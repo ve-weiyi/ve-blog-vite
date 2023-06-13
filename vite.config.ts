@@ -5,6 +5,21 @@ import banner from 'vite-plugin-banner'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import { envDir, sourceDir, manualChunks } from './scripts/build'
 import pkg from './package.json'
+import { resolve } from 'path'
+
+/** 当前执行node命令时文件夹的地址（工作目录） */
+const root: string = process.cwd()
+
+/** 路径查找 */
+const pathResolve = (dir: string): string => {
+  return resolve(__dirname, '.', dir)
+}
+
+/** 设置别名 */
+const alias: Record<string, string> = {
+  '@': pathResolve('src'),
+  '@build': pathResolve('build'),
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -77,9 +92,10 @@ export default defineConfig(({ mode }) => {
        *  配置 alias 前： `import foo from '../../../libs/foo'`
        *  配置 alias 后： `import foo from '@/libs/foo'`
        */
-      alias: {
-        '@': sourceDir,
-      },
+      alias,
+      // 想要省略的扩展名列表。默认值为 ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']。注意，不 建议忽略自定义导入类型的扩展名（例如：.vue）
+      // 设置后导入文件时不需要加后缀'.vue'
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     },
 
     css: {
@@ -146,7 +162,7 @@ export default defineConfig(({ mode }) => {
           ` * description: ${pkg.description}`,
           ` * author: ${pkg.author}`,
           ` */`,
-        ].join('\n')
+        ].join('\n'),
       ),
 
       /**

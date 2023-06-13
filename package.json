@@ -25,7 +25,16 @@
   "dependencies": {
     "@bassist/progress": "^0.2.1",
     "@bassist/utils": "^0.11.2",
+    "eslint": "^8.37.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.10.0",
+    "nprogress": "^0.2.0",
     "pinia": "^2.0.33",
+    "sass": "^1.63.3",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
