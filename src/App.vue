@@ -1,12 +1,14 @@
 <template>
-  <el-config-provider :locale="locale" :size="size">
-    <!-- 导航栏 -->
-    <TopNavBar></TopNavBar>
-    <!-- 内容 -->
-    <router-view />
-    <!-- 页脚 -->
-    <Footer></Footer>
-  </el-config-provider>
+  <v-app id="app">
+    <el-config-provider :locale="locale" :size="size">
+      <!-- 导航栏 -->
+      <TopNavBar></TopNavBar>
+      <!-- 内容 -->
+      <router-view />
+      <!-- 页脚 -->
+      <Footer></Footer>
+    </el-config-provider>
+  </v-app>
 </template>
 
 <script setup lang="ts">

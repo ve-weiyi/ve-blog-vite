@@ -1,19 +1,19 @@
 <template>
   <v-app-bar app :class="navClass" hide-on-scroll flat height="60">
     <!-- 手机端导航栏 -->
-    <!--    <div class="d-md-none nav-mobile-container">-->
-    <!--      <div style="font-size:18px;font-weight:bold">-->
-    <!--        <router-link to="/">-->
-    <!--          {{ blogInfo.websiteConfig.websiteAuthor }}-->
-    <!--        </router-link>-->
-    <!--      </div>-->
-    <!--      <div style="margin-left:auto">-->
-    <!--        <a @click="openSearch"><i class="iconfont iconsousuo"/></a>-->
-    <!--        <a @click="openDrawer" style="margin-left:10px;font-size:20px">-->
-    <!--          <i class="iconfont iconhanbao"/>-->
-    <!--        </a>-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <div class="d-md-none nav-mobile-container">
+      <div style="font-size: 18px; font-weight: bold">
+        <router-link to="/">
+          {{ blogInfo.websiteConfig.websiteAuthor }}
+        </router-link>
+      </div>
+      <div style="margin-left: auto">
+        <a @click="openSearch"><i class="iconfont iconsousuo" /></a>
+        <a @click="openDrawer" style="margin-left: 10px; font-size: 20px">
+          <i class="iconfont iconhanbao" />
+        </a>
+      </div>
+    </div>
     <!-- 电脑导航栏 -->
     <div class="d-md-block d-none nav-container">
       <div class="float-left blog-title">
