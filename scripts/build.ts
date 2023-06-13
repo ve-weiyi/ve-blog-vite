@@ -1,6 +1,5 @@
 import { resolve } from 'path'
 import { cwd } from 'process'
-// @ts-ignore
 import pkg from '../package.json'
 
 function getManualChunks() {

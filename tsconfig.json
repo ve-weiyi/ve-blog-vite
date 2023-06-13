@@ -1,21 +1,44 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "useDefineForClassFields": true,
-    "strict": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "strict": false,
+//    jsx/tsx支持
     "jsx": "preserve",
-    "sourceMap": true,
-    "baseUrl": "./",
-    "types": ["node"],
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "strictFunctionTypes": false,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "lib": ["dom", "esnext"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@build/*": ["build/*"]
     },
-    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+    "types": [
+      "node",
+      "vite/client",
+      "element-plus/global",
+    ],
+    "typeRoots": ["./types", "./node_modules/@types/"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "mock/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/*.d.ts",
+    "vite.config.ts"
+  ],
+  "exclude": ["dist", "**/*.js", "node_modules"]
 }
