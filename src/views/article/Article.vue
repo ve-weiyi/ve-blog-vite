@@ -218,12 +218,18 @@ import Clipboard from 'clipboard'
 // import Comment from "../../components/Comment";
 import tocbot from 'tocbot'
 import { useWebStore } from '@/stores'
-import MarkdownItMark from 'markdown-it-mark';
-import MarkdownIt from 'markdown-it';
+import MarkdownItMark from 'markdown-it-mark'
+import MarkdownIt from 'markdown-it'
+import { useRoute } from 'vue-router'
+import { getArticleApi } from '@/api/article'
 
 const config = {
   sites: ['qzone', 'wechat', 'weibo', 'qq'],
 }
+
+// 获取路由参数
+const route = useRoute()
+const articleId = route.params.articleId // 假设路由参数名为 "id"
 
 // 获取存储的博客信息
 const blogInfo = ref(useWebStore().blogInfo)
@@ -237,9 +243,20 @@ const article = ref<{
   lastArticle: {
     id: number
     articleCover: string
+    articleTitle: string
   }
-  recommendArticleList: any[]
-  newestArticleList: any[]
+  recommendArticleList: {
+    id: number
+    articleCover: string
+    articleTitle: string
+    createdAt: string
+  }[]
+  newestArticleList: {
+    id: number
+    articleCover: string
+    articleTitle: string
+    createdAt: string
+  }[]
 }>({
   nextArticle: {
     id: 0,
@@ -261,52 +278,50 @@ let clipboard: Clipboard | null = null
 let commentCount = 0
 
 const getArticle = () => {
-  const axios = require('axios')
   const that = this
   // 查询文章
-  axios.get('/api' + this.$route.path).then(({ data }: any) => {
-    document.title = data.data.articleTitle
+  getArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
+    document.title = res.data.articleTitle
     // 将markdown转换为Html
-    markdownToHtml(data.data)
-    this.$nextTick(() => {
-      // 统计文章字数
-      wordNum = deleteHTMLTag(article.value.articleContent).length
-      // 计算阅读时间
-      readTime = Math.round(wordNum / 400) + '分钟'
-      // 添加代码复制功能
-      clipboard = new Clipboard('.copy-btn')
-      clipboard.on('success', () => {
-        this.$toast({ type: 'success', message: '复制成功' })
-      })
-      // 添加文章生成目录功能
-      const nodes = this.$refs.article.children
-      if (nodes.length) {
-        for (let i = 0; i < nodes.length; i++) {
-          const node = nodes[i]
-          const reg = /^H[1-4]{1}$/
-          if (reg.exec(node.tagName)) {
-            node.id = i
-          }
-        }
-      }
-      tocbot.init({
-        tocSelector: '#toc',
-        contentSelector: '.article-content',
-        headingSelector: 'h1, h2, h3',
-        hasInnerContainers: true,
-        onClick: function(e: Event) {
-          e.preventDefault()
-        },
-      })
-      // 添加图片预览功能
-      const imgList = this.$refs.article.getElementsByTagName('img')
-      for (let i = 0; i < imgList.length; i++) {
-        imgList.push(imgList[i].src)
-        imgList[i].addEventListener('click', function(e: Event) {
-          that.previewImg(e.target.currentSrc)
-        })
-      }
+    markdownToHtml(res.data)
+
+    // 统计文章字数
+    wordNum = deleteHTMLTag(article.value.articleContent).length
+    // 计算阅读时间
+    readTime = Math.round(wordNum / 400) + '分钟'
+    // 添加代码复制功能
+    clipboard = new Clipboard('.copy-btn')
+    clipboard.on('success', () => {
+      this.$toast({ type: 'success', message: '复制成功' })
     })
+    // 添加文章生成目录功能
+    // const nodes = article.value.children;
+    // if (nodes.length) {
+    //   for (let i = 0; i < nodes.length; i++) {
+    //     const node = nodes[i];
+    //     const reg = /^H[1-4]{1}$/;
+    //     if (reg.exec(node.tagName)) {
+    //       node.id = i;
+    //     }
+    //   }
+    // }
+    tocbot.init({
+      tocSelector: '#toc',
+      contentSelector: '.article-content',
+      headingSelector: 'h1, h2, h3',
+      hasInnerContainers: true,
+      onClick: function(e: Event) {
+        e.preventDefault()
+      },
+    })
+    // 添加图片预览功能
+    // const imgList = article.value.getElementsByTagName("img");
+    // for (let i = 0; i < imgList.length; i++) {
+    //   imgList.push(imgList[i].src);
+    //   imgList[i].addEventListener("click", function(e: Event) {
+    //     that.previewImg(e.target.currentSrc);
+    //   });
+    // }
   })
 }
 
@@ -330,7 +345,7 @@ const like = () => {
 }
 
 const markdownToHtml = (articleData: any) => {
-  const hljs = ""
+  const hljs = ''
   const md = new MarkdownIt({
     html: true,
     linkify: true,
@@ -389,6 +404,17 @@ const deleteHTMLTag = (content: string) => {
 
 function articleCover() {
   return 'background: url(' + article.value.articleCover + ') center center / cover no-repeat'
+}
+
+function isLike() {
+  var articleLikeSet = this.$store.state.articleLikeSet
+  return articleLikeSet.indexOf(this.article.id) != -1 ? 'like-btn-active' : 'like-btn'
+}
+
+function isFull() {
+  return function(id) {
+    return id ? 'post full' : 'post'
+  }
 }
 
 const getCommentCount = (count: number) => {

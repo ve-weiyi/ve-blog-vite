@@ -210,7 +210,7 @@ import EasyTyper from 'easy-typer-js'
 import MarkdownIt from 'markdown-it'
 import { useWebStore } from '@/stores'
 import { usePagination } from '@/hooks/usePagination'
-import { getArticleList } from '@/api/article'
+import { getArticleListApi } from '@/api/article'
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -260,7 +260,7 @@ const infiniteHandler = () => {
   isLoading.value = true
   // 模拟异步加载数据
   const md = require('markdown-it')()
-  getArticleList({
+  getArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {
@@ -307,7 +307,7 @@ const init = () => {
       initTyped(hitokoto)
     })
 
-  getArticleList({
+  getArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {
@@ -325,16 +325,6 @@ const init = () => {
           .replace(/&npsp;/gi, '')
       })
       articleList.value.push(...list)
-      const hasMoreData = paginationData.total == 0 // 判断是否还有更多数据需要加载
-      if (hasMoreData) {
-        // 还有更多数据，告知组件加载完成
-        infiniteLoading.value.complete()
-      } else {
-        // 没有更多数据了，重置组件状态
-        infiniteLoading.value.reset()
-      }
-
-      isLoading.value = false // 重置加载状态
     }
   })
 }
