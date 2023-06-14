@@ -77,15 +77,7 @@ module.exports = {
     // 腾讯地图
     TMap: 'readonly',
   },
-  extends: [
-    'standard',
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    // "@vue/typescript/recommended",
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
-    // "@vue/eslint-config-typescript"
-  ],
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'prettier'],
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: '@typescript-eslint/parser',
@@ -304,12 +296,12 @@ module.exports = {
     'no-undef-init': 0,
     'no-unexpected-multiline': 2,
     'no-unmodified-loop-condition': 0,
-    'no-unneeded-ternary': [
-      2,
-      {
-        defaultAssignment: false,
-      },
-    ],
+    // 'no-unneeded-ternary': [
+    //   2,
+    //   {
+    //     defaultAssignment: false,
+    //   },
+    // ],
     'no-unreachable': 2,
     'no-unsafe-finally': 2,
     'no-unused-vars': [

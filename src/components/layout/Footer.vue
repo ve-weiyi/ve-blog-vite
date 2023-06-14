@@ -1,8 +1,12 @@
 <template>
-  <v-footer app padless absolute v-if="!isMessage">
+  <v-footer fixed class="footer absolute">
     <div class="footer-wrap">
+      <v-btn v-for="link in links" :key="link" color="white" variant="text" class="mx-2" rounded="xl">
+        {{ link }}
+      </v-btn>
       <div>
-        ©{{ websiteConfig.websiteCreateTime }} - {{ new Date().getFullYear() }} By
+        ©{{ websiteConfig.websiteCreateTime }} - {{ new Date().getFullYear() }}
+        By
         {{ websiteConfig.websiteAuthor }}
       </div>
       <a href="https://beian.miit.gov.cn/" target="_blank">
@@ -24,9 +28,15 @@ const websiteConfig = blogInfo.websiteConfig
 function getCurrentYear() {
   return new Date().getFullYear()
 }
+
+const links = ['关于', '联系', '博客', '项目', '友链']
 </script>
 
 <style scoped>
+.footer {
+  padding: 0; /* 或者根据需要设置自定义的 padding 值 */
+}
+
 .footer-wrap {
   width: 100%;
   line-height: 2;

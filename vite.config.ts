@@ -140,15 +140,15 @@ export default defineConfig(({ mode }) => {
        * 自动导入组件，不用每次都 import
        * @see https://github.com/antfu/unplugin-vue-components#configuration
        */
-      components({
-        dirs: ['src/components'],
-        directoryAsNamespace: true,
-        collapseSamePrefixes: true,
-        globalNamespaces: [],
-        extensions: ['vue', 'ts', 'tsx'],
-        deep: true,
-        dts: 'src/types/declaration-files/components.d.ts',
-      }),
+      // components({
+      //   dirs: ['src/components'],
+      //   directoryAsNamespace: true,
+      //   collapseSamePrefixes: true,
+      //   globalNamespaces: [],
+      //   extensions: ['vue', 'ts', 'tsx'],
+      //   deep: true,
+      //   dts: 'src/types/declaration-files/components.d.ts',
+      // }),
 
       /**
        * 版权注释

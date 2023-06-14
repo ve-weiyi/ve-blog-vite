@@ -9,9 +9,9 @@ import './styles/index.scss'
 import './assets/iconfont/iconfont.css'
 
 // 全局样式
-import '@/styles/var.less'
-import '@/styles/mixin.less'
-import '@/styles/global.less'
+// import '@/styles/var.less'
+// import '@/styles/mixin.less'
+// import '@/styles/global.less'
 
 // vuetify 响应时ui https://github.com/vuetifyjs/vuetify
 import { vuetify } from '@/plugins/vuetify'
