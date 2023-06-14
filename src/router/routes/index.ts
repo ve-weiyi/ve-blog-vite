@@ -19,10 +19,10 @@ const routes: RouteRecordRaw[] = [
   /**
    * 子路由示例
    */
-  // {
-  //   path: "/articles/:articleId",
-  //   component: () => import("@/views/article/Article.vue")
-  // },
+  {
+    path: '/articles/:articleId',
+    component: () => import('@/views/article/Article.vue'),
+  },
   // {
   //   path: "/archives",
   //   component: () => import("@/views/archive/Archive.vue"),

@@ -1,5 +1,13 @@
 <template>
-  <v-app-bar :class="navClass" style="overflow: visible;background-color: rgba(255,255,255,0.5)" elevation="0" height="60" scroll-behavior="hide" scroll-threshold="200" text>
+  <v-app-bar
+    :class="navClass"
+    style="overflow: visible; background-color: rgba(255, 255, 255, 0.5)"
+    elevation="0"
+    height="60"
+    scroll-behavior="hide"
+    scroll-threshold="200"
+    text
+  >
     <!-- 手机端导航栏 -->
     <div class="d-md-none nav-mobile-container">
       <div style="font-size: 18px; font-weight: bold">

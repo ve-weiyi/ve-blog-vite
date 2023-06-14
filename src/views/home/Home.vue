@@ -11,7 +11,12 @@
         <div class="blog-intro">{{ obj.output }} <span class="typed-cursor">|</span></div>
         <!-- 联系方式 -->
         <div class="blog-contact">
-          <a v-if="isShowSocial('qq')" class="mr-5 iconfont iconqq" target="_blank" :href="getQQLink"></a>
+          <a
+            v-if="isShowSocial('qq')"
+            class="mr-5 iconfont iconqq"
+            target="_blank"
+            :href="'http://wpa.qq.com/msgrd?v=3&uin=' + blogInfo.websiteConfig.qq + '&site=qq&menu=yes'"
+          ></a>
           <a
             v-if="isShowSocial('github')"
             target="_blank"
@@ -73,8 +78,7 @@
                 {{ item.categoryName }}
               </router-link>
               <span class="separator">|</span>
-              <!-- 文章标
-签 -->
+              <!-- 文章标签 -->
               <router-link
                 style="display: inline-block"
                 :to="'/tags/' + tag.id"
@@ -94,7 +98,7 @@
         </v-card>
         <!-- 无限加载 -->
         <infinite-loading @infinite="infiniteHandler">
-          <!--          <div slot='no-more'></div>-->
+          <template #no-more></template>
         </infinite-loading>
       </v-col>
       <!-- 博主信息 -->
@@ -145,7 +149,12 @@
             </a>
             <!-- 社交信息 -->
             <div class="card-info-social">
-              <a v-if="isShowSocial('qq')" class="mr-5 iconfont iconqq" target="_blank" :href="getQQLink"></a>
+              <a
+                v-if="isShowSocial('qq')"
+                class="mr-5 iconfont iconqq"
+                target="_blank"
+                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + blogInfo.websiteConfig.qq + '&site=qq&menu=yes'"
+              ></a>
               <a
                 v-if="isShowSocial('github')"
                 target="_blank"
@@ -194,11 +203,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref, onMounted, computed, onUnmounted } from "vue";
+import { defineComponent, ref, onMounted, computed, onUnmounted } from 'vue'
 import Swiper from '../../components/Swiper.vue'
+import InfiniteLoading from 'vue-infinite-loading'
 import EasyTyper from 'easy-typer-js'
 import MarkdownIt from 'markdown-it'
 import { useWebStore } from '@/stores'
+import { usePagination } from '@/hooks/usePagination'
+import { getArticleList } from '@/api/article'
+
+const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 // 获取存储的博客信息
 const blogInfo = ref(useWebStore().blogInfo)
@@ -216,7 +230,68 @@ const obj = ref({
   backSpeed: 40,
   sentencePause: true,
 })
-const articleList = ref([])
+
+// 文章列表
+const articleList = ref([
+  // {
+  //   articleContent: '恭喜你成功运行博客！\n',
+  //   articleCover: 'http://static.ve77.cn/articles/3a4b4e40fb8aa5fcc016f0228938d321.jpg',
+  //   articleTitle: '测试文章',
+  //   categoryId: 187,
+  //   createdAt: '2022-01-18T00:29:02+08:00',
+  //   id: 54,
+  //   isDelete: false,
+  //   isTop: false,
+  //   originalUrl: '',
+  //   status: 1,
+  //   type: 1,
+  //   updatedAt: '2022-01-19T23:10:07+08:00',
+  //   userId: 2,
+  // },
+])
+
+const isLoading = ref(false)
+const infiniteLoading = ref(null)
+const infiniteHandler = () => {
+  console.log('infiniteHandler')
+  if (isLoading.value) {
+    return // 避免重复加载
+  }
+  isLoading.value = true
+  // 模拟异步加载数据
+  const md = require('markdown-it')()
+  getArticleList({
+    page: paginationData.currentPage,
+    pageSize: paginationData.pageSize,
+  }).then((res) => {
+    console.log('-->', res)
+
+    paginationData.total = res.data.total
+    paginationData.pageSize = res.data.pageSize
+    if (data.data.length) {
+      // 去除markdown标签
+      data.data.forEach((item) => {
+        item.articleContent = md
+          .render(item.articleContent)
+          .replace(/<\/?[^>]*>/g, '')
+          .replace(/[|]*\n/, '')
+          .replace(/&npsp;/gi, '')
+      })
+      articleList.value.push(...data.data)
+      const hasMoreData = paginationData.total == 0 // 判断是否还有更多数据需要加载
+      if (hasMoreData) {
+        // 还有更多数据，告知组件加载完成
+        infiniteLoading.value.complete()
+      } else {
+        // 没有更多数据了，重置组件状态
+        infiniteLoading.value.reset()
+      }
+
+      isLoading.value = false // 重置加载状态
+    }
+  })
+}
+
 const talkList = ref([])
 const current = ref(1)
 
@@ -231,6 +306,37 @@ const init = () => {
     .then(({ hitokoto }) => {
       initTyped(hitokoto)
     })
+
+  getArticleList({
+    page: paginationData.currentPage,
+    pageSize: paginationData.pageSize,
+  }).then((res) => {
+    console.log('-->', res)
+    paginationData.total = res.data.total
+    paginationData.pageSize = res.data.pageSize
+    const list = res.data.list
+    if (list.length) {
+      // 去除markdown标签
+      list.forEach((item) => {
+        item.articleContent = new MarkdownIt()
+          .render(item.articleContent)
+          .replace(/<\/?[^>]*>/g, '')
+          .replace(/[|]*\n/, '')
+          .replace(/&npsp;/gi, '')
+      })
+      articleList.value.push(...list)
+      const hasMoreData = paginationData.total == 0 // 判断是否还有更多数据需要加载
+      if (hasMoreData) {
+        // 还有更多数据，告知组件加载完成
+        infiniteLoading.value.complete()
+      } else {
+        // 没有更多数据了，重置组件状态
+        infiniteLoading.value.reset()
+      }
+
+      isLoading.value = false // 重置加载状态
+    }
+  })
 }
 
 const listHomeTalks = () => {}
@@ -258,8 +364,6 @@ const runTime = () => {
   str += day.getSeconds() + '秒'
   time.value = str
 }
-
-const infiniteHandler = ($state) => {}
 
 runTime()
 
@@ -289,18 +393,17 @@ const cover = computed(() => {
   return 'background: url(' + cover + ') center center / cover no-repeat'
 })
 
-let timer: number;
+let timer: number
 // 在组件挂载时启动定时器
 onMounted(() => {
   init()
-  timer = setInterval(runTime, 1000);
-});
+  timer = setInterval(runTime, 1000)
+})
 
 // 在组件卸载时清除定时器
 onUnmounted(() => {
-  clearInterval(timer);
-});
-
+  clearInterval(timer)
+})
 </script>
 
 <style scoped>
@@ -365,7 +468,7 @@ onUnmounted(() => {
 
   .home-container {
     max-width: 1200px;
-    margin: calc(100vh) auto 88px auto;
+    margin: calc(100vh) auto 48px auto;
     padding: 0 5px;
     background: transparent;
   }

@@ -42,7 +42,7 @@ export const useWebStore = defineStore({
         websiteAuthor: '静闻弦语',
         websiteAvatar: Avatar,
         websiteCreateTime: '2022-01-19',
-        websiteIntro: '分享美好生活。',
+        websiteIntro: '你能做的,不止如此。',
         websiteName: '与梦',
         websiteNotice:
           '用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统->https://ve77.cn/admin。     \n网站搭建问题请联系站长QQ791422171。',

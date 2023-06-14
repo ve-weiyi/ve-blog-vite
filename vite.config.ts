@@ -43,13 +43,34 @@ export default defineConfig(({ mode }) => {
      */
     server: {
       port: 3000,
-      // proxy: {
-      //   '/devapi': {
-      //     target: 'http://192.168.10.198',
-      //     changeOrigin: true,
-      //     rewrite: (path) => path.replace(/^\/devapi/, ''),
-      //   },
-      // },
+      /** 接口代理 */
+      proxy: {
+        // mock代理
+        '/mock': {
+          target: env.VITE_PROXY_DOMAIN_REAL,
+          ws: false,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(path, env.VITE_PROXY_DOMAIN),
+        },
+        // "/api/v1": {
+        //   // target: "http://127.0.0.1:8088/api/v1",
+        //   target: "https://mock.mengxuegu.com/mock/63218b5fb4c53348ed2bc212/api/v1",
+        //   ws: true,
+        //   /** 是否允许跨域 */
+        //   changeOrigin: true,
+        //   logLevel: "debug", // 打印代理以后的地址
+        //   rewrite: (path) => path.replace("/api/v1", ""),
+        // },
+        // 前缀
+        '/api': {
+          target: 'http://127.0.0.1:9999/', // 代理后的地址 =target/path
+          ws: true,
+          /** 是否允许跨域 */
+          changeOrigin: true,
+          logLevel: 'debug', // 打印代理以后的地址
+          rewrite: (path) => path.replace('', ''),
+        },
+      },
     },
 
     build: {
