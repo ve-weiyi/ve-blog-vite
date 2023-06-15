@@ -215,17 +215,14 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import Clipboard from 'clipboard'
 // import Comment from "../../components/Comment";
+import { ElMessage } from 'element-plus'
 import tocbot from 'tocbot'
 import { useWebStore } from '@/stores'
-import MarkdownItMark from 'markdown-it-mark'
-import MarkdownIt from 'markdown-it'
+
 import { useRoute } from 'vue-router'
 import { getArticleApi } from '@/api/article'
 
-// 引入代码高亮样式
-import 'highlight.js/styles/default.css'
-import hljs from 'highlight.js/lib/core'
-import javascript from 'highlight.js/lib/languages/javascript'
+import { markdownToHtml } from '@/utils/markdown'
 
 const config = {
   sites: ['qzone', 'wechat', 'weibo', 'qq'],
@@ -307,7 +304,7 @@ const getArticle = () => {
     // 添加代码复制功能
     clipboard = new Clipboard('.copy-btn')
     clipboard.on('success', () => {
-      this.$toast({ type: 'success', message: '复制成功' })
+      ElMessage.success('复制成功')
     })
     // 添加文章生成目录功能
     const nodes = articleRef.value.articleContent
@@ -358,49 +355,6 @@ const like = () => {
       this.$store.commit('articleLike', articleRef.value.id)
     }
   })
-}
-
-const markdownToHtml = (articleContent: any) => {
-  hljs.registerLanguage('javascript', javascript)
-  const md = new MarkdownIt({
-    html: true,
-    linkify: true,
-    typographer: true,
-    breaks: true,
-    highlight: function(str: string, lang: string | null) {
-      var d = new Date().getTime()
-      if (window.performance && typeof window.performance.now === 'function') {
-        d += performance.now()
-      }
-      const codeIndex = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
-      })
-      let html = `<button class="copy-btn iconfont iconfuzhi" type="button" data-clipboard-action="copy" data-clipboard-target="#copy${codeIndex}"></button>`
-      const linesLength = str.split(/\n/).length - 1
-      let linesNum = '<span aria-hidden="true" class="line-numbers-rows">'
-      for (let index = 0; index < linesLength; index++) {
-        linesNum = linesNum + '<span></span>'
-      }
-      linesNum += '</span>'
-      if (lang == null) {
-        lang = 'java'
-      }
-      if (lang && hljs.getLanguage(lang)) {
-        const preCode = hljs.highlight(lang, str, true).value
-        html = html + preCode
-        if (linesLength) {
-          html += '<b class="name">' + lang + '</b>'
-        }
-        return `<pre class="hljs"><code>${html}</code>${linesNum}</pre><textarea style="position: absolute;top: -9999px;left: -9999px;z-index: -9999;" id="copy${codeIndex}">${str.replace(
-          /<\/textarea>/g,
-          '</textarea>',
-        )}</textarea>`
-      }
-    },
-  }).use(MarkdownItMark)
-  return md.render(articleContent)
 }
 
 const previewImg = (img: string) => {
