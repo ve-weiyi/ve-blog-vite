@@ -4,32 +4,32 @@
     <div class="banner" :style="articleCover">
       <div class="article-info-container">
         <!-- 文章标题 -->
-        <div class="article-title">{{ article.articleTitle }}</div>
+        <div class="article-title">{{ articleDetail.articleTitle }}</div>
         <div class="article-info">
           <div class="first-line">
             <!-- 发表时间 -->
             <span>
               <i class="iconfont iconrili" />
-              发表于 {{ article.createdAt }}
+              发表于 {{ articleDetail.createdAt }}
             </span>
             <span class="separator">|</span>
             <!-- 发表时间 -->
             <span>
               <i class="iconfont icongengxinshijian" />
               更新于
-              <template v-if="article.updatedAt">
-                {{ article.updatedAt }}
+              <template v-if="articleRef.updatedAt">
+                {{ articleDetail.updatedAt }}
               </template>
               <template v-else>
-                {{ article.createdAt }}
+                {{ articleDetail.createdAt }}
               </template>
             </span>
             <span class="separator">|</span>
             <!-- 文章分类 -->
             <span class="article-category">
               <i class="iconfont iconfenlei1" />
-              <router-link :to="'/categories/' + article.categoryId">
-                {{ article.categoryName }}
+              <router-link :to="'/categories/' + articleRef.categoryId">
+                {{ articleDetail.categoryName }}
               </router-link>
             </span>
           </div>
@@ -49,7 +49,7 @@
           <div class="third-line">
             <span class="separator">|</span>
             <!-- 阅读量 -->
-            <span> <i class="iconfont iconliulan" /> 阅读量: {{ article.viewsCount }} </span>
+            <span> <i class="iconfont iconliulan" /> 阅读量: {{ articleDetail.viewsCount }} </span>
             <span class="separator">|</span>
             <!-- 评论量 -->
             <span> <i class="iconfont iconpinglunzu1" />评论数: {{ commentCount }} </span>
@@ -64,8 +64,8 @@
           <article
             id="write"
             class="article-content markdown-body"
-            v-html="article.articleContent"
-            ref="article"
+            v-html="articleDetail.articleContent"
+            ref="articleRef"
           ></article>
           <!-- 版权声明 -->
           <div class="aritcle-copyright">
@@ -88,19 +88,18 @@
           <!-- 转发 -->
           <div class="article-operation">
             <div class="tag-container">
-              <router-link v-for="item of article.tagDTOList" :key="item.id" :to="'/tags/' + item.id">
+              <router-link v-for="item of articleRef.articleTagList" :key="item.id" :to="'/tags/' + item.id">
                 {{ item.tagName }}
               </router-link>
             </div>
-            <share style="margin-left: auto" :config="config" />
+            <!--            <share style="margin-left: auto" :config="config" />-->
           </div>
           <!-- 点赞打赏等 -->
           <div class="article-reward">
             <!-- 点赞按钮 -->
-            <a :class="isLike" @click="like">
-              <v-icon size="14" color="#fff">mdi-thumb-up</v-icon>
-              点赞
-              <span v-show="article.likeCount > 0">{{ article.likeCount }}</span>
+            <a :class="isLike()" @click="like">
+              <i class="iconfont icondianzan" /> 点赞
+              <span v-show="articleDetail.likeCount > 0">{{ articleDetail.likeCount }}</span>
             </a>
             <a class="reward-btn" v-if="blogInfo.websiteConfig.isReward == 1">
               <!-- 打赏按钮 -->
@@ -122,38 +121,38 @@
           </div>
           <div class="pagination-post">
             <!-- 上一篇 -->
-            <div :class="isFull(article.lastArticle.id)" v-if="article.lastArticle.id">
-              <router-link :to="'/articles/' + article.lastArticle.id">
-                <img class="post-cover" :src="article.lastArticle.articleCover" />
+            <div :class="isFull(articleRef.lastArticle.id)" v-if="articleRef.lastArticle.id">
+              <router-link :to="'/articles/' + articleRef.lastArticle.id">
+                <img class="post-cover" :src="articleRef.lastArticle.articleCover" />
                 <div class="post-info">
                   <div class="label">上一篇</div>
                   <div class="post-title">
-                    {{ article.lastArticle.articleTitle }}
+                    {{ articleRef.lastArticle.articleTitle }}
                   </div>
                 </div>
               </router-link>
             </div>
             <!-- 下一篇 -->
-            <div :class="isFull(article.nextArticle.id)" v-if="article.nextArticle.id">
-              <router-link :to="'/articles/' + article.nextArticle.id">
-                <img class="post-cover" :src="article.nextArticle.articleCover" />
+            <div :class="isFull(articleRef.nextArticle.id)" v-if="articleRef.lastArticle.id">
+              <router-link :to="'/articles/' + articleRef.nextArticle.id">
+                <img class="post-cover" :src="articleRef.nextArticle.articleCover" />
                 <div class="post-info" style="text-align: right">
                   <div class="label">下一篇</div>
                   <div class="post-title">
-                    {{ article.nextArticle.articleTitle }}
+                    {{ articleRef.nextArticle.articleTitle }}
                   </div>
                 </div>
               </router-link>
             </div>
           </div>
           <!-- 推荐文章 -->
-          <div class="recommend-container" v-if="article.recommendArticleList.length">
+          <div class="recommend-container" v-if="articleRef.recommendArticleList">
             <div class="recommend-title">
-              <v-icon size="20" color="#4c4948">mdi-thumb-up</v-icon>
+              <i size="20" color="#4c4948" class="iconfont icondianzan" />
               相关推荐
             </div>
             <div class="recommend-list">
-              <div class="recommend-item" v-for="item of article.recommendArticleList" :key="item.id">
+              <div class="recommend-item" v-for="item of articleRef.recommendArticleList" :key="item.id">
                 <router-link :to="'/articles/' + item.id">
                   <img class="recommend-cover" :src="item.articleCover" />
                   <div class="recommend-info">
@@ -191,7 +190,7 @@
               <span style="margin-left: 10px">最新文章</span>
             </div>
             <div class="article-list">
-              <div class="article-item" v-for="item of article.newestArticleList" :key="item.id">
+              <div class="article-item" v-for="item of articleRef.newestArticleList" :key="item.id">
                 <router-link :to="'/articles/' + item.id" class="content-cover">
                   <img :src="item.articleCover" />
                 </router-link>
@@ -213,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import Clipboard from 'clipboard'
 // import Comment from "../../components/Comment";
 import tocbot from 'tocbot'
@@ -222,6 +221,11 @@ import MarkdownItMark from 'markdown-it-mark'
 import MarkdownIt from 'markdown-it'
 import { useRoute } from 'vue-router'
 import { getArticleApi } from '@/api/article'
+
+// 引入代码高亮样式
+import 'highlight.js/styles/default.css'
+import hljs from 'highlight.js/lib/core'
+import javascript from 'highlight.js/lib/languages/javascript'
 
 const config = {
   sites: ['qzone', 'wechat', 'weibo', 'qq'],
@@ -232,10 +236,11 @@ const route = useRoute()
 const articleId = route.params.articleId // 假设路由参数名为 "id"
 
 // 获取存储的博客信息
+const webInfo = ref(useWebStore())
 const blogInfo = ref(useWebStore().blogInfo)
 
 const imgList = ref<string[]>([])
-const article = ref<{
+const articleRef = ref<{
   nextArticle: {
     id: number
     articleCover: string
@@ -257,6 +262,10 @@ const article = ref<{
     articleTitle: string
     createdAt: string
   }[]
+  tagDTOList: {
+    id: number
+    tagName: string
+  }[]
 }>({
   nextArticle: {
     id: 0,
@@ -269,45 +278,51 @@ const article = ref<{
   recommendArticleList: [],
   newestArticleList: [],
 })
+const articleDetail = ref<object>({})
 
-let wordNum = ''
-let readTime = ''
+const wordNum = ref<number>()
+const readTime = ref<string>()
 const commentType = 1
 const articleHref = window.location.href
 let clipboard: Clipboard | null = null
 let commentCount = 0
-
+const articleCover = ref<string>('')
 const getArticle = () => {
-  const that = this
   // 查询文章
   getArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
-    document.title = res.data.articleTitle
-    // 将markdown转换为Html
-    markdownToHtml(res.data)
+    articleRef.value = res.data
+    articleDetail.value = res.data
 
+    document.title = res.data.articleTitle
+    console.log('res.data', res.data)
+    // 将markdown转换为Html
+    articleRef.value.articleContent = markdownToHtml(res.data.articleContent)
+    articleCover.value = 'background: url(' + articleRef.value.articleCover + ') center center / cover no-repeat'
+    // nextTick(() => {
     // 统计文章字数
-    wordNum = deleteHTMLTag(article.value.articleContent).length
+    wordNum.value = deleteHTMLTag(articleRef.value.articleContent).length
+    console.log('wordNum', wordNum.value)
     // 计算阅读时间
-    readTime = Math.round(wordNum / 400) + '分钟'
+    readTime.value = Math.round(wordNum.value / 400) + '分钟'
     // 添加代码复制功能
     clipboard = new Clipboard('.copy-btn')
     clipboard.on('success', () => {
       this.$toast({ type: 'success', message: '复制成功' })
     })
     // 添加文章生成目录功能
-    // const nodes = article.value.children;
-    // if (nodes.length) {
-    //   for (let i = 0; i < nodes.length; i++) {
-    //     const node = nodes[i];
-    //     const reg = /^H[1-4]{1}$/;
-    //     if (reg.exec(node.tagName)) {
-    //       node.id = i;
-    //     }
-    //   }
-    // }
+    const nodes = articleRef.value.articleContent
+    if (nodes.length) {
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i]
+        const reg = /^H[1-4]{1}$/
+        if (reg.exec(node.tagName)) {
+          node.id = i
+        }
+      }
+    }
     tocbot.init({
       tocSelector: '#toc',
-      contentSelector: '.article-content',
+      contentSelector: '.articleRef-content',
       headingSelector: 'h1, h2, h3',
       hasInnerContainers: true,
       onClick: function(e: Event) {
@@ -315,14 +330,15 @@ const getArticle = () => {
       },
     })
     // 添加图片预览功能
-    // const imgList = article.value.getElementsByTagName("img");
+    // const imgList = articleRef.value.querySelectorAll('img')
     // for (let i = 0; i < imgList.length; i++) {
-    //   imgList.push(imgList[i].src);
-    //   imgList[i].addEventListener("click", function(e: Event) {
-    //     that.previewImg(e.target.currentSrc);
-    //   });
+    //   imgList.push(imgList[i].src)
+    //   imgList[i].addEventListener('click', function(e: Event) {
+    //     this.previewImg(e.target.currentSrc)
+    //   })
     // }
   })
+  // })
 }
 
 const like = () => {
@@ -332,20 +348,20 @@ const like = () => {
     return false
   }
   // 发送请求
-  this.axios.post('/api/articles/' + article.value.id + '/like').then(({ data }: any) => {
+  this.axios.post('/api/articles/' + articleRef.value.id + '/like').then(({ data }: any) => {
     if (data.flag) {
-      if (blogInfo.value.articleLikeSet.indexOf(article.value.id) != -1) {
-        this.$set(article.value, 'likeCount', article.value.likeCount - 1)
+      if (blogInfo.value.articleLikeSet.indexOf(articleRef.value.id) != -1) {
+        this.$set(articleRef.value, 'likeCount', articleRef.value.likeCount - 1)
       } else {
-        this.$set(article.value, 'likeCount', article.value.likeCount + 1)
+        this.$set(articleRef.value, 'likeCount', articleRef.value.likeCount + 1)
       }
-      this.$store.commit('articleLike', article.value.id)
+      this.$store.commit('articleLike', articleRef.value.id)
     }
   })
 }
 
-const markdownToHtml = (articleData: any) => {
-  const hljs = ''
+const markdownToHtml = (articleContent: any) => {
+  hljs.registerLanguage('javascript', javascript)
   const md = new MarkdownIt({
     html: true,
     linkify: true,
@@ -364,7 +380,7 @@ const markdownToHtml = (articleData: any) => {
       let html = `<button class="copy-btn iconfont iconfuzhi" type="button" data-clipboard-action="copy" data-clipboard-target="#copy${codeIndex}"></button>`
       const linesLength = str.split(/\n/).length - 1
       let linesNum = '<span aria-hidden="true" class="line-numbers-rows">'
-      for (let index = 0; index < linesLpength; index++) {
+      for (let index = 0; index < linesLength; index++) {
         linesNum = linesNum + '<span></span>'
       }
       linesNum += '</span>'
@@ -384,8 +400,7 @@ const markdownToHtml = (articleData: any) => {
       }
     },
   }).use(MarkdownItMark)
-  articleData.articleContent = md.render(articleData.articleContent)
-  article.value = articleData
+  return md.render(articleContent)
 }
 
 const previewImg = (img: string) => {
@@ -402,19 +417,13 @@ const deleteHTMLTag = (content: string) => {
     .replace(/&npsp;/gi, '')
 }
 
-function articleCover() {
-  return 'background: url(' + article.value.articleCover + ') center center / cover no-repeat'
-}
-
 function isLike() {
-  var articleLikeSet = this.$store.state.articleLikeSet
-  return articleLikeSet.indexOf(this.article.id) != -1 ? 'like-btn-active' : 'like-btn'
+  const articleLikeSet = webInfo.value.articleLikeSet
+  return articleLikeSet.indexOf(articleRef.value.id) != -1 ? 'like-btn-active' : 'like-btn'
 }
 
-function isFull() {
-  return function(id) {
-    return id ? 'post full' : 'post'
-  }
+function isFull(id) {
+  return id ? 'post full' : 'post'
 }
 
 const getCommentCount = (count: number) => {
@@ -846,6 +855,10 @@ hr {
 .recommend-item:hover .recommend-cover {
   opacity: 0.8;
   transform: scale(1.1);
+}
+
+.article-wrapper {
+  padding: 50px 40px;
 }
 
 .article-item {

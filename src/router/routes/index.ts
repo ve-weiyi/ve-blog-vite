@@ -84,13 +84,13 @@ const routes: RouteRecordRaw[] = [
   //     title: "友链列表"
   //   }
   // },
-  // {
-  //   path: "/about",
-  //   component: () => import("@/views/about/About.vue"),
-  //   meta: {
-  //     title: "关于我"
-  //   }
-  // },
+  {
+    path: "/about",
+    component: () => import("@/views/about/About.vue"),
+    meta: {
+      title: "关于我"
+    }
+  },
   // {
   //   path: "/message",
   //   component: () => import("@/views/message/Message.vue"),
