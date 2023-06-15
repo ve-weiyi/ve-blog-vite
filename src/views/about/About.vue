@@ -38,24 +38,24 @@ const imgList = ref<string[]>([])
 
 const getAboutContent = () => {
   const that = this
-  getAboutApi().then(({ data }) => {
-    markdownToHtml(data.data)
-    nextTick(() => {
-      // 添加代码复制功能
-      clipboard.value = new Clipboard('.copy-btn')
-      clipboard.value.on('success', () => {
-        this.$toast({ type: 'success', message: '复制成功' })
-      })
-      // 添加图片预览功能
-      const imgListRef = aboutRef.value.getElementsByTagName('img')
-      for (let i = 0; i < imgListRef.length; i++) {
-        imgList.value.push(imgListRef[i].src)
-        imgListRef[i].addEventListener('click', function(e) {
-          previewImg(e.target.currentSrc)
-        })
-      }
-    })
-  })
+  // getAboutApi().then(({ data }) => {
+  //   markdownToHtml(data.data)
+  //   nextTick(() => {
+  //     // 添加代码复制功能
+  //     clipboard.value = new Clipboard('.copy-btn')
+  //     clipboard.value.on('success', () => {
+  //       this.$toast({ type: 'success', message: '复制成功' })
+  //     })
+  //     // 添加图片预览功能
+  //     const imgListRef = aboutRef.value.getElementsByTagName('img')
+  //     for (let i = 0; i < imgListRef.length; i++) {
+  //       imgList.value.push(imgListRef[i].src)
+  //       imgListRef[i].addEventListener('click', function(e) {
+  //         previewImg(e.target.currentSrc)
+  //       })
+  //     }
+  //   })
+  // })
 }
 
 const markdownToHtml = (data: string) => {
@@ -121,15 +121,15 @@ onBeforeUnmount(() => {
 })
 
 const avatar = blogInfo.value.websiteConfig.websiteAvatar
-const cover =
-  blogInfo.value.pageList.find((item: { pageLabel: string; pageCover: string }) => item.pageLabel === 'about')
-    ?.pageCover || ''
+const url = 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg'
+const cover = 'background: url(' + url + ') center center / cover no-repeat'
 </script>
 
 <style scoped>
 .about-content {
   word-break: break-word;
   line-height: 1.8;
+  min-height: 300px;
 }
 
 .my-wrapper {
