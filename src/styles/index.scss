@@ -190,7 +190,7 @@ p {
   .blog-container {
     animation: main 1s;
     max-width: 970px;
-    padding: 50px 40px;
+    padding: 50px 40px !important;
     margin: 380px auto 40px auto;
   }
   .article-container {

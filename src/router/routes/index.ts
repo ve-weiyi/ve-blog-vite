@@ -77,19 +77,19 @@ const routes: RouteRecordRaw[] = [
   //   path: "/tags/:tagId",
   //   component: () => import("@/views/article/ArticleList.vue")
   // },
-  // {
-  //   path: "/links",
-  //   component: () => import("@/views/link/Link.vue"),
-  //   meta: {
-  //     title: "友链列表"
-  //   }
-  // },
   {
-    path: "/about",
-    component: () => import("@/views/about/About.vue"),
+    path: '/links',
+    component: () => import('@/views/link/Link.vue'),
     meta: {
-      title: "关于我"
-    }
+      title: '友链列表',
+    },
+  },
+  {
+    path: '/about',
+    component: () => import('@/views/about/About.vue'),
+    meta: {
+      title: '关于我',
+    },
   },
   // {
   //   path: "/message",
