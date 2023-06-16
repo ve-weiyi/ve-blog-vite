@@ -129,7 +129,7 @@ const cover = 'background: url(' + url + ') center center / cover no-repeat'
 .about-content {
   word-break: break-word;
   line-height: 1.8;
-  min-height: 300px;
+  min-height: 200px;
 }
 
 .my-wrapper {

@@ -37,13 +37,13 @@ const routes: RouteRecordRaw[] = [
   //     title: "相册"
   //   }
   // },
-  // {
-  //   path: "/talks",
-  //   component: () => import("@/views/talk/Talk.vue"),
-  //   meta: {
-  //     title: "说说"
-  //   }
-  // },
+  {
+    path: '/talks',
+    component: () => import('@/views/talk/Talk.vue'),
+    meta: {
+      title: '说说',
+    },
+  },
   // {
   //   path: "/talks/:talkId",
   //   component: () => import("@/views/talk/TalkInfo.vue"),
@@ -91,13 +91,13 @@ const routes: RouteRecordRaw[] = [
       title: '关于我',
     },
   },
-  // {
-  //   path: "/message",
-  //   component: () => import("@/views/message/Message.vue"),
-  //   meta: {
-  //     title: "留言板"
-  //   }
-  // },
+  {
+    path: '/message',
+    component: () => import('@/views/message/Message.vue'),
+    meta: {
+      title: '留言板',
+    },
+  },
   // {
   //   path: "/user",
   //   component: () => import("@/views/user/User.vue"),

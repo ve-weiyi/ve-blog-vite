@@ -22,6 +22,7 @@ export const useWebStore = defineStore({
     articleLikeSet: [],
     commentLikeSet: [],
     talkLikeSet: [],
+    defaultCover: 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg',
     blogInfo: {
       viewsCount: 999,
       websiteConfig: {
@@ -59,6 +60,12 @@ export const useWebStore = defineStore({
     },
   }),
   actions: {
+    getCover(page: string) {
+      const cover = this.blogInfo.pageList.find((item: any) => item.pageLabel === page)?.pageCover
+      const pageCover = cover ? cover : this.defaultCover
+      console.log('cover', pageCover)
+      return `background: url(${pageCover}) center center / cover no-repeat`
+    },
     login(user) {
       this.userId = user.userInfoId
       this.avatar = user.avatar
