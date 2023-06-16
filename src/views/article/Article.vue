@@ -169,7 +169,7 @@
           <!-- 分割线 -->
           <hr />
           <!-- 评论 -->
-          <!--          <comment :type="commentType" @getCommentCount="getCommentCount" />-->
+          <comment :type="commentType" @getCommentCount="getCommentCount" />
         </v-card>
       </v-col>
       <!-- 侧边功能 -->
@@ -214,7 +214,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import Clipboard from 'clipboard'
-// import Comment from "../../components/Comment";
+import Comment from '../../components/Comment'
 import { ElMessage } from 'element-plus'
 import tocbot from 'tocbot'
 import { useWebStore } from '@/stores'

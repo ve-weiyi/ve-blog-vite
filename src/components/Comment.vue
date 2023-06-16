@@ -5,8 +5,8 @@
     <div class="comment-input-wrapper">
       <div style="display: flex">
         <v-avatar size="40">
-          <img v-if="store.state.avatar" :src="store.state.avatar" />
-          <img v-else :src="store.state.blogInfo.websiteConfig.touristAvatar" />
+          <img height="40" v-if="webState.avatar" :src="webState.avatar" />
+          <img height="40" v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -54,7 +54,7 @@
             <!-- 楼层 -->
             <span style="margin-right: 10px">{{ count - index }}楼</span>
             <!-- 发表时间 -->
-            <span style="margin-right: 10px">{{ formatDate(item.createdAt) }}</span>
+            <span style="margin-right: 10px">{{ item.createdAt }}</span>
             <!-- 点赞 -->
             <span :class="isLike(item.id) + ' iconfont icondianzan'" @click="like(item)"></span>
             <span v-show="item.likeCount > 0"> {{ item.likeCount }}</span>
@@ -82,7 +82,7 @@
               <div class="comment-info">
                 <!-- 发表时间 -->
                 <span style="margin-right: 10px">
-                  {{ formatDate(reply.createdAt) }}
+                  {{ reply.createdAt }}
                 </span>
                 <!-- 点赞 -->
                 <span :class="isLike(reply.id) + ' iconfont icondianzan'" @click="like(reply)"></span>
@@ -141,6 +141,7 @@ import Reply from './Reply'
 import Paging from './Paging'
 import Emoji from './Emoji'
 import EmojiList from '../assets/js/emoji'
+import { useWebStore } from '@/stores'
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -150,10 +151,14 @@ const props = defineProps({
   },
 })
 
+// 获取存储的博客信息
+const webState = ref(useWebStore())
+
 const commentContent = ref('')
 const current = ref(1)
 const commentList = ref([])
 const count = ref(0)
+const chooseEmoji = ref(false)
 
 const listComments = () => {
   // 查看评论
@@ -189,8 +194,8 @@ const listComments = () => {
 
 const insertComment = () => {
   // 判断登录
-  if (!$store.state.userId) {
-    $store.state.loginFlag = true
+  if (!webState.value.userId) {
+    webState.value.loginFlag = true
     return false
   }
   // 判空
@@ -224,7 +229,7 @@ const insertComment = () => {
       // 查询最新评论
       current.value = 1
       listComments()
-      const isReview = $store.state.blogInfo.websiteConfig.isCommentReview
+      const isReview = webState.value.blogInfo.websiteConfig.isCommentReview
       if (isReview) {
         $toast({ type: 'warning', message: '评论成功，正在审核中' })
       } else {
@@ -236,10 +241,39 @@ const insertComment = () => {
   })
 }
 
+const addEmoji = (emoji) => {
+  commentContent.value += emoji
+}
+
+const like = (commentId) => {
+  // 判断登录
+  if (!webState.value.userId) {
+    webState.value.loginFlag = true
+    return false
+  }
+  axios.post('/api/comments/like', { commentId }).then(({ data }) => {
+    if (data.flag) {
+      $toast({ type: 'success', message: '点赞成功' })
+      const commentLikeSet = webState.value.commentLikeSet
+      if (commentLikeSet.indexOf(commentId) === -1) {
+        commentLikeSet.push(commentId)
+      }
+    } else {
+      $toast({ type: 'error', message: data.message })
+    }
+  })
+}
+
+const isLike = (commentId) => {
+  var commentLikeSet = webState.value.commentLikeSet
+  return commentLikeSet.indexOf(commentId) != -1 ? 'like-active' : 'like'
+}
+
+const reFresh = ref(false)
 watch(commentList, () => {
-  reFresh = false
+  reFresh.value = false
   nextTick(() => {
-    reFresh = true
+    reFresh.value = true
   })
 })
 </script>

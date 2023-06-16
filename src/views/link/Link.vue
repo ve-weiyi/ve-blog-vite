@@ -7,9 +7,7 @@
     <!-- 链接列表 -->
     <v-card class="blog-container">
       <div class="link-title mb-1">
-        <v-icon icon="mdi-link-variant" style="background-color: black" color="blue"></v-icon>
-        <v-icon icon="mdi-home" />
-        <v-icon icon="mdi-link-variant" color="blue"></v-icon>
+        <i class="iconfont iconlianjie"></i>
         大佬链接
       </div>
       <v-row class="link-container">
@@ -27,7 +25,8 @@
       </v-row>
       <!-- 说明 -->
       <div class="link-title mt-4 mb-4">
-        <v-icon color="blue">mdi-dots-horizontal-circle</v-icon>
+        <i class="iconfont iconzhifeiji"></i>
+        <!--        <v-icon color="blue">mdi-dots-horizontal-circle</v-icon>-->
         添加友链
       </div>
       <blockquote>
@@ -38,13 +37,13 @@
       <div class="mt-5 mb-5">需要交换友链的可在下方留言💖</div>
       <blockquote class="mb-10">友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像</blockquote>
       <!-- 评论 -->
-      <!--      <Comment :type="commentType" />-->
+      <Comment :type="commentType" />
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-// import Comment from '../../components/Comment'
+import Comment from '../../components/Comment'
 import { ref, onMounted, computed } from 'vue'
 import { useWebStore } from '@/stores'
 import { getLinkListApi } from '@/api/link'
