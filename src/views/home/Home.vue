@@ -52,7 +52,7 @@
           <!-- 文章封面图 -->
           <div :class="isRight(index)">
             <router-link :to="'/articles/' + item.id">
-              <v-img class="on-hover" width="100%" height="100%" :src="item.articleCover" />
+              <v-img cover class="on-hover" width="100%" height="100%" :src="item.articleCover" />
             </router-link>
           </div>
           <!-- 文章信息 -->
