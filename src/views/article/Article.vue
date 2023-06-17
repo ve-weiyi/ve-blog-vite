@@ -233,7 +233,7 @@ const route = useRoute()
 const articleId = route.params.articleId // 假设路由参数名为 "id"
 
 // 获取存储的博客信息
-const webInfo = ref(useWebStore())
+const webState = ref(useWebStore())
 const blogInfo = ref(useWebStore().blogInfo)
 
 const imgList = ref<string[]>([])
@@ -372,7 +372,7 @@ const deleteHTMLTag = (content: string) => {
 }
 
 function isLike() {
-  const articleLikeSet = webInfo.value.articleLikeSet
+  const articleLikeSet = webState.value.articleLikeSet
   return articleLikeSet.indexOf(articleRef.value.id) != -1 ? 'like-btn-active' : 'like-btn'
 }
 

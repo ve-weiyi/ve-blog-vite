@@ -21,6 +21,7 @@ import { vuetify } from '@/plugins/vuetify'
 // 使用element-ui
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import { usePhotoPreview } from '@/plugins/imagePreview'
 
 const app = createApp(App)
 
@@ -30,6 +31,8 @@ const initApp = async() => {
   app.use(vuetify)
 
   app.use(ElementPlus)
+
+  usePhotoPreview(app)
   await router.isReady()
   app.mount('#app')
 }

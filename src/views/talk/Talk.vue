@@ -69,6 +69,13 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Comment from '@/components/TalkComment'
+import { useWebStore } from '@/stores'
+import axios from 'axios'
+import { getTalkListApi } from '@/api/talk'
+
+// 获取存储的博客信息
+const webState = ref(useWebStore())
+const cover = ref(webState.value.getCover('talk'))
 
 const current = ref(1)
 const size = ref(10)
@@ -79,27 +86,20 @@ const previewList = ref([])
 const router = useRouter()
 
 const listTalks = () => {
-  axios
-    .get('/api/talks', {
-      params: {
-        current: current.value,
-        size: size.value,
-      },
-    })
-    .then(({ data }) => {
-      if (current.value === 1) {
-        talkList.value = data.data.recordList
-      } else {
-        talkList.value.push(...data.data.recordList)
+  getTalkListApi({}).then((res) => {
+    if (current.value === 1) {
+      talkList.value = res.data.list
+    } else {
+      talkList.value.push(...res.data.list)
+    }
+    talkList.value.forEach((item) => {
+      if (item.imgList) {
+        previewList.value.push(...item.imgList)
       }
-      talkList.value.forEach((item) => {
-        if (item.imgList) {
-          previewList.value.push(...item.imgList)
-        }
-      })
-      current.value++
-      count.value = data.data.count
     })
+    current.value++
+    count.value = res.data.total
+  })
 }
 
 const previewImg = (img) => {
@@ -111,15 +111,15 @@ const previewImg = (img) => {
 
 const like = (talk) => {
   // 判断登录
-  if (!$store.state.userId) {
-    $store.state.loginFlag = true
+  if (!webState.value.userId) {
+    webState.value.loginFlag = true
     return false
   }
   // 发送请求
   axios.post('/api/talks/' + talk.id + '/like').then(({ data }) => {
     if (data.flag) {
       // 判断是否点赞
-      if ($store.state.talkLikeSet.indexOf(talk.id) != -1) {
+      if (webState.value.talkLikeSet.indexOf(talk.id) != -1) {
         talk.likeCount -= 1
       } else {
         talk.likeCount += 1
@@ -129,18 +129,8 @@ const like = (talk) => {
   })
 }
 
-const cover = computed(() => {
-  var cover = ''
-  $store.state.blogInfo.pageList.forEach((item) => {
-    if (item.pageLabel === 'talk') {
-      cover = item.pageCover
-    }
-  })
-  return `background: url(${cover}) center center / cover no-repeat`
-})
-
 const isLike = (talkId) => {
-  var talkLikeSet = $store.state.talkLikeSet
+  var talkLikeSet = webState.value.talkLikeSet
   return talkLikeSet.includes(talkId) ? '#eb5055' : '#999'
 }
 

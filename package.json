@@ -45,6 +45,7 @@
     "vue": "^3.3.4",
     "vue-infinite-loading": "^2.4.5",
     "vue-router": "^4.2.2",
+    "vue3-photo-preview": "^0.3.0",
     "vuetify": "^3.3.4"
   },
   "devDependencies": {

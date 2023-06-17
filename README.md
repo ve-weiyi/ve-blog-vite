@@ -35,3 +35,11 @@ See: [Learning Vue3](https://vue3.chengpeiquan.com/)
 如果你对 Vue 3 和 TypeScript 不是很熟悉，甚至完全没有接触过，不用担心，我整理了一个入门指南，适合没有 Vue 3 开发经验的开发者阅读，以一个项目的开发过程来写的一本书，建议一边 Reading ，一边 Coding 。
 
 点击阅读：[Vue3入门指南与实战案例](https://vue3.chengpeiquan.com/)
+
+## done
+1.相册页面
+2.相册详情页面
+
+## todo
+1.相册详情页面 获取指定相册下的照片
+2.归档页面时间轴页面替换

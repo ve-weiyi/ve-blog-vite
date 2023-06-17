@@ -23,20 +23,20 @@ const routes: RouteRecordRaw[] = [
     path: '/articles/:articleId',
     component: () => import('@/views/article/Article.vue'),
   },
-  // {
-  //   path: "/archives",
-  //   component: () => import("@/views/archive/Archive.vue"),
-  //   meta: {
-  //     title: "归档"
-  //   }
-  // },
-  // {
-  //   path: "/albums",
-  //   component: () => import("@/views/album/Album.vue"),
-  //   meta: {
-  //     title: "相册"
-  //   }
-  // },
+  {
+    path: '/archives',
+    component: () => import('@/views/archive/Archive.vue'),
+    meta: {
+      title: '归档',
+    },
+  },
+  {
+    path: '/albums',
+    component: () => import('@/views/album/Album.vue'),
+    meta: {
+      title: '相册',
+    },
+  },
   {
     path: '/talks',
     component: () => import('@/views/talk/Talk.vue'),
@@ -44,39 +44,39 @@ const routes: RouteRecordRaw[] = [
       title: '说说',
     },
   },
-  // {
-  //   path: "/talks/:talkId",
-  //   component: () => import("@/views/talk/TalkInfo.vue"),
-  //   meta: {
-  //     title: "说说"
-  //   }
-  // },
-  // {
-  //   path: "/albums/:albumId",
-  //   component: () => import("@/views/album/Photo.vue")
-  // },
-  // {
-  //   path: "/tags",
-  //   component: () => import("@/views/tag/Tag.vue"),
-  //   meta: {
-  //     title: "标签"
-  //   }
-  // },
-  // {
-  //   path: "/categories",
-  //   component: () => import("@/views/category/Category.vue"),
-  //   meta: {
-  //     title: "分类"
-  //   }
-  // },
-  // {
-  //   path: "/categories/:categoryId",
-  //   component: () => import("@/views/article/ArticleList.vue")
-  // },
-  // {
-  //   path: "/tags/:tagId",
-  //   component: () => import("@/views/article/ArticleList.vue")
-  // },
+  {
+    path: '/talks/:talkId',
+    component: () => import('@/views/talk/TalkInfo.vue'),
+    meta: {
+      title: '说说',
+    },
+  },
+  {
+    path: '/albums/:albumId',
+    component: () => import('@/views/album/Photo.vue'),
+  },
+  {
+    path: '/tags',
+    component: () => import('@/views/tag/Tag.vue'),
+    meta: {
+      title: '标签',
+    },
+  },
+  {
+    path: '/categories',
+    component: () => import('@/views/category/Category.vue'),
+    meta: {
+      title: '分类',
+    },
+  },
+  {
+    path: '/categories/:categoryId',
+    component: () => import('@/views/article/ArticleList.vue'),
+  },
+  {
+    path: '/tags/:tagId',
+    component: () => import('@/views/article/ArticleList.vue'),
+  },
   {
     path: '/links',
     component: () => import('@/views/link/Link.vue'),

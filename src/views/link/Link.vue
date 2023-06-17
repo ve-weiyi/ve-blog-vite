@@ -49,7 +49,7 @@ import { useWebStore } from '@/stores'
 import { getLinkListApi } from '@/api/link'
 
 // 获取存储的博客信息
-const webInfo = ref(useWebStore())
+const webState = ref(useWebStore())
 const blogInfo = ref(useWebStore().blogInfo)
 
 const friendLinkList = ref([])
@@ -61,8 +61,7 @@ function listFriendLink() {
   })
 }
 
-const url = 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg'
-const cover = 'background: url(' + url + ') center center / cover no-repeat'
+const cover = ref(webState.value.getCover('link'))
 
 onMounted(() => {
   listFriendLink()

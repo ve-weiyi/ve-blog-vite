@@ -53,3 +53,12 @@ export function getArticleListApi(page: object): Promise<IApiResponseData<any>> 
     params: page,
   })
 }
+
+/** 查 列表*/
+export function getArticleArchivesApi(page: object): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: '/api/v1/blog/article/archives',
+    method: 'get',
+    params: page,
+  })
+}
