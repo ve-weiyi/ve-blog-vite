@@ -63,7 +63,6 @@ export const useWebStore = defineStore({
     getCover(page: string) {
       const cover = this.blogInfo.pageList.find((item: any) => item.pageLabel === page)?.pageCover
       const pageCover = cover ? cover : this.defaultCover
-      console.log('cover', pageCover)
       return `background: url(${pageCover}) center center / cover no-repeat`
     },
     login(user) {

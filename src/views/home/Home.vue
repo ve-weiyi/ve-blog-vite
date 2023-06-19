@@ -600,6 +600,7 @@ onUnmounted(() => {
 }
 
 .blog-info-data a {
+  color: rgb(76, 73, 72);
   text-decoration: none;
 }
 
