@@ -18,7 +18,7 @@
         </v-timeline-item>
       </v-timeline>
       <!-- 分页按钮 -->
-      <v-pagination color="#00C4B6" v-model="current" :length="Math.ceil(count / 10)" total-visible="7" />
+      <v-pagination color="#00C4B6" v-model="current" :length="Math.ceil(count / 10)" total-visible="7" rounded="0" />
     </v-card>
   </div>
 </template>

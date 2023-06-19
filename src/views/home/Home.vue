@@ -97,9 +97,9 @@
           </div>
         </v-card>
         <!-- 无限加载 -->
-        <infinite-loading @infinite="infiniteHandler">
-          <template #no-more></template>
-        </infinite-loading>
+        <!--        <infinite-loading @infinite="infiniteHandler">-->
+        <!--          <template #no-more></template>-->
+        <!--        </infinite-loading>-->
       </v-col>
       <!-- 博主信息 -->
       <v-col md="3" cols="12" class="d-md-block d-none">
@@ -332,7 +332,10 @@ const init = () => {
 const listHomeTalks = () => {}
 
 const initTyped = (input, fn, hooks) => {
-  const typed = new EasyTyper(obj.value, input, fn, hooks)
+  // obj.value.output = input
+  const typed = new EasyTyper(obj.value, input, fn, function() {
+    console.log('end', obj.value)
+  })
 }
 
 const scrollDown = () => {
