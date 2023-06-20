@@ -8,9 +8,11 @@
       <!-- 导航栏 -->
       <TopNavBar></TopNavBar>
       <!-- 侧边导航栏 -->
-      <!--      <SideNavBar></SideNavBar>-->
+      <SideNavBar></SideNavBar>
       <!-- 页脚 -->
       <Footer></Footer>
+      <!-- 返回顶部 -->
+      <BackTop></BackTop>
     </el-config-provider>
   </v-app>
 </template>
@@ -20,6 +22,7 @@ import { computed } from 'vue'
 import TopNavBar from './components/layout/TopNavBar.vue'
 import Footer from './components/layout/Footer.vue'
 import SideNavBar from './components/layout/SideNavBar.vue'
+import BackTop from './components/BackTop.vue'
 import { ElConfigProvider } from 'element-plus'
 import zh from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
