@@ -15,8 +15,8 @@
       <BackTop></BackTop>
       <!-- 搜索模态框 -->
       <SearchModel></SearchModel>
-      <!--    &lt;!&ndash; 登录模态框 &ndash;&gt;-->
-      <!--    <LoginModel></LoginModel>-->
+      <!-- 登录模态框 -->
+      <LoginModel></LoginModel>
       <!--    &lt;!&ndash; 注册模态框 &ndash;&gt;-->
       <!--    <RegisterModel></RegisterModel>-->
       <!--    &lt;!&ndash; 忘记密码模态框 &ndash;&gt;-->
@@ -34,6 +34,8 @@ import Footer from './components/layout/Footer.vue'
 import SideNavBar from './components/layout/SideNavBar.vue'
 import BackTop from './components/BackTop.vue'
 import SearchModel from './components/model/SearchModel.vue'
+import LoginModel from './components/model/LoginModel.vue'
+
 import { ElConfigProvider } from 'element-plus'
 import zh from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
