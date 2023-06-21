@@ -311,7 +311,6 @@ const init = () => {
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {
-    console.log('-->', res)
     paginationData.total = res.data.total
     paginationData.pageSize = res.data.pageSize
     const list = res.data.list
@@ -333,9 +332,7 @@ const listHomeTalks = () => {}
 
 const initTyped = (input, fn, hooks) => {
   // obj.value.output = input
-  const typed = new EasyTyper(obj.value, input, fn, function() {
-    console.log('end', obj.value)
-  })
+  const typed = new EasyTyper(obj.value, input, fn, function() {})
 }
 
 const scrollDown = () => {

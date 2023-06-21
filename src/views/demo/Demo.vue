@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 
 // 定义组件的属性和事件
 const props = defineProps({
@@ -41,6 +41,15 @@ function insertComment() {
   // insertComment方法代码
 }
 
+// 监听属性变化
+watch(
+  // sum, //监听一个
+  [1, 2], // 监听多个
+  (newValue, oldValue) => {
+    console.log(newValue, oldValue) // 1 'hhh' undefined undefined
+  },
+  { immediate: true }, // 立即监听属性
+)
 // 导出响应式数据、方法和事件
 // export { commentContent, data, insertComment }
 </script>

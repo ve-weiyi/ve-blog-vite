@@ -118,18 +118,19 @@ const scroll = () => {
 }
 
 // 获取存储的博客信息
+const webStore = useWebStore()
 const blogInfo = useWebStore().blogInfo
 
 const openSearch = () => {
-  blogInfo.searchFlag = true
+  webStore.searchFlag = true
 }
 
 const openDrawer = () => {
-  blogInfo.drawer = true
+  webStore.drawer = true
 }
 
 const openLogin = () => {
-  blogInfo.loginFlag = true
+  webStore.loginFlag = true
 }
 
 const logout = () => {
