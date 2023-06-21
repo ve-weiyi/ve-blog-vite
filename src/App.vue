@@ -8,7 +8,7 @@
       <!-- 导航栏 -->
       <TopNavBar></TopNavBar>
       <!-- 侧边导航栏 -->
-      <!--      <SideNavBar></SideNavBar>-->
+      <SideNavBar></SideNavBar>
       <!-- 页脚 -->
       <Footer></Footer>
       <!-- 返回顶部 -->

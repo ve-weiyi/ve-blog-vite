@@ -126,7 +126,13 @@ import { useWebStore } from '@/stores'
 import axios from 'axios'
 
 // 获取存储的博客信息
+const store = useWebStore()
 const blogInfo = useWebStore().blogInfo
+const router = useRouter()
+
+const avatar = computed<string>(() => {
+  return store.avatar
+})
 
 const drawer = computed<boolean>({
   get() {
@@ -140,9 +146,6 @@ const drawer = computed<boolean>({
 const isLogin = computed<boolean>(() => {
   return store.userId
 })
-
-const store = useWebStore()
-const router = useRouter()
 
 const openLogin = () => {
   store.loginFlag = true

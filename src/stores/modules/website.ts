@@ -13,7 +13,7 @@ export const useWebStore = defineStore({
     drawer: false,
     loginUrl: '',
     userId: null,
-    avatar: null,
+    avatar: 'https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg',
     nickname: null,
     intro: null,
     webSite: null,
