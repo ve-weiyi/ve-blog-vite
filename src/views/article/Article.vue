@@ -212,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import Clipboard from 'clipboard'
 import Comment from '../../components/Comment'
 import { ElMessage } from 'element-plus'
@@ -394,6 +394,17 @@ onUnmounted(() => {
   }
   tocbot.destroy()
 })
+
+// 监听路由变化，刷新页面
+watch(
+  () => route.params.articleId,
+  (to, from) => {
+    // 执行你的逻辑
+
+    // 刷新页面的操作
+    location.reload()
+  },
+)
 </script>
 
 <style scoped>

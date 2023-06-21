@@ -24,7 +24,7 @@
           </li>
         </ul>
         <!-- 搜索结果不存在提示 -->
-        <div v-show="flag && articleList.length == 0" style="font-size: 0.875rem">
+        <div v-show="flag && articleList.length === 0" style="font-size: 0.875rem">
           找不到您查询的内容：{{ keywords }}
         </div>
       </div>
@@ -36,6 +36,8 @@
 import { computed, reactive, ref, toRef, watch, watchEffect } from 'vue'
 import { useWebStore } from '@/stores'
 import { getArticleListApi } from '@/api/article'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 // 获取存储的博客信息
 const webStore = useWebStore()
@@ -56,6 +58,11 @@ const flag = ref(true)
 
 const goTo = (id) => {
   // 在此处添加跳转到文章详情页的逻辑
+  webStore.searchFlag = false
+  router.push({ path: '/articles/' + id })
+  //   .then(() => {
+  //   router.go(0) // 强制刷新当前页面
+  // })
 }
 
 // const isMobile = () => {
