@@ -17,10 +17,10 @@
       <SearchModel></SearchModel>
       <!-- 登录模态框 -->
       <LoginModel></LoginModel>
-      <!--    &lt;!&ndash; 注册模态框 &ndash;&gt;-->
-      <!--    <RegisterModel></RegisterModel>-->
-      <!--    &lt;!&ndash; 忘记密码模态框 &ndash;&gt;-->
-      <!--    <ForgetModel></ForgetModel>-->
+      <!-- 注册模态框 -->
+      <RegisterModel></RegisterModel>
+      <!-- 忘记密码模态框 -->
+      <ForgetModel></ForgetModel>
       <!--    &lt;!&ndash; 绑定邮箱模态框 &ndash;&gt;-->
       <!--    <EmailModel></EmailModel>-->
     </el-config-provider>
@@ -35,6 +35,8 @@ import SideNavBar from './components/layout/SideNavBar.vue'
 import BackTop from './components/BackTop.vue'
 import SearchModel from './components/model/SearchModel.vue'
 import LoginModel from './components/model/LoginModel.vue'
+import RegisterModel from './components/model/RegisterModel.vue'
+import ForgetModel from './components/model/ForgetModel.vue'
 
 import { ElConfigProvider } from 'element-plus'
 import zh from 'element-plus/lib/locale/lang/zh-cn'
