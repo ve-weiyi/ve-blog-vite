@@ -41,6 +41,13 @@ to="/"
           </router-link>
         </div>
         <div class="menus-item">
+          <router-link class="menu-btn"
+to="/ai/chatbot"
+            ><i class="iconfont iconzhuye" />
+            ChatGpt
+          </router-link>
+        </div>
+        <div class="menus-item">
           <a class="menu-btn">
             <i class="iconfont iconfaxian" /> 发现
             <i class="iconfont iconxiangxia2 expand" />

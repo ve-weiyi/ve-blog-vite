@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import aiRoutes from '@/router/routes/ai.routes'
 
 /**
  * 路由配置
@@ -97,6 +98,10 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: '留言板',
     },
+  },
+  {
+    path: '/ai/chatbot',
+    component: () => import('@/views/chatgpt/ChatBotV1.vue'),
   },
   // {
   //   path: "/user",

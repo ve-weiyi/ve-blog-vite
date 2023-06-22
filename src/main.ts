@@ -22,6 +22,7 @@ import { vuetify } from '@/plugins/vuetify'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import { usePhotoPreview } from '@/plugins/imagePreview'
+import Vue3Lottie from 'vue3-lottie'
 
 const app = createApp(App)
 
@@ -31,6 +32,7 @@ const initApp = async() => {
   app.use(vuetify)
 
   app.use(ElementPlus)
+  app.use(Vue3Lottie, { name: 'LottieAnimation' })
 
   usePhotoPreview(app)
   await router.isReady()
