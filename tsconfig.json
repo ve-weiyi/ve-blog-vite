@@ -23,7 +23,8 @@
     "lib": ["dom", "esnext"],
     "paths": {
       "@/*": ["src/*"],
-      "@build/*": ["build/*"]
+      "@build/*": ["build/*"],
+      "@/assets/*": ["src/assets/*"],
     },
     "types": [
       "node",

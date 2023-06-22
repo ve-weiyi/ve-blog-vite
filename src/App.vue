@@ -24,7 +24,7 @@
       <!--    &lt;!&ndash; 绑定邮箱模态框 &ndash;&gt;-->
       <!--    <EmailModel></EmailModel>-->
       <!-- 音乐播放器 -->
-      <!--      <Player v-if="webState.blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" />-->
+      <Player v-if="webState.blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" />
       <!-- 聊天室 -->
       <ChatRoom v-if="webState.blogInfo.websiteConfig.isChatRoom === 1"></ChatRoom>
     </el-config-provider>
@@ -41,7 +41,7 @@ import SearchModel from './components/model/SearchModel.vue'
 import LoginModel from './components/model/LoginModel.vue'
 import RegisterModel from './components/model/RegisterModel.vue'
 import ForgetModel from './components/model/ForgetModel.vue'
-// import Player from './components/zw-player/player.vue'
+import Player from './components/zw-player/player.vue'
 import ChatRoom from './components/ChatRoom.vue'
 import { ElConfigProvider } from 'element-plus'
 import zh from 'element-plus/lib/locale/lang/zh-cn'

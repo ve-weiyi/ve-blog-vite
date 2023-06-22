@@ -71,7 +71,7 @@
       <div class="footer">
         <!-- 表情框 -->
         <div class="emoji-box" v-show="isEmoji">
-          <Emoji :chooseEmoji="true" @addEmoji="addEmoji" />
+          <!--          <Emoji :chooseEmoji="true" @addEmoji="addEmoji" />-->
         </div>
         <div class="emoji-border" v-show="isEmoji" />
         <!-- 切换输入方式 -->
@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onBeforeUnmount, nextTick } from 'vue'
+import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from 'vue'
 import Recorderx, { ENCODE_TYPE } from 'recorderx'
 // import Emoji from './Emoji'
 // import EmojiList from '../assets/js/emoji'
@@ -130,6 +130,10 @@ import image from '@/assets/images/avatar.jpg'
 // 获取存储的博客信息
 const webState = ref(useWebStore())
 const blogInfo = ref(useWebStore().blogInfo)
+
+const isInput = computed(() => {
+  return content.value.trim() != '' ? 'iconfont iconzhifeiji submit-btn' : 'iconfont iconzhifeiji'
+})
 
 // 是否显示表情面板
 const isEmoji = ref(false)
