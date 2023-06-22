@@ -68,7 +68,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import Comment from '@/components/TalkComment'
 import { useWebStore } from '@/stores'
 import axios from 'axios'
 import { getTalkListApi } from '@/api/talk'

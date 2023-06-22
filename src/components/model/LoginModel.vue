@@ -142,12 +142,12 @@ const weiboLogin = () => {
 
 // 监听 username 和 password 变化
 watch([username, password], () => {
-  console.log('Username or password changed')
+  // console.log('Username or password changed')
 })
 
 // 页面加载后执行的操作
 onMounted(() => {
-  console.log('Page loaded')
+  // console.log('Page loaded')
 })
 </script>
 

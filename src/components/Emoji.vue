@@ -6,24 +6,25 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import EmojiList from '../assets/js/emoji'
-export default {
-  props: {
-    chooseEmoji: {
-      type: Boolean,
-    },
+
+// 定义组件的 props
+const props = defineProps({
+  chooseEmoji: {
+    type: Boolean,
+    required: true,
   },
-  data: function() {
-    return {
-      emojiList: EmojiList,
-    }
-  },
-  methods: {
-    addEmoji(key) {
-      this.$emit('addEmoji', key)
-    },
-  },
+})
+
+const emit = defineEmits(['addEmoji'])
+
+// 响应式数据
+const emojiList = EmojiList
+
+// 方法
+const addEmoji = (key: string) => {
+  emit('addEmoji', key)
 }
 </script>
 

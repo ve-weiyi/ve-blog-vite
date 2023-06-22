@@ -33,7 +33,7 @@ export const useWebStore = defineStore({
         isCommentReview: 0,
         isEmailNotice: 1,
         isMessageReview: 0,
-        isMusicPlayer: 0,
+        isMusicPlayer: 1,
         isReward: 1,
         qq: '791422171',
         socialLoginList: ['qq', 'weibo'],
@@ -48,7 +48,7 @@ export const useWebStore = defineStore({
         websiteNotice:
           '用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统->https://ve77.cn/admin。     \n网站搭建问题请联系站长QQ791422171。',
         websiteRecordNo: '桂ICP备2022000185号-1',
-        websocketUrl: 'wss://ve77.cn:8088/api/websocket',
+        websocketUrl: 'ws://127.0.0.1:9999/api/v1/ws',
         weiXinQRCode: 'https://veport.oss-cn-beijing.aliyuncs.com/config/6bed8a1130b170546341ece729e8819f.jpg',
       },
       pageList: [
