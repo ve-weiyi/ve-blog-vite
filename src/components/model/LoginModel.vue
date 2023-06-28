@@ -35,9 +35,28 @@
           <div class="social-login-title">社交账号登录</div>
           <div class="social-login-wrapper">
             <!-- 微博登录 -->
-            <a v-if="showLogin('weibo')" class="mr-3 iconfont iconweibo" style="color: #e05244" @click="weiboLogin" />
+            <a
+              v-if="showLogin('weibo')"
+              class="mr-2 iconfont icon-weibo-circle"
+              style="color: #e05244"
+              @click="weiboLogin"
+            />
             <!-- qq登录 -->
-            <a v-if="showLogin('qq')" class="iconfont iconqq" style="color: #00aaee" @click="qqLogin" />
+            <a v-if="showLogin('qq')" class="mr-2 iconfont icon-qq-circle" style="color: #00aaee" @click="qqLogin" />
+            <!-- 飞书登录 -->
+            <a
+              v-if="showLogin('feishu')"
+              class="mr-2 iconfont icon-feishu-circle"
+              style="color: #00aaee"
+              @click="feishuLogin"
+            />
+            <!-- 微信登录 -->
+            <a
+              v-if="showLogin('wechat')"
+              class="mr-2 iconfont icon-wechat-circle"
+              style="color: #0be148"
+              @click="feishuLogin"
+            />
           </div>
         </div>
       </div>
@@ -48,6 +67,8 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { useWebStore } from '@/stores'
+import { getAuthorizeUrlApi, loginApi } from '@/api/login'
+import { ElMessage } from 'element-plus'
 
 // 获取存储的博客信息
 const webStore = useWebStore()
@@ -85,59 +106,51 @@ const openForget = () => {
 const login = () => {
   const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(username.value)) {
-    $toast({ type: 'error', message: '邮箱格式不正确' })
+    ElMessage.error('邮箱格式不正确')
     return false
   }
   if (password.value.trim().length === 0) {
-    $toast({
-      type: 'error',
-      message: '密码不能为空',
-    })
+    ElMessage.error('密码不能为空')
     return false
   }
-  const captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, (res) => {
-    if (res.ret === 0) {
-      const param = new URLSearchParams()
-      param.append('username', username.value)
-      param.append('password', password.value)
-      axios.post('/api/login', param).then(({ data }) => {
-        if (data.flag) {
-          username.value = ''
-          password.value = ''
-          $store.commit('login', data.data)
-          $store.commit('closeModel')
-          $toast({ type: 'success', message: '登录成功' })
-        } else {
-          $toast({ type: 'error', message: data.message })
-        }
-      })
-    }
-  })
-
-  captcha.show()
+  loginApi({ username: username.value, password: password.value, code: '123' })
+    .then((res) => {
+      console.log(res)
+      ElMessage.success('登录成功')
+      webStore.loginFlag = false
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 const qqLogin = () => {
-  $store.commit('saveLoginUrl', $route.path)
+  // $store.commit('saveLoginUrl', $route.path)
   if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i)) {
-    QC.Login.showPopup({
-      appId: this.config.QQ_APP_ID,
-      redirectURI: this.config.QQ_REDIRECT_URI,
-    })
+    // eslint-disable-next-line no-undef
+    // QC.Login.showPopup({
+    //   appId: this.config.QQ_APP_ID,
+    //   redirectURI: this.config.QQ_REDIRECT_URI,
+    // })
   } else {
-    window.open(
-      `https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=${this.config.QQ_APP_ID}&response_type=token&scope=all&redirect_uri=${this.config.QQ_REDIRECT_URI}`,
-      '_self',
-    )
+    getAuthorizeUrlApi({ platform: 'qq' }).then((res) => {
+      window.open(res.data.url)
+    })
   }
 }
 
 const weiboLogin = () => {
-  $store.commit('saveLoginUrl', $route.path)
-  window.open(
-    `https://api.weibo.com/oauth2/authorize?client_id=${this.config.WEIBO_APP_ID}&response_type=code&redirect_uri=${this.config.WEIBO_REDIRECT_URI}`,
-    '_self',
-  )
+  // $store.commit('saveLoginUrl', $route.path)
+  getAuthorizeUrlApi({ platform: 'weibo' }).then((res) => {
+    window.open(res.data.url)
+  })
+}
+
+const feishuLogin = () => {
+  // $store.commit('saveLoginUrl', $route.path)
+  getAuthorizeUrlApi({ platform: 'feishu' }).then((res) => {
+    window.open(res.data.url)
+  })
 }
 
 // 监听 username 和 password 变化

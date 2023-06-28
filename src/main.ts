@@ -7,6 +7,9 @@ import router from '@/router'
 import './styles/index.scss'
 // 导入字体图标
 import './assets/iconfont/iconfont.css'
+// 导入字体图标
+import './assets/iconfont/kit/iconfont.css'
+import './assets/iconfont/platform/iconfont.css'
 // 动画样式
 import 'animate.css'
 // markdown样式

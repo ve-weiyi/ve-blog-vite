@@ -12,6 +12,18 @@
           clearable
           @keyup.enter="register"
         />
+        <!-- 密码 -->
+        <v-text-field
+          v-model="password"
+          class="mt-7"
+          label="密码"
+          placeholder="请输入您的密码"
+          variant="underlined"
+          @keyup.enter="register"
+          :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show ? 'text' : 'password'"
+          @click:append="show = !show"
+        />
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
           <v-text-field
@@ -26,18 +38,6 @@
             {{ codeMsg }}
           </v-btn>
         </div>
-        <!-- 密码 -->
-        <v-text-field
-          v-model="password"
-          class="mt-7"
-          label="密码"
-          placeholder="请输入您的密码"
-          variant="underlined"
-          @keyup.enter="register"
-          :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="show ? 'text' : 'password'"
-          @click:append="show = !show"
-        />
         <!-- 注册按钮 -->
         <v-btn class="mt-7" block color="red" style="color: #fff" @click="register"> 注册 </v-btn>
         <!-- 登录 -->
@@ -50,6 +50,8 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useWebStore } from '@/stores'
+import { registerApi } from '@/api/login'
+import { ElMessage } from 'element-plus'
 
 // 获取存储的博客信息
 const webStore = useWebStore()
@@ -77,6 +79,11 @@ const countDown = () => {
 
 const register = () => {
   // ...
+  registerApi({ username: username.value, password: password.value, code: code.value }).then((res) => {
+    console.log(res)
+    ElMessage.success('注册成功')
+    openLogin()
+  })
 }
 
 const registerFlag = computed({

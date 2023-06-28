@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
      * @see https://cn.vitejs.dev/config/#server-proxy
      */
     server: {
-      port: 3000,
+      port: 8888,
       /** 接口代理 */
       proxy: {
         // mock代理

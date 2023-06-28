@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
+// @ts-ignore
 import Qinglong from '@/assets/images/qinglong.jpg'
+// @ts-ignore
 import Avatar from '@/assets/images/avatar.jpg'
 
 export const useWebStore = defineStore({
@@ -33,10 +35,10 @@ export const useWebStore = defineStore({
         isCommentReview: 0,
         isEmailNotice: 1,
         isMessageReview: 0,
-        isMusicPlayer: 1,
+        isMusicPlayer: 0,
         isReward: 1,
         qq: '791422171',
-        socialLoginList: ['qq', 'weibo'],
+        socialLoginList: ['qq', 'weibo', 'feishu', 'wechat'],
         socialUrlList: ['qq', 'github', 'gitee'],
         touristAvatar: 'https://veport.oss-cn-beijing.aliyuncs.com/config/5bfb96809bee5ba80a36811f0bf1d1ea.gif',
         userAvatar: 'https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg',
