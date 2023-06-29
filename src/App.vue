@@ -21,8 +21,8 @@
       <RegisterModel></RegisterModel>
       <!-- 忘记密码模态框 -->
       <ForgetModel></ForgetModel>
-      <!--    &lt;!&ndash; 绑定邮箱模态框 &ndash;&gt;-->
-      <!--    <EmailModel></EmailModel>-->
+      <!-- 绑定邮箱模态框 -->
+      <EmailModel></EmailModel>
       <!-- 音乐播放器 -->
       <Player v-if="webState.blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" />
       <!-- 聊天室 -->
@@ -43,6 +43,7 @@ import RegisterModel from './components/model/RegisterModel.vue'
 import ForgetModel from './components/model/ForgetModel.vue'
 import Player from './components/zw-player/player.vue'
 import ChatRoom from './components/ChatRoom.vue'
+import EmailModel from './components/model/EmailModel.vue'
 import { ElConfigProvider } from 'element-plus'
 import zh from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'

@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 // 定义组件的属性和事件
 const props = defineProps({
@@ -20,6 +21,10 @@ const emit = defineEmits([
   // 定义事件
   // 'eventName',
 ])
+
+// 获取路由参数
+const route = useRoute()
+const tagId = route.params.tagId ? parseInt(route.params.tagId) : 0 // 假设路由参数名为 "id"
 
 // 使用Composition API定义组件的逻辑
 const commentContent = ref('')

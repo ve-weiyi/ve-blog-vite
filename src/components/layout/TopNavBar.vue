@@ -81,9 +81,11 @@ to="/"
           <router-link class="menu-btn" to="/message"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
         </div>
         <div class="menus-item">
-          <a class="menu-btn" v-if="!blogInfo.avatar" @click="openLogin"> <i class="iconfont icondenglu" /> 登录 </a>
+          <a class="menu-btn" v-if="!webStore.userInfo.avatar" @click="openLogin">
+            <i class="iconfont icondenglu" /> 登录
+          </a>
           <template v-else>
-            <img class="user-avatar" :src="blogInfo.avatar" height="30" width="30" />
+            <img class="user-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
             <ul class="menus-submenu">
               <li>
                 <router-link to="/user"

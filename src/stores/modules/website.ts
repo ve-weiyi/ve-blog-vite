@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import Qinglong from '@/assets/images/qinglong.jpg'
 // @ts-ignore
 import Avatar from '@/assets/images/avatar.jpg'
+import cookies from '@/utils/cookies'
 
 export const useWebStore = defineStore({
   id: 'store',
@@ -69,6 +70,7 @@ export const useWebStore = defineStore({
       return `background: url(${pageCover}) center center / cover no-repeat`
     },
     login(user) {
+      this.userInfo = user
       this.userId = user.userInfoId
       this.avatar = user.avatar
       this.nickname = user.nickname
@@ -94,6 +96,9 @@ export const useWebStore = defineStore({
     },
     saveLoginUrl(url) {
       this.loginUrl = url
+    },
+    setToken(token) {
+      cookies.set('token', token)
     },
     saveEmail(email) {
       this.email = email

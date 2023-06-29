@@ -122,7 +122,7 @@ import { ref, reactive, watch, onMounted } from 'vue'
 // 定义响应式变量
 const commentContent = ref('') // 评论内容
 const replyContent = ref('') // 回复内容
-const commentList = reactive([]) // 评论列表
+const commentList = ref([]) // 评论列表
 const chooseEmoji = ref(false) // 是否选择表情
 const replyCommentIndex = ref(-1) // 回复评论的索引
 const replyToCommentId = ref(null) // 回复的评论 ID

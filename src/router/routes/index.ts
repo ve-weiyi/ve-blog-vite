@@ -98,21 +98,17 @@ const routes: RouteRecordRaw[] = [
       title: '留言板',
     },
   },
-  // {
-  //   path: "/user",
-  //   component: () => import("@/views/user/User.vue"),
-  //   meta: {
-  //     title: "个人中心"
-  //   }
-  // },
-  // {
-  //   path: "/oauth/login/qq",
-  //   component: () => import("@/components/OauthLogin.vue")
-  // },
-  // {
-  //   path: "/oauth/login/weibo",
-  //   component: () => import("@/components/OauthLogin.vue")
-  // }
+  {
+    path: '/user',
+    component: () => import('@/views/user/User.vue'),
+    meta: {
+      title: '个人中心',
+    },
+  },
+  {
+    path: '/oauth/login/:platform',
+    component: () => import('@/components/OauthLogin.vue'),
+  },
 ]
 
 export default routes

@@ -43,6 +43,7 @@ specifiers:
   vite-plugin-eslint: ^1.8.1
   vite-plugin-html: ^3.2.0
   vue: ^3.3.4
+  vue-avatar-cropper: ^6.0.9
   vue-eslint-parser: ^9.3.1
   vue-infinite-loading: ^2.4.5
   vue-router: ^4.2.2
@@ -70,6 +71,7 @@ dependencies:
   stylus: 0.59.0
   tocbot: 4.21.0
   vue: 3.3.4
+  vue-avatar-cropper: 6.0.9_vue@3.3.4
   vue-infinite-loading: 2.4.5_vue@3.3.4
   vue-router: 4.2.2_vue@3.3.4
   vue3-photo-preview: 0.3.0_vue@3.3.4
@@ -1192,6 +1194,10 @@ packages:
     dependencies:
       is-what: 3.14.1
     dev: true
+
+  /cropperjs/1.5.13:
+    resolution: {integrity: sha512-by7jKAo73y5/Do0K6sxdTKHgndY0NMjG2bEdgeJxycbcmHuCiMXqw8sxy5C5Y5WTOTcDGmbT7Sr5CgKOXR06OA==}
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -2611,6 +2617,12 @@ packages:
     dev: true
     optional: true
 
+  /mime/3.0.0:
+    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dev: false
+
   /mimic-fn/2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
     engines: {node: '>=6'}
@@ -3545,6 +3557,17 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /vue-avatar-cropper/6.0.9_vue@3.3.4:
+    resolution: {integrity: sha512-1Zf1HPcS0GcfmuHlEl28wMhmtBB/xu36fgvs0T+rtTAPG3MEXqNoaYMKAGEvWUyBLBTOfHyETP48diHbt4/fCQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.2.21
+    dependencies:
+      cropperjs: 1.5.13
+      mime: 3.0.0
+      vue: 3.3.4
+    dev: false
 
   /vue-demi/0.14.5_vue@3.3.4:
     resolution: {integrity: sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==}

@@ -131,7 +131,7 @@ const blogInfo = useWebStore().blogInfo
 const router = useRouter()
 
 const avatar = computed<string>(() => {
-  return store.avatar
+  return store.userInfo.avatar
 })
 
 const drawer = computed<boolean>({

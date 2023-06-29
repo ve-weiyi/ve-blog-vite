@@ -268,16 +268,16 @@ const infiniteHandler = () => {
 
     paginationData.total = res.data.total
     paginationData.pageSize = res.data.pageSize
-    if (data.data.length) {
+    if (res.data.length) {
       // 去除markdown标签
-      data.data.forEach((item) => {
+      res.data.forEach((item) => {
         item.articleContent = md
           .render(item.articleContent)
           .replace(/<\/?[^>]*>/g, '')
           .replace(/[|]*\n/, '')
           .replace(/&npsp;/gi, '')
       })
-      articleList.value.push(...data.data)
+      articleList.value.push(...res.data)
       const hasMoreData = paginationData.total == 0 // 判断是否还有更多数据需要加载
       if (hasMoreData) {
         // 还有更多数据，告知组件加载完成
