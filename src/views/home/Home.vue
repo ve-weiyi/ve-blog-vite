@@ -304,7 +304,7 @@ const init = () => {
       return res.json()
     })
     .then(({ hitokoto }) => {
-      initTyped(hitokoto)
+      initTyped(hitokoto, null, null)
     })
 
   getArticleListApi({

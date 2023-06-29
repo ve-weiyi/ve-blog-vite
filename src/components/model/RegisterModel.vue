@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="registerFlag" :fullscreen="isMobile" max-width="460">
+  <v-dialog v-model="webStore.registerFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon class="float-end" style="margin-left: auto" @click="registerFlag = false"> mdi-close </v-icon>
+      <v-icon class="float-end" style="margin-left: auto" @click="webStore.registerFlag = false"> mdi-close </v-icon>
       <div class="login-wrapper">
         <!-- 用户名 -->
         <v-text-field
@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useWebStore } from '@/stores'
-import { registerApi } from '@/api/login'
+import { registerApi, registerEmailApi } from '@/api/login'
 import { ElMessage } from 'element-plus'
 
 // 获取存储的博客信息
@@ -59,56 +59,56 @@ const webStore = useWebStore()
 const username = ref('')
 const code = ref('')
 const password = ref('')
-const flag = ref(true)
+const flag = ref(false)
 const codeMsg = ref('发送')
-const time = 60
+const countdown = ref(60)
 const show = ref(false)
 
 const openLogin = () => {
-  registerFlag.value = false
-  loginFlag.value = true
+  webStore.registerFlag = false
+  setTimeout(() => {
+    webStore.loginFlag = true
+  }, 300)
 }
 
 const sendCode = () => {
-  // ...
-}
-
-const countDown = () => {
-  // ...
+  registerEmailApi({ username: username.value }).then((res) => {
+    ElMessage.success('验证码发送成功')
+    countDown()
+  })
 }
 
 const register = () => {
   // ...
   registerApi({ username: username.value, password: password.value, code: code.value }).then((res) => {
-    console.log(res)
     ElMessage.success('注册成功')
     openLogin()
   })
 }
-
-const registerFlag = computed({
-  get() {
-    return webStore.registerFlag
-  },
-  set(value) {
-    webStore.registerFlag = value
-  },
-})
-
-const loginFlag = computed({
-  get: () => webStore.loginFlag,
-  set: (value) => {
-    webStore.loginFlag = value
-  },
-})
 
 const isMobile = computed(() => {
   const clientWidth = document.documentElement.clientWidth
   return clientWidth <= 960
 })
 
-watch(username, (value) => {
-  // ...
+// 倒计时函数
+const countDown = () => {
+  flag.value = true
+  countdown.value = 60
+}
+
+// 监听countdown变化
+watch(countdown, (newValue) => {
+  if (newValue > 0) {
+    setTimeout(() => {
+      countdown.value--
+      codeMsg.value = `${countdown.value}s`
+    }, 1000)
+  } else {
+    codeMsg.value = '发送'
+    countdown.value = 60
+    flag.value = false
+  }
 })
 </script>
 

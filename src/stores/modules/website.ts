@@ -25,6 +25,7 @@ export const useWebStore = defineStore({
     commentLikeSet: [],
     talkLikeSet: [],
     defaultCover: 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg',
+    userInfo: {},
     blogInfo: {
       viewsCount: 999,
       websiteConfig: {

@@ -24,6 +24,19 @@
           :type="show ? 'text' : 'password'"
           @click:append="show = !show"
         />
+        <!-- 验证码 -->
+        <div class="mt-7 send-wrapper">
+          <v-text-field
+            maxlength="6"
+            v-model="code"
+            label="验证码"
+            placeholder="请输入6位验证码"
+            variant="underlined"
+          />
+          <div class="login-captcha">
+            <img v-if="captcha" :src="captcha.encodeData" alt="请输入验证码" @click="getCaptchaImage()" />
+          </div>
+        </div>
         <!-- 按钮 -->
         <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录 </v-btn>
         <!-- 注册和找回密码 -->
@@ -67,15 +80,19 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { useWebStore } from '@/stores'
-import { getAuthorizeUrlApi, loginApi } from '@/api/login'
 import { ElMessage } from 'element-plus'
+import { getOauthUrlApi, loginApi } from '@/api/login'
+import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from '@/api/captcha'
+import cookies from '@/utils/cookies'
 
 // 获取存储的博客信息
 const webStore = useWebStore()
 
 const username = ref('')
 const password = ref('')
+const code = ref('')
 const show = ref(false)
+const captcha = ref<any>()
 
 const loginFlag = computed({
   get: () => webStore.loginFlag,
@@ -103,6 +120,16 @@ const openForget = () => {
   webStore.forgetFlag = true
 }
 
+const getCaptchaImage = () => {
+  getCaptchaImageApi({
+    height: 40,
+    width: 100,
+    length: 6,
+  }).then((res) => {
+    captcha.value = res.data
+  })
+}
+
 const login = () => {
   const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(username.value)) {
@@ -113,14 +140,28 @@ const login = () => {
     ElMessage.error('密码不能为空')
     return false
   }
-  loginApi({ username: username.value, password: password.value, code: '123' })
+
+  verifyCaptchaApi({
+    id: captcha.value.id,
+    code: code.value,
+  })
     .then((res) => {
-      console.log(res)
-      ElMessage.success('登录成功')
-      webStore.loginFlag = false
+      loginApi({ username: username.value, password: password.value, code: code.value })
+        .then((res) => {
+          ElMessage.success('登录成功')
+          console.log(res)
+
+          cookies.set('token', res.data.accessToken)
+          webStore.userInfo = res.data.userInfo
+          webStore.loginFlag = false
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     })
     .catch((err) => {
       console.log(err)
+      getCaptchaImage()
     })
 }
 
@@ -133,7 +174,7 @@ const qqLogin = () => {
     //   redirectURI: this.config.QQ_REDIRECT_URI,
     // })
   } else {
-    getAuthorizeUrlApi({ platform: 'qq' }).then((res) => {
+    getOauthUrlApi({ platform: 'qq' }).then((res) => {
       window.open(res.data.url)
     })
   }
@@ -141,23 +182,25 @@ const qqLogin = () => {
 
 const weiboLogin = () => {
   // $store.commit('saveLoginUrl', $route.path)
-  getAuthorizeUrlApi({ platform: 'weibo' }).then((res) => {
+  getOauthUrlApi({ platform: 'weibo' }).then((res) => {
     window.open(res.data.url)
   })
 }
 
 const feishuLogin = () => {
   // $store.commit('saveLoginUrl', $route.path)
-  getAuthorizeUrlApi({ platform: 'feishu' }).then((res) => {
+  getOauthUrlApi({ platform: 'feishu' }).then((res) => {
     window.open(res.data.url)
   })
 }
 
-// 监听 username 和 password 变化
-watch([username, password], () => {
-  // console.log('Username or password changed')
+// 监听变化
+watch(loginFlag, (newLoginFlag) => {
+  if (newLoginFlag === true) {
+    // 在loginFlag为true时执行的操作
+    getCaptchaImage()
+  }
 })
-
 // 页面加载后执行的操作
 onMounted(() => {
   // console.log('Page loaded')
