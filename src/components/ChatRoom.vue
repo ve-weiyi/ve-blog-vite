@@ -71,7 +71,7 @@
       <div class="footer">
         <!-- 表情框 -->
         <div class="emoji-box" v-show="isEmoji">
-          <!--          <Emoji :chooseEmoji="true" @addEmoji="addEmoji" />-->
+          <Emoji :chooseEmoji="true" @addEmoji="addEmoji" />
         </div>
         <div class="emoji-border" v-show="isEmoji" />
         <!-- 切换输入方式 -->
@@ -120,12 +120,13 @@
 <script setup lang="ts">
 import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from 'vue'
 import Recorderx, { ENCODE_TYPE } from 'recorderx'
-// import Emoji from './Emoji'
-// import EmojiList from '../assets/js/emoji'
+import Emoji from './Emoji.vue'
 import EmojiList from '@/assets/emojis/qq_emoji.json'
 import { useWebStore } from '@/stores'
 import axios from 'axios'
 import image from '@/assets/images/avatar.jpg'
+import { ElMessage } from 'element-plus'
+import { replaceEmoji } from '@/utils/emoji'
 
 // 获取存储的博客信息
 const webState = ref(useWebStore())
@@ -282,11 +283,13 @@ const saveMessage = (e: Event) => {
   e.preventDefault()
   if (content.value.trim() === '') {
     // 内容不能为空
-    alert('内容不能为空')
+    ElMessage.error('内容不能为空')
     return
   }
+
   // 解析表情
-  const reg = ''
+  content.value = replaceEmoji(content.value)
+
   const socketMsg = {
     nickname: webState.value.nickname,
     avatar: webState.value.avatar,

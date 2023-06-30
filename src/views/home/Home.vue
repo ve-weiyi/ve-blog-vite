@@ -402,26 +402,11 @@ const cover = computed(() => {
   return 'background: url(' + cover + ') center center / cover no-repeat'
 })
 
-const getUserinfo = () => {
-  getUserinfoApi()
-    .then((res) => {
-      useWebStore().setUser(res.data)
-    })
-    .catch((err) => {
-      cookies.clearAll()
-    })
-}
-
 let timer
 // 在组件挂载时启动定时器
 onMounted(() => {
   init()
   timer = setInterval(runTime, 1000)
-  // 页面刷新后自动获取用户信息
-  const token = useWebStore().getToken()
-  if (token != undefined) {
-    getUserinfo()
-  }
 })
 
 // 在组件卸载时清除定时器

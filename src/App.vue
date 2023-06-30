@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import TopNavBar from './components/layout/TopNavBar.vue'
 import Footer from './components/layout/Footer.vue'
 import SideNavBar from './components/layout/SideNavBar.vue'
@@ -48,6 +48,8 @@ import { ElConfigProvider } from 'element-plus'
 import zh from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
 import { useAppStore, useWebStore } from '@/stores'
+import { getUserinfoApi } from '@/api/user'
+import cookies from '@/utils/cookies'
 
 const appStore = useAppStore()
 const locale = computed(() => (appStore.lang === 'zh' ? zh : en))
@@ -60,5 +62,25 @@ const isMobile = computed(() => {
     /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
   )
   return flag
+})
+
+const getUserinfo = () => {
+  getUserinfoApi()
+    .then((res) => {
+      useWebStore().setUser(res.data)
+    })
+    .catch((err) => {
+      cookies.clearAll()
+    })
+}
+
+// 在组件挂载时启动定时器
+onMounted(() => {
+  // 页面刷新后自动获取用户信息
+  const token = useWebStore().getToken()
+  // console.log('token', token)
+  if (token != undefined) {
+    getUserinfo()
+  }
 })
 </script>

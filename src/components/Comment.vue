@@ -136,17 +136,23 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
-import Reply from './Reply'
-import Paging from './Paging'
-import Emoji from './Emoji'
-import EmojiList from '../assets/js/emoji'
+import { ref, reactive, watch, nextTick } from 'vue'
+import Reply from './Reply.vue'
+import Paging from './Paging.vue'
+import Emoji from './Emoji.vue'
 import { useWebStore } from '@/stores'
+import { ElMessage } from 'element-plus'
+import { replaceEmoji } from '@/utils/emoji'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
+
+// 获取路由参数
+const route = useRoute()
 
 // 父组件向子组件传输的数据
 const props = defineProps({
   type: {
-    type: String,
+    type: Number,
     required: false,
   },
 })
@@ -162,11 +168,12 @@ const chooseEmoji = ref(false)
 
 const listComments = () => {
   // 查看评论
-  const path = $route.path
+  const path = route.path
   const arr = path.split('/')
   const param = {
     current: current.value,
     type: props.type,
+    topicId: null,
   }
   switch (props.type) {
     case 1:
@@ -176,44 +183,43 @@ const listComments = () => {
     default:
       break
   }
-  axios
-    .get('/api/comments', {
-      params: param,
-    })
-    .then(({ data }) => {
-      if (current.value === 1) {
-        commentList.value = data.data.recordList
-      } else {
-        commentList.value.push(...data.data.recordList)
-      }
-      current.value++
-      count.value = data.data.count
-      $emit('getCommentCount', count.value)
-    })
+  // axios
+  //   .get('/api/comments', {
+  //     params: param,
+  //   })
+  //   .then(({ data }) => {
+  //     if (current.value === 1) {
+  //       commentList.value = data.data.recordList
+  //     } else {
+  //       commentList.value.push(...data.data.recordList)
+  //     }
+  //     current.value++
+  //     count.value = data.data.count
+  //     $emit('getCommentCount', count.value)
+  //   })
 }
 
 const insertComment = () => {
   // 判断登录
-  if (!webState.value.userId) {
+  if (!webState.value.userInfo.id) {
     webState.value.loginFlag = true
     return false
   }
   // 判空
   if (commentContent.value.trim() === '') {
-    $toast({ type: 'error', message: '评论不能为空' })
+    ElMessage.error('评论不能为空')
     return false
   }
   // 解析表情
-  const reg = /\[.+?\]/g
-  commentContent.value = commentContent.value.replace(reg, (str) => {
-    return `<img src="${EmojiList[str]}" width="24" height="24" style="margin: 0 1px;vertical-align: text-bottom" />`
-  })
+  commentContent.value = replaceEmoji(commentContent.value)
+
   // 发送请求
-  const path = $route.path
+  const path = route.path
   const arr = path.split('/')
   const comment = {
     commentContent: commentContent.value,
     type: props.type,
+    topicId: null,
   }
   switch (props.type) {
     case 1:
@@ -231,12 +237,12 @@ const insertComment = () => {
       listComments()
       const isReview = webState.value.blogInfo.websiteConfig.isCommentReview
       if (isReview) {
-        $toast({ type: 'warning', message: '评论成功，正在审核中' })
+        ElMessage.success('评论成功，正在审核中')
       } else {
-        $toast({ type: 'success', message: '评论成功' })
+        ElMessage.success('评论成功')
       }
     } else {
-      $toast({ type: 'error', message: data.message })
+      ElMessage.success(data.message)
     }
   })
 }
@@ -275,6 +281,10 @@ watch(commentList, () => {
   nextTick(() => {
     reFresh.value = true
   })
+})
+watch(commentContent, (val) => {
+  if (val.indexOf('[') != -1) {
+  }
 })
 </script>
 
