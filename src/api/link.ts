@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function createLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/link/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createLinkApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 改 */
-export function updateLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function updateLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/link/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updateLinkApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 删 删除单个*/
-export function deleteLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function deleteLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/link/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsLinkApi(ids: number[]): Promise<IApiResponseData<any>
 }
 
 /** 查 查询单个*/
-export function getLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function getLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/link/find',
     method: 'post',

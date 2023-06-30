@@ -1,6 +1,6 @@
 import http from '@/utils/request'
 
-export function sendCaptchaEmailApi(data: object): Promise<IApiResponseData<any>> {
+export function sendCaptchaEmailApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/captcha/email',
     method: 'post',
@@ -8,7 +8,7 @@ export function sendCaptchaEmailApi(data: object): Promise<IApiResponseData<any>
   })
 }
 
-export function getCaptchaImageApi(data: object): Promise<IApiResponseData<any>> {
+export function getCaptchaImageApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/captcha/image',
     method: 'post',
@@ -16,7 +16,7 @@ export function getCaptchaImageApi(data: object): Promise<IApiResponseData<any>>
   })
 }
 
-export function verifyCaptchaApi(data: object): Promise<IApiResponseData<any>> {
+export function verifyCaptchaApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/captcha/verify',
     method: 'post',

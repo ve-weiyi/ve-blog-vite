@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createTagApi(data: object): Promise<IApiResponseData<any>> {
+export function createTagApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/tag/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createTagApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 改 */
-export function updateTagApi(data: object): Promise<IApiResponseData<any>> {
+export function updateTagApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/tag/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updateTagApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 删 删除单个*/
-export function deleteTagApi(data: object): Promise<IApiResponseData<any>> {
+export function deleteTagApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/tag/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsTagApi(ids: number[]): Promise<IApiResponseData<any>>
 }
 
 /** 查 查询单个*/
-export function getTagApi(data: object): Promise<IApiResponseData<any>> {
+export function getTagApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/tag/find',
     method: 'post',

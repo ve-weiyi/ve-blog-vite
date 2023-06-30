@@ -136,7 +136,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, watch, nextTick, onMounted } from 'vue'
 import Reply from './Reply.vue'
 import Paging from './Paging.vue'
 import Emoji from './Emoji.vue'
@@ -145,6 +145,7 @@ import { ElMessage } from 'element-plus'
 import { replaceEmoji } from '@/utils/emoji'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { createCommentApi, getCommentListApi } from '@/api/comment'
 
 // 获取路由参数
 const route = useRoute()
@@ -183,20 +184,17 @@ const listComments = () => {
     default:
       break
   }
-  // axios
-  //   .get('/api/comments', {
-  //     params: param,
-  //   })
-  //   .then(({ data }) => {
-  //     if (current.value === 1) {
-  //       commentList.value = data.data.recordList
-  //     } else {
-  //       commentList.value.push(...data.data.recordList)
-  //     }
-  //     current.value++
-  //     count.value = data.data.count
-  //     $emit('getCommentCount', count.value)
-  //   })
+  getCommentListApi({}).then((res) => {
+    console.log(res)
+    if (current.value === 1) {
+      commentList.value = res.data.list
+    } else {
+      commentList.value.push(...res.data.list)
+    }
+    current.value++
+    count.value = res.data.total
+    // $emit('getCommentCount', count.value)
+  })
 }
 
 const insertComment = () => {
@@ -229,9 +227,9 @@ const insertComment = () => {
     default:
       break
   }
-  commentContent.value = ''
-  axios.post('/api/comments', comment).then(({ data }) => {
-    if (data.flag) {
+
+  createCommentApi(comment)
+    .then((res) => {
       // 查询最新评论
       current.value = 1
       listComments()
@@ -241,10 +239,12 @@ const insertComment = () => {
       } else {
         ElMessage.success('评论成功')
       }
-    } else {
-      ElMessage.success(data.message)
-    }
-  })
+    })
+    .catch((err) => {
+      ElMessage.error(err.message)
+    })
+
+  commentContent.value = ''
 }
 
 const addEmoji = (emoji) => {
@@ -276,6 +276,11 @@ const isLike = (commentId) => {
 }
 
 const reFresh = ref(false)
+
+onMounted(() => {
+  listComments()
+})
+
 watch(commentList, () => {
   reFresh.value = false
   nextTick(() => {

@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createArticleApi(data: object): Promise<IApiResponseData<any>> {
+export function createArticleApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/article/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createArticleApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 改 */
-export function updateArticleApi(data: object): Promise<IApiResponseData<any>> {
+export function updateArticleApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/article/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updateArticleApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 删 删除单个*/
-export function deleteArticleApi(data: object): Promise<IApiResponseData<any>> {
+export function deleteArticleApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/article/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsArticleApi(ids: number[]): Promise<IApiResponseData<a
 }
 
 /** 查 查询单个*/
-export function getArticleApi(data: object): Promise<IApiResponseData<any>> {
+export function getArticleApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/article/find',
     method: 'post',
@@ -55,7 +55,7 @@ export function getArticleListApi(page: object): Promise<IApiResponseData<any>> 
 }
 
 /** 查 列表*/
-export function getArticleListByConditionApi(data: object): Promise<IApiResponseData<any>> {
+export function getArticleListByConditionApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/article/condition',
     method: 'post',

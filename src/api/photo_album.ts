@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createPhotoAlbumApi(data: object): Promise<IApiResponseData<any>> {
+export function createPhotoAlbumApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/photoAlbum/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createPhotoAlbumApi(data: object): Promise<IApiResponseData<any>
 }
 
 /** 改 */
-export function updatePhotoAlbumApi(data: object): Promise<IApiResponseData<any>> {
+export function updatePhotoAlbumApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/photoAlbum/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updatePhotoAlbumApi(data: object): Promise<IApiResponseData<any>
 }
 
 /** 删 删除单个*/
-export function deletePhotoAlbumApi(data: object): Promise<IApiResponseData<any>> {
+export function deletePhotoAlbumApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/photoAlbum/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsPhotoAlbumApi(ids: number[]): Promise<IApiResponseDat
 }
 
 /** 查 查询单个*/
-export function getPhotoAlbumApi(data: object): Promise<IApiResponseData<any>> {
+export function getPhotoAlbumApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/photoAlbum/find',
     method: 'post',

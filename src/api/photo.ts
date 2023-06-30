@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createPhotoApi(data: object): Promise<IApiResponseData<any>> {
+export function createPhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/photo/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createPhotoApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 改 */
-export function updatePhotoApi(data: object): Promise<IApiResponseData<any>> {
+export function updatePhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/photo/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updatePhotoApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 删 删除单个*/
-export function deletePhotoApi(data: object): Promise<IApiResponseData<any>> {
+export function deletePhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/photo/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsPhotoApi(ids: number[]): Promise<IApiResponseData<any
 }
 
 /** 查 查询单个*/
-export function getPhotoApi(data: object): Promise<IApiResponseData<any>> {
+export function getPhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/photo/find',
     method: 'post',

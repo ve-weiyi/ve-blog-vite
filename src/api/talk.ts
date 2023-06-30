@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createTalkApi(data: object): Promise<IApiResponseData<any>> {
+export function createTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/talk/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createTalkApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 改 */
-export function updateTalkApi(data: object): Promise<IApiResponseData<any>> {
+export function updateTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/talk/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updateTalkApi(data: object): Promise<IApiResponseData<any>> {
 }
 
 /** 删 删除单个*/
-export function deleteTalkApi(data: object): Promise<IApiResponseData<any>> {
+export function deleteTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/talk/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsTalkApi(ids: number[]): Promise<IApiResponseData<any>
 }
 
 /** 查 查询单个*/
-export function getTalkApi(data: object): Promise<IApiResponseData<any>> {
+export function getTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/talk/find',
     method: 'post',

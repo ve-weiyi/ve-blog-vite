@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 /** 增 */
-export function createCategoryApi(data: object): Promise<IApiResponseData<any>> {
+export function createCategoryApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/category/create',
     method: 'post',
@@ -10,7 +10,7 @@ export function createCategoryApi(data: object): Promise<IApiResponseData<any>> 
 }
 
 /** 改 */
-export function updateCategoryApi(data: object): Promise<IApiResponseData<any>> {
+export function updateCategoryApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/category/update',
     method: 'put',
@@ -19,7 +19,7 @@ export function updateCategoryApi(data: object): Promise<IApiResponseData<any>> 
 }
 
 /** 删 删除单个*/
-export function deleteCategoryApi(data: object): Promise<IApiResponseData<any>> {
+export function deleteCategoryApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/admin/category/delete',
     method: 'delete',
@@ -37,7 +37,7 @@ export function deleteByIdsCategoryApi(ids: number[]): Promise<IApiResponseData<
 }
 
 /** 查 查询单个*/
-export function getCategoryApi(data: object): Promise<IApiResponseData<any>> {
+export function getCategoryApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/category/find',
     method: 'post',
