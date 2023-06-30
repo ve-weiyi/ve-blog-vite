@@ -198,7 +198,7 @@ module.exports = {
         after: true,
       },
     ],
-    'handle-callback-err': [2, '^(err|error)$'],
+    'handle-callback-err': [1, '^(err|error)$'],
     // indent: [
     //   2,
     //   2,

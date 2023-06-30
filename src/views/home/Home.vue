@@ -211,11 +211,15 @@ import MarkdownIt from 'markdown-it'
 import { useWebStore } from '@/stores'
 import { usePagination } from '@/hooks/usePagination'
 import { getArticleListApi } from '@/api/article'
+import { getTalkListApi } from '@/api/talk'
+import { getUserinfoApi } from '@/api/user'
+import cookies from '@/utils/cookies'
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 // 获取存储的博客信息
-const blogInfo = ref(useWebStore().blogInfo)
+const webStore = useWebStore()
+const blogInfo = useWebStore().blogInfo
 
 // 数据响应式
 const tip = ref(false)
@@ -297,7 +301,7 @@ const current = ref(1)
 
 // 初始化
 const init = () => {
-  document.title = blogInfo.value.websiteConfig.websiteName
+  document.title = blogInfo.websiteConfig.websiteName
   // 一言Api进行打字机循环输出效果
   fetch('https://v1.hitokoto.cn?c=i')
     .then((res) => {
@@ -307,6 +311,23 @@ const init = () => {
       initTyped(hitokoto, null, null)
     })
 
+  // 获取首页说说
+  listHomeTalks()
+
+  // 获取首页文章
+  listHomeArticles()
+}
+
+const listHomeTalks = () => {
+  getTalkListApi({
+    page: 0,
+    pageSize: 10,
+  }).then((res) => {
+    talkList.value = res.data.list
+  })
+}
+
+const listHomeArticles = () => {
   getArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
@@ -328,8 +349,6 @@ const init = () => {
   })
 }
 
-const listHomeTalks = () => {}
-
 const initTyped = (input, fn, hooks) => {
   // obj.value.output = input
   const typed = new EasyTyper(obj.value, input, fn, function() {})
@@ -343,7 +362,7 @@ const scrollDown = () => {
 }
 
 const runTime = () => {
-  const timeold = new Date().getTime() - new Date(blogInfo.value.websiteConfig.websiteCreateTime).getTime()
+  const timeold = new Date().getTime() - new Date(blogInfo.websiteConfig.websiteCreateTime).getTime()
   const msPerDay = 24 * 60 * 60 * 1000
   const daysold = Math.floor(timeold / msPerDay)
   let str = ''
@@ -369,13 +388,13 @@ const isRight = computed(() => {
 
 const isShowSocial = computed(() => {
   return function(social) {
-    return blogInfo.value.websiteConfig.socialUrlList.indexOf(social) != -1
+    return blogInfo.websiteConfig.socialUrlList.indexOf(social) != -1
   }
 })
 
 const cover = computed(() => {
   let cover = ''
-  blogInfo.value.pageList.forEach((item) => {
+  blogInfo.pageList.forEach((item) => {
     if (item.pageLabel == 'home') {
       cover = item.pageCover
     }
@@ -383,11 +402,26 @@ const cover = computed(() => {
   return 'background: url(' + cover + ') center center / cover no-repeat'
 })
 
-let timer: number
+const getUserinfo = () => {
+  getUserinfoApi()
+    .then((res) => {
+      useWebStore().setUser(res.data)
+    })
+    .catch((err) => {
+      cookies.clearAll()
+    })
+}
+
+let timer
 // 在组件挂载时启动定时器
 onMounted(() => {
   init()
   timer = setInterval(runTime, 1000)
+  // 页面刷新后自动获取用户信息
+  const token = useWebStore().getToken()
+  if (token != undefined) {
+    getUserinfo()
+  }
 })
 
 // 在组件卸载时清除定时器

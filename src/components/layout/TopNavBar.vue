@@ -107,6 +107,8 @@ to="/"
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useWebStore } from '@/stores/modules/website'
+import { logoutApi } from '@/api/login'
+import { ElMessage } from 'element-plus'
 
 const navClass = ref('')
 
@@ -136,17 +138,10 @@ const openLogin = () => {
 }
 
 const logout = () => {
-  // if ($route.path === '/user') {
-  //   $router.go(-1);
-  // }
-  // axios.get('/api/logout').then(({data}) => {
-  //   if (data.flag) {
-  //     $store.commit('logout');
-  //     $toast({type: 'success', message: '注销成功'});
-  //   } else {
-  //     $toast({type: 'error', message: data.message});
-  //   }
-  // });
+  webStore.logout()
+  logoutApi().then(() => {
+    ElMessage.success('注销成功')
+  })
 }
 </script>
 

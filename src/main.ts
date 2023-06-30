@@ -6,10 +6,10 @@ import router from '@/router'
 // 导入公共样式
 import './styles/index.scss'
 // 导入字体图标
-import './assets/iconfont/iconfont.css'
-// 导入字体图标
 import './assets/iconfont/kit/iconfont.css'
 import './assets/iconfont/platform/iconfont.css'
+// 导入字体图标
+import './assets/iconfont/iconfont.css'
 // 动画样式
 import 'animate.css'
 // markdown样式
@@ -28,15 +28,25 @@ import { usePhotoPreview } from '@/plugins/imagePreview'
 
 const app = createApp(App)
 
-const initApp = async() => {
-  app.use(router)
-  app.use(createPinia())
-  app.use(vuetify)
+app.use(router)
+app.use(createPinia())
+app.use(vuetify)
 
-  app.use(ElementPlus)
+app.use(ElementPlus)
 
-  usePhotoPreview(app)
-  await router.isReady()
-  app.mount('#app')
-}
-initApp()
+usePhotoPreview(app)
+await router.isReady()
+app.mount('#app')
+
+// const initApp = async () => {
+//   app.use(router)
+//   app.use(createPinia())
+//   app.use(vuetify)
+//
+//   app.use(ElementPlus)
+//
+//   usePhotoPreview(app)
+//   await router.isReady()
+//   app.mount('#app')
+// }
+// initApp()

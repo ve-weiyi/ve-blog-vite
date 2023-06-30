@@ -25,7 +25,7 @@
           @click:append="show = !show"
         />
         <!-- 验证码 -->
-        <div class="mt-7 send-wrapper">
+        <div v-if="needCaptcha" class="mt-7 send-wrapper">
           <v-text-field
             maxlength="6"
             v-model="code"
@@ -93,6 +93,7 @@ const password = ref('')
 const code = ref('')
 const show = ref(false)
 const captcha = ref<any>()
+const needCaptcha = ref(false)
 
 const loginFlag = computed({
   get: () => webStore.loginFlag,
@@ -141,27 +142,35 @@ const login = () => {
     return false
   }
 
-  verifyCaptchaApi({
-    id: captcha.value.id,
-    code: code.value,
-  })
+  // 校验验证码
+  if (needCaptcha.value) {
+    verifyCaptchaApi({
+      id: captcha.value.id,
+      code: code.value,
+    })
+      .then((res) => {
+        emailLogin()
+      })
+      .catch((err) => {
+        console.log(err)
+        getCaptchaImage()
+      })
+  } else {
+    emailLogin()
+  }
+}
+const emailLogin = () => {
+  loginApi({ username: username.value, password: password.value, code: code.value })
     .then((res) => {
-      loginApi({ username: username.value, password: password.value, code: code.value })
-        .then((res) => {
-          ElMessage.success('登录成功')
-          console.log(res)
+      ElMessage.success('登录成功')
+      console.log(res)
 
-          cookies.set('token', res.data.accessToken)
-          webStore.userInfo = res.data.userInfo
-          webStore.loginFlag = false
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      cookies.set('token', res.data.token)
+      webStore.userInfo = res.data.userInfo
+      webStore.loginFlag = false
     })
     .catch((err) => {
       console.log(err)
-      getCaptchaImage()
     })
 }
 

@@ -4,7 +4,7 @@
     <div :style="{ height: `${height * lineNum}px` }" class="rollScreen_container" id="rollScreen_container">
       <ul class="rollScreen_list" :style="{ transform: transform }" :class="{ rollScreen_list_unanim: num === 0 }">
         <li class="rollScreen_once" v-for="(item, index) in list" :key="index" :style="{ height: `${height}px` }">
-          <span class="item" v-html="item" />
+          <span class="item" v-html="item.content" />
         </li>
         <li
           class="rollScreen_once"
@@ -12,7 +12,7 @@
           :key="index + list.length"
           :style="{ height: `${height}px` }"
         >
-          <span class="item" v-html="item" />
+          <span class="item" v-html="item.content" />
         </li>
       </ul>
     </div>
@@ -60,7 +60,8 @@ onMounted(startInterval)
 
 <style>
 .swiper-container {
-  margin-top: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   padding: 0.6rem 1rem;
   display: flex;
   align-items: center;

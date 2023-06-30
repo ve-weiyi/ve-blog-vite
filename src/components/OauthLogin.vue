@@ -31,8 +31,8 @@ function OauthLogin() {
     state: route.query.state as string,
   }).then((res) => {
     console.log(res)
-    store.login(res.data.userInfo)
-    store.setToken(res.data.accessToken)
+    store.setUser(res.data.userInfo)
+    store.setToken(res.data.token)
     router.push({ path: '/' })
   })
 }

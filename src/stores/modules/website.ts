@@ -69,7 +69,7 @@ export const useWebStore = defineStore({
       const pageCover = cover ? cover : this.defaultCover
       return `background: url(${pageCover}) center center / cover no-repeat`
     },
-    login(user) {
+    setUser(user) {
       this.userInfo = user
       this.userId = user.userInfoId
       this.avatar = user.avatar
@@ -83,6 +83,8 @@ export const useWebStore = defineStore({
       this.loginType = user.loginType
     },
     logout() {
+      this.setToken(undefined)
+      this.userInfo = {}
       this.userId = null
       this.avatar = null
       this.nickname = null
@@ -99,6 +101,10 @@ export const useWebStore = defineStore({
     },
     setToken(token) {
       cookies.set('token', token)
+      console.log('setToken', cookies.get('token'))
+    },
+    getToken() {
+      return cookies.get('token')
     },
     saveEmail(email) {
       this.email = email

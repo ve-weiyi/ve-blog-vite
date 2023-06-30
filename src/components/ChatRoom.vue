@@ -14,7 +14,7 @@
           <div>聊天室</div>
           <div style="font-size: 12px">当前{{ count }}人在线</div>
         </div>
-        <v-icon class="close" @click="isShow = false"> mdi-close </v-icon>
+        <v-icon class="close" @click="isShow = false"> mdi-close</v-icon>
       </div>
       <!-- 对话内容 -->
       <div class="message" id="message">
@@ -36,7 +36,7 @@
               <span style="margin-left: 12px">{{ item.createdAt }}</span>
             </div>
             <!-- 内容 -->
-            <div ref="content" @contextmenu.prevent.stop="showBack(item, index, $event)" :class="isMyContent(item)">
+            <div ref="all-content" @contextmenu.prevent.stop="showBack(item, index, $event)" :class="isMyContent(item)">
               <!-- 文字消息 -->
               <div v-if="item.type == 3" v-html="item.content" />
               <!-- 语音消息 -->
@@ -132,7 +132,10 @@ const webState = ref(useWebStore())
 const blogInfo = ref(useWebStore().blogInfo)
 
 const isInput = computed(() => {
-  return content.value.trim() != '' ? 'iconfont iconzhifeiji submit-btn' : 'iconfont iconzhifeiji'
+  if (typeof content.value === 'string') {
+    return content.value.trim() != '' ? 'iconfont iconzhifeiji submit-btn' : 'iconfont iconzhifeiji'
+  }
+  return 'iconfont iconzhifeiji'
 })
 
 // 是否显示表情面板
@@ -162,7 +165,7 @@ const isVoice = ref(false)
 // 是否正在录音
 const voiceActive = ref(false)
 // 开始录音时间
-const startVoiceTime = ref<Date | null>(null)
+const startVoiceTime = ref<Date>(null)
 // WebSocket 消息对象
 const WebsocketMessage = reactive({
   type: null,
@@ -176,6 +179,9 @@ watch(chatRecordList, (newList) => {
   // 更新语音消息列表
   voiceList.value = newList.filter((item: any) => item.type === 5).map((item: any) => item.id)
 })
+
+// 监听输入框内容变化
+watch(content, (newVal) => {})
 
 // 组件销毁前清除定时器
 onBeforeUnmount(() => {
@@ -302,17 +308,17 @@ const addEmoji = (key: string) => {
   content.value += key
 }
 
+const backBtn = ref<any>([])
 // 展示操作菜单
 const showBack = (item: any, index: number, e: MouseEvent) => {
-  const backBtns = document.querySelectorAll('.back-btn')
-  backBtns.forEach((item) => {
+  backBtn.value.forEach((item) => {
     item.style.display = 'none'
   })
+
   if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webState.value.userId)) {
-    const backBtn = backBtns[index] as HTMLElement
-    backBtn.style.left = e.offsetX + 'px'
-    backBtn.style.bottom = e.offsetY + 'px'
-    backBtn.style.display = 'block'
+    backBtn.value[index].style.left = e.offsetX + 'px'
+    backBtn.value[index].style.bottom = e.offsetY + 'px'
+    backBtn.value[index].style.display = 'block'
   }
 }
 
@@ -325,19 +331,15 @@ const back = (item: any, index: number) => {
   WebsocketMessage.type = 4
   WebsocketMessage.data = socketMsg
   websocket.value?.send(JSON.stringify(WebsocketMessage))
-  const backBtns = document.querySelectorAll('.back-btn')
-  ;(backBtns[index] as HTMLElement).style.display = 'none'
+  backBtn.value[index].style.display = 'none'
 }
 
 // 关闭所有操作菜单
 const closeAll = () => {
   isEmoji.value = false
-  const backBtns = document.querySelectorAll('.back-btn')
-  if (chatRecordList.value.length > 0) {
-    backBtns.forEach((item) => {
-      item.style.display = 'none'
-    })
-  }
+  backBtn.value.forEach((item) => {
+    item.style.display = 'none'
+  })
 }
 
 // 开始录音
@@ -362,7 +364,7 @@ const translationEnd = () => {
   console.log('结束')
   voiceActive.value = false
   rc.value.pause()
-  if (new Date() - startVoiceTime.value < 1000) {
+  if (new Date().getTime() - startVoiceTime.value.getTime() < 1000) {
     // 按键时间太短
     alert('按键时间太短')
     return

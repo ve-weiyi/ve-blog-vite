@@ -1,6 +1,6 @@
 import http from '@/utils/request'
 
-export function loginApi(data: object): Promise<IApiResponseData<any>> {
+export function loginApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/login',
     method: 'post',
@@ -8,7 +8,7 @@ export function loginApi(data: object): Promise<IApiResponseData<any>> {
   })
 }
 
-export function registerApi(data: object): Promise<IApiResponseData<any>> {
+export function registerApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/register',
     method: 'post',
@@ -16,7 +16,7 @@ export function registerApi(data: object): Promise<IApiResponseData<any>> {
   })
 }
 
-export function logoutApi(data: object): Promise<IApiResponseData<any>> {
+export function logoutApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/logout',
     method: 'post',
@@ -24,7 +24,7 @@ export function logoutApi(data: object): Promise<IApiResponseData<any>> {
   })
 }
 
-export function getOauthUrlApi(data: object): Promise<IApiResponseData<any>> {
+export function getOauthUrlApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/oauth/url',
     method: 'post',
@@ -32,7 +32,7 @@ export function getOauthUrlApi(data: object): Promise<IApiResponseData<any>> {
   })
 }
 
-export function oauthLoginApi(data: object): Promise<IApiResponseData<any>> {
+export function oauthLoginApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/oauth/login',
     method: 'post',
@@ -40,7 +40,7 @@ export function oauthLoginApi(data: object): Promise<IApiResponseData<any>> {
   })
 }
 
-export function forgetPasswordApi(data: object): Promise<IApiResponseData<any>> {
+export function forgetPasswordApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/password/forget',
     method: 'post',
@@ -48,7 +48,7 @@ export function forgetPasswordApi(data: object): Promise<IApiResponseData<any>> 
   })
 }
 
-export function resetPasswordApi(data: object): Promise<IApiResponseData<any>> {
+export function resetPasswordApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/password/reset',
     method: 'post',
@@ -56,7 +56,7 @@ export function resetPasswordApi(data: object): Promise<IApiResponseData<any>> {
   })
 }
 
-export function registerEmailApi(data: object): Promise<IApiResponseData<any>> {
+export function registerEmailApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/user/register/email',
     method: 'post',
