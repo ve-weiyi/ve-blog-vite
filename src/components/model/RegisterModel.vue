@@ -2,6 +2,7 @@
   <v-dialog v-model="webStore.registerFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
       <v-icon class="float-end" style="margin-left: auto" @click="webStore.registerFlag = false"> mdi-close </v-icon>
+      <div class="login-title">注册</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
         <v-text-field

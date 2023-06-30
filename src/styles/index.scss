@@ -184,6 +184,14 @@ p {
 .login-container {
   background: #fff !important;
 }
+.login-title {
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #4c4948;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
 @media (min-width: 760px) {
   .v-toolbar__content,
   .v-toolbar__extension {
@@ -229,7 +237,7 @@ p {
     height: 500px;
   }
   .login-wrapper {
-    padding: 1.5rem 1.5rem 0 1.5rem;
+    padding: 0.5rem 1.5rem 0 1.5rem;
   }
 }
 

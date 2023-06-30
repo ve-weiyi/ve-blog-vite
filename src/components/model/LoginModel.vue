@@ -2,6 +2,7 @@
   <v-dialog v-model="loginFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
       <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close </v-icon>
+      <div class="login-title">登录账号</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
         <v-text-field

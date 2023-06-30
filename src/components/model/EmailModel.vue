@@ -2,6 +2,7 @@
   <v-dialog v-model="webStore.emailFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
       <v-icon class="float-right" @click="webStore.emailFlag = false"> mdi-close </v-icon>
+      <div class="login-title">绑定邮箱</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
         <v-text-field
