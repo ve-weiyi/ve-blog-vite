@@ -46,7 +46,7 @@ export function getPageApi(data?: object): Promise<IApiResponseData<any>> {
 }
 
 /** 查 列表*/
-export function getPageListApi(page: object): Promise<IApiResponseData<any>> {
+export function getPageListApi(page?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/page/list',
     method: 'get',

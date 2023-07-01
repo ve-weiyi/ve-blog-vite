@@ -20,11 +20,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useWebStore } from '@/stores'
-import { getPhotoListApi } from '@/api/photo'
+import { findPhotoListApi } from '@/api/photo'
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const cover = ref(webState.value.getCover('album'))
+const webState = useWebStore()
+const cover = ref(webState.getCover('album'))
 
 const photoAlbumName = ref('相册详情')
 const photoAlbumCover = ref('')
@@ -37,7 +37,7 @@ onMounted(() => {
 })
 
 function listPhoto() {
-  getPhotoListApi({}).then((res) => {
+  findPhotoListApi({}).then((res) => {
     photoList.value = res.data.list
   })
 }

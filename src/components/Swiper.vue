@@ -44,7 +44,9 @@ const { height, lineNum, list } = toRefs(props)
 const transform = computed(() => {
   return `translateY(-${num.value * height.value}px)`
 })
-
+const addNum = () => {
+  console.log('addNum')
+}
 const startInterval = () => {
   setInterval(() => {
     if (num.value !== list.value.length) {
@@ -54,7 +56,11 @@ const startInterval = () => {
     }
   }, 3000)
 }
-
+const hello = ref('Hello from child component')
+defineExpose({
+  addNum,
+  hello,
+})
 onMounted(startInterval)
 </script>
 

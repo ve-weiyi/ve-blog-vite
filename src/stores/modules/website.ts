@@ -82,6 +82,9 @@ export const useWebStore = defineStore({
       this.email = user.email
       this.loginType = user.loginType
     },
+    isLogin() {
+      return this.getToken() != undefined
+    },
     logout() {
       this.setToken(undefined)
       this.userInfo = {}

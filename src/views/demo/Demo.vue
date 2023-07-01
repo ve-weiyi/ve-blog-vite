@@ -8,23 +8,29 @@
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useWebStore } from '@/stores'
 
-// 定义组件的属性和事件
+// 父组件向子组件传输的数据
 const props = defineProps({
-  // 定义props
-  // props: {
-  //   ...
-  // }
+  type: {
+    type: Number,
+    required: false,
+  },
 })
 
+// 父组件向子组件传输的事件
 const emit = defineEmits([
   // 定义事件
   // 'eventName',
 ])
 
+// 获取存储的缓存信息
+const webState = useWebStore()
+
 // 获取路由参数
 const route = useRoute()
-const tagId = route.params.tagId ? parseInt(route.params.tagId) : 0 // 假设路由参数名为 "id"
+
+const tagId = route.params.tagId ? parseInt(route.params.tagId as string) : 0 // 假设路由参数名为 "id"
 
 // 使用Composition API定义组件的逻辑
 const commentContent = ref('')
@@ -55,6 +61,9 @@ watch(
   },
   { immediate: true }, // 立即监听属性
 )
+defineExpose({
+  data,
+})
 // 导出响应式数据、方法和事件
 // export { commentContent, data, insertComment }
 </script>

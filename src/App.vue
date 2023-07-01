@@ -56,7 +56,7 @@ const locale = computed(() => (appStore.lang === 'zh' ? zh : en))
 const size = computed(() => appStore.size)
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
+const webState = useWebStore()
 const isMobile = computed(() => {
   const flag = navigator.userAgent.match(
     /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,

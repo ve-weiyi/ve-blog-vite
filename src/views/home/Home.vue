@@ -41,7 +41,7 @@
       <v-col md="9" cols="12">
         <!-- 说说轮播 -->
         <v-card class="animated zoomIn" v-if="talkList.length > 0">
-          <Swiper :list="talkList" />
+          <Swiper ref="swiper" :list="talkList" />
         </v-card>
         <v-card
           class="animated zoomIn article-card"
@@ -104,7 +104,7 @@
       <!-- 博主信息 -->
       <v-col md="3" cols="12" class="d-md-block d-none">
         <div class="blog-wrapper">
-          <v-card class="animated zoomIn blog-card mt-5">
+          <v-card class="animated zoomIn blog-card">
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
@@ -211,7 +211,7 @@ import MarkdownIt from 'markdown-it'
 import { useWebStore } from '@/stores'
 import { usePagination } from '@/hooks/usePagination'
 import { getArticleListApi } from '@/api/article'
-import { getTalkListApi } from '@/api/talk'
+import { findTalkListApi } from '@/api/talk'
 import { getUserinfoApi } from '@/api/user'
 import cookies from '@/utils/cookies'
 
@@ -319,7 +319,7 @@ const init = () => {
 }
 
 const listHomeTalks = () => {
-  getTalkListApi({
+  findTalkListApi({
     page: 0,
     pageSize: 10,
   }).then((res) => {
@@ -403,9 +403,11 @@ const cover = computed(() => {
 })
 
 let timer
+const swiper = ref()
 // 在组件挂载时启动定时器
 onMounted(() => {
   init()
+  console.log('swiper', swiper.value.hello)
   timer = setInterval(runTime, 1000)
 })
 
@@ -478,7 +480,7 @@ onUnmounted(() => {
   .home-container {
     max-width: 1200px;
     margin: calc(100vh) auto 48px auto;
-    padding: 0 5px;
+    padding: 20px 5px;
     background: transparent;
   }
 

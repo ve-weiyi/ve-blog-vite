@@ -43,25 +43,25 @@
 </template>
 
 <script setup lang="ts">
-import Comment from '../../components/Comment'
+import Comment from '@/components/comment/Comment.vue'
 import { ref, onMounted, computed } from 'vue'
 import { useWebStore } from '@/stores'
-import { getLinkListApi } from '@/api/link'
+import { findLinkListApi } from '@/api/link'
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const blogInfo = ref(useWebStore().blogInfo)
+const webState = useWebStore()
+const blogInfo = useWebStore().blogInfo
 
 const friendLinkList = ref([])
 const commentType = ref(2)
 
 function listFriendLink() {
-  getLinkListApi({}).then((res) => {
+  findLinkListApi({}).then((res) => {
     friendLinkList.value = res.data.list
   })
 }
 
-const cover = ref(webState.value.getCover('link'))
+const cover = ref(webState.getCover('link'))
 
 onMounted(() => {
   listFriendLink()

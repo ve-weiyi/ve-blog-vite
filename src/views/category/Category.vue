@@ -25,8 +25,8 @@ import { useWebStore } from '@/stores'
 import { getCategoryListApi } from '@/api/category'
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const cover = ref(webState.value.getCover('talk'))
+const webState = useWebStore()
+const cover = ref(webState.getCover('talk'))
 
 const categoryList = ref([])
 const count = ref(0)

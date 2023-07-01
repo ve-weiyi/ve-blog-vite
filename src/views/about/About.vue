@@ -26,7 +26,7 @@ import MarkdownIt from 'markdown-it'
 import { getAboutApi } from '@/api/website'
 
 // 获取存储的博客信息
-const blogInfo = ref(useWebStore().blogInfo)
+const blogInfo = useWebStore().blogInfo
 
 interface Article {
   data: string
@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
   }
 })
 
-const avatar = blogInfo.value.websiteConfig.websiteAvatar
+const avatar = blogInfo.websiteConfig.websiteAvatar
 const url = 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg'
 const cover = 'background: url(' + url + ') center center / cover no-repeat'
 </script>

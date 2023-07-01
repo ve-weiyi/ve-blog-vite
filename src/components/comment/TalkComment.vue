@@ -5,8 +5,8 @@
     <div class="comment-wrapper">
       <div style="display: flex; width: 100%">
         <v-avatar size="36">
-          <img v-if="store.avatar" :src="store.avatar" />
-          <img v-else :src="store.blogInfo.websiteConfig.touristAvatar" />
+          <img v-if="webState.avatar" :src="webState.avatar" />
+          <img v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -85,8 +85,8 @@
           <div v-if="replyCommentIndex === index && replyToCommentId === item.id" class="comment-wrapper">
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
-                <img v-if="store.avatar" :src="store.avatar" />
-                <img v-else :src="store.blogInfo.websiteConfig.touristAvatar" />
+                <img v-if="webState.avatar" :src="webState.avatar" />
+                <img v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
               </v-avatar>
               <div style="width: 100%" class="ml-3">
                 <div class="comment-input">
@@ -106,18 +106,37 @@
           </div>
         </div>
       </div>
+      <!-- 加载按钮 -->
+      <div class="load-wrapper">
+        <v-btn outlined v-if="paginationData.total > commentList.length" @click="listComments"> 加载更多... </v-btn>
+      </div>
     </div>
-    <!-- 无评论提示 -->
-    <div v-else class="comment-empty">暂无评论</div>
-    <!-- 加载更多按钮 -->
-    <div v-if="count > commentList.length">
-      <button class="load-more-btn" @click="loadMore">加载更多</button>
-    </div>
+    <!-- 没有评论提示 -->
+    <div v-else style="padding: 1.25rem; text-align: center">来发评论吧~</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted } from 'vue'
+import { useWebStore } from '@/stores'
+import { findCommentListApi, queryCommentApi } from '@/api/comment'
+import { usePagination } from '@/hooks/usePagination'
+import { useRoute } from 'vue-router'
+
+const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
+
+// 父组件向子组件传输的数据
+const props = defineProps({
+  type: {
+    type: Number,
+    required: false,
+  },
+})
+
+// 获取存储的博客信息
+const webState = useWebStore()
+// 获取路由参数
+const route = useRoute()
 
 // 定义响应式变量
 const commentContent = ref('') // 评论内容
@@ -129,14 +148,52 @@ const replyToCommentId = ref(null) // 回复的评论 ID
 const count = ref(0) // 评论总数
 const reFresh = ref(true) // 是否刷新评论
 
-async function fetchComments() {
-  // 调用 API 获取评论
-  const response = await fetch('/api/comments')
-  const data = await response.json()
-
-  // 将获取的数据赋值给评论列表变量
-  commentList.value = data.comments
-  count.value = data.count
+const listComments = () => {
+  // 查看评论
+  const path = route.path
+  const arr = path.split('/')
+  let conditions
+  switch (props.type) {
+    case 1:
+    case 3:
+      conditions = [
+        {
+          field: 'topic_id',
+          value: arr[2],
+          rule: '=',
+        },
+      ]
+      break
+    default:
+      break
+  }
+  findCommentListApi({
+    page: paginationData.currentPage,
+    pageSize: paginationData.pageSize,
+    orders: [
+      {
+        field: 'created_at',
+        rule: 'desc',
+      },
+    ],
+    conditions: [
+      {
+        field: 'type',
+        value: props.type,
+        rule: '=',
+      },
+    ],
+  }).then((res) => {
+    console.log(res)
+    if (paginationData.currentPage === 1) {
+      commentList.value = res.data.list
+    } else {
+      commentList.value.push(...res.data.list)
+    }
+    paginationData.currentPage = res.data.page + 1
+    paginationData.pageSize = res.data.pageSize
+    paginationData.total = res.data.total
+  })
 }
 
 // 提交新评论
@@ -167,7 +224,7 @@ async function submitComment() {
     // 清空评论输入框
     commentContent.value = ''
     // 获取更新后的评论列表
-    fetchComments()
+    listComments()
   } else {
     // 处理错误响应
     // 显示错误信息或执行其他必要操作
@@ -213,24 +270,17 @@ async function insertComment(parentId) {
     replyCommentIndex.value = -1
     replyToCommentId.value = null
     // 获取更新后的评论列表
-    fetchComments()
+    listComments()
   } else {
     // 处理错误响应
-    // 显示错误信息或执行其他必要
-    操作
+    // 显示错误信息或执行其他必要操作
   }
-}
-
-// 加载更多评论
-function loadMore() {
-  // 根据分页逻辑获取更多评论
-  // 相应地更新评论列表和总数变量
 }
 
 // 生命周期钩子
 onMounted(() => {
   // 在组件挂载时获取初始评论
-  fetchComments()
+  listComments()
 })
 
 // 监听响应式变量的变化

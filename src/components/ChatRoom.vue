@@ -129,8 +129,8 @@ import { ElMessage } from 'element-plus'
 import { replaceEmoji } from '@/utils/emoji'
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const blogInfo = ref(useWebStore().blogInfo)
+const webState = useWebStore()
+const blogInfo = useWebStore().blogInfo
 
 const isInput = computed(() => {
   if (typeof content.value === 'string') {
@@ -206,7 +206,7 @@ const openEmoji = () => {
 
 // 连接 WebSocket
 const connect = () => {
-  websocket.value = new WebSocket(blogInfo.value.websiteConfig.websocketUrl)
+  websocket.value = new WebSocket(blogInfo.websiteConfig.websocketUrl)
 
   // 连接发生错误的回调方法
   websocket.value.onerror = (event) => {
@@ -291,10 +291,10 @@ const saveMessage = (e: Event) => {
   content.value = replaceEmoji(content.value)
 
   const socketMsg = {
-    nickname: webState.value.nickname,
-    avatar: webState.value.avatar,
+    nickname: webState.nickname,
+    avatar: webState.avatar,
     content: content.value,
-    userId: webState.value.userId,
+    userId: webState.userId,
     type: 3,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
@@ -318,7 +318,7 @@ const showBack = (item: any, index: number, e: MouseEvent) => {
     item.style.display = 'none'
   })
 
-  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webState.value.userId)) {
+  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webState.userId)) {
     backBtn.value[index].style.left = e.offsetX + 'px'
     backBtn.value[index].style.bottom = e.offsetY + 'px'
     backBtn.value[index].style.display = 'block'
@@ -381,10 +381,10 @@ const translationEnd = () => {
   const formData = new FormData()
   formData.append('file', file)
   formData.append('type', 5)
-  formData.append('nickname', webState.value.nickname)
-  formData.append('avatar', webState.value.avatar)
-  if (webState.value.userId !== null) {
-    formData.append('userId', webState.value.userId)
+  formData.append('nickname', webState.nickname)
+  formData.append('avatar', webState.avatar)
+  if (webState.userId !== null) {
+    formData.append('userId', webState.userId)
   }
   formData.append('ipAddress', ipAddress.value)
   formData.append('ipSource', ipSource.value)
@@ -443,7 +443,7 @@ const getVoiceTime = (item: any) => {
 
 // 计算属性
 const isSelf = (item: any) => {
-  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webState.value.userId)
+  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webState.userId)
 }
 
 const isleft = (item: any) => {
