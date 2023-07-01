@@ -62,6 +62,7 @@ export const useWebStore = defineStore({
         },
       ],
     },
+    replyInfo: {},
   }),
   actions: {
     getCover(page: string) {
@@ -81,6 +82,9 @@ export const useWebStore = defineStore({
       this.talkLikeSet = user.talkLikeSet ? user.talkLikeSet : []
       this.email = user.email
       this.loginType = user.loginType
+    },
+    isLogin() {
+      return this.getToken() != undefined
     },
     logout() {
       this.setToken(undefined)

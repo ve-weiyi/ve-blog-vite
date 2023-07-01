@@ -63,8 +63,8 @@ import { usePagination } from '@/hooks/usePagination'
 import { formatDate } from '@/utils/format'
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const cover = ref(webState.value.getCover('talk'))
+const webState = useWebStore()
+const cover = ref(webState.getCover('talk'))
 
 // 获取路由参数
 const route = useRoute()

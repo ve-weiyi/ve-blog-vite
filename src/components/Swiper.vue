@@ -35,6 +35,7 @@ const props = defineProps({
   },
   list: {
     type: Array,
+    default: () => [],
   },
 })
 
@@ -54,7 +55,10 @@ const startInterval = () => {
     }
   }, 3000)
 }
-
+const hello = ref('Hello from child component')
+defineExpose({
+  hello,
+})
 onMounted(startInterval)
 </script>
 

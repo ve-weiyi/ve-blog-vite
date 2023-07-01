@@ -3,7 +3,7 @@ import http from '@/utils/request'
 /** 增 */
 export function createPhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/photo/create',
+    url: '/api/v1/photo/create',
     method: 'post',
     data,
   })
@@ -12,7 +12,7 @@ export function createPhotoApi(data?: object): Promise<IApiResponseData<any>> {
 /** 改 */
 export function updatePhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/photo/update',
+    url: '/api/v1/photo/update',
     method: 'put',
     data,
   })
@@ -21,7 +21,7 @@ export function updatePhotoApi(data?: object): Promise<IApiResponseData<any>> {
 /** 删 删除单个*/
 export function deletePhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/photo/delete',
+    url: '/api/v1/photo/delete',
     method: 'delete',
     data,
   })
@@ -30,26 +30,26 @@ export function deletePhotoApi(data?: object): Promise<IApiResponseData<any>> {
 /** 删除 批量操作 */
 export function deleteByIdsPhotoApi(ids: number[]): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/photo/deleteByIds',
+    url: '/api/v1/photo/deleteByIds',
     method: 'delete',
     data: ids,
   })
 }
 
 /** 查 查询单个*/
-export function getPhotoApi(data?: object): Promise<IApiResponseData<any>> {
+export function queryPhotoApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/photo/find',
+    url: '/api/v1/photo/query',
     method: 'post',
     data: data,
   })
 }
 
 /** 查 列表*/
-export function getPhotoListApi(page: object): Promise<IApiResponseData<any>> {
+export function findPhotoListApi(page?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/photo/list',
-    method: 'get',
-    params: page,
+    url: '/api/v1/photo/list',
+    method: 'post',
+    data: page,
   })
 }

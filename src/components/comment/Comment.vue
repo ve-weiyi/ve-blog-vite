@@ -31,14 +31,14 @@
       </div>
     </div>
     <!-- 评论详情 -->
-    <div v-if="count > 0 && reFresh">
+    <div v-if="paginationData.total > 0 && reFresh">
       <!-- 评论数量 -->
-      <div class="count">{{ count }} 评论</div>
+      <div class="count">{{ paginationData.total }} 评论</div>
       <!-- 评论列表 -->
       <div style="display: flex" class="pt-5" v-for="(item, index) of commentList" :key="item.id">
         <!-- 头像 -->
         <v-avatar size="40" class="comment-avatar">
-          <img :src="item.avatar" />
+          <img height="40" :src="item.avatar" />
         </v-avatar>
         <div class="comment-meta">
           <!-- 用户名 -->
@@ -52,7 +52,7 @@
           <!-- 信息 -->
           <div class="comment-info">
             <!-- 楼层 -->
-            <span style="margin-right: 10px">{{ count - index }}楼</span>
+            <span style="margin-right: 10px">{{ paginationData.total - index }}楼</span>
             <!-- 发表时间 -->
             <span style="margin-right: 10px">{{ item.createdAt }}</span>
             <!-- 点赞 -->
@@ -67,7 +67,7 @@
           <div style="display: flex" v-for="reply of item.replyDTOList" :key="reply.id">
             <!--     头像-->
             <v-avatar size="36" class="comment-avatar">
-              <img :src="reply.avatar" />
+              <img height="36" :src="reply.avatar" />
             </v-avatar>
             <div class="reply-meta">
               <!-- 用户名 -->
@@ -109,7 +109,7 @@
             共
             <b>{{ item.replyCount }}</b>
             条回复，
-            <span style="color: #00a1d6; cursor: pointer" @click="checkReplies(index, item)"> 点击查看 </span>
+            <span style="color: #00a1d6; cursor: pointer" @click="viewReply(index, item)"> 点击查看 </span>
           </div>
           <!-- 回复分页 -->
           <div class="mb-3" style="font-size: 0.75rem; color: #222; display: none" ref="paging">
@@ -123,12 +123,17 @@
             />
           </div>
           <!-- 回复框 -->
-          <Reply :type="type" ref="reply" @reloadReply="reloadReply" />
+          <Reply
+            :style="showReplyBlock === index ? 'display: block' : 'display: none'"
+            :type="type"
+            ref="replyRef"
+            @reloadReply="reloadReply"
+          />
         </div>
       </div>
       <!-- 加载按钮 -->
       <div class="load-wrapper">
-        <v-btn outlined v-if="count > commentList.length" @click="listComments"> 加载更多... </v-btn>
+        <v-btn outlined v-if="paginationData.total > commentList.length" @click="listComments"> 加载更多... </v-btn>
       </div>
     </div>
     <!-- 没有评论提示 -->
@@ -136,19 +141,19 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick, onMounted } from 'vue'
+import { ref, reactive, watch, nextTick, onMounted, computed } from 'vue'
 import Reply from './Reply.vue'
-import Paging from './Paging.vue'
-import Emoji from './Emoji.vue'
+import Paging from '../Paging.vue'
+import Emoji from '../Emoji.vue'
 import { useWebStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import { replaceEmoji } from '@/utils/emoji'
 import { useRoute } from 'vue-router'
+import { createCommentApi, findCommentListApi, findCommentReplyListApi, queryCommentApi } from '@/api/comment'
+import { usePagination } from '@/hooks/usePagination'
 import axios from 'axios'
-import { createCommentApi, getCommentListApi } from '@/api/comment'
 
-// 获取路由参数
-const route = useRoute()
+const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -159,48 +164,75 @@ const props = defineProps({
 })
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
+const webState = useWebStore()
+
+// 获取路由参数
+const route = useRoute()
 
 const commentContent = ref('')
-const current = ref(1)
 const commentList = ref([])
-const count = ref(0)
 const chooseEmoji = ref(false)
+// const reply = ref([])
+const check = ref([])
+const paging = ref([])
 
+// 查看评论
 const listComments = () => {
-  // 查看评论
+  const order = [
+    {
+      field: 'created_at',
+      rule: 'desc',
+    },
+  ]
+  const conditions: Condition[] = [
+    {
+      field: 'type',
+      value: props.type,
+      rule: '=',
+    },
+    {
+      flag: 'and',
+      field: 'parent_id',
+      value: 0,
+      rule: '=',
+    },
+  ]
   const path = route.path
   const arr = path.split('/')
-  const param = {
-    current: current.value,
-    type: props.type,
-    topicId: null,
-  }
   switch (props.type) {
     case 1:
     case 3:
-      param.topicId = arr[2]
+      conditions.push({
+        field: 'topic_id',
+        value: arr[2],
+        rule: '=',
+      })
       break
     default:
       break
   }
-  getCommentListApi({}).then((res) => {
+  findCommentListApi({
+    page: paginationData.currentPage,
+    pageSize: paginationData.pageSize,
+    orders: order,
+    conditions: conditions,
+  }).then((res) => {
     console.log(res)
-    if (current.value === 1) {
+    if (paginationData.currentPage === 1) {
       commentList.value = res.data.list
     } else {
       commentList.value.push(...res.data.list)
     }
-    current.value++
-    count.value = res.data.total
-    // $emit('getCommentCount', count.value)
+    paginationData.currentPage = res.data.page + 1
+    paginationData.pageSize = res.data.pageSize
+    paginationData.total = res.data.total
   })
 }
 
 const insertComment = () => {
   // 判断登录
-  if (!webState.value.userInfo.id) {
-    webState.value.loginFlag = true
+  if (!webState.isLogin()) {
+    webState.loginFlag = true
     return false
   }
   // 判空
@@ -231,9 +263,9 @@ const insertComment = () => {
   createCommentApi(comment)
     .then((res) => {
       // 查询最新评论
-      current.value = 1
+      paginationData.currentPage = 1
       listComments()
-      const isReview = webState.value.blogInfo.websiteConfig.isCommentReview
+      const isReview = webState.blogInfo.websiteConfig.isCommentReview
       if (isReview) {
         ElMessage.success('评论成功，正在审核中')
       } else {
@@ -247,38 +279,124 @@ const insertComment = () => {
   commentContent.value = ''
 }
 
+const replyRef = ref()
+const showReplyBlock = ref(-1)
+
+const replyComment = (index, item) => {
+  console.log(index, item)
+  if (showReplyBlock.value == index) {
+    showReplyBlock.value = -1
+    return
+  }
+  showReplyBlock.value = index
+
+  webState.replyInfo = item
+
+  const childComponent = replyRef.value[index]
+  console.log('replyRef', replyRef.value[0])
+  console.log('childComponent', childComponent.commentContent)
+
+  childComponent.commentContent = ''
+  childComponent.nickname = item.nickname
+  childComponent.replyUserId = item.userId
+  childComponent.parentId = commentList.value[index].id
+  childComponent.chooseEmoji = false
+  childComponent.index = index
+  // reply.value[index].$el.style.display = 'block'
+}
+
+const reloadReply = (index) => {
+  findCommentReplyListApi(commentList.value[index].id, {
+    orders: [
+      {
+        field: 'created_at',
+        rule: 'desc',
+      },
+    ],
+    conditions: [
+      {
+        flag: 'and',
+        field: 'type',
+        value: props.type,
+        rule: '=',
+      },
+    ],
+  })
+  // findCommentReplyListApi(commentList.value[index].id)
+}
+
+const viewReply = (index, item) => {
+  const orders = [
+    {
+      field: 'created_at',
+      rule: 'desc',
+    },
+  ]
+  const conditions: Condition[] = [
+    {
+      field: 'type',
+      value: props.type,
+      rule: '=',
+    },
+  ]
+
+  findCommentReplyListApi(commentList.value[index].id, {
+    orders: orders,
+    conditions: conditions,
+  }).then(({ data }) => {
+    check[index].style.display = 'none'
+    item.replyDTOList = data.data
+    // 超过1页才显示分页
+    if (Math.ceil(item.replyCount / 5) > 1) {
+      paging[index].style.display = 'flex'
+    }
+  })
+}
+
+const changeReplyCurrent = (current, index, commentId) => {
+  // 查看下一页回复
+  axios
+    .get('/api/comments/' + commentId + '/replies', {
+      params: { current: current, size: 5 },
+    })
+    .then(({ data }) => {
+      commentList[index].replyDTOList = data.data
+    })
+}
+
 const addEmoji = (emoji) => {
   commentContent.value += emoji
 }
 
 const like = (commentId) => {
   // 判断登录
-  if (!webState.value.userId) {
-    webState.value.loginFlag = true
+  if (!webState.isLogin()) {
+    webState.loginFlag = true
     return false
   }
-  axios.post('/api/comments/like', { commentId }).then(({ data }) => {
-    if (data.flag) {
-      $toast({ type: 'success', message: '点赞成功' })
-      const commentLikeSet = webState.value.commentLikeSet
-      if (commentLikeSet.indexOf(commentId) === -1) {
-        commentLikeSet.push(commentId)
-      }
-    } else {
-      $toast({ type: 'error', message: data.message })
-    }
-  })
+  // axios.post('/api/comments/like', { commentId }).then(({ data }) => {
+  //   if (data.flag) {
+  //     $toast({ type: 'success', message: '点赞成功' })
+  //     const commentLikeSet = webState.commentLikeSet
+  //     if (commentLikeSet.indexOf(commentId) === -1) {
+  //       commentLikeSet.push(commentId)
+  //     }
+  //   } else {
+  //     $toast({ type: 'error', message: data.message })
+  //   }
+  // })
 }
 
 const isLike = (commentId) => {
-  var commentLikeSet = webState.value.commentLikeSet
+  var commentLikeSet = webState.commentLikeSet
   return commentLikeSet.indexOf(commentId) != -1 ? 'like-active' : 'like'
 }
 
-const reFresh = ref(false)
+const reFresh = ref(true)
 
 onMounted(() => {
   listComments()
+  console.log('replyRef', replyRef.value)
 })
 
 watch(commentList, () => {

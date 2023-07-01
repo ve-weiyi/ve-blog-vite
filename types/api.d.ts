@@ -11,3 +11,22 @@ interface PageResult<T> {
   page_size: number
   total: number
 }
+
+interface Page {
+  page?: number
+  page_size?: number
+  orders?: Order[]
+  conditions?: Condition[]
+}
+
+interface Order {
+  field: string
+  rule: string
+}
+
+interface Condition {
+  flag?: string
+  field: string
+  value: any
+  rule: string
+}

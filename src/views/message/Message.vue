@@ -32,7 +32,7 @@ import { useWebStore } from '@/stores'
 import axios from 'axios'
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
+const webState = useWebStore()
 
 const show = ref(false)
 const messageContent = ref('')
@@ -43,8 +43,8 @@ const addToList = () => {
     $toast({ type: 'error', message: '留言不能为空' })
     return false
   }
-  const userAvatar = webState.value.avatar ? webState.value.avatar : webState.value.blogInfo.websiteConfig.touristAvatar
-  const userNickname = webState.value.nickname ? webState.value.nickname : '游客'
+  const userAvatar = webState.avatar ? webState.avatar : webState.blogInfo.websiteConfig.touristAvatar
+  const userNickname = webState.nickname ? webState.nickname : '游客'
   const message = {
     avatar: userAvatar,
     nickname: userNickname,
@@ -70,7 +70,7 @@ const listMessage = () => {
   })
 }
 
-const cover = ref(webState.value.getCover('message'))
+const cover = ref(webState.getCover('message'))
 </script>
 
 <style scoped>

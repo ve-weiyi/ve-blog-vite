@@ -214,7 +214,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import Clipboard from 'clipboard'
-import Comment from '../../components/Comment'
+import Comment from '../../components/comment/Comment.vue'
 import { ElMessage } from 'element-plus'
 import tocbot from 'tocbot'
 import { useWebStore } from '@/stores'
@@ -233,8 +233,8 @@ const route = useRoute()
 const articleId = route.params.articleId // 假设路由参数名为 "id"
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const blogInfo = ref(useWebStore().blogInfo)
+const webState = useWebStore()
+const blogInfo = useWebStore().blogInfo
 
 const imgList = ref<string[]>([])
 const articleRef = ref<{
@@ -340,14 +340,14 @@ const getArticle = () => {
 
 const like = () => {
   // 判断登录
-  if (!blogInfo.value.userId) {
-    blogInfo.value.loginFlag = true
+  if (!blogInfo.userId) {
+    blogInfo.loginFlag = true
     return false
   }
   // 发送请求
   this.axios.post('/api/articles/' + articleRef.value.id + '/like').then(({ data }: any) => {
     if (data.flag) {
-      if (blogInfo.value.articleLikeSet.indexOf(articleRef.value.id) != -1) {
+      if (blogInfo.articleLikeSet.indexOf(articleRef.value.id) != -1) {
         this.$set(articleRef.value, 'likeCount', articleRef.value.likeCount - 1)
       } else {
         this.$set(articleRef.value, 'likeCount', articleRef.value.likeCount + 1)
@@ -372,7 +372,7 @@ const deleteHTMLTag = (content: string) => {
 }
 
 function isLike() {
-  const articleLikeSet = webState.value.articleLikeSet
+  const articleLikeSet = webState.articleLikeSet
   return articleLikeSet.indexOf(articleRef.value.id) != -1 ? 'like-btn-active' : 'like-btn'
 }
 

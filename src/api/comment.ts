@@ -3,7 +3,7 @@ import http from '@/utils/request'
 /** 增 */
 export function createCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/comment/create',
+    url: '/api/v1/comment/create',
     method: 'post',
     data,
   })
@@ -12,44 +12,55 @@ export function createCommentApi(data?: object): Promise<IApiResponseData<any>> 
 /** 改 */
 export function updateCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/comment/update',
+    url: '/api/v1/comment/update',
     method: 'put',
     data,
   })
 }
 
-/** 删 删除单个*/
+/** 删 */
 export function deleteCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/comment/delete',
+    url: '/api/v1/comment/delete',
     method: 'delete',
     data,
+  })
+}
+
+/** 查 */
+export function queryCommentApi(data?: object): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: '/api/v1/comment/query',
+    method: 'post',
+    data: data,
   })
 }
 
 /** 删除 批量操作 */
 export function deleteByIdsCommentApi(ids: number[]): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/comment/deleteByIds',
+    url: '/api/v1/comment/deleteByIds',
     method: 'delete',
     data: ids,
   })
 }
 
-/** 查 查询单个*/
-export function getCommentApi(data?: object): Promise<IApiResponseData<any>> {
+/** 查 列表*/
+export function findCommentListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/comment/find',
+    url: '/api/v1/comment/list',
     method: 'post',
-    data: data,
+    data: page,
   })
 }
 
 /** 查 列表*/
-export function getCommentListApi(page: object): Promise<IApiResponseData<any>> {
+export function findCommentReplyListApi(id: number, page?: Page): Promise<IApiResponseData<any>> {
+  console.log('id', id)
+  console.log('page', page)
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/comment/list',
-    method: 'get',
-    params: page,
+    url: `/api/v1/comment/${id}/reply_list`,
+    method: 'post',
+    data: page,
   })
 }

@@ -46,7 +46,7 @@ export function getTagApi(data?: object): Promise<IApiResponseData<any>> {
 }
 
 /** 查 列表*/
-export function getTagListApi(page: object): Promise<IApiResponseData<any>> {
+export function getTagListApi(page?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/tag/list',
     method: 'get',

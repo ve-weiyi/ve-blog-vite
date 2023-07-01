@@ -46,7 +46,7 @@ export function getArticleApi(data?: object): Promise<IApiResponseData<any>> {
 }
 
 /** 查 列表*/
-export function getArticleListApi(page: object): Promise<IApiResponseData<any>> {
+export function getArticleListApi(page?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/article/list',
     method: 'post',
@@ -64,7 +64,7 @@ export function getArticleListByConditionApi(data?: object): Promise<IApiRespons
 }
 
 /** 查 列表*/
-export function getArticleArchivesApi(page: object): Promise<IApiResponseData<any>> {
+export function getArticleArchivesApi(page?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: '/api/v1/blog/article/archives',
     method: 'get',
