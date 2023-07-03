@@ -64,3 +64,10 @@ export function findCommentReplyListApi(id: number, page?: Page): Promise<IApiRe
     data: page,
   })
 }
+
+export function likeCommentApi(id: number): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: `/api/v1/comment/${id}/like`,
+    method: 'post',
+  })
+}

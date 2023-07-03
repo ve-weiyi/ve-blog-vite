@@ -149,7 +149,13 @@ import { useWebStore } from '@/stores'
 import { ElMessage } from 'element-plus'
 import { replaceEmoji } from '@/utils/emoji'
 import { useRoute } from 'vue-router'
-import { createCommentApi, findCommentListApi, findCommentReplyListApi, queryCommentApi } from '@/api/comment'
+import {
+  createCommentApi,
+  findCommentListApi,
+  findCommentReplyListApi,
+  likeCommentApi,
+  queryCommentApi,
+} from '@/api/comment'
 import { usePagination } from '@/hooks/usePagination'
 import axios from 'axios'
 
@@ -368,23 +374,23 @@ const addEmoji = (emoji) => {
   commentContent.value += emoji
 }
 
-const like = (commentId) => {
+const like = (comment) => {
   // 判断登录
   if (!webState.isLogin()) {
     webState.loginFlag = true
     return false
   }
-  // axios.post('/api/comments/like', { commentId }).then(({ data }) => {
-  //   if (data.flag) {
-  //     $toast({ type: 'success', message: '点赞成功' })
-  //     const commentLikeSet = webState.commentLikeSet
-  //     if (commentLikeSet.indexOf(commentId) === -1) {
-  //       commentLikeSet.push(commentId)
-  //     }
-  //   } else {
-  //     $toast({ type: 'error', message: data.message })
-  //   }
-  // })
+
+  likeCommentApi(comment.id).then((res) => {
+    ElMessage.success('点赞成功')
+    const commentLikeSet = webState.commentLikeSet
+    if (commentLikeSet.indexOf(comment.id) !== -1) {
+      comment.likeCount--
+    } else {
+      comment.likeCount++
+    }
+    webState.commentLike(comment.id)
+  })
 }
 
 const isLike = (commentId) => {

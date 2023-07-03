@@ -161,14 +161,14 @@ class HttpRequest {
           case 403:
             console.log('403')
             cookies.clearAll()
-            return new Error(message || 'Error')
+            return Promise.reject(new Error(message || 'Error'))
           default:
             ElMessage({
               message: message || 'Error',
               type: 'error',
               duration: 3 * 1000,
             })
-            return new Error(message || 'Error')
+            return Promise.reject(new Error(message || 'Error'))
         }
       },
       (error) => {
@@ -181,7 +181,7 @@ class HttpRequest {
           type: 'error',
           duration: 2 * 1000,
         })
-        return new Error(error.message)
+        return Promise.reject(new Error(error.message))
       },
     )
     return instance
