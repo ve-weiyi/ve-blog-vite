@@ -9,12 +9,17 @@
       </div>
       <v-row class="info-wrapper">
         <v-col md="3" cols="12">
-          <button id="pick-avatar">
+          <button id="pick-avatar" @click="showCropperDialog">
             <v-avatar size="140">
               <img :src="userInfo.avatar" />
             </v-avatar>
           </button>
-          <vue-cropper ref="vueCropperRef" :src="userInfo.avatar" alt="Source Image" />
+          <avatar-cropper
+            v-if="showCropper"
+            :src="userInfo.avatar"
+            @onCancel="showCropper = false"
+            @onConfirm="showCropper = false"
+          />
         </v-col>
         <v-col md="7" cols="12">
           <v-text-field v-model="userInfo.nickname" variant="underlined" label="昵称" placeholder="请输入您的昵称" />
@@ -47,15 +52,19 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useWebStore } from '@/stores'
-// 使用cropper头像裁剪
-import VueCropper from '@ballcat/vue-cropper'
-import 'cropperjs/dist/cropper.css'
+import AvatarCropper from '@/components/AvatarCropper.vue'
 
 // 获取存储的博客信息
 const store = useWebStore()
 
-const userInfo = store.userInfo
+const userInfo = store
 
+const showCropper = ref(false)
+
+const showCropperDialog = () => {
+  showCropper.value = !showCropper.value
+  console.log('showCropperDialog', showCropper.value)
+}
 // 更新用户信息
 const updateUserInfo = () => {
   // axios.put('/api/users/info', userInfo.value).then(({ data }) => {

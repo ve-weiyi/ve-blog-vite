@@ -25,7 +25,6 @@
     "lint": "pnpm run lint-prettier && pnpm run lint-fix"
   },
   "dependencies": {
-    "@ballcat/vue-cropper": "^1.0.5",
     "@bassist/progress": "^0.2.1",
     "@bassist/utils": "^0.11.2",
     "animate.css": "^4.1.1",
@@ -44,6 +43,7 @@
     "stylus": "^0.59.0",
     "tocbot": "^4.21.0",
     "vue": "^3.3.4",
+    "vue-cropper": "^0.6.2",
     "vue-router": "^4.2.2",
     "vue3-photo-preview": "^0.3.0",
     "vuetify": "^3.3.4"
