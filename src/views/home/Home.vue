@@ -205,7 +205,6 @@
 <script setup lang="ts">
 import { defineComponent, ref, onMounted, computed, onUnmounted } from 'vue'
 import Swiper from '../../components/Swiper.vue'
-import InfiniteLoading from 'vue-infinite-loading'
 import EasyTyper from 'easy-typer-js'
 import MarkdownIt from 'markdown-it'
 import { useWebStore } from '@/stores'

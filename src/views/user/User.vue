@@ -14,7 +14,7 @@
               <img :src="userInfo.avatar" />
             </v-avatar>
           </button>
-          <avatar-cropper @uploaded="uploadAvatar" trigger="#pick-avatar" upload-url="/api/users/avatar" />
+          <vue-cropper ref="vueCropperRef" :src="userInfo.avatar" alt="Source Image" />
         </v-col>
         <v-col md="7" cols="12">
           <v-text-field v-model="userInfo.nickname" variant="underlined" label="昵称" placeholder="请输入您的昵称" />
@@ -33,7 +33,7 @@
             placeholder="介绍下自己吧"
           />
           <div v-if="loginType !== 0" class="mt-7 binding">
-            <v-text-field disabled="true" v-model="email" label="邮箱号" placeholder="请绑定邮箱" />
+            <v-text-field disabled v-model="email" label="邮箱号" placeholder="请绑定邮箱" />
             <v-btn v-if="email" variant="text" small @click="openEmailModel"> 修改绑定 </v-btn>
             <v-btn v-else variant="text" small @click="openEmailModel"> 绑定邮箱 </v-btn>
           </div>
@@ -46,13 +46,15 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import AvatarCropper from 'vue-avatar-cropper'
 import { useWebStore } from '@/stores'
+// 使用cropper头像裁剪
+import VueCropper from '@ballcat/vue-cropper'
+import 'cropperjs/dist/cropper.css'
 
 // 获取存储的博客信息
 const store = useWebStore()
 
-const userInfo = ref(store.userInfo)
+const userInfo = store.userInfo
 
 // 更新用户信息
 const updateUserInfo = () => {

@@ -67,6 +67,7 @@ const isMobile = computed(() => {
 const getUserinfo = () => {
   getUserinfoApi()
     .then((res) => {
+      console.log('getUserinfoApi', res)
       useWebStore().setUser(res.data)
     })
     .catch((err) => {

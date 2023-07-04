@@ -72,7 +72,7 @@ export const useWebStore = defineStore({
     },
     setUser(user) {
       this.userInfo = user
-      this.userId = user.userInfoId
+      this.userId = user.id
       this.avatar = user.avatar
       this.nickname = user.nickname
       this.intro = user.intro
