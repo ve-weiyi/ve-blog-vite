@@ -127,6 +127,7 @@ import axios from 'axios'
 import image from '@/assets/images/avatar.jpg'
 import { ElMessage } from 'element-plus'
 import { replaceEmoji } from '@/utils/emoji'
+import { findChatRecordsApi } from '@/api/website'
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -167,11 +168,7 @@ const isVoice = ref(false)
 const voiceActive = ref(false)
 // 开始录音时间
 const startVoiceTime = ref<Date>(null)
-// WebSocket 消息对象
-const WebsocketMessage = reactive({
-  type: null,
-  data: null,
-})
+
 // 心跳定时器
 let heartBeat: NodeJS.Timeout | null = null
 
@@ -193,9 +190,22 @@ onBeforeUnmount(() => {
 const open = () => {
   if (!websocket.value) {
     connect()
+    getChatRecords()
   }
   unreadCount.value = 0
   isShow.value = !isShow.value
+}
+
+const getChatRecords = () => {
+  findChatRecordsApi({
+    page: 1,
+    pageSize: 10,
+    orders: [{ field: 'created_at', order: 'desc' }],
+  }).then((res) => {
+    if (res.code === 200) {
+      chatRecordList.value = res.data.list
+    }
+  })
 }
 
 // 打开/关闭表情面板
@@ -233,31 +243,31 @@ const connect = () => {
     switch (data.type) {
       case 1:
         // 在线人数
-        count.value = data.data
+        count.value = data
         break
       case 2:
         // 聊天历史记录
-        chatRecordList.value = data.data.chatRecordList
-        ipAddress.value = data.data.ipAddress
-        ipSource.value = data.data.ipSource
+        chatRecordList.value = data.chatRecordList
+        ipAddress.value = data.ipAddress
+        ipSource.value = data.ipSource
         break
       case 3:
         // 文字消息
-        chatRecordList.value.push(data.data)
+        chatRecordList.value.push(data)
         if (!isShow.value) {
           unreadCount.value++
         }
         break
       case 4:
         // 撤回消息
-        if (data.data.isVoice) {
-          const index = voiceList.value.indexOf(data.data.id)
+        if (data.isVoice) {
+          const index = voiceList.value.indexOf(data.id)
           if (index !== -1) {
             voiceList.value.splice(index, 1)
           }
         }
         for (let i = 0; i < chatRecordList.value.length; i++) {
-          if (chatRecordList.value[i].id === data.data.id) {
+          if (chatRecordList.value[i].id === data.id) {
             chatRecordList.value.splice(i, 1)
             i--
           }
@@ -265,8 +275,8 @@ const connect = () => {
         break
       case 5:
         // 语音消息
-        voiceList.value.push(data.data.id)
-        chatRecordList.value.push(data.data)
+        voiceList.value.push(data.id)
+        chatRecordList.value.push(data)
         if (!isShow.value) {
           unreadCount.value++
         }
@@ -289,18 +299,17 @@ const saveMessage = (e: Event) => {
 
   // 解析表情
   content.value = replaceEmoji(content.value)
-
-  const socketMsg = {
+  // WebSocket 消息对象
+  const WebsocketMessage = {
+    type: 3,
     nickname: webState.nickname,
     avatar: webState.avatar,
     content: content.value,
     userId: webState.userId,
-    type: 3,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   }
-  WebsocketMessage.type = 3
-  WebsocketMessage.data = socketMsg
+
   websocket.value?.send(JSON.stringify(WebsocketMessage))
   content.value = ''
 }
@@ -327,12 +336,11 @@ const showBack = (item: any, index: number, e: MouseEvent) => {
 
 // 撤回消息
 const back = (item: any, index: number) => {
-  const socketMsg = {
+  const WebsocketMessage = {
     id: item.id,
     isVoice: item.type === 5,
+    type: 4,
   }
-  WebsocketMessage.type = 4
-  WebsocketMessage.data = socketMsg
   websocket.value?.send(JSON.stringify(WebsocketMessage))
   backBtn.value[index].style.display = 'none'
 }
