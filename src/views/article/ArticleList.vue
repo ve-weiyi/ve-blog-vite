@@ -55,16 +55,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { getArticleListApi, getArticleListByConditionApi } from '@/api/article'
-import { useRoute } from 'vue-router'
-import { usePagination } from '@/hooks/usePagination'
-import { formatDate } from '@/utils/format'
+import { ref, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { getArticleListApi, getArticleListByConditionApi } from "@/api/article"
+import { useRoute } from "vue-router"
+import { usePagination } from "@/hooks/usePagination"
+import { formatDate } from "@/utils/format"
 
 // 获取存储的博客信息
 const webState = useWebStore()
-const cover = ref(webState.getCover('talk'))
+const cover = ref(webState.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
@@ -72,16 +72,16 @@ const tagId = route.params.tagId ? parseInt(route.params.tagId) : 0 // 假设路
 const categoryId = route.params.categoryId ? parseInt(route.params.categoryId) : 0 // 假设路由参数名为 "id"
 
 const articleList = ref([])
-const name = ref('')
-const title = ref('')
+const name = ref("")
+const title = ref("")
 
 onMounted(() => {
   const path = route.path
-  if (path.includes('/categories')) {
-    title.value = '分类'
+  if (path.includes("/categories")) {
+    title.value = "分类"
     getArticleList(categoryId, tagId)
   } else {
-    title.value = '标签'
+    title.value = "标签"
     getArticleList(categoryId, tagId)
   }
 })

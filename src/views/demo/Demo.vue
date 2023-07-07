@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useWebStore } from '@/stores'
+import { ref, reactive, watch, onMounted } from "vue"
+import { useRoute } from "vue-router"
+import { useWebStore } from "@/stores"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -33,7 +33,7 @@ const route = useRoute()
 const tagId = route.params.tagId ? parseInt(route.params.tagId as string) : 0 // 假设路由参数名为 "id"
 
 // 使用Composition API定义组件的逻辑
-const commentContent = ref('')
+const commentContent = ref("")
 // 其他变量和方法...
 
 // 返回响应式数据

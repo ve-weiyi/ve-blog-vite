@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { getCategoryListApi } from '@/api/category'
+import { ref, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { getCategoryListApi } from "@/api/category"
 
 // 获取存储的博客信息
 const webState = useWebStore()
-const cover = ref(webState.getCover('talk'))
+const cover = ref(webState.getCover("talk"))
 
 const categoryList = ref([])
 const count = ref(0)
@@ -70,7 +70,7 @@ function listCategories() {
   border: 0.2rem solid #49b1f5;
   border-radius: 50%;
   background: #fff;
-  content: '';
+  content: "";
   transition-duration: 0.3s;
 }
 .category-list-item:hover:before {

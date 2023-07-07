@@ -31,10 +31,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, toRef, watch, watchEffect } from 'vue'
-import { useWebStore } from '@/stores'
-import { getArticleListApi } from '@/api/article'
-import { useRouter } from 'vue-router'
+import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
+import { useWebStore } from "@/stores"
+import { getArticleListApi } from "@/api/article"
+import { useRouter } from "vue-router"
 const router = useRouter()
 
 // 获取存储的博客信息
@@ -46,18 +46,18 @@ const isMobile = computed(() => {
   if (clientWidth > 960) {
     return false
   }
-  console.log('isMobile')
+  console.log("isMobile")
   return true
 })
 
-const keywords = ref('')
+const keywords = ref("")
 const articleList = ref([])
 const flag = ref(true)
 
 const goTo = (id) => {
   // 在此处添加跳转到文章详情页的逻辑
   webStore.searchFlag = false
-  router.push({ path: '/articles/' + id })
+  router.push({ path: "/articles/" + id })
   //   .then(() => {
   //   router.go(0) // 强制刷新当前页面
   // })
@@ -74,24 +74,24 @@ const goTo = (id) => {
 watch(
   keywords, // 监听属性变化
   (newValue, oldValue) => {
-    flag.value = newValue.trim() != ''
+    flag.value = newValue.trim() != ""
     if (flag.value) {
       // 搜索条件
       const conditions = [
         {
-          field: 'article_title',
+          field: "article_title",
           value: newValue,
-          rule: 'like',
-          flag: '',
+          rule: "like",
+          flag: "",
         },
         {
-          field: 'article_content',
+          field: "article_content",
           value: newValue,
-          rule: 'like',
-          flag: 'or',
+          rule: "like",
+          flag: "or",
         },
       ]
-      getArticleListApi({ page: 1, pageSize: 10, order: 'created_at', order_key: 'desc', conditions: conditions }).then(
+      getArticleListApi({ page: 1, pageSize: 10, order: "created_at", order_key: "desc", conditions: conditions }).then(
         (res) => {
           console.log(res)
           articleList.value = res.data.list

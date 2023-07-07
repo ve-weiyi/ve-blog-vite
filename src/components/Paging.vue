@@ -87,9 +87,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { useRoute } from 'vue-router'
+import { ref, defineProps, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { useRoute } from "vue-router"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -123,21 +123,21 @@ const current = ref(1)
 
 const changeReplyCurrent = (i) => {
   current.value = i
-  emit('changeReplyCurrent', current.value, props.index, props.commentId)
+  emit("changeReplyCurrent", current.value, props.index, props.commentId)
 }
 
 const prePage = () => {
   current.value -= 1
-  emit('changeReplyCurrent', current.value, props.index, props.commentId)
+  emit("changeReplyCurrent", current.value, props.index, props.commentId)
 }
 
 const nextPage = () => {
   current.value += 1
-  emit('changeReplyCurrent', current.value, props.index, props.commentId)
+  emit("changeReplyCurrent", current.value, props.index, props.commentId)
 }
 
 const isActive = (i) => {
-  return i === current.value ? 'active' : ''
+  return i === current.value ? "active" : ""
 }
 </script>
 

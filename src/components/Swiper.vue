@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, toRefs } from 'vue'
+import { ref, computed, onMounted, toRefs } from "vue"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -55,7 +55,7 @@ const startInterval = () => {
     }
   }, 3000)
 }
-const hello = ref('Hello from child component')
+const hello = ref("Hello from child component")
 defineExpose({
   hello,
 })

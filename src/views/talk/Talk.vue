@@ -66,15 +66,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useWebStore } from '@/stores'
-import axios from 'axios'
-import { findTalkListApi } from '@/api/talk'
+import { ref, onMounted, computed } from "vue"
+import { useRouter } from "vue-router"
+import { useWebStore } from "@/stores"
+import axios from "axios"
+import { findTalkListApi } from "@/api/talk"
 
 // 获取存储的博客信息
 const webState = useWebStore()
-const cover = ref(webState.getCover('talk'))
+const cover = ref(webState.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
@@ -115,7 +115,7 @@ const like = (talk) => {
     return false
   }
   // 发送请求
-  axios.post('/api/talks/' + talk.id + '/like').then(({ data }) => {
+  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
     if (data.flag) {
       // 判断是否点赞
       if (webState.talkLikeSet.indexOf(talk.id) != -1) {
@@ -123,14 +123,14 @@ const like = (talk) => {
       } else {
         talk.likeCount += 1
       }
-      $store.commit('talkLike', talk.id)
+      $store.commit("talkLike", talk.id)
     }
   })
 }
 
 const isLike = (talkId) => {
   var talkLikeSet = webState.talkLikeSet
-  return talkLikeSet.includes(talkId) ? '#eb5055' : '#999'
+  return talkLikeSet.includes(talkId) ? "#eb5055" : "#999"
 }
 
 onMounted(() => {

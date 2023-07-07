@@ -117,11 +117,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { findCommentListApi, queryCommentApi } from '@/api/comment'
-import { usePagination } from '@/hooks/usePagination'
-import { useRoute } from 'vue-router'
+import { ref, reactive, watch, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { findCommentListApi, queryCommentApi } from "@/api/comment"
+import { usePagination } from "@/hooks/usePagination"
+import { useRoute } from "vue-router"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -139,8 +139,8 @@ const webState = useWebStore()
 const route = useRoute()
 
 // 定义响应式变量
-const commentContent = ref('') // 评论内容
-const replyContent = ref('') // 回复内容
+const commentContent = ref("") // 评论内容
+const replyContent = ref("") // 回复内容
 const commentList = ref([]) // 评论列表
 const chooseEmoji = ref(false) // 是否选择表情
 const replyCommentIndex = ref(-1) // 回复评论的索引
@@ -151,16 +151,16 @@ const reFresh = ref(true) // 是否刷新评论
 const listComments = () => {
   // 查看评论
   const path = route.path
-  const arr = path.split('/')
+  const arr = path.split("/")
   let conditions
   switch (props.type) {
     case 1:
     case 3:
       conditions = [
         {
-          field: 'topic_id',
+          field: "topic_id",
           value: arr[2],
-          rule: '=',
+          rule: "=",
         },
       ]
       break
@@ -172,20 +172,20 @@ const listComments = () => {
     pageSize: paginationData.pageSize,
     orders: [
       {
-        field: 'created_at',
-        rule: 'desc',
+        field: "created_at",
+        rule: "desc",
       },
     ],
     conditions: [
       {
-        field: 'type',
+        field: "type",
         value: props.type,
-        rule: '=',
+        rule: "=",
       },
       {
-        field: 'parent_id',
+        field: "parent_id",
         value: 0,
-        rule: '=',
+        rule: "=",
       },
     ],
   }).then((res) => {
@@ -204,7 +204,7 @@ const listComments = () => {
 // 提交新评论
 async function submitComment() {
   // 验证评论内容
-  if (commentContent.value.trim() === '') {
+  if (commentContent.value.trim() === "") {
     // 显示错误信息或处理验证错误
     return
   }
@@ -216,18 +216,18 @@ async function submitComment() {
   }
 
   // 调用 API 提交新评论
-  const response = await fetch('/api/comments', {
-    method: 'POST',
+  const response = await fetch("/api/comments", {
+    method: "POST",
     body: JSON.stringify(newComment),
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   })
 
   if (response.ok) {
     // 评论提交成功
     // 清空评论输入框
-    commentContent.value = ''
+    commentContent.value = ""
     // 获取更新后的评论列表
     listComments()
   } else {
@@ -246,7 +246,7 @@ function replyComment(index, item, reply) {
 // 插入回复评论
 async function insertComment(parentId) {
   // 验证回复内容
-  if (replyContent.value.trim() === '') {
+  if (replyContent.value.trim() === "") {
     // 显示错误信息或处理验证错误
     return
   }
@@ -259,18 +259,18 @@ async function insertComment(parentId) {
   }
 
   // 调用 API 插入回复评论
-  const response = await fetch('/api/comments', {
-    method: 'POST',
+  const response = await fetch("/api/comments", {
+    method: "POST",
     body: JSON.stringify(newReply),
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   })
 
   if (response.ok) {
     // 回复评论插入成功
     // 清空回复输入框
-    replyContent.value = ''
+    replyContent.value = ""
     // 重置回复评论的索引和 ID
     replyCommentIndex.value = -1
     replyToCommentId.value = null

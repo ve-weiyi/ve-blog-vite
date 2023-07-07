@@ -32,27 +32,27 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import TopNavBar from './components/layout/TopNavBar.vue'
-import Footer from './components/layout/Footer.vue'
-import SideNavBar from './components/layout/SideNavBar.vue'
-import BackTop from './components/BackTop.vue'
-import SearchModel from './components/model/SearchModel.vue'
-import LoginModel from './components/model/LoginModel.vue'
-import RegisterModel from './components/model/RegisterModel.vue'
-import ForgetModel from './components/model/ForgetModel.vue'
-import Player from './components/zw-player/player.vue'
-import ChatRoom from './components/ChatRoom.vue'
-import EmailModel from './components/model/EmailModel.vue'
-import { ElConfigProvider } from 'element-plus'
-import zh from 'element-plus/lib/locale/lang/zh-cn'
-import en from 'element-plus/lib/locale/lang/en'
-import { useAppStore, useWebStore } from '@/stores'
-import { getUserinfoApi } from '@/api/user'
-import cookies from '@/utils/cookies'
+import { computed, onMounted, ref } from "vue"
+import TopNavBar from "./components/layout/TopNavBar.vue"
+import Footer from "./components/layout/Footer.vue"
+import SideNavBar from "./components/layout/SideNavBar.vue"
+import BackTop from "./components/BackTop.vue"
+import SearchModel from "./components/model/SearchModel.vue"
+import LoginModel from "./components/model/LoginModel.vue"
+import RegisterModel from "./components/model/RegisterModel.vue"
+import ForgetModel from "./components/model/ForgetModel.vue"
+import Player from "./components/zw-player/player.vue"
+import ChatRoom from "./components/ChatRoom.vue"
+import EmailModel from "./components/model/EmailModel.vue"
+import { ElConfigProvider } from "element-plus"
+import zh from "element-plus/lib/locale/lang/zh-cn"
+import en from "element-plus/lib/locale/lang/en"
+import { useAppStore, useWebStore } from "@/stores"
+import { getUserinfoApi } from "@/api/user"
+import cookies from "@/utils/cookies"
 
 const appStore = useAppStore()
-const locale = computed(() => (appStore.lang === 'zh' ? zh : en))
+const locale = computed(() => (appStore.lang === "zh" ? zh : en))
 const size = computed(() => appStore.size)
 
 // 获取存储的博客信息
@@ -67,7 +67,7 @@ const isMobile = computed(() => {
 const getUserinfo = () => {
   getUserinfoApi()
     .then((res) => {
-      console.log('getUserinfoApi', res)
+      console.log("getUserinfoApi", res)
       useWebStore().setUser(res.data)
     })
     .catch((err) => {
@@ -79,7 +79,7 @@ const getUserinfo = () => {
 onMounted(() => {
   // 页面刷新后自动获取用户信息
   const token = useWebStore().getToken()
-  console.log('token', token)
+  console.log("token", token)
   if (token != undefined) {
     getUserinfo()
   }

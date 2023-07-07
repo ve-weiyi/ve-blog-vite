@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import EmojiList from '../assets/emojis/qq_emoji.json'
+import EmojiList from "../assets/emojis/qq_emoji.json"
 
 // 定义组件的 props
 const props = defineProps({
@@ -24,14 +24,14 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['addEmoji'])
+const emit = defineEmits(["addEmoji"])
 
 // 响应式数据
 const emojiList = EmojiList
 
 // 方法
 const addEmoji = (key: string) => {
-  emit('addEmoji', key)
+  emit("addEmoji", key)
 }
 
 const getImage = (localUrl) => {

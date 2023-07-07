@@ -27,50 +27,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useWebStore } from '@/stores'
-import axios from 'axios'
+import { ref } from "vue"
+import { useWebStore } from "@/stores"
+import axios from "axios"
 
 // 获取存储的博客信息
 const webState = useWebStore()
 
 const show = ref(false)
-const messageContent = ref('')
+const messageContent = ref("")
 const barrageList = ref([])
 
 const addToList = () => {
-  if (messageContent.value.trim() == '') {
-    $toast({ type: 'error', message: '留言不能为空' })
+  if (messageContent.value.trim() == "") {
+    $toast({ type: "error", message: "留言不能为空" })
     return false
   }
   const userAvatar = webState.avatar ? webState.avatar : webState.blogInfo.websiteConfig.touristAvatar
-  const userNickname = webState.nickname ? webState.nickname : '游客'
+  const userNickname = webState.nickname ? webState.nickname : "游客"
   const message = {
     avatar: userAvatar,
     nickname: userNickname,
     messageContent: messageContent.value,
     time: Math.floor(Math.random() * (10 - 7)) + 7,
   }
-  messageContent.value = ''
-  axios.post('/api/messages', message).then(({ data }) => {
+  messageContent.value = ""
+  axios.post("/api/messages", message).then(({ data }) => {
     if (data.flag) {
       barrageList.value.push(message)
-      $toast({ type: 'success', message: '留言成功' })
+      $toast({ type: "success", message: "留言成功" })
     } else {
-      $toast({ type: 'error', message: data.message })
+      $toast({ type: "error", message: data.message })
     }
   })
 }
 
 const listMessage = () => {
-  axios.get('/api/messages').then(({ data }) => {
+  axios.get("/api/messages").then(({ data }) => {
     if (data.flag) {
       barrageList.value = data.data
     }
   })
 }
 
-const cover = ref(webState.getCover('message'))
+const cover = ref(webState.getCover("message"))
 </script>
 
 <style scoped>

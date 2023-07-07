@@ -54,16 +54,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import Comment from '../../components/comment/TalkComment.vue'
-import axios from 'axios'
-import { useWebStore } from '@/stores'
-import { queryTalkApi } from '@/api/talk'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, computed } from "vue"
+import Comment from "../../components/comment/TalkComment.vue"
+import axios from "axios"
+import { useWebStore } from "@/stores"
+import { queryTalkApi } from "@/api/talk"
+import { useRoute } from "vue-router"
 
 // 获取存储的博客信息
 const webState = useWebStore()
-const cover = ref(webState.getCover('talk'))
+const cover = ref(webState.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
@@ -74,14 +74,14 @@ const commentCount = ref(0)
 const talkInfo = ref<any>({
   id: 49,
   userId: 2,
-  nickname: 've77',
-  avatar: 'https://ve77.cn/images/avatar.jpg',
-  content: '用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。',
-  images: '',
+  nickname: "ve77",
+  avatar: "https://ve77.cn/images/avatar.jpg",
+  content: "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。",
+  images: "",
   isTop: true,
   status: true,
-  createdAt: '2022-01-24T23:34:59+08:00',
-  updatedAt: '2022-02-11T23:19:59+08:00',
+  createdAt: "2022-01-24T23:34:59+08:00",
+  updatedAt: "2022-02-11T23:19:59+08:00",
 })
 const previewList = ref([])
 
@@ -91,8 +91,8 @@ function getTalkById() {
   }).then((res) => {
     console.log(res)
     talkInfo.value = res.data
-    talkInfo.value.avatar = ''
-    talkInfo.value.nickname = ''
+    talkInfo.value.avatar = ""
+    talkInfo.value.nickname = ""
     previewList.value = talkInfo.value.imgList
   })
 }
@@ -115,7 +115,7 @@ function like(talk) {
     return false
   }
   // 发送请求
-  axios.post('/api/talks/' + talk.id + '/like').then(({ data }) => {
+  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
     if (data.flag) {
       // 判断是否点赞
       if (webState.talkLikeSet.indexOf(talk.id) !== -1) {
@@ -130,7 +130,7 @@ function like(talk) {
 
 function isLike(talkId) {
   const talkLikeSet = webState.talkLikeSet
-  return talkLikeSet.indexOf(talkId) !== -1 ? '#eb5055' : '#999'
+  return talkLikeSet.indexOf(talkId) !== -1 ? "#eb5055" : "#999"
 }
 getTalkById()
 onMounted(() => {

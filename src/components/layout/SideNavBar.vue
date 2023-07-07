@@ -120,10 +120,10 @@ hr {
 </style>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useWebStore } from '@/stores'
-import axios from 'axios'
+import { ref, computed } from "vue"
+import { useRouter } from "vue-router"
+import { useWebStore } from "@/stores"
+import axios from "axios"
 
 // 获取存储的博客信息
 const store = useWebStore()
@@ -152,15 +152,15 @@ const openLogin = () => {
 }
 
 const logout = () => {
-  if (router.currentRoute.value.path === '/user') {
+  if (router.currentRoute.value.path === "/user") {
     router.go(-1)
   }
-  axios.get('/api/logout').then(({ data }) => {
+  axios.get("/api/logout").then(({ data }) => {
     if (data.flag) {
-      store.commit('logout')
-      toast({ type: 'success', message: '注销成功' })
+      store.commit("logout")
+      toast({ type: "success", message: "注销成功" })
     } else {
-      toast({ type: 'error', message: data.message })
+      toast({ type: "error", message: data.message })
     }
   })
 }

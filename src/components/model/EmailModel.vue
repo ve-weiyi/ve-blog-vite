@@ -35,16 +35,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { useWebStore } from '@/stores'
+import { ref, watch, computed } from "vue"
+import { useWebStore } from "@/stores"
 
 // 获取存储的博客信息
 const webStore = useWebStore()
 
-const email = ref('')
-const code = ref('')
+const email = ref("")
+const code = ref("")
 const flag = ref(false)
-const codeMsg = ref('发送')
+const codeMsg = ref("发送")
 const time = ref(60)
 const show = ref(false)
 
@@ -57,10 +57,10 @@ const countDown = () => {
   flag.value = true
   const timer = setInterval(() => {
     time.value--
-    codeMsg.value = time.value + 's'
+    codeMsg.value = time.value + "s"
     if (time.value <= 0) {
       clearInterval(timer)
-      codeMsg.value = '发送'
+      codeMsg.value = "发送"
       time.value = 60
       flag.value = false
     }
@@ -70,11 +70,11 @@ const countDown = () => {
 const saveUserEmail = () => {
   var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(email.value)) {
-    this.$toast({ type: 'error', message: '邮箱格式不正确' })
+    this.$toast({ type: "error", message: "邮箱格式不正确" })
     return false
   }
   if (code.value.trim().length != 6) {
-    this.$toast({ type: 'error', message: '请输入6位验证码' })
+    this.$toast({ type: "error", message: "请输入6位验证码" })
     return false
   }
   const user = {

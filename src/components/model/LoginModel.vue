@@ -79,19 +79,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { ElMessage } from 'element-plus'
-import { getOauthUrlApi, loginApi } from '@/api/login'
-import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from '@/api/captcha'
-import cookies from '@/utils/cookies'
+import { ref, computed, watch, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { ElMessage } from "element-plus"
+import { getOauthUrlApi, loginApi } from "@/api/login"
+import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from "@/api/captcha"
+import cookies from "@/utils/cookies"
 
 // 获取存储的博客信息
 const webStore = useWebStore()
 
-const username = ref('')
-const password = ref('')
-const code = ref('')
+const username = ref("")
+const password = ref("")
+const code = ref("")
 const show = ref(false)
 const captcha = ref<any>()
 const needCaptcha = ref(false)
@@ -135,11 +135,11 @@ const getCaptchaImage = () => {
 const login = () => {
   const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(username.value)) {
-    ElMessage.error('邮箱格式不正确')
+    ElMessage.error("邮箱格式不正确")
     return false
   }
   if (password.value.trim().length === 0) {
-    ElMessage.error('密码不能为空')
+    ElMessage.error("密码不能为空")
     return false
   }
 
@@ -163,10 +163,10 @@ const login = () => {
 const emailLogin = () => {
   loginApi({ username: username.value, password: password.value, code: code.value })
     .then((res) => {
-      ElMessage.success('登录成功')
+      ElMessage.success("登录成功")
       console.log(res)
 
-      cookies.set('token', res.data.token)
+      cookies.set("token", res.data.token)
       webStore.userInfo = res.data.userInfo
       webStore.loginFlag = false
     })
@@ -184,7 +184,7 @@ const qqLogin = () => {
     //   redirectURI: this.config.QQ_REDIRECT_URI,
     // })
   } else {
-    getOauthUrlApi({ platform: 'qq' }).then((res) => {
+    getOauthUrlApi({ platform: "qq" }).then((res) => {
       window.open(res.data.url)
     })
   }
@@ -192,14 +192,14 @@ const qqLogin = () => {
 
 const weiboLogin = () => {
   // $store.commit('saveLoginUrl', $route.path)
-  getOauthUrlApi({ platform: 'weibo' }).then((res) => {
+  getOauthUrlApi({ platform: "weibo" }).then((res) => {
     window.open(res.data.url)
   })
 }
 
 const feishuLogin = () => {
   // $store.commit('saveLoginUrl', $route.path)
-  getOauthUrlApi({ platform: 'feishu' }).then((res) => {
+  getOauthUrlApi({ platform: "feishu" }).then((res) => {
     window.open(res.data.url)
   })
 }
@@ -226,7 +226,7 @@ onMounted(() => {
 }
 
 .social-login-title::before {
-  content: '';
+  content: "";
   display: inline-block;
   background-color: #d8d8d8;
   width: 60px;
@@ -236,7 +236,7 @@ onMounted(() => {
 }
 
 .social-login-title::after {
-  content: '';
+  content: "";
   display: inline-block;
   background-color: #d8d8d8;
   width: 60px;
