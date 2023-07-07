@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    /** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
+    "useDefineForClassFields": true,
     "module": "esnext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
+    /** TS 严格模式 */
     "strict": false,
-//    jsx/tsx支持
     "jsx": "preserve",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
@@ -13,14 +15,18 @@
     "strictFunctionTypes": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    /** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "allowJs": false,
     "resolveJsonModule": true,
-    "lib": ["dom", "esnext"],
+    /** baseUrl 用来告诉编译器到哪里去查找模块，使用非相对模块时必须配置此项 */
+    "baseUrl": ".",
+    /**  允许导入js文件 */
+    "allowJs": false,
+    "lib": ["esnext", "dom"],
+    /** 非相对模块导入的路径映射配置，根据 baseUrl 配置进行路径计算 */
     "paths": {
       "@/*": ["src/*"],
       "@build/*": ["build/*"],
@@ -29,17 +35,24 @@
     "types": [
       "node",
       "vite/client",
+      /** Element Plus 的 Volar 插件支持 */
       "element-plus/global",
+      "vitest"
     ],
     "typeRoots": ["./types", "./node_modules/@types/"]
   },
   "include": [
     "mock/*.ts",
     "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "tests/**/*.ts",
     "types/*.d.ts",
-    "vite.config.ts"
+    "types/**/*.d.ts",
+    "vite.config.ts",
+    "vitest.config.ts"
   ],
-  "exclude": ["dist", "**/*.js", "node_modules"]
+  /** 编译器默认排除的编译文件 */
+  "exclude": ["node_modules", "dist"]
 }
