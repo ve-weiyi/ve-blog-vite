@@ -220,7 +220,7 @@ import tocbot from "tocbot"
 import { useWebStore } from "@/stores"
 
 import { useRoute } from "vue-router"
-import { getArticleApi } from "@/api/article"
+import { findArticleApi } from "@/api/article"
 
 import { markdownToHtml } from "@/utils/markdown"
 
@@ -286,7 +286,7 @@ let commentCount = 0
 const articleCover = ref<string>("")
 const getArticle = () => {
   // 查询文章
-  getArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
+  findArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
     articleRef.value = res.data
     articleDetail.value = res.data
 

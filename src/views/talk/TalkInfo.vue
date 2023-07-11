@@ -58,7 +58,7 @@ import { ref, onMounted, computed } from "vue"
 import Comment from "../../components/comment/TalkComment.vue"
 import axios from "axios"
 import { useWebStore } from "@/stores"
-import { queryTalkApi } from "@/api/talk"
+import { findTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"
 
 // 获取存储的博客信息
@@ -86,7 +86,7 @@ const talkInfo = ref<any>({
 const previewList = ref([])
 
 function getTalkById() {
-  queryTalkApi({
+  findTalkApi({
     id: talkId,
   }).then((res) => {
     console.log(res)

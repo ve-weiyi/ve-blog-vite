@@ -209,7 +209,7 @@ import EasyTyper from "easy-typer-js"
 import MarkdownIt from "markdown-it"
 import { useWebStore } from "@/stores"
 import { usePagination } from "@/hooks/usePagination"
-import { getArticleListApi } from "@/api/article"
+import { findArticleListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
 import { getUserinfoApi } from "@/api/user"
 import cookies from "@/utils/cookies"
@@ -263,7 +263,7 @@ const infiniteHandler = () => {
   isLoading.value = true
   // 模拟异步加载数据
   const md = require("markdown-it")()
-  getArticleListApi({
+  findArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {
@@ -327,7 +327,7 @@ const listHomeTalks = () => {
 }
 
 const listHomeArticles = () => {
-  getArticleListApi({
+  findArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {

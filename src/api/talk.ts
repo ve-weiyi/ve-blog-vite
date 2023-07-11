@@ -1,10 +1,10 @@
-import http from '@/utils/request'
+import http from "@/utils/request"
 
 /** 增 */
 export function createTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/talk/create',
-    method: 'post',
+    url: "/api/v1/talk/create",
+    method: "post",
     data,
   })
 }
@@ -12,8 +12,8 @@ export function createTalkApi(data?: object): Promise<IApiResponseData<any>> {
 /** 改 */
 export function updateTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/talk/update',
-    method: 'put',
+    url: "/api/v1/talk/update",
+    method: "put",
     data,
   })
 }
@@ -21,17 +21,17 @@ export function updateTalkApi(data?: object): Promise<IApiResponseData<any>> {
 /** 删 删除单个*/
 export function deleteTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/talk/delete',
-    method: 'delete',
+    url: "/api/v1/talk/delete",
+    method: "delete",
     data,
   })
 }
 
 /** 查 */
-export function queryTalkApi(data?: object): Promise<IApiResponseData<any>> {
+export function findTalkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/talk/query',
-    method: 'post',
+    url: "/api/v1/talk/find",
+    method: "post",
     data: data,
   })
 }
@@ -39,8 +39,8 @@ export function queryTalkApi(data?: object): Promise<IApiResponseData<any>> {
 /** 删除 批量操作 */
 export function deleteByIdsTalkApi(ids: number[]): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/talk/deleteByIds',
-    method: 'delete',
+    url: "/api/v1/talk/deleteByIds",
+    method: "delete",
     data: ids,
   })
 }
@@ -48,8 +48,8 @@ export function deleteByIdsTalkApi(ids: number[]): Promise<IApiResponseData<any>
 /** 查 列表*/
 export function findTalkListApi(page?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/talk/list',
-    method: 'post',
+    url: "/api/v1/talk/list",
+    method: "post",
     data: page,
   })
 }

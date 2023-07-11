@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
 import { useWebStore } from "@/stores"
-import { getArticleListApi } from "@/api/article"
+import { findArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
 const router = useRouter()
 
@@ -91,12 +91,16 @@ watch(
           flag: "or",
         },
       ]
-      getArticleListApi({ page: 1, pageSize: 10, order: "created_at", order_key: "desc", conditions: conditions }).then(
-        (res) => {
-          console.log(res)
-          articleList.value = res.data.list
-        },
-      )
+      findArticleListApi({
+        page: 1,
+        pageSize: 10,
+        order: "created_at",
+        order_key: "desc",
+        conditions: conditions,
+      }).then((res) => {
+        console.log(res)
+        articleList.value = res.data.list
+      })
     }
   },
   { immediate: true }, // 立即监听属性

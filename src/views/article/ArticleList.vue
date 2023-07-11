@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { getArticleListApi, getArticleListByConditionApi } from "@/api/article"
+import { findArticleListApi, getArticleListByConditionApi } from "@/api/article"
 import { useRoute } from "vue-router"
 import { usePagination } from "@/hooks/usePagination"
 import { formatDate } from "@/utils/format"

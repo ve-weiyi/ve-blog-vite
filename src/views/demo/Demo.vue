@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from "vue"
+import { ref, reactive, watch, onMounted, watchEffect } from "vue"
 import { useRoute } from "vue-router"
 import { useWebStore } from "@/stores"
 
@@ -24,8 +24,8 @@ const emit = defineEmits([
   // 'eventName',
 ])
 
-// 获取存储的缓存信息
-const webState = useWebStore()
+// 获取缓存信息
+const store = useWebStore()
 
 // 获取路由参数
 const route = useRoute()
@@ -57,10 +57,14 @@ watch(
   // sum, //监听一个
   [1, 2], // 监听多个
   (newValue, oldValue) => {
-    console.log(newValue, oldValue) // 1 'hhh' undefined undefined
+    console.log(newValue, oldValue)
   },
   { immediate: true }, // 立即监听属性
 )
+// watchEffect 会自动追踪依赖并在其变化时执行回调函数。
+watchEffect(() => {
+  console.log("watchEffect", props.type)
+})
 
 // 使用v-if时不能使用defineExpose的属性，要使用display: none
 defineExpose({

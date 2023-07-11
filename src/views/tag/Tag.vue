@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { getTagListApi } from "@/api/tag"
+import { findTagListApi } from "@/api/tag"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -39,7 +39,7 @@ onMounted(() => {
 })
 
 function listTags() {
-  getTagListApi({ page: 1, page_size: 100 }).then((res) => {
+  findTagListApi({ page: 1, page_size: 100 }).then((res) => {
     tagList.value = res.data.list
     count.value = res.data.total
   })

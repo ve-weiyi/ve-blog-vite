@@ -1,10 +1,10 @@
-import http from '@/utils/request'
+import http from "@/utils/request"
 
 /** 增 */
 export function createCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/comment/create',
-    method: 'post',
+    url: "/api/v1/comment/create",
+    method: "post",
     data,
   })
 }
@@ -12,8 +12,8 @@ export function createCommentApi(data?: object): Promise<IApiResponseData<any>> 
 /** 改 */
 export function updateCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/comment/update',
-    method: 'put',
+    url: "/api/v1/comment/update",
+    method: "put",
     data,
   })
 }
@@ -21,17 +21,17 @@ export function updateCommentApi(data?: object): Promise<IApiResponseData<any>> 
 /** 删 */
 export function deleteCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/comment/delete',
-    method: 'delete',
+    url: "/api/v1/comment/delete",
+    method: "delete",
     data,
   })
 }
 
 /** 查 */
-export function queryCommentApi(data?: object): Promise<IApiResponseData<any>> {
+export function findCommentApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/comment/query',
-    method: 'post',
+    url: "/api/v1/comment/find",
+    method: "post",
     data: data,
   })
 }
@@ -39,8 +39,8 @@ export function queryCommentApi(data?: object): Promise<IApiResponseData<any>> {
 /** 删除 批量操作 */
 export function deleteByIdsCommentApi(ids: number[]): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/comment/deleteByIds',
-    method: 'delete',
+    url: "/api/v1/comment/deleteByIds",
+    method: "delete",
     data: ids,
   })
 }
@@ -48,19 +48,19 @@ export function deleteByIdsCommentApi(ids: number[]): Promise<IApiResponseData<a
 /** 查 列表*/
 export function findCommentListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/comment/list',
-    method: 'post',
+    url: "/api/v1/comment/list",
+    method: "post",
     data: page,
   })
 }
 
 /** 查 列表*/
 export function findCommentReplyListApi(id: number, page?: Page): Promise<IApiResponseData<any>> {
-  console.log('id', id)
-  console.log('page', page)
+  console.log("id", id)
+  console.log("page", page)
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/comment/${id}/reply_list`,
-    method: 'post',
+    method: "post",
     data: page,
   })
 }
@@ -68,6 +68,6 @@ export function findCommentReplyListApi(id: number, page?: Page): Promise<IApiRe
 export function likeCommentApi(id: number): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/comment/${id}/like`,
-    method: 'post',
+    method: "post",
   })
 }
