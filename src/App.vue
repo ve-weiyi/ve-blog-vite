@@ -48,7 +48,7 @@ import { ElConfigProvider } from "element-plus"
 import zh from "element-plus/lib/locale/lang/zh-cn"
 import en from "element-plus/lib/locale/lang/en"
 import { useAppStore, useWebStore } from "@/stores"
-import { getUserinfoApi } from "@/api/user"
+import { getUserInfoApi } from "@/api/user"
 import cookies from "@/utils/cookies"
 
 const appStore = useAppStore()
@@ -65,9 +65,9 @@ const isMobile = computed(() => {
 })
 
 const getUserinfo = () => {
-  getUserinfoApi()
+  getUserInfoApi()
     .then((res) => {
-      console.log("getUserinfoApi", res)
+      console.log("getUserInfoApi", res)
       useWebStore().setUser(res.data)
     })
     .catch((err) => {

@@ -46,7 +46,7 @@ export function deleteByIdsTalkApi(ids: number[]): Promise<IApiResponseData<any>
 }
 
 /** 查 列表*/
-export function findTalkListApi(page?: object): Promise<IApiResponseData<any>> {
+export function findTalkListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: "/api/v1/talk/list",
     method: "post",

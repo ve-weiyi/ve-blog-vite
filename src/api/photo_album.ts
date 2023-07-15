@@ -46,7 +46,7 @@ export function findPhotoAlbumApi(data?: object): Promise<IApiResponseData<any>>
 }
 
 /** 查 列表*/
-export function findPhotoAlbumListApi(page?: object): Promise<IApiResponseData<any>> {
+export function findPhotoAlbumListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: "/api/v1/photoAlbum/list",
     method: "post",

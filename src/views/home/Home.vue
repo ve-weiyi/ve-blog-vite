@@ -211,7 +211,7 @@ import { useWebStore } from "@/stores"
 import { usePagination } from "@/hooks/usePagination"
 import { findArticleListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
-import { getUserinfoApi } from "@/api/user"
+import { getUserInfoApi } from "@/api/user"
 import cookies from "@/utils/cookies"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()

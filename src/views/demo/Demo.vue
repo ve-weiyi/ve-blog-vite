@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted, watchEffect } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useWebStore } from "@/stores"
 
 // 父组件向子组件传输的数据
@@ -29,6 +29,8 @@ const store = useWebStore()
 
 // 获取路由参数
 const route = useRoute()
+// 路由
+const router = useRouter()
 
 const tagId = route.params.tagId ? parseInt(route.params.tagId as string) : 0 // 假设路由参数名为 "id"
 

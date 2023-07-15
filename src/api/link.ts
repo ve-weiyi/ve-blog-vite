@@ -46,7 +46,7 @@ export function findLinkApi(data?: object): Promise<IApiResponseData<any>> {
 }
 
 /** 查 列表*/
-export function findLinkListApi(page?: object): Promise<IApiResponseData<any>> {
+export function findLinkListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: "/api/v1/friendLink/list",
     method: "post",

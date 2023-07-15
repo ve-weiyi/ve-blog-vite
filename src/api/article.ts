@@ -46,7 +46,7 @@ export function deleteByIdsArticleApi(ids: number[]): Promise<IApiResponseData<a
 }
 
 /** 查询 列表*/
-export function findArticleListApi(page?: object): Promise<IApiResponseData<any>> {
+export function findArticleListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: "/api/v1/article/list",
     method: "post",
@@ -64,7 +64,7 @@ export function getArticleListByConditionApi(data?: object): Promise<IApiRespons
 }
 
 /** 查 列表*/
-export function getArticleArchivesApi(page?: object): Promise<IApiResponseData<any>> {
+export function getArticleArchivesApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: "/api/v1/article/archives",
     method: "get",
