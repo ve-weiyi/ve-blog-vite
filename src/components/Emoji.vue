@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import EmojiList from "../assets/emojis/qq_emoji.json"
+import EmojiList from "@/assets/emojis/qq_emoji.json"
 
 // 定义组件的 props
 const props = defineProps({

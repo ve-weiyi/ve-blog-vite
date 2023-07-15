@@ -149,13 +149,7 @@ import { useWebStore } from "@/stores"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { useRoute } from "vue-router"
-import {
-  createCommentApi,
-  findCommentListApi,
-  findCommentReplyListApi,
-  likeCommentApi,
-  queryCommentApi,
-} from "@/api/comment"
+import { createCommentApi, findCommentListApi, findCommentReplyListApi, likeCommentApi } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
 import axios from "axios"
 
@@ -219,7 +213,7 @@ const listComments = () => {
   }
   findCommentListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page_size: paginationData.pageSize,
     orders: order,
     conditions: conditions,
   }).then((res) => {
