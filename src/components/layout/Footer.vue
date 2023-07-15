@@ -35,7 +35,7 @@ const links = ["关于", "联系", "博客", "项目", "友链"]
 <style scoped>
 .footer {
   position: absolute;
-  bottom: -16vh;
+  top: calc(100%);
   width: 100%;
   padding: 0; /* 或者根据需要设置自定义的 padding 值 */
 }
