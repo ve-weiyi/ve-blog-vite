@@ -66,16 +66,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import Comment from '@/components/TalkComment'
-import { useWebStore } from '@/stores'
-import axios from 'axios'
-import { getTalkListApi } from '@/api/talk'
+import { ref, onMounted, computed } from "vue"
+import { useRouter } from "vue-router"
+import { useWebStore } from "@/stores"
+import axios from "axios"
+import { findTalkListApi } from "@/api/talk"
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const cover = ref(webState.value.getCover('talk'))
+const webState = useWebStore()
+const cover = ref(webState.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
@@ -86,7 +85,7 @@ const previewList = ref([])
 const router = useRouter()
 
 const listTalks = () => {
-  getTalkListApi({}).then((res) => {
+  findTalkListApi({}).then((res) => {
     if (current.value === 1) {
       talkList.value = res.data.list
     } else {
@@ -111,27 +110,27 @@ const previewImg = (img) => {
 
 const like = (talk) => {
   // 判断登录
-  if (!webState.value.userId) {
-    webState.value.loginFlag = true
+  if (!webState.userId) {
+    webState.loginFlag = true
     return false
   }
   // 发送请求
-  axios.post('/api/talks/' + talk.id + '/like').then(({ data }) => {
+  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
     if (data.flag) {
       // 判断是否点赞
-      if (webState.value.talkLikeSet.indexOf(talk.id) != -1) {
+      if (webState.talkLikeSet.indexOf(talk.id) != -1) {
         talk.likeCount -= 1
       } else {
         talk.likeCount += 1
       }
-      $store.commit('talkLike', talk.id)
+      $store.commit("talkLike", talk.id)
     }
   })
 }
 
 const isLike = (talkId) => {
-  var talkLikeSet = webState.value.talkLikeSet
-  return talkLikeSet.includes(talkId) ? '#eb5055' : '#999'
+  var talkLikeSet = webState.talkLikeSet
+  return talkLikeSet.includes(talkId) ? "#eb5055" : "#999"
 }
 
 onMounted(() => {

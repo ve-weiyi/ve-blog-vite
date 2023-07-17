@@ -1,0 +1,161 @@
+@font-face {
+  font-family: 'iconfont'; /* Project id 4142722 */
+  src: url('iconfont.woff2?t=1687946234644') format('woff2'), url('iconfont.woff?t=1687946234644') format('woff'),
+    url('iconfont.ttf?t=1687946234644') format('truetype');
+}
+
+.iconfont {
+  font-family: 'iconfont' !important;
+  /*font-size: 16px;*/
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-wechat-square:before {
+  content: '\f0d9';
+}
+
+.icon-wechat-circle:before {
+  content: '\e635';
+}
+
+.icon-qq-circle:before {
+  content: '\e703';
+}
+
+.icon-qq-square:before {
+  content: '\e704';
+}
+
+.icon-feishu:before {
+  content: '\e91e';
+}
+
+.icon-gitee-fill-round:before {
+  content: '\e604';
+}
+
+.icon-github:before {
+  content: '\e7d9';
+}
+
+.icon-gitlab:before {
+  content: '\e7da';
+}
+
+.icon-google:before {
+  content: '\e7dc';
+}
+
+.icon-ie:before {
+  content: '\e7e7';
+}
+
+.icon-qq:before {
+  content: '\e82e';
+}
+
+.icon-qrcode:before {
+  content: '\e831';
+}
+
+.icon-skype:before {
+  content: '\e858';
+}
+
+.icon-taobao-circle:before {
+  content: '\e873';
+}
+
+.icon-twitter:before {
+  content: '\e87c';
+}
+
+.icon-weibo-circle:before {
+  content: '\e894';
+}
+
+.icon-wechat:before {
+  content: '\e895';
+}
+
+.icon-weibo-square:before {
+  content: '\e896';
+}
+
+.icon-weibo:before {
+  content: '\e897';
+}
+
+.icon-windows:before {
+  content: '\e898';
+}
+
+.icon-yahoo:before {
+  content: '\e899';
+}
+
+.icon-zhihu:before {
+  content: '\e89c';
+}
+
+.icon-taobao:before {
+  content: '\e89f';
+}
+
+.icon-feishu-square:before {
+  content: '\e8a3';
+}
+
+.icon-feishu-circle:before {
+  content: '\e754';
+}
+
+.icon-alibaba:before {
+  content: '\e715';
+}
+
+.icon-alipay-circle:before {
+  content: '\e71a';
+}
+
+.icon-aliyun:before {
+  content: '\e71b';
+}
+
+.icon-amazon:before {
+  content: '\e71f';
+}
+
+.icon-android:before {
+  content: '\e720';
+}
+
+.icon-apple:before {
+  content: '\e724';
+}
+
+.icon-appstore:before {
+  content: '\e725';
+}
+
+.icon-barcode:before {
+  content: '\e733';
+}
+
+.icon-alipay:before {
+  content: '\e735';
+}
+
+.icon-chrome:before {
+  content: '\e77e';
+}
+
+.icon-dingding:before {
+  content: '\e794';
+}
+
+.icon-facebook:before {
+  content: '\e7af';
+}

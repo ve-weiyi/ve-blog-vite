@@ -6,10 +6,10 @@
  * @LastEditors: 灰是小灰灰的灰
  * @LastEditTime: 2021-07-06 11:49:40
  */
-'use strict'
-import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios'
-import { ElMessage } from 'element-plus'
-import cookies from '@/utils/cookies'
+"use strict"
+import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios"
+import { ElMessage } from "element-plus"
+import cookies from "@/utils/cookies"
 
 class HttpRequest {
   private baseUrl: string
@@ -27,7 +27,7 @@ class HttpRequest {
   }
 
   getBaseUrl(): string {
-    return ''
+    return ""
   }
 
   // https://www.gxlsystem.com/APPkaifa-293852.html AxiosRequestConfig 详解
@@ -37,7 +37,7 @@ class HttpRequest {
       timeout: this.timeout,
       withCredentials: this.withCredentials,
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        "Content-Type": "application/json;charset=UTF-8",
       },
     }
     return config
@@ -66,52 +66,52 @@ class HttpRequest {
   }
 
   private checkStatus(status: number) {
-    let errMessage = ''
+    let errMessage = ""
     switch (status) {
       case 400:
-        errMessage = '错误请求'
+        errMessage = "错误请求"
         break
       case 401:
-        errMessage = '未授权，请重新登录'
+        errMessage = "未授权，请重新登录"
         break
       case 403:
-        errMessage = '拒绝访问'
+        errMessage = "拒绝访问"
         break
       case 404:
-        errMessage = '请求错误,未找到该资源'
+        errMessage = "请求错误,未找到该资源"
         break
       case 405:
-        errMessage = '请求方法未允许'
+        errMessage = "请求方法未允许"
         break
       case 408:
-        errMessage = '请求超时'
+        errMessage = "请求超时"
         break
       case 500:
-        errMessage = '服务器端出错'
+        errMessage = "服务器端出错"
         break
       case 501:
-        errMessage = '网络未实现'
+        errMessage = "网络未实现"
         break
       case 502:
-        errMessage = '网络错误'
+        errMessage = "网络错误"
         break
       case 503:
-        errMessage = '服务不可用'
+        errMessage = "服务不可用"
         break
       case 504:
-        errMessage = '网络超时'
+        errMessage = "网络超时"
         break
       case 505:
-        errMessage = 'http版本不支持该请求'
+        errMessage = "http版本不支持该请求"
         break
       default:
-        errMessage = '连接错误'
+        errMessage = "连接错误"
     }
     return errMessage
   }
 
   private setHeader(config: AxiosRequestConfig) {
-    const token = cookies.get('token')
+    const token = cookies.get("token")
     if (token) {
       config.headers!.Authorization = token
     }
@@ -129,18 +129,18 @@ class HttpRequest {
         this.setHeader(config)
         if (!navigator.onLine) {
           ElMessage({
-            message: '请检查您的网络是否正常',
-            type: 'error',
+            message: "请检查您的网络是否正常",
+            type: "error",
             duration: 3 * 1000,
           })
-          return Promise.reject(new Error('请检查您的网络是否正常'))
+          return Promise.reject(new Error("请检查您的网络是否正常"))
         }
 
         return config
       },
       (error) => {
         return Promise.reject(new Error(error))
-      },
+      }
     )
 
     // 响应拦截
@@ -149,7 +149,7 @@ class HttpRequest {
         const result = res.data
         const type = Object.prototype.toString.call(result)
         // 如果是文件流 直接返回
-        if (type === '[object Blob]' || type === '[object ArrayBuffer]') {
+        if (type === "[object Blob]" || type === "[object ArrayBuffer]") {
           return result
         }
 
@@ -157,27 +157,32 @@ class HttpRequest {
         switch (code) {
           case 200:
             return result
+          // token 错误
+          case 403:
+            console.log("403")
+            cookies.clearAll()
+            return Promise.reject(new Error(message || "Error"))
           default:
             ElMessage({
-              message: message || 'Error',
-              type: 'error',
+              message: message || "Error",
+              type: "error",
               duration: 3 * 1000,
             })
-            return Promise.reject(new Error(message || 'Error'))
+            return Promise.reject(new Error(message || "Error"))
         }
       },
       (error) => {
         if (error && error.response) {
           error.message = this.checkStatus(error.response.status)
         }
-        const isTimeout = error.message.includes('timeout')
+        const isTimeout = error.message.includes("timeout")
         ElMessage({
-          message: isTimeout ? '网络请求超时' : error.message || '连接到服务器失败',
-          type: 'error',
+          message: isTimeout ? "网络请求超时" : error.message || "连接到服务器失败",
+          type: "error",
           duration: 2 * 1000,
         })
         return Promise.reject(new Error(error.message))
-      },
+      }
     )
     return instance
   }

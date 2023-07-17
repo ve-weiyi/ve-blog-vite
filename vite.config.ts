@@ -1,28 +1,33 @@
-import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import components from 'unplugin-vue-components/vite'
-import banner from 'vite-plugin-banner'
-import { createHtmlPlugin } from 'vite-plugin-html'
-import { envDir, sourceDir, manualChunks } from './scripts/build'
-import pkg from './package.json'
-import { resolve } from 'path'
+/* eslint-disable spaced-comment */
+/// <reference types="vite/client" />
+
+import { ConfigEnv, defineConfig, loadEnv } from "vite"
+import { resolve } from "path"
+import pkg from "./package.json"
+import { envDir, sourceDir, manualChunks } from "./scripts/build"
+import vue from "@vitejs/plugin-vue"
+import vueJsx from "@vitejs/plugin-vue-jsx"
+import banner from "vite-plugin-banner"
+import { createHtmlPlugin } from "vite-plugin-html"
+import components from "unplugin-vue-components/vite"
+import eslintPlugin from "vite-plugin-eslint"
 
 /** 当前执行node命令时文件夹的地址（工作目录） */
 const root: string = process.cwd()
 
 /** 路径查找 */
 const pathResolve = (dir: string): string => {
-  return resolve(__dirname, '.', dir)
+  return resolve(__dirname, ".", dir)
 }
 
 /** 设置别名 */
 const alias: Record<string, string> = {
-  '@': pathResolve('src'),
-  '@build': pathResolve('build'),
+  "@": pathResolve("src"),
+  "@build": pathResolve("build"),
 }
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+/** 配置项文档：https://cn.vitejs.dev/config */
+export default defineConfig(({ mode }: ConfigEnv) => {
   const env = loadEnv(mode, envDir)
 
   return {
@@ -36,44 +41,90 @@ export default defineConfig(({ mode }) => {
      * @description 见项目根目录下的 `config` 文件夹说明
      */
     base: env.VITE_DEPLOY_BASE_URL,
-
+    resolve: {
+      /**
+       * 配置目录别名
+       * @see https://cn.vitejs.dev/config/shared-options.html#resolve-alias
+       *
+       * @example
+       *  想从 `src/libs/foo` 文件里导入功能：
+       *  配置 alias 前： `import foo from '../../../libs/foo'`
+       *  配置 alias 后： `import foo from '@/libs/foo'`
+       */
+      alias,
+      // 想要省略的扩展名列表。默认值为 ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']。注意，不 建议忽略自定义导入类型的扩展名（例如：.vue）
+      // 设置后导入文件时不需要加后缀'.vue'
+      extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+    },
     /**
      * 本地开发服务，也可以配置接口代理
      * @see https://cn.vitejs.dev/config/#server-proxy
      */
     server: {
-      port: 3000,
+      /** 是否开启 HTTPS */
+      https: false,
+      /** 设置 host: true 才可以使用 Network 的形式，以 IP 访问项目 */
+      host: true, // host: "0.0.0.0"
+      /** 端口号 */
+      port: 8888,
+      /** 是否自动打开浏览器 */
+      open: false,
+      /** 跨域设置允许 */
+      cors: true,
+      /** 端口被占用时，是否直接退出 */
+      strictPort: false,
       /** 接口代理 */
       proxy: {
         // mock代理
-        '/mock': {
+        "/mock": {
           target: env.VITE_PROXY_DOMAIN_REAL,
           ws: false,
           changeOrigin: true,
           rewrite: (path) => path.replace(path, env.VITE_PROXY_DOMAIN),
         },
-        // "/api/v1": {
-        //   // target: "http://127.0.0.1:8088/api/v1",
-        //   target: "https://mock.mengxuegu.com/mock/63218b5fb4c53348ed2bc212/api/v1",
-        //   ws: true,
-        //   /** 是否允许跨域 */
-        //   changeOrigin: true,
-        //   logLevel: "debug", // 打印代理以后的地址
-        //   rewrite: (path) => path.replace("/api/v1", ""),
-        // },
         // 前缀
-        '/api': {
-          target: 'http://127.0.0.1:9999/', // 代理后的地址 =target/path
+        "/api": {
+          target: "http://127.0.0.1:9999/", // 代理后的地址 =target/path
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true,
-          logLevel: 'debug', // 打印代理以后的地址
-          rewrite: (path) => path.replace('', ''),
+          rewrite: (path) => path.replace("", ""),
         },
       },
     },
 
+    /** 预定义常量 */
+    define: {
+      // https://vue-i18n.intlify.dev/guide/advanced/optimization.html#quasar-cli
+      // 消除 vue-i18n 警告
+      __VUE_I18N_FULL_INSTALL__: true,
+      __VUE_I18N_LEGACY_API__: false,
+      __INTLIFY_PROD_DEVTOOLS__: false,
+    },
     build: {
+      /** 消除打包大小超过 500kb 警告 */
+      chunkSizeWarningLimit: 2000,
+      /** Vite 2.6.x 以上需要配置 minify: "terser", terserOptions 才能生效 */
+      minify: "terser",
+      /** 在打包代码时移除 console.log、debugger 和 注释 */
+      terserOptions: {
+        compress: {
+          drop_console: false,
+          drop_debugger: true,
+          pure_funcs: ["console.log"],
+        },
+        format: {
+          /** 删除注释 */
+          comments: false,
+        },
+      },
+      /** 打包文件的输出目录,默认值为 dist */
+      outDir: "dist",
+      /** 打包后静态资源目录 */
+      assetsDir: "static",
+      path: "./",
+      sourcemap: false,
+      brotliSize: false,
       rollupOptions: {
         output: {
           /**
@@ -101,22 +152,6 @@ export default defineConfig(({ mode }) => {
           manualChunks,
         },
       },
-    },
-
-    resolve: {
-      /**
-       * 配置目录别名
-       * @see https://cn.vitejs.dev/config/shared-options.html#resolve-alias
-       *
-       * @example
-       *  想从 `src/libs/foo` 文件里导入功能：
-       *  配置 alias 前： `import foo from '../../../libs/foo'`
-       *  配置 alias 后： `import foo from '@/libs/foo'`
-       */
-      alias,
-      // 想要省略的扩展名列表。默认值为 ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']。注意，不 建议忽略自定义导入类型的扩展名（例如：.vue）
-      // 设置后导入文件时不需要加后缀'.vue'
-      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     },
 
     css: {
@@ -155,21 +190,24 @@ export default defineConfig(({ mode }) => {
        * 如果需要支持 `.tsx` 组件，请安装 `@vitejs/plugin-vue-jsx` 这个包
        * 并在这里添加一个插件导入 `import vueJsx from '@vitejs/plugin-vue-jsx'`
        */
-      // vueJsx(),
+      vueJsx(),
 
+      eslintPlugin({
+        include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
+      }),
       /**
        * 自动导入组件，不用每次都 import
        * @see https://github.com/antfu/unplugin-vue-components#configuration
        */
-      // components({
-      //   dirs: ['src/components'],
-      //   directoryAsNamespace: true,
-      //   collapseSamePrefixes: true,
-      //   globalNamespaces: [],
-      //   extensions: ['vue', 'ts', 'tsx'],
-      //   deep: true,
-      //   dts: 'src/types/declaration-files/components.d.ts',
-      // }),
+      components({
+        dirs: ["src/components"],
+        directoryAsNamespace: true,
+        collapseSamePrefixes: true,
+        globalNamespaces: [],
+        extensions: ["vue", "ts", "tsx"],
+        deep: true,
+        dts: "./types/components.d.ts",
+      }),
 
       /**
        * 版权注释
@@ -183,7 +221,7 @@ export default defineConfig(({ mode }) => {
           ` * description: ${pkg.description}`,
           ` * author: ${pkg.author}`,
           ` */`,
-        ].join('\n'),
+        ].join("\n")
       ),
 
       /**
@@ -201,5 +239,10 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+    /** Vitest 单元测试配置：https://cn.vitest.dev/config */
+    test: {
+      include: ["tests/**/*.test.ts"],
+      environment: "jsdom",
+    },
   }
 })

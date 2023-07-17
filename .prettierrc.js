@@ -11,24 +11,24 @@ module.exports = {
   /** 行尾是否加分号 默认true */
   semi: false,
   /** 是否采用单引号代替双引号 */
-  singleQuote: true,
+  singleQuote: false,
   /** 在对象中的括号之间是否用空格来间隔 */
   bracketSpacing: true,
   /** 是否折叠  <button >*/
   bracketSameLine: false,
   /** 箭头函数的括号 always:(x) => x,avoid:x => x  */
-  arrowParens: 'always',
+  arrowParens: "always",
   /** 指定代码最后是否添加一行空行 */
-  endOfLine: 'auto',
-  /** 对象或者数组的最后一个元素后面不要加逗号 es5 none all*/
-  trailingComma: 'all',
+  endOfLine: "auto",
+  /** 对象或者数组的最后一个元素后面不要加逗号 es5:在数组最后一行加逗号 none:都不加 all:方法和数组都加 */
+  trailingComma: "es5",
 
   //在 JSX 中使用单引号替代双引号，默认false
   jsxSingleQuote: false,
   //将 html 开始标签的后面一个 > 放在最后一行的末尾，而不是单独一行。
   jsxBracketSameLine: false,
   //指定对 HTML, Vue, Angular, and Handlebars 文件中的空格保持敏感。 css 遵循css|strict 保留|ignore 忽略
-  htmlWhitespaceSensitivity: 'css',
+  htmlWhitespaceSensitivity: "css",
   //vue 文件中，是否给 script 和 style 内的代码添加缩进。
   vueIndentScriptAndStyle: false,
 

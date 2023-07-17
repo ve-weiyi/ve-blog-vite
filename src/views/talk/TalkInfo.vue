@@ -34,13 +34,13 @@
                   mdi-thumb-up
                 </v-icon>
                 <div class="operation-count">
-                  {{ talkInfo.likeCount == null ? 0 : talkInfo.likeCount }}
+                  {{ talkInfo.likeCount === null ? 0 : talkInfo.likeCount }}
                 </div>
               </div>
               <div class="talk-operation-item">
                 <v-icon size="16" color="#999">mdi-chat</v-icon>
                 <div class="operation-count">
-                  {{ commentCount == null ? 0 : commentCount }}
+                  {{ commentCount === null ? 0 : commentCount }}
                 </div>
               </div>
             </div>
@@ -53,77 +53,89 @@
   </div>
 </template>
 
-<script>
-import Comment from '../../components/TalkComment'
-export default {
-  components: {
-    Comment,
-  },
-  created() {
-    this.getTalkById()
-  },
-  data: function() {
-    return {
-      commentType: 3,
-      commentCount: 0,
-      talkInfo: {},
-      previewList: [],
-    }
-  },
-  methods: {
-    getTalkById() {
-      this.axios.get('/api/talks/' + this.$route.params.talkId).then(({ data }) => {
-        this.talkInfo = data.data
-        this.previewList = this.talkInfo.imgList
-      })
-    },
-    getCommentCount(count) {
-      this.commentCount = count
-    },
-    previewImg(img) {
-      this.$imagePreview({
-        images: this.previewList,
-        index: this.previewList.indexOf(img),
-      })
-    },
-    like(talk) {
-      // 判断登录
-      if (!this.$store.state.userId) {
-        this.$store.state.loginFlag = true
-        return false
-      }
-      // 发送请求
-      this.axios.post('/api/talks/' + talk.id + '/like').then(({ data }) => {
-        if (data.flag) {
-          // 判断是否点赞
-          if (this.$store.state.talkLikeSet.indexOf(talk.id) != -1) {
-            this.$set(talk, 'likeCount', talk.likeCount - 1)
-          } else {
-            this.$set(talk, 'likeCount', talk.likeCount + 1)
-          }
-          this.$store.commit('talkLike', talk.id)
-        }
-      })
-    },
-  },
-  computed: {
-    cover() {
-      var cover = ''
-      this.$store.state.blogInfo.pageList.forEach((item) => {
-        if (item.pageLabel == 'talk') {
-          cover = item.pageCover
-        }
-      })
-      return 'background: url(' + cover + ') center center / cover no-repeat'
-    },
-    isLike() {
-      return function(talkId) {
-        var talkLikeSet = this.$store.state.talkLikeSet
-        return talkLikeSet.indexOf(talkId) != -1 ? '#eb5055' : '#999'
-      }
-    },
-  },
+<script setup lang="ts">
+import { ref, onMounted, computed } from "vue"
+import Comment from "../../components/comment/TalkComment.vue"
+import axios from "axios"
+import { useWebStore } from "@/stores"
+import { findTalkApi } from "@/api/talk"
+import { useRoute } from "vue-router"
+
+// 获取存储的博客信息
+const webState = useWebStore()
+const cover = ref(webState.getCover("talk"))
+
+// 获取路由参数
+const route = useRoute()
+const talkId = route.params.talkId ? parseInt(route.params.talkId as string) : 0 // 假设路由参数名为 "id"
+
+const commentType = 3
+const commentCount = ref(0)
+const talkInfo = ref<any>({
+  id: 49,
+  userId: 2,
+  nickname: "ve77",
+  avatar: "https://ve77.cn/images/avatar.jpg",
+  content: "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。",
+  images: "",
+  isTop: true,
+  status: true,
+  createdAt: "2022-01-24T23:34:59+08:00",
+  updatedAt: "2022-02-11T23:19:59+08:00",
+})
+const previewList = ref([])
+
+function getTalkById() {
+  findTalkApi({
+    id: talkId,
+  }).then((res) => {
+    console.log(res)
+    talkInfo.value = res.data
+    talkInfo.value.avatar = ""
+    talkInfo.value.nickname = ""
+    previewList.value = talkInfo.value.imgList
+  })
 }
+
+function getCommentCount(count) {
+  commentCount.value = count
+}
+
+function previewImg(img) {
+  // $imagePreview({
+  //   images: previewList.value,
+  //   index: previewList.value.indexOf(img),
+  // })
+}
+
+function like(talk) {
+  // 判断登录
+  if (!webState.userId) {
+    webState.loginFlag = true
+    return false
+  }
+  // 发送请求
+  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
+    if (data.flag) {
+      // 判断是否点赞
+      if (webState.talkLikeSet.indexOf(talk.id) !== -1) {
+        talk.likeCount -= 1
+      } else {
+        talk.likeCount += 1
+      }
+      // $store.commit('talkLike', talk.id)
+    }
+  })
+}
+
+function isLike(talkId) {
+  const talkLikeSet = webState.talkLikeSet
+  return talkLikeSet.indexOf(talkId) !== -1 ? "#eb5055" : "#999"
+}
+getTalkById()
+onMounted(() => {
+  getTalkById()
+})
 </script>
 
 <style scoped>

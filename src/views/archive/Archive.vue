@@ -24,14 +24,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import { useWebStore } from '@/stores'
-import { getArticleArchivesApi } from '@/api/article'
+import { ref, onMounted, watch } from "vue"
+import { useWebStore } from "@/stores"
+import { getArticleArchivesApi } from "@/api/article"
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
+const webState = useWebStore()
 // 获取背景图片
-const cover = ref(webState.value.getCover('talk'))
+const cover = ref(webState.getCover("talk"))
 
 const current = ref(1)
 const count = ref(0)

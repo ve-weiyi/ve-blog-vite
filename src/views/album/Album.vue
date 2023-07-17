@@ -22,13 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { getPhotoAlbumListApi } from '@/api/photo_album'
+import { ref, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { findPhotoAlbumListApi } from "@/api/photo_album"
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
-const cover = ref(webState.value.getCover('album'))
+const webState = useWebStore()
+const cover = ref(webState.getCover("album"))
 
 const photoAlbumList = ref([])
 
@@ -37,7 +37,7 @@ onMounted(() => {
 })
 
 function listPhotoAlbums() {
-  getPhotoAlbumListApi({}).then((res) => {
+  findPhotoAlbumListApi({}).then((res) => {
     photoAlbumList.value = res.data.list
   })
 }
@@ -96,7 +96,7 @@ function listPhotoAlbums() {
   width: 100%;
   height: 2px;
   background: #fff;
-  content: '';
+  content: "";
   transition: transform 0.35s;
   transform: translate3d(-101%, 0, 0);
 }

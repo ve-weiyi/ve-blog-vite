@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 
-export const useMessageStore = defineStore('message', {
+export const useMessageStore = defineStore("message", {
   state: () => ({
-    message: 'Hello World',
+    message: "Hello World",
   }),
   getters: {
     fullMessage: (state) => `The message is "${state.message}".`,
@@ -14,7 +14,7 @@ export const useMessageStore = defineStore('message', {
         setTimeout(() => {
           // 这里的 this 是当前的 Store 实例
           this.message = newMessage
-          resolve('Async done.')
+          resolve("Async done.")
         }, 3000)
       })
     },
@@ -22,7 +22,7 @@ export const useMessageStore = defineStore('message', {
     updateMessageSync(newMessage: string): string {
       // 这里的 this 是当前的 Store 实例
       this.message = newMessage
-      return 'Sync done.'
+      return "Sync done."
     },
   },
 })

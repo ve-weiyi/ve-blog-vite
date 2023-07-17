@@ -1,11 +1,11 @@
-import { ref } from 'vue'
-import { LocalStorage, SessionStorage } from '@bassist/utils'
-import { STORAGE_PREFIX } from '@/constants'
-import type { StorageType } from '@bassist/utils'
+import { ref } from "vue"
+import { LocalStorage, SessionStorage } from "@bassist/utils"
+import { STORAGE_PREFIX } from "@/constants"
+import type { StorageType } from "@bassist/utils"
 
-export function useStorage(type: StorageType = 'localStorage') {
+export function useStorage(type: StorageType = "localStorage") {
   const prefix = ref(STORAGE_PREFIX)
-  const isLocalStorage = ref(type === 'localStorage')
+  const isLocalStorage = ref(type === "localStorage")
 
   /**
    * Storage 实例，可以操作具体的 API

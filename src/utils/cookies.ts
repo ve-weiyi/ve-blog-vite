@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie"
 
 const { hostname } = window.location
 
@@ -19,7 +19,7 @@ class CookieProxy implements ProxyCookie {
     this.prefix = this.getPrefix()
     this.baseParams = {
       expires: 7,
-      path: '/',
+      path: "/",
       domain: hostname || undefined,
       // Secure : true,
       // SameSite : 'none',
@@ -28,7 +28,7 @@ class CookieProxy implements ProxyCookie {
 
   // TODO : 此处也是按照我司开发习惯添加的，主要是为了区分 fat uat pro 三个环境的cookie，可以根据自己需要修改或删除
   getPrefix(): string {
-    return ''
+    return ""
   }
 
   getAll(): any {
@@ -43,20 +43,20 @@ class CookieProxy implements ProxyCookie {
   }
 
   get(key: string, hasPrefix = true) {
-    const keyStr = hasPrefix ? this.prefix + '' + key : key
+    const keyStr = hasPrefix ? this.prefix + "" + key : key
     return Cookies.get(keyStr)
   }
 
   set(key: string, value: any, params?: any) {
     const options = params === undefined ? this.baseParams : params
-    const keyStr = this.prefix + '' + key
+    const keyStr = this.prefix + "" + key
     return Cookies.set(keyStr, value, options)
   }
 
   remove(key: string, hasPrefix = true) {
-    const keyStr = !hasPrefix ? key : this.prefix + '' + key
+    const keyStr = !hasPrefix ? key : this.prefix + "" + key
     return Cookies.remove(keyStr, {
-      path: '/',
+      path: "/",
       domain: hostname,
     })
   }

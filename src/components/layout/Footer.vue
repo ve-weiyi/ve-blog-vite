@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useWebStore } from '@/stores/modules/website'
+import { useWebStore } from "@/stores/modules/website"
 
 // 获取存储的博客信息
 const blogInfo = useWebStore().blogInfo
@@ -29,13 +29,13 @@ function getCurrentYear() {
   return new Date().getFullYear()
 }
 
-const links = ['关于', '联系', '博客', '项目', '友链']
+const links = ["关于", "联系", "博客", "项目", "友链"]
 </script>
 
 <style scoped>
 .footer {
   position: absolute;
-  bottom: -16vh;
+  top: calc(100%);
   width: 100%;
   padding: 0; /* 或者根据需要设置自定义的 padding 值 */
 }

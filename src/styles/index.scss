@@ -6,6 +6,12 @@ a {
   color: rgb(76, 73, 72); /* link字体颜色 */
   text-decoration: none; /* link无下划线 */
 }
+
+/* message被遮挡问题，调整 ElMessage 样式 */
+.el-message {
+  z-index: 9999 !important; /* 设置较高的 z-index 值 */
+}
+
 /**
 设置鼠标样式
  */
@@ -159,12 +165,33 @@ canvas {
   }
 }
 
+// 修改全局字体样式
 p {
-  margin-bottom: 16px !important;
+  //margin-bottom: 16px !important;
 }
 
+// 验证码
+.login-captcha {
+  margin-left: 10px;
+  width: 33%;
+  height: 38px;
+  background: #ccc;
+  img {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+  }
+}
 .login-container {
   background: #fff !important;
+}
+.login-title {
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #4c4948;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
 }
 @media (min-width: 760px) {
   .v-toolbar__content,
@@ -211,7 +238,7 @@ p {
     height: 500px;
   }
   .login-wrapper {
-    padding: 1.5rem 1.5rem 0 1.5rem;
+    padding: 0.5rem 1.5rem 0 1.5rem;
   }
 }
 
@@ -352,7 +379,7 @@ p {
   background-color: #ff7242;
 }
 
-.cancle-btn {
+.cancel-btn {
   background-color: #90939910;
   border-color: #90939950;
   color: #4c4948;

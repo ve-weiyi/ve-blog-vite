@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import progress from '@bassist/progress'
-import routes from './routes'
-import { APP_NAME } from '@/constants'
+import { createRouter, createWebHistory } from "vue-router"
+import progress from "@bassist/progress"
+import routes from "./routes"
+import { APP_NAME } from "@/constants"
 
 progress.configure({ showSpinner: false })
-progress.setColor('var(--c-brand)')
+progress.setColor("var(--c-brand)")
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

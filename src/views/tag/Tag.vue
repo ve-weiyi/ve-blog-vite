@@ -22,14 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useWebStore } from '@/stores'
-import { getTagListApi } from '@/api/tag'
+import { ref, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { findTagListApi } from "@/api/tag"
 
 // 获取存储的博客信息
-const webState = ref(useWebStore())
+const webState = useWebStore()
 // 获取背景图片
-const cover = ref(webState.value.getCover('talk'))
+const cover = ref(webState.getCover("talk"))
 
 const tagList = ref([])
 const count = ref(0)
@@ -39,7 +39,7 @@ onMounted(() => {
 })
 
 function listTags() {
-  getTagListApi({ page: 1, page_size: 100 }).then((res) => {
+  findTagListApi({ page: 1, page_size: 100 }).then((res) => {
     tagList.value = res.data.list
     count.value = res.data.total
   })

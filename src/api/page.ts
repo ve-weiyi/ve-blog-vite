@@ -1,28 +1,28 @@
-import http from '@/utils/request'
+import http from "@/utils/request"
 
 /** 增 */
-export function createPageApi(data: object): Promise<IApiResponseData<any>> {
+export function createPageApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/page/create',
-    method: 'post',
+    url: "/api/v1/page/create",
+    method: "post",
     data,
   })
 }
 
 /** 改 */
-export function updatePageApi(data: object): Promise<IApiResponseData<any>> {
+export function updatePageApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/page/update',
-    method: 'put',
+    url: "/api/v1/page/update",
+    method: "put",
     data,
   })
 }
 
 /** 删 删除单个*/
-export function deletePageApi(data: object): Promise<IApiResponseData<any>> {
+export function deletePageApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/page/delete',
-    method: 'delete',
+    url: "/api/v1/page/delete",
+    method: "delete",
     data,
   })
 }
@@ -30,26 +30,26 @@ export function deletePageApi(data: object): Promise<IApiResponseData<any>> {
 /** 删除 批量操作 */
 export function deleteByIdsPageApi(ids: number[]): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/page/deleteByIds',
-    method: 'delete',
+    url: "/api/v1/page/deleteByIds",
+    method: "delete",
     data: ids,
   })
 }
 
-/** 查 查询单个*/
-export function getPageApi(data: object): Promise<IApiResponseData<any>> {
+/** 查 */
+export function findPageApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/page/find',
-    method: 'post',
+    url: "/api/v1/page/find",
+    method: "post",
     data: data,
   })
 }
 
 /** 查 列表*/
-export function getPageListApi(page: object): Promise<IApiResponseData<any>> {
+export function findPageListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/page/list',
-    method: 'get',
-    params: page,
+    url: "/api/v1/page/list",
+    method: "get",
+    data: page,
   })
 }

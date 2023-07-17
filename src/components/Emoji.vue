@@ -1,37 +1,48 @@
 <template>
   <div v-show="chooseEmoji" class="emoji-wrapper">
-    <span class="emoji-item" v-for="(value, key, index) of emojiList" :key="index" @click="addEmoji(key)">
-      <v-img :lazy-src="value" :src="value" :title="key" class="emoji" width="24" height="24" />
+    <span class="emoji-item" v-for="(item, key, index) of emojiList" :key="index" @click="addEmoji(key)">
+      <v-img
+        :lazy-src="getImage(item.normal)"
+        :src="getImage(item.active)"
+        :title="item.key"
+        class="emoji"
+        width="24"
+        height="24"
+      />
     </span>
   </div>
 </template>
 
-<script>
-import EmojiList from '../assets/js/emoji'
-export default {
-  props: {
-    chooseEmoji: {
-      type: Boolean,
-    },
+<script setup lang="ts">
+import EmojiList from "@/assets/emojis/qq_emoji.json"
+
+// 定义组件的 props
+const props = defineProps({
+  chooseEmoji: {
+    type: Boolean,
+    required: true,
   },
-  data: function() {
-    return {
-      emojiList: EmojiList,
-    }
-  },
-  methods: {
-    addEmoji(key) {
-      this.$emit('addEmoji', key)
-    },
-  },
+})
+
+const emit = defineEmits(["addEmoji"])
+
+// 响应式数据
+const emojiList = EmojiList
+
+// 方法
+const addEmoji = (key: string) => {
+  emit("addEmoji", key)
+}
+
+const getImage = (localUrl) => {
+  return new URL(`/src/assets/${localUrl}`, import.meta.url).href
 }
 </script>
 
 <style scoped>
 .emoji {
   user-select: none;
-  margin: 0.25rem;
-  display: inline-block;
+  margin: 0.1rem;
   vertical-align: middle;
 }
 .emoji-item {

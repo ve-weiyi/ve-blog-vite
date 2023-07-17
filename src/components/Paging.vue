@@ -1,16 +1,18 @@
 <template>
   <div class="paging">
     <!-- 上一页按钮 第一页不显示 -->
-    <a @click="prePage" v-show="current != 1" class="ml-1 mr-1">上一页</a>
-    <!-- 小于6页直接显示 -->
+    <a @click="prePage" v-show="current !== 1" class="ml-1 mr-1">上一页</a>
+
     <template v-if="totalPage < 6">
-      <a v-for="i of totalPage" :key="i" :class="'ml-1 mr-1 ' + isActive(i)" @click="changeReplyCurrent(i)">
+      <!-- 小于6页直接显示 -->
+      <a v-for="i in totalPage" :key="i" :class="'ml-1 mr-1 ' + isActive(i)" @click="changeReplyCurrent(i)">
         {{ i }}
       </a>
     </template>
-    <!-- 大于等于6页且在前两页 -->
+
     <template v-else-if="current < 3">
-      <a v-for="i in 4" @click="changeReplyCurrent(i)" :class="'ml-1 mr-1 ' + isActive(i)" :key="i">
+      <!-- 大于等于6页且在前两页 -->
+      <a v-for="i in 4" :key="i" @click="changeReplyCurrent(i)" :class="'ml-1 mr-1 ' + isActive(i)">
         {{ i }}
       </a>
       <span class="ml-1 mr-1">···</span>
@@ -18,9 +20,10 @@
         {{ totalPage }}
       </a>
     </template>
-    <!-- 大于等于6页且在3-4页 -->
+
     <template v-else-if="current < 5">
-      <a v-for="i in current + 2" @click="changeReplyCurrent(i)" :class="'ml-1 mr-1 ' + isActive(i)" :key="i">
+      <!-- 大于等于6页且在3-4页 -->
+      <a v-for="i in current + 2" :key="i" @click="changeReplyCurrent(i)" :class="'ml-1 mr-1 ' + isActive(i)">
         {{ i }}
       </a>
       <span class="ml-1 mr-1" v-if="current + 2 < totalPage - 1">···</span>
@@ -28,34 +31,37 @@
         {{ totalPage }}
       </a>
     </template>
-    <!-- 大于等于6页且在最后两页-->
+
     <template v-else-if="current > totalPage - 2">
+      <!-- 大于等于6页且在最后两页 -->
       <a class="ml-1 mr-1" @click="changeReplyCurrent(1)">1</a>
       <span class="ml-1 mr-1">···</span>
       <a
         v-for="i in 4"
+        :key="i"
         @click="changeReplyCurrent(i + (totalPage - 4))"
         :class="'ml-1 mr-1 ' + isActive(i + (totalPage - 4))"
-        :key="i"
       >
         {{ i + (totalPage - 4) }}
       </a>
     </template>
-    <!-- 大于等于6页且在最后三四页-->
+
     <template v-else-if="current > totalPage - 4">
+      <!-- 大于等于6页且在最后三四页 -->
       <a class="ml-1 mr-1" @click="changeReplyCurrent(1)">1</a>
       <span class="ml-1 mr-1">···</span>
       <a
         v-for="i in totalPage - current + 3"
+        :key="i"
         @click="changeReplyCurrent(i + current - 3)"
         :class="'ml-1 mr-1 ' + isActive(i + current - 3)"
-        :key="i"
       >
         {{ i + current - 3 }}
       </a>
     </template>
-    <!-- 大于等于6页且在中间页-->
+
     <template v-else>
+      <!-- 大于等于6页且在中间页 -->
       <a class="ml-1 mr-1" @click="changeReplyCurrent(1)">1</a>
       <span class="ml-1 mr-1">···</span>
       <a class="ml-1 mr-1" @click="changeReplyCurrent(current - 2)">
@@ -74,52 +80,64 @@
       <span class="ml-1 mr-1">···</span>
       <a class="ml-1 mr-1" @click="changeReplyCurrent(totalPage)">{{ totalPage }}</a>
     </template>
+
     <!-- 下一页按钮 最后一页不显示 -->
-    <a @click="nextPage" v-show="current != totalPage" class="ml-1 mr-1"> 下一页 </a>
+    <a @click="nextPage" v-show="current !== totalPage" class="ml-1 mr-1"> 下一页 </a>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    totalPage: {
-      type: Number,
-    },
-    index: {
-      type: Number,
-    },
-    commentId: {
-      type: Number,
-    },
+<script setup lang="ts">
+import { ref, defineProps, onMounted } from "vue"
+import { useWebStore } from "@/stores"
+import { useRoute } from "vue-router"
+
+// 父组件向子组件传输的数据
+const props = defineProps({
+  totalPage: {
+    type: Number,
+    required: false,
   },
-  data: function() {
-    return {
-      current: 1,
-    }
+  index: {
+    type: Number,
+    required: false,
   },
-  methods: {
-    changeReplyCurrent(i) {
-      this.current = i
-      this.$emit('changeReplyCurrent', this.current, this.index, this.commentId)
-    },
-    prePage() {
-      this.current -= 1
-      this.$emit('changeReplyCurrent', this.current, this.index, this.commentId)
-    },
-    nextPage() {
-      this.current += 1
-      this.$emit('changeReplyCurrent', this.current, this.index, this.commentId)
-    },
+  commentId: {
+    type: Number,
+    required: false,
   },
-  computed: {
-    isActive() {
-      return function(i) {
-        if (i == this.current) {
-          return 'active'
-        }
-      }
-    },
-  },
+})
+
+// 父组件向子组件传输的事件
+const emit = defineEmits([
+  // 定义事件
+  // 'eventName',
+])
+
+// 获取存储的缓存信息
+const webState = useWebStore()
+
+// 获取路由参数
+const route = useRoute()
+
+const current = ref(1)
+
+const changeReplyCurrent = (i) => {
+  current.value = i
+  emit("changeReplyCurrent", current.value, props.index, props.commentId)
+}
+
+const prePage = () => {
+  current.value -= 1
+  emit("changeReplyCurrent", current.value, props.index, props.commentId)
+}
+
+const nextPage = () => {
+  current.value += 1
+  emit("changeReplyCurrent", current.value, props.index, props.commentId)
+}
+
+const isActive = (i) => {
+  return i === current.value ? "active" : ""
 }
 </script>
 

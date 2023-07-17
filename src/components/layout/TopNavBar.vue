@@ -88,9 +88,11 @@ to="/ai/chatbot"
           <router-link class="menu-btn" to="/message"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
         </div>
         <div class="menus-item">
-          <a class="menu-btn" v-if="!blogInfo.avatar" @click="openLogin"> <i class="iconfont icondenglu" /> 登录 </a>
+          <a class="menu-btn" v-if="!webStore.userInfo.avatar" @click="openLogin">
+            <i class="iconfont icondenglu" /> 登录
+          </a>
           <template v-else>
-            <img class="user-avatar" :src="blogInfo.avatar" height="30" width="30" />
+            <img class="user-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
             <ul class="menus-submenu">
               <li>
                 <router-link to="/user"
@@ -110,18 +112,20 @@ to="/ai/chatbot"
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useWebStore } from '@/stores/modules/website'
+import { ref, onMounted, computed } from "vue"
+import { useWebStore } from "@/stores/modules/website"
+import { logoutApi } from "@/api/login"
+import { ElMessage } from "element-plus"
 
-const navClass = ref('')
+const navClass = ref("")
 
 onMounted(() => {
-  window.addEventListener('scroll', scroll)
+  window.addEventListener("scroll", scroll)
 })
 
 const scroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
-  navClass.value = scrollTop > 60 ? 'nav-fixed' : 'nav'
+  navClass.value = scrollTop > 60 ? "nav-fixed" : "nav"
 }
 
 // 获取存储的博客信息
@@ -141,17 +145,10 @@ const openLogin = () => {
 }
 
 const logout = () => {
-  // if ($route.path === '/user') {
-  //   $router.go(-1);
-  // }
-  // axios.get('/api/logout').then(({data}) => {
-  //   if (data.flag) {
-  //     $store.commit('logout');
-  //     $toast({type: 'success', message: '注销成功'});
-  //   } else {
-  //     $toast({type: 'error', message: data.message});
-  //   }
-  // });
+  webStore.logout()
+  logoutApi().then(() => {
+    ElMessage.success("注销成功")
+  })
 }
 </script>
 
@@ -252,7 +249,7 @@ ul {
   width: 0;
   height: 3px;
   background-color: #80c8f8;
-  content: '';
+  content: "";
   transition: all 0.3s ease-in-out;
 }
 
@@ -282,7 +279,7 @@ ul {
   left: 0;
   width: 100%;
   height: 20px;
-  content: '';
+  content: "";
 }
 
 .menus-submenu a {

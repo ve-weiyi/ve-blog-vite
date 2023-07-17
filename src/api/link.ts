@@ -1,28 +1,28 @@
-import http from '@/utils/request'
+import http from "@/utils/request"
 
 /** 增 */
-export function createLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function createLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/link/create',
-    method: 'post',
+    url: "/api/v1/friendLink/create",
+    method: "post",
     data,
   })
 }
 
 /** 改 */
-export function updateLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function updateLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/link/update',
-    method: 'put',
+    url: "/api/v1/friendLink/update",
+    method: "put",
     data,
   })
 }
 
 /** 删 删除单个*/
-export function deleteLinkApi(data: object): Promise<IApiResponseData<any>> {
+export function deleteLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/link/delete',
-    method: 'delete',
+    url: "/api/v1/friendLink/delete",
+    method: "delete",
     data,
   })
 }
@@ -30,26 +30,26 @@ export function deleteLinkApi(data: object): Promise<IApiResponseData<any>> {
 /** 删除 批量操作 */
 export function deleteByIdsLinkApi(ids: number[]): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/admin/link/deleteByIds',
-    method: 'delete',
+    url: "/api/v1/friendLink/deleteByIds",
+    method: "delete",
     data: ids,
   })
 }
 
-/** 查 查询单个*/
-export function getLinkApi(data: object): Promise<IApiResponseData<any>> {
+/** 查 */
+export function findLinkApi(data?: object): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/link/find',
-    method: 'post',
+    url: "/api/v1/friendLink/find",
+    method: "post",
     data: data,
   })
 }
 
 /** 查 列表*/
-export function getLinkListApi(page: object): Promise<IApiResponseData<any>> {
+export function findLinkListApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: '/api/v1/blog/link/list',
-    method: 'get',
-    params: page,
+    url: "/api/v1/friendLink/list",
+    method: "post",
+    data: page,
   })
 }
