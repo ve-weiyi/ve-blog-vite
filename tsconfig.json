@@ -7,6 +7,7 @@
     "moduleResolution": "node",
     /** TS 严格模式 */
     "strict": false,
+    "allowImportingTsExtensions": true,
     "jsx": "preserve",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
@@ -25,12 +26,24 @@
     "baseUrl": ".",
     /**  允许导入js文件 */
     "allowJs": false,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     /** 非相对模块导入的路径映射配置，根据 baseUrl 配置进行路径计算 */
     "paths": {
-      "@/*": ["src/*"],
-      "@build/*": ["build/*"],
-      "@/assets/*": ["src/assets/*"],
+      "@/*": [
+        "src/*"
+      ],
+      "@build/*": [
+        "build/*"
+      ],
+      "@types/*": [
+        "types/*"
+      ],
+      "@/assets/*": [
+        "src/assets/*"
+      ]
     },
     "types": [
       "node",
@@ -39,12 +52,16 @@
       "element-plus/global",
       "vitest"
     ],
-    "typeRoots": ["./types", "./node_modules/@types/"]
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types/"
+    ]
   },
   "include": [
     "mock/*.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
+    "src/**/*.d.tsx",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
@@ -54,5 +71,8 @@
     "vitest.config.ts"
   ],
   /** 编译器默认排除的编译文件 */
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

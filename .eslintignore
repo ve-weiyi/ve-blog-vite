@@ -1,3 +1,5 @@
+# Eslint 会忽略的文件
+
 dist/*
 *.d.ts
 *.css
