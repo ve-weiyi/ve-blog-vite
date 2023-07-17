@@ -265,7 +265,7 @@ const infiniteHandler = () => {
   const md = require("markdown-it")()
   findArticleListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page_size: paginationData.pageSize,
   }).then((res) => {
     console.log("-->", res)
 
@@ -320,7 +320,7 @@ const init = () => {
 const listHomeTalks = () => {
   findTalkListApi({
     page: 0,
-    pageSize: 10,
+    page_size: 10,
   }).then((res) => {
     talkList.value = res.data.list
   })
@@ -329,7 +329,7 @@ const listHomeTalks = () => {
 const listHomeArticles = () => {
   findArticleListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page_size: paginationData.pageSize,
   }).then((res) => {
     paginationData.total = res.data.total
     paginationData.pageSize = res.data.pageSize
@@ -350,7 +350,7 @@ const listHomeArticles = () => {
 
 const initTyped = (input, fn, hooks) => {
   // obj.value.output = input
-  const typed = new EasyTyper(obj.value, input, fn, function() {})
+  const typed = new EasyTyper(obj.value, input, fn, function () {})
 }
 
 const scrollDown = () => {
@@ -377,7 +377,7 @@ runTime()
 
 // 计算属性
 const isRight = computed(() => {
-  return function(index) {
+  return function (index) {
     if (index % 2 == 0) {
       return "article-cover left-radius"
     }
@@ -386,7 +386,7 @@ const isRight = computed(() => {
 })
 
 const isShowSocial = computed(() => {
-  return function(social) {
+  return function (social) {
     return blogInfo.websiteConfig.socialUrlList.indexOf(social) != -1
   }
 })

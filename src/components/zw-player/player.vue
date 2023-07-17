@@ -222,7 +222,7 @@ const musicStateButton = ref("")
 function DisAuthorInfo() {
   console.log(
     "%c音乐播放器作者----仲威，博客地址：https://blogme.top",
-    "background-color:rgb(30,30,30);border-radius:4px;font-size:12px;padding:4px;color:rgb(220,208,129);",
+    "background-color:rgb(30,30,30);border-radius:4px;font-size:12px;padding:4px;color:rgb(220,208,129);"
   )
 }
 
@@ -574,7 +574,7 @@ watch(
         }
       })
     }
-  },
+  }
 )
 </script>
 

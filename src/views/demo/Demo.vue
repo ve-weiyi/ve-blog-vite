@@ -61,7 +61,7 @@ watch(
   (newValue, oldValue) => {
     console.log(newValue, oldValue)
   },
-  { immediate: true }, // 立即监听属性
+  { immediate: true } // 立即监听属性
 )
 // watchEffect 会自动追踪依赖并在其变化时执行回调函数。
 watchEffect(() => {

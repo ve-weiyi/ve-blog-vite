@@ -1,12 +1,12 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 // @ts-ignore
-import Qinglong from '@/assets/images/qinglong.jpg'
+import Qinglong from "@/assets/images/qinglong.jpg"
 // @ts-ignore
-import Avatar from '@/assets/images/avatar.jpg'
-import cookies from '@/utils/cookies'
+import Avatar from "@/assets/images/avatar.jpg"
+import cookies from "@/utils/cookies"
 
 export const useWebStore = defineStore({
-  id: 'store',
+  id: "store",
   state: (): any => ({
     searchFlag: false,
     loginFlag: false,
@@ -14,9 +14,9 @@ export const useWebStore = defineStore({
     forgetFlag: false,
     emailFlag: false,
     drawer: false,
-    loginUrl: '',
+    loginUrl: "",
     userId: null,
-    avatar: 'https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg',
+    avatar: "https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg",
     nickname: null,
     intro: null,
     webSite: null,
@@ -25,39 +25,39 @@ export const useWebStore = defineStore({
     articleLikeSet: [],
     commentLikeSet: [],
     talkLikeSet: [],
-    defaultCover: 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg',
+    defaultCover: "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg",
     userInfo: {},
     blogInfo: {
       viewsCount: 999,
       websiteConfig: {
-        alipayQRCode: 'https://veport.oss-cn-beijing.aliyuncs.com/config/17f234dc487c1bb5bbb732869be0eb53.jpg',
-        gitee: 'https://gitee.com/wy791422171',
-        github: 'https://github.com/ve-weiyi',
+        alipayQRCode: "https://veport.oss-cn-beijing.aliyuncs.com/config/17f234dc487c1bb5bbb732869be0eb53.jpg",
+        gitee: "https://gitee.com/wy791422171",
+        github: "https://github.com/ve-weiyi",
         isChatRoom: 1,
         isCommentReview: 0,
         isEmailNotice: 1,
         isMessageReview: 0,
         isMusicPlayer: 0,
         isReward: 1,
-        qq: '791422171',
-        socialLoginList: ['qq', 'weibo', 'feishu', 'wechat'],
-        socialUrlList: ['qq', 'github', 'gitee'],
-        touristAvatar: 'https://veport.oss-cn-beijing.aliyuncs.com/config/5bfb96809bee5ba80a36811f0bf1d1ea.gif',
-        userAvatar: 'https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg',
-        websiteAuthor: '静闻弦语',
+        qq: "791422171",
+        socialLoginList: ["qq", "weibo", "feishu", "wechat"],
+        socialUrlList: ["qq", "github", "gitee"],
+        touristAvatar: "https://veport.oss-cn-beijing.aliyuncs.com/config/5bfb96809bee5ba80a36811f0bf1d1ea.gif",
+        userAvatar: "https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg",
+        websiteAuthor: "静闻弦语",
         websiteAvatar: Avatar,
-        websiteCreateTime: '2022-01-19',
-        websiteIntro: '你能做的,不止如此。',
-        websiteName: '与梦',
+        websiteCreateTime: "2022-01-19",
+        websiteIntro: "你能做的,不止如此。",
+        websiteName: "与梦",
         websiteNotice:
-          '用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统->https://ve77.cn/admin。     \n网站搭建问题请联系站长QQ791422171。',
-        websiteRecordNo: '桂ICP备2022000185号-1',
-        websocketUrl: 'ws://127.0.0.1:9999/api/v1/ws',
-        weiXinQRCode: 'https://veport.oss-cn-beijing.aliyuncs.com/config/6bed8a1130b170546341ece729e8819f.jpg',
+          "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统->https://ve77.cn/admin。     \n网站搭建问题请联系站长QQ791422171。",
+        websiteRecordNo: "桂ICP备2022000185号-1",
+        websocketUrl: "ws://127.0.0.1:9999/api/v1/ws",
+        weiXinQRCode: "https://veport.oss-cn-beijing.aliyuncs.com/config/6bed8a1130b170546341ece729e8819f.jpg",
       },
       pageList: [
         {
-          pageLabel: 'home',
+          pageLabel: "home",
           pageCover: Qinglong,
         },
       ],
@@ -65,12 +65,12 @@ export const useWebStore = defineStore({
     replyInfo: {},
   }),
   actions: {
-    getCover(page: string) {
+    getCover (page: string) {
       const cover = this.blogInfo.pageList.find((item: any) => item.pageLabel === page)?.pageCover
       const pageCover = cover ? cover : this.defaultCover
       return `background: url(${pageCover}) center center / cover no-repeat`
     },
-    setUser(user) {
+    setUser (user) {
       this.userInfo = user
       this.userId = user.id
       this.avatar = user.avatar
@@ -83,10 +83,10 @@ export const useWebStore = defineStore({
       this.email = user.email
       this.loginType = user.loginType
     },
-    isLogin() {
+    isLogin () {
       return this.getToken() != undefined
     },
-    logout() {
+    logout () {
       this.setToken(undefined)
       this.userInfo = {}
       this.userId = null
@@ -100,40 +100,40 @@ export const useWebStore = defineStore({
       this.email = null
       this.loginType = null
     },
-    saveLoginUrl(url) {
+    saveLoginUrl (url) {
       this.loginUrl = url
     },
-    setToken(token) {
-      cookies.set('token', token)
-      console.log('setToken', cookies.get('token'))
+    setToken (token) {
+      cookies.set("token", token)
+      console.log("setToken", cookies.get("token"))
     },
-    getToken() {
-      return cookies.get('token')
+    getToken () {
+      return cookies.get("token")
     },
-    saveEmail(email) {
+    saveEmail (email) {
       this.email = email
     },
-    updateUserInfo(user) {
+    updateUserInfo (user) {
       this.nickname = user.nickname
       this.intro = user.intro
       this.webSite = user.webSite
     },
-    savePageInfo(pageList) {
+    savePageInfo (pageList) {
       this.pageList = pageList
     },
-    updateAvatar(avatar) {
+    updateAvatar (avatar) {
       this.avatar = avatar
     },
-    checkBlogInfo(blogInfo) {
+    checkBlogInfo (blogInfo) {
       this.blogInfo = blogInfo
     },
-    closeModel() {
+    closeModel () {
       this.registerFlag = false
       this.loginFlag = false
       this.searchFlag = false
       this.emailFlag = false
     },
-    articleLike(articleId) {
+    articleLike (articleId) {
       var articleLikeSet = this.articleLikeSet
       if (articleLikeSet.indexOf(articleId) != -1) {
         articleLikeSet.splice(articleLikeSet.indexOf(articleId), 1)
@@ -141,7 +141,7 @@ export const useWebStore = defineStore({
         articleLikeSet.push(articleId)
       }
     },
-    commentLike(commentId) {
+    commentLike (commentId) {
       var commentLikeSet = this.commentLikeSet
       if (commentLikeSet.indexOf(commentId) != -1) {
         commentLikeSet.splice(commentLikeSet.indexOf(commentId), 1)
@@ -149,7 +149,7 @@ export const useWebStore = defineStore({
         commentLikeSet.push(commentId)
       }
     },
-    talkLike(talkId) {
+    talkLike (talkId) {
       var talkLikeSet = this.talkLikeSet
       if (talkLikeSet.indexOf(talkId) != -1) {
         talkLikeSet.splice(talkLikeSet.indexOf(talkId), 1)

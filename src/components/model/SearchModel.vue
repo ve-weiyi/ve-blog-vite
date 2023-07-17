@@ -93,7 +93,7 @@ watch(
       ]
       findArticleListApi({
         page: 1,
-        pageSize: 10,
+        page_size: 10,
         order: "created_at",
         order_key: "desc",
         conditions: conditions,
@@ -103,7 +103,7 @@ watch(
       })
     }
   },
-  { immediate: true }, // 立即监听属性
+  { immediate: true } // 立即监听属性
 )
 </script>
 

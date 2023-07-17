@@ -169,7 +169,7 @@ const listComments = () => {
   }
   findCommentListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page_size: paginationData.pageSize,
     orders: [
       {
         field: "created_at",

@@ -20,8 +20,8 @@ module.exports = {
   arrowParens: "always",
   /** 指定代码最后是否添加一行空行 */
   endOfLine: "auto",
-  /** 对象或者数组的最后一个元素后面不要加逗号 es5 none all*/
-  trailingComma: "all",
+  /** 对象或者数组的最后一个元素后面不要加逗号 es5:在数组最后一行加逗号 none:都不加 all:方法和数组都加 */
+  trailingComma: "es5",
 
   //在 JSX 中使用单引号替代双引号，默认false
   jsxSingleQuote: false,

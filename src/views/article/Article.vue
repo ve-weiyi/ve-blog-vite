@@ -322,7 +322,7 @@ const getArticle = () => {
       contentSelector: ".articleRef-content",
       headingSelector: "h1, h2, h3",
       hasInnerContainers: true,
-      onClick: function(e: Event) {
+      onClick: function (e: Event) {
         e.preventDefault()
       },
     })
@@ -403,7 +403,7 @@ watch(
 
     // 刷新页面的操作
     location.reload()
-  },
+  }
 )
 </script>
 

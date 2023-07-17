@@ -48,7 +48,7 @@ const getAboutContent = () => {
       const imgListRef = aboutRef.value.getElementsByTagName("img")
       for (let i = 0; i < imgListRef.length; i++) {
         imgList.value.push(imgListRef[i].src)
-        imgListRef[i].addEventListener("click", function(e) {
+        imgListRef[i].addEventListener("click", function (e) {
           previewImg(e.target.currentSrc)
         })
       }

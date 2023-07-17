@@ -199,7 +199,7 @@ const open = () => {
 const getChatRecords = () => {
   findChatRecordsApi({
     page: 1,
-    pageSize: 10,
+    page_size: 10,
     orders: [{ field: "created_at", order: "desc" }],
   }).then((res) => {
     if (res.code === 200) {

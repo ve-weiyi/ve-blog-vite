@@ -88,7 +88,6 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true,
-          logLevel: "debug", // 打印代理以后的地址
           rewrite: (path) => path.replace("", ""),
         },
       },
@@ -222,7 +221,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           ` * description: ${pkg.description}`,
           ` * author: ${pkg.author}`,
           ` */`,
-        ].join("\n"),
+        ].join("\n")
       ),
 
       /**

@@ -1,6 +1,15 @@
 import http from "@/utils/request"
 
 /** 获取api列表 */
+export function updateAboutApi(content: string): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: "/api/v1/admin/about",
+    method: "post",
+    data: content,
+  })
+}
+
+/** 获取api列表 */
 export function adminApisApi(page?: Page): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: "/api/v1/admin/apis",
