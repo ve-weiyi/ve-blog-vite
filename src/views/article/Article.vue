@@ -212,20 +212,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
-import Clipboard from 'clipboard'
-import Comment from '../../components/comment/Comment.vue'
-import { ElMessage } from 'element-plus'
-import tocbot from 'tocbot'
-import { useWebStore } from '@/stores'
+import { ref, onMounted, onUnmounted, nextTick, watch } from "vue"
+import Clipboard from "clipboard"
+import Comment from "../../components/comment/Comment.vue"
+import { ElMessage } from "element-plus"
+import tocbot from "tocbot"
+import { useWebStore } from "@/stores"
 
-import { useRoute } from 'vue-router'
-import { getArticleApi } from '@/api/article'
+import { useRoute } from "vue-router"
+import { findArticleApi } from "@/api/article"
 
-import { markdownToHtml } from '@/utils/markdown'
+import { markdownToHtml } from "@/utils/markdown"
 
 const config = {
-  sites: ['qzone', 'wechat', 'weibo', 'qq'],
+  sites: ["qzone", "wechat", "weibo", "qq"],
 }
 
 // 获取路由参数
@@ -266,11 +266,11 @@ const articleRef = ref<{
 }>({
   nextArticle: {
     id: 0,
-    articleCover: '',
+    articleCover: "",
   },
   lastArticle: {
     id: 0,
-    articleCover: '',
+    articleCover: "",
   },
   recommendArticleList: [],
   newestArticleList: [],
@@ -283,28 +283,28 @@ const commentType = 1
 const articleHref = window.location.href
 let clipboard: Clipboard | null = null
 let commentCount = 0
-const articleCover = ref<string>('')
+const articleCover = ref<string>("")
 const getArticle = () => {
   // 查询文章
-  getArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
+  findArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
     articleRef.value = res.data
     articleDetail.value = res.data
 
     document.title = res.data.articleTitle
-    console.log('res.data', res.data)
+    console.log("res.data", res.data)
     // 将markdown转换为Html
     articleRef.value.articleContent = markdownToHtml(res.data.articleContent)
-    articleCover.value = 'background: url(' + articleRef.value.articleCover + ') center center / cover no-repeat'
+    articleCover.value = "background: url(" + articleRef.value.articleCover + ") center center / cover no-repeat"
     // nextTick(() => {
     // 统计文章字数
     wordNum.value = deleteHTMLTag(articleRef.value.articleContent).length
-    console.log('wordNum', wordNum.value)
+    console.log("wordNum", wordNum.value)
     // 计算阅读时间
-    readTime.value = Math.round(wordNum.value / 400) + '分钟'
+    readTime.value = Math.round(wordNum.value / 400) + "分钟"
     // 添加代码复制功能
-    clipboard = new Clipboard('.copy-btn')
-    clipboard.on('success', () => {
-      ElMessage.success('复制成功')
+    clipboard = new Clipboard(".copy-btn")
+    clipboard.on("success", () => {
+      ElMessage.success("复制成功")
     })
     // 添加文章生成目录功能
     const nodes = articleRef.value.articleContent
@@ -318,9 +318,9 @@ const getArticle = () => {
       }
     }
     tocbot.init({
-      tocSelector: '#toc',
-      contentSelector: '.articleRef-content',
-      headingSelector: 'h1, h2, h3',
+      tocSelector: "#toc",
+      contentSelector: ".articleRef-content",
+      headingSelector: "h1, h2, h3",
       hasInnerContainers: true,
       onClick: function(e: Event) {
         e.preventDefault()
@@ -345,14 +345,14 @@ const like = () => {
     return false
   }
   // 发送请求
-  this.axios.post('/api/articles/' + articleRef.value.id + '/like').then(({ data }: any) => {
+  this.axios.post("/api/articles/" + articleRef.value.id + "/like").then(({ data }: any) => {
     if (data.flag) {
       if (blogInfo.articleLikeSet.indexOf(articleRef.value.id) != -1) {
-        this.$set(articleRef.value, 'likeCount', articleRef.value.likeCount - 1)
+        this.$set(articleRef.value, "likeCount", articleRef.value.likeCount - 1)
       } else {
-        this.$set(articleRef.value, 'likeCount', articleRef.value.likeCount + 1)
+        this.$set(articleRef.value, "likeCount", articleRef.value.likeCount + 1)
       }
-      this.$store.commit('articleLike', articleRef.value.id)
+      this.$store.commit("articleLike", articleRef.value.id)
     }
   })
 }
@@ -366,18 +366,18 @@ const previewImg = (img: string) => {
 
 const deleteHTMLTag = (content: string) => {
   return content
-    .replace(/<\/?[^>]*>/g, '')
-    .replace(/[|]*\n/, '')
-    .replace(/&npsp;/gi, '')
+    .replace(/<\/?[^>]*>/g, "")
+    .replace(/[|]*\n/, "")
+    .replace(/&npsp;/gi, "")
 }
 
 function isLike() {
   const articleLikeSet = webState.articleLikeSet
-  return articleLikeSet.indexOf(articleRef.value.id) != -1 ? 'like-btn-active' : 'like-btn'
+  return articleLikeSet.indexOf(articleRef.value.id) != -1 ? "like-btn-active" : "like-btn"
 }
 
 function isFull(id) {
-  return id ? 'post full' : 'post'
+  return id ? "post full" : "post"
 }
 
 const getCommentCount = (count: number) => {
@@ -409,7 +409,7 @@ watch(
 
 <style scoped>
 .banner:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -583,7 +583,7 @@ watch(
   height: 1rem;
   border-radius: 1rem;
   background: #49b1f5;
-  content: '';
+  content: "";
 }
 
 .aritcle-copyright:after {
@@ -594,7 +594,7 @@ watch(
   height: 0.5rem;
   border-radius: 0.5em;
   background: #fff;
-  content: '';
+  content: "";
 }
 
 .article-reward {
@@ -645,11 +645,11 @@ watch(
   left: 0;
   width: 100%;
   height: 20px;
-  content: '';
+  content: "";
 }
 
 .reward-all:after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   bottom: 2px;

@@ -20,5 +20,5 @@
 
 // 接口的网关域名
 // 防止生产环境忘记配置变量，讲其默认为生产环境的网关
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://example.com'
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://example.com"
 ```

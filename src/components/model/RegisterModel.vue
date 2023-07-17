@@ -49,19 +49,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { useWebStore } from '@/stores'
-import { registerApi, registerEmailApi } from '@/api/login'
-import { ElMessage } from 'element-plus'
+import { ref, watch, computed } from "vue"
+import { useWebStore } from "@/stores"
+import { registerApi, registerEmailApi } from "@/api/login"
+import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
 const webStore = useWebStore()
 
-const username = ref('')
-const code = ref('')
-const password = ref('')
+const username = ref("")
+const code = ref("")
+const password = ref("")
 const flag = ref(false)
-const codeMsg = ref('发送')
+const codeMsg = ref("发送")
 const countdown = ref(60)
 const show = ref(false)
 
@@ -74,7 +74,7 @@ const openLogin = () => {
 
 const sendCode = () => {
   registerEmailApi({ username: username.value }).then((res) => {
-    ElMessage.success('验证码发送成功')
+    ElMessage.success("验证码发送成功")
     countDown()
   })
 }
@@ -82,7 +82,7 @@ const sendCode = () => {
 const register = () => {
   // ...
   registerApi({ username: username.value, password: password.value, code: code.value }).then((res) => {
-    ElMessage.success('注册成功')
+    ElMessage.success("注册成功")
     openLogin()
   })
 }
@@ -106,7 +106,7 @@ watch(countdown, (newValue) => {
       codeMsg.value = `${countdown.value}s`
     }, 1000)
   } else {
-    codeMsg.value = '发送'
+    codeMsg.value = "发送"
     countdown.value = 60
     flag.value = false
   }

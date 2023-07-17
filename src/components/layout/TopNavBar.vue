@@ -105,20 +105,20 @@ to="/"
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useWebStore } from '@/stores/modules/website'
-import { logoutApi } from '@/api/login'
-import { ElMessage } from 'element-plus'
+import { ref, onMounted, computed } from "vue"
+import { useWebStore } from "@/stores/modules/website"
+import { logoutApi } from "@/api/login"
+import { ElMessage } from "element-plus"
 
-const navClass = ref('')
+const navClass = ref("")
 
 onMounted(() => {
-  window.addEventListener('scroll', scroll)
+  window.addEventListener("scroll", scroll)
 })
 
 const scroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
-  navClass.value = scrollTop > 60 ? 'nav-fixed' : 'nav'
+  navClass.value = scrollTop > 60 ? "nav-fixed" : "nav"
 }
 
 // 获取存储的博客信息
@@ -140,7 +140,7 @@ const openLogin = () => {
 const logout = () => {
   webStore.logout()
   logoutApi().then(() => {
-    ElMessage.success('注销成功')
+    ElMessage.success("注销成功")
   })
 }
 </script>
@@ -242,7 +242,7 @@ ul {
   width: 0;
   height: 3px;
   background-color: #80c8f8;
-  content: '';
+  content: "";
   transition: all 0.3s ease-in-out;
 }
 
@@ -272,7 +272,7 @@ ul {
   left: 0;
   width: 100%;
   height: 20px;
-  content: '';
+  content: "";
 }
 
 .menus-submenu a {

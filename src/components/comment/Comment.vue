@@ -141,23 +141,17 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick, onMounted, computed } from 'vue'
-import Reply from './Reply.vue'
-import Paging from '../Paging.vue'
-import Emoji from '../Emoji.vue'
-import { useWebStore } from '@/stores'
-import { ElMessage } from 'element-plus'
-import { replaceEmoji } from '@/utils/emoji'
-import { useRoute } from 'vue-router'
-import {
-  createCommentApi,
-  findCommentListApi,
-  findCommentReplyListApi,
-  likeCommentApi,
-  queryCommentApi,
-} from '@/api/comment'
-import { usePagination } from '@/hooks/usePagination'
-import axios from 'axios'
+import { ref, reactive, watch, nextTick, onMounted, computed } from "vue"
+import Reply from "./Reply.vue"
+import Paging from "../Paging.vue"
+import Emoji from "../Emoji.vue"
+import { useWebStore } from "@/stores"
+import { ElMessage } from "element-plus"
+import { replaceEmoji } from "@/utils/emoji"
+import { useRoute } from "vue-router"
+import { createCommentApi, findCommentListApi, findCommentReplyListApi, likeCommentApi } from "@/api/comment"
+import { usePagination } from "@/hooks/usePagination"
+import axios from "axios"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -175,7 +169,7 @@ const webState = useWebStore()
 // 获取路由参数
 const route = useRoute()
 
-const commentContent = ref('')
+const commentContent = ref("")
 const commentList = ref([])
 const chooseEmoji = ref(false)
 // const reply = ref([])
@@ -186,32 +180,32 @@ const paging = ref([])
 const listComments = () => {
   const order = [
     {
-      field: 'created_at',
-      rule: 'desc',
+      field: "created_at",
+      rule: "desc",
     },
   ]
   const conditions: Condition[] = [
     {
-      field: 'type',
+      field: "type",
       value: props.type,
-      rule: '=',
+      rule: "=",
     },
     {
-      flag: 'and',
-      field: 'parent_id',
+      flag: "and",
+      field: "parent_id",
       value: 0,
-      rule: '=',
+      rule: "=",
     },
   ]
   const path = route.path
-  const arr = path.split('/')
+  const arr = path.split("/")
   switch (props.type) {
     case 1:
     case 3:
       conditions.push({
-        field: 'topic_id',
+        field: "topic_id",
         value: arr[2],
-        rule: '=',
+        rule: "=",
       })
       break
     default:
@@ -219,7 +213,7 @@ const listComments = () => {
   }
   findCommentListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page_size: paginationData.pageSize,
     orders: order,
     conditions: conditions,
   }).then((res) => {
@@ -242,8 +236,8 @@ const insertComment = () => {
     return false
   }
   // 判空
-  if (commentContent.value.trim() === '') {
-    ElMessage.error('评论不能为空')
+  if (commentContent.value.trim() === "") {
+    ElMessage.error("评论不能为空")
     return false
   }
   // 解析表情
@@ -251,7 +245,7 @@ const insertComment = () => {
 
   // 发送请求
   const path = route.path
-  const arr = path.split('/')
+  const arr = path.split("/")
   const comment = {
     commentContent: commentContent.value,
     type: props.type,
@@ -273,16 +267,16 @@ const insertComment = () => {
       listComments()
       const isReview = webState.blogInfo.websiteConfig.isCommentReview
       if (isReview) {
-        ElMessage.success('评论成功，正在审核中')
+        ElMessage.success("评论成功，正在审核中")
       } else {
-        ElMessage.success('评论成功')
+        ElMessage.success("评论成功")
       }
     })
     .catch((err) => {
       ElMessage.error(err.message)
     })
 
-  commentContent.value = ''
+  commentContent.value = ""
 }
 
 const replyRef = ref()
@@ -299,10 +293,10 @@ const replyComment = (index, item) => {
   webState.replyInfo = item
 
   const childComponent = replyRef.value[index]
-  console.log('replyRef', replyRef.value[0])
-  console.log('childComponent', childComponent.commentContent)
+  console.log("replyRef", replyRef.value[0])
+  console.log("childComponent", childComponent.commentContent)
 
-  childComponent.commentContent = ''
+  childComponent.commentContent = ""
   childComponent.nickname = item.nickname
   childComponent.replyUserId = item.userId
   childComponent.parentId = commentList.value[index].id
@@ -315,16 +309,16 @@ const reloadReply = (index) => {
   findCommentReplyListApi(commentList.value[index].id, {
     orders: [
       {
-        field: 'created_at',
-        rule: 'desc',
+        field: "created_at",
+        rule: "desc",
       },
     ],
     conditions: [
       {
-        flag: 'and',
-        field: 'type',
+        flag: "and",
+        field: "type",
         value: props.type,
-        rule: '=',
+        rule: "=",
       },
     ],
   })
@@ -334,15 +328,15 @@ const reloadReply = (index) => {
 const viewReply = (index, item) => {
   const orders = [
     {
-      field: 'created_at',
-      rule: 'desc',
+      field: "created_at",
+      rule: "desc",
     },
   ]
   const conditions: Condition[] = [
     {
-      field: 'type',
+      field: "type",
       value: props.type,
-      rule: '=',
+      rule: "=",
     },
   ]
 
@@ -350,11 +344,11 @@ const viewReply = (index, item) => {
     orders: orders,
     conditions: conditions,
   }).then(({ data }) => {
-    check[index].style.display = 'none'
+    check[index].style.display = "none"
     item.replyDTOList = data.data
     // 超过1页才显示分页
     if (Math.ceil(item.replyCount / 5) > 1) {
-      paging[index].style.display = 'flex'
+      paging[index].style.display = "flex"
     }
   })
 }
@@ -362,7 +356,7 @@ const viewReply = (index, item) => {
 const changeReplyCurrent = (current, index, commentId) => {
   // 查看下一页回复
   axios
-    .get('/api/comments/' + commentId + '/replies', {
+    .get("/api/comments/" + commentId + "/replies", {
       params: { current: current, size: 5 },
     })
     .then(({ data }) => {
@@ -382,7 +376,7 @@ const like = (comment) => {
   }
 
   likeCommentApi(comment.id).then((res) => {
-    ElMessage.success('点赞成功')
+    ElMessage.success("点赞成功")
     const commentLikeSet = webState.commentLikeSet
     if (commentLikeSet.indexOf(comment.id) !== -1) {
       comment.likeCount--
@@ -395,14 +389,14 @@ const like = (comment) => {
 
 const isLike = (commentId) => {
   var commentLikeSet = webState.commentLikeSet
-  return commentLikeSet.indexOf(commentId) != -1 ? 'like-active' : 'like'
+  return commentLikeSet.indexOf(commentId) != -1 ? "like-active" : "like"
 }
 
 const reFresh = ref(true)
 
 onMounted(() => {
   listComments()
-  console.log('replyRef', replyRef.value)
+  console.log("replyRef", replyRef.value)
 })
 
 watch(commentList, () => {
@@ -412,7 +406,7 @@ watch(commentList, () => {
   })
 })
 watch(commentContent, (val) => {
-  if (val.indexOf('[') != -1) {
+  if (val.indexOf("[") != -1) {
   }
 })
 </script>

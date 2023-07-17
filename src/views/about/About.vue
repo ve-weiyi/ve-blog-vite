@@ -13,101 +13,54 @@
         </v-avatar>
       </div>
       <!-- 介绍 -->
-      <div ref="about" class="about-content markdown-body" v-html="aboutContent" />
+      <div ref="aboutRef" class="about-content markdown-body" v-html="aboutContent" />
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import Clipboard from 'clipboard'
-import { useWebStore } from '@/stores'
-import MarkdownIt from 'markdown-it'
-import { getAboutApi } from '@/api/website'
+import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
+import Clipboard from "clipboard"
+import { useWebStore } from "@/stores"
+import { getAboutApi } from "@/api/website"
+import { ElMessage } from "element-plus"
+import { markdownToHtml } from "@/utils/markdown"
 
 // 获取存储的博客信息
 const blogInfo = useWebStore().blogInfo
 
-interface Article {
-  data: string
-}
-
-const aboutContent = ref('')
+const aboutRef = ref(null)
+const aboutContent = ref("")
 const clipboard = ref<Clipboard | null>(null)
 const imgList = ref<string[]>([])
 
 const getAboutContent = () => {
-  const that = this
-  // getAboutApi().then(({ data }) => {
-  //   markdownToHtml(data.data)
-  //   nextTick(() => {
-  //     // 添加代码复制功能
-  //     clipboard.value = new Clipboard('.copy-btn')
-  //     clipboard.value.on('success', () => {
-  //       this.$toast({ type: 'success', message: '复制成功' })
-  //     })
-  //     // 添加图片预览功能
-  //     const imgListRef = aboutRef.value.getElementsByTagName('img')
-  //     for (let i = 0; i < imgListRef.length; i++) {
-  //       imgList.value.push(imgListRef[i].src)
-  //       imgListRef[i].addEventListener('click', function(e) {
-  //         previewImg(e.target.currentSrc)
-  //       })
-  //     }
-  //   })
-  // })
-}
-
-const markdownToHtml = (data: string) => {
-  const hljs = require('highlight.js')
-  const md = new MarkdownIt({
-    html: true,
-    linkify: true,
-    typographer: true,
-    highlight: function(str: string, lang: string) {
-      // 当前时间加随机数生成唯一的id标识
-      let d = new Date().getTime()
-      if (window.performance && typeof window.performance.now === 'function') {
-        d += performance.now()
-      }
-      const codeIndex = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16)
+  getAboutApi().then((res) => {
+    // 将markdown替换为html标签
+    aboutContent.value = markdownToHtml(res.data)
+    nextTick(() => {
+      // 添加代码复制功能
+      clipboard.value = new Clipboard(".copy-btn")
+      clipboard.value.on("success", () => {
+        ElMessage({ type: "success", message: "复制成功" })
       })
-      // 复制功能主要使用的是 clipboard.js
-      let html = `<button class="copy-btn iconfont iconfuzhi" type="button" data-clipboard-action="copy" data-clipboard-target="#copy${codeIndex}"></button>`
-      const linesLength = str.split(/\n/).length - 1
-      // 生成行号
-      let linesNum = '<span aria-hidden="true" class="line-numbers-rows">'
-      for (let index = 0; index < linesLength; index++) {
-        linesNum += '<span></span>'
+      // 添加图片预览功能
+      const imgListRef = aboutRef.value.getElementsByTagName("img")
+      for (let i = 0; i < imgListRef.length; i++) {
+        imgList.value.push(imgListRef[i].src)
+        imgListRef[i].addEventListener("click", function(e) {
+          previewImg(e.target.currentSrc)
+        })
       }
-      linesNum += '</span>'
-      if (lang && hljs.getLanguage(lang)) {
-        // highlight.js 高亮代码
-        const preCode = hljs.highlight(lang, str, true).value
-        html = html + preCode
-        if (linesLength) {
-          html += '<b class="name">' + lang + '</b>'
-        }
-        // 将代码包裹在 textarea 中，由于防止textarea渲染出现问题，这里将 "<" 用 "<" 代替，不影响复制功能
-        return `<pre class="hljs"><code>${html}</code>${linesNum}</pre><textarea style="position: absolute;top: -9999px;left: -9999px;z-index: -9999;" id="copy${codeIndex}">${str.replace(
-          /<\/textarea>/g,
-          '</textarea>',
-        )}</textarea>`
-      }
-    },
+    })
   })
-  // 将markdown替换为html标签
-  aboutContent.value = md.render(data)
 }
 
 const previewImg = (img: string) => {
-  this.$imagePreview({
-    images: imgList.value,
-    index: imgList.value.indexOf(img),
-  })
+  // imagePreview({
+  //   images: imgList.value,
+  //   index: imgList.value.indexOf(img),
+  // })
 }
 
 onMounted(() => {
@@ -121,8 +74,8 @@ onBeforeUnmount(() => {
 })
 
 const avatar = blogInfo.websiteConfig.websiteAvatar
-const url = 'https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg'
-const cover = 'background: url(' + url + ') center center / cover no-repeat'
+const url = "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg"
+const cover = "background: url(" + url + ") center center / cover no-repeat"
 </script>
 
 <style scoped>

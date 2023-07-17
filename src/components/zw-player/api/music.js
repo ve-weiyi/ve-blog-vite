@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 // 获取歌词
 export const getWords = (id) => {
   return axios.post(`https://n.xlz122.cn/api/lyric?id=${id}`)

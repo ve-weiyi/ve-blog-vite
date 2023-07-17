@@ -203,16 +203,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref, onMounted, computed, onUnmounted } from 'vue'
-import Swiper from '../../components/Swiper.vue'
-import EasyTyper from 'easy-typer-js'
-import MarkdownIt from 'markdown-it'
-import { useWebStore } from '@/stores'
-import { usePagination } from '@/hooks/usePagination'
-import { getArticleListApi } from '@/api/article'
-import { findTalkListApi } from '@/api/talk'
-import { getUserinfoApi } from '@/api/user'
-import cookies from '@/utils/cookies'
+import { defineComponent, ref, onMounted, computed, onUnmounted } from "vue"
+import Swiper from "../../components/Swiper.vue"
+import EasyTyper from "easy-typer-js"
+import MarkdownIt from "markdown-it"
+import { useWebStore } from "@/stores"
+import { usePagination } from "@/hooks/usePagination"
+import { findArticleListApi } from "@/api/article"
+import { findTalkListApi } from "@/api/talk"
+import { getUserInfoApi } from "@/api/user"
+import cookies from "@/utils/cookies"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -222,14 +222,14 @@ const blogInfo = useWebStore().blogInfo
 
 // 数据响应式
 const tip = ref(false)
-const time = ref('')
+const time = ref("")
 const obj = ref({
-  output: '',
+  output: "",
   isEnd: false,
   speed: 300,
   singleBack: false,
   sleep: 0,
-  type: 'rollback',
+  type: "rollback",
   backSpeed: 40,
   sentencePause: true,
 })
@@ -256,18 +256,18 @@ const articleList = ref([
 const isLoading = ref(false)
 const infiniteLoading = ref(null)
 const infiniteHandler = () => {
-  console.log('infiniteHandler')
+  console.log("infiniteHandler")
   if (isLoading.value) {
     return // 避免重复加载
   }
   isLoading.value = true
   // 模拟异步加载数据
-  const md = require('markdown-it')()
-  getArticleListApi({
+  const md = require("markdown-it")()
+  findArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {
-    console.log('-->', res)
+    console.log("-->", res)
 
     paginationData.total = res.data.total
     paginationData.pageSize = res.data.pageSize
@@ -276,9 +276,9 @@ const infiniteHandler = () => {
       res.data.forEach((item) => {
         item.articleContent = md
           .render(item.articleContent)
-          .replace(/<\/?[^>]*>/g, '')
-          .replace(/[|]*\n/, '')
-          .replace(/&npsp;/gi, '')
+          .replace(/<\/?[^>]*>/g, "")
+          .replace(/[|]*\n/, "")
+          .replace(/&npsp;/gi, "")
       })
       articleList.value.push(...res.data)
       const hasMoreData = paginationData.total == 0 // 判断是否还有更多数据需要加载
@@ -302,7 +302,7 @@ const current = ref(1)
 const init = () => {
   document.title = blogInfo.websiteConfig.websiteName
   // 一言Api进行打字机循环输出效果
-  fetch('https://v1.hitokoto.cn?c=i')
+  fetch("https://v1.hitokoto.cn?c=i")
     .then((res) => {
       return res.json()
     })
@@ -327,7 +327,7 @@ const listHomeTalks = () => {
 }
 
 const listHomeArticles = () => {
-  getArticleListApi({
+  findArticleListApi({
     page: paginationData.currentPage,
     pageSize: paginationData.pageSize,
   }).then((res) => {
@@ -339,9 +339,9 @@ const listHomeArticles = () => {
       list.forEach((item) => {
         item.articleContent = new MarkdownIt()
           .render(item.articleContent)
-          .replace(/<\/?[^>]*>/g, '')
-          .replace(/[|]*\n/, '')
-          .replace(/&npsp;/gi, '')
+          .replace(/<\/?[^>]*>/g, "")
+          .replace(/[|]*\n/, "")
+          .replace(/&npsp;/gi, "")
       })
       articleList.value.push(...list)
     }
@@ -355,7 +355,7 @@ const initTyped = (input, fn, hooks) => {
 
 const scrollDown = () => {
   window.scrollTo({
-    behavior: 'smooth',
+    behavior: "smooth",
     top: document.documentElement.clientHeight,
   })
 }
@@ -364,12 +364,12 @@ const runTime = () => {
   const timeold = new Date().getTime() - new Date(blogInfo.websiteConfig.websiteCreateTime).getTime()
   const msPerDay = 24 * 60 * 60 * 1000
   const daysold = Math.floor(timeold / msPerDay)
-  let str = ''
+  let str = ""
   const day = new Date()
-  str += daysold + '天'
-  str += day.getHours() + '时'
-  str += day.getMinutes() + '分'
-  str += day.getSeconds() + '秒'
+  str += daysold + "天"
+  str += day.getHours() + "时"
+  str += day.getMinutes() + "分"
+  str += day.getSeconds() + "秒"
   time.value = str
 }
 
@@ -379,9 +379,9 @@ runTime()
 const isRight = computed(() => {
   return function(index) {
     if (index % 2 == 0) {
-      return 'article-cover left-radius'
+      return "article-cover left-radius"
     }
-    return 'article-cover right-radius'
+    return "article-cover right-radius"
   }
 })
 
@@ -392,13 +392,13 @@ const isShowSocial = computed(() => {
 })
 
 const cover = computed(() => {
-  let cover = ''
+  let cover = ""
   blogInfo.pageList.forEach((item) => {
-    if (item.pageLabel == 'home') {
+    if (item.pageLabel == "home") {
       cover = item.pageCover
     }
   })
-  return 'background: url(' + cover + ') center center / cover no-repeat'
+  return "background: url(" + cover + ") center center / cover no-repeat"
 })
 
 let timer
@@ -647,7 +647,7 @@ onUnmounted(() => {
   left: 0;
   z-index: -1;
   background: #ff7242;
-  content: '';
+  content: "";
   transition-timing-function: ease-out;
   transition-duration: 0.5s;
   transition-property: transform;

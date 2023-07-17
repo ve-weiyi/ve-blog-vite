@@ -11,20 +11,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useTheme } from 'vuetify'
+import { ref, onMounted, onBeforeUnmount } from "vue"
+import { useTheme } from "vuetify"
 
 const theme = useTheme()
 
-const isShow = ref('')
-const isOut = ref('rightside-out')
-const icon = ref('iconyueliang')
+const isShow = ref("")
+const isOut = ref("rightside-out")
+const icon = ref("iconyueliang")
 let scrollTop = 0
 
 // 回到顶部方法
 const backTop = () => {
   window.scrollTo({
-    behavior: 'smooth',
+    behavior: "smooth",
     top: 0,
   })
 }
@@ -33,28 +33,28 @@ const backTop = () => {
 const scrollToTop = () => {
   scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
   if (scrollTop > 20) {
-    isShow.value = 'opacity: 1; transform: translateX(-38px);'
+    isShow.value = "opacity: 1; transform: translateX(-38px);"
   } else {
-    isShow.value = ''
+    isShow.value = ""
   }
 }
 
 const show = () => {
-  isOut.value = isOut.value === 'rightside-out' ? 'rightside-in' : 'rightside-out'
+  isOut.value = isOut.value === "rightside-out" ? "rightside-in" : "rightside-out"
 }
 
 const check = () => {
-  icon.value = icon.value === 'iconyueliang' ? 'icontaiyang' : 'iconyueliang'
+  icon.value = icon.value === "iconyueliang" ? "icontaiyang" : "iconyueliang"
   // 在此处添加处理主题切换的逻辑
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  theme.global.name.value = theme.global.current.value.dark ? "light" : "dark"
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', scrollToTop)
+  window.addEventListener("scroll", scrollToTop)
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', scrollToTop)
+  window.removeEventListener("scroll", scrollToTop)
 })
 </script>
 

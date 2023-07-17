@@ -50,9 +50,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useWebStore } from '@/stores'
-import AvatarCropper from '@/components/AvatarCropper.vue'
+import { ref, computed } from "vue"
+import { useWebStore } from "@/stores"
+import AvatarCropper from "@/components/AvatarCropper.vue"
 
 // 获取存储的博客信息
 const store = useWebStore()
@@ -63,7 +63,7 @@ const showCropper = ref(false)
 
 const showCropperDialog = () => {
   showCropper.value = !showCropper.value
-  console.log('showCropperDialog', showCropper.value)
+  console.log("showCropperDialog", showCropper.value)
 }
 // 更新用户信息
 const updateUserInfo = () => {
@@ -91,7 +91,7 @@ const uploadAvatar = (data: any) => {
 
 // 打开邮箱模态框
 const openEmailModel = () => {
-  console.log('打开邮箱模态框')
+  console.log("打开邮箱模态框")
   store.emailFlag = true
 }
 
@@ -99,9 +99,9 @@ const email = computed(() => store.email)
 const loginType = computed(() => store.loginType)
 
 const cover = computed(() => {
-  let cover = ''
+  let cover = ""
   store.blogInfo.pageList.forEach((item: any) => {
-    if (item.pageLabel === 'user') {
+    if (item.pageLabel === "user") {
       cover = item.pageCover
     }
   })

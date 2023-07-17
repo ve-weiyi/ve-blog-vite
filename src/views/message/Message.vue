@@ -11,66 +11,78 @@
         </div>
       </div>
       <!-- 弹幕列表 -->
-      <div class="barrage-container">
-        <!--        <vue-baberrage :barrageList="barrageList">-->
-        <!--          <template #default="slotProps">-->
-        <!--            <span class="barrage-items">-->
-        <!--              <img :src="slotProps.item.avatar" width="30" height="30" style="border-radius: 50%" />-->
-        <!--              <span class="ml-2">{{ slotProps.item.nickname }} :</span>-->
-        <!--              <span class="ml-2">{{ slotProps.item.messageContent }}</span>-->
-        <!--            </span>-->
-        <!--          </template>-->
-        <!--        </vue-baberrage>-->
-      </div>
+      <vue-danmaku ref="danmakuRef" class="barrage-container" v-model:danmus="barrageList" isSuspend v-bind="config">
+        <template v-slot:dm="{ index, danmu }">
+          <span class="barrage-items">
+            <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" alt="img" />
+            <span class="ml-2">{{ danmu.nickname }} :</span>
+            <span class="ml-2">{{ danmu.messageContent }}</span>
+          </span>
+        </template>
+      </vue-danmaku>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useWebStore } from '@/stores'
-import axios from 'axios'
+import { onMounted, ref } from "vue"
+import { useWebStore } from "@/stores"
+import VueDanmaku from "vue3-danmaku"
+import { ElMessage } from "element-plus"
+import { createRemarkApi, findRemarkListApi } from "@/api/remark"
+
+const config = ref({
+  channels: 7, // 轨道数量，为0则弹幕轨道数会撑满容器
+  useSlot: true, // 是否开启slot
+  loop: true, // 是否开启弹幕循环
+  speeds: 100, // 弹幕速度
+  fontSize: 20, // 文本模式下的字号
+  top: 5, // 弹幕轨道间的垂直间距
+  right: 10, // 同一轨道弹幕的水平间距
+  debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+  randomChannel: true, // 随机弹幕轨道
+})
 
 // 获取存储的博客信息
 const webState = useWebStore()
 
+const danmakuRef = ref(null)
 const show = ref(false)
-const messageContent = ref('')
+const messageContent = ref("")
 const barrageList = ref([])
 
 const addToList = () => {
-  if (messageContent.value.trim() == '') {
-    $toast({ type: 'error', message: '留言不能为空' })
+  if (messageContent.value.trim() == "") {
+    ElMessage({ type: "error", message: "留言不能为空" })
     return false
   }
   const userAvatar = webState.avatar ? webState.avatar : webState.blogInfo.websiteConfig.touristAvatar
-  const userNickname = webState.nickname ? webState.nickname : '游客'
+  const userNickname = webState.nickname ? webState.nickname : "游客"
   const message = {
     avatar: userAvatar,
     nickname: userNickname,
     messageContent: messageContent.value,
     time: Math.floor(Math.random() * (10 - 7)) + 7,
   }
-  messageContent.value = ''
-  axios.post('/api/messages', message).then(({ data }) => {
-    if (data.flag) {
-      barrageList.value.push(message)
-      $toast({ type: 'success', message: '留言成功' })
-    } else {
-      $toast({ type: 'error', message: data.message })
-    }
+  messageContent.value = ""
+  createRemarkApi(message).then((res) => {
+    barrageList.value.push(message)
+    ElMessage({ type: "success", message: "留言成功" })
   })
 }
 
 const listMessage = () => {
-  axios.get('/api/messages').then(({ data }) => {
-    if (data.flag) {
-      barrageList.value = data.data
-    }
+  findRemarkListApi({}).then((res) => {
+    barrageList.value = res.data.list
   })
 }
 
-const cover = ref(webState.getCover('message'))
+const cover = ref(webState.getCover("message"))
+
+onMounted(() => {
+  listMessage()
+  danmakuRef.value.play()
+})
 </script>
 
 <style scoped>
@@ -132,11 +144,11 @@ const cover = ref(webState.getCover('message'))
 
 .barrage-container {
   position: absolute;
-  top: 50px;
+  top: 60px;
   left: 0;
   right: 0;
   bottom: 0;
-  height: calc(100% - 50px);
+  height: calc(100% - 60px);
   width: 100%;
 }
 

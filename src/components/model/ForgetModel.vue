@@ -49,19 +49,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-import { useWebStore } from '@/stores'
-import { forgetPasswordApi, resetPasswordApi } from '@/api/login'
-import { ElMessage } from 'element-plus'
+import { ref, watch, computed } from "vue"
+import { useWebStore } from "@/stores"
+import { forgetPasswordApi, resetPasswordApi } from "@/api/login"
+import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
 const webStore = useWebStore()
 
-const username = ref('')
-const code = ref('')
-const password = ref('')
+const username = ref("")
+const code = ref("")
+const password = ref("")
 const flag = ref(false)
-const codeMsg = ref('发送')
+const codeMsg = ref("发送")
 const countdown = ref(0)
 const show = ref(false)
 
@@ -72,7 +72,7 @@ const openLogin = () => {
 
 const sendCode = () => {
   forgetPasswordApi({ username: username.value }).then((res) => {
-    ElMessage.success('发送成功')
+    ElMessage.success("发送成功")
     countDown()
   })
 }
@@ -81,15 +81,15 @@ const sendCode = () => {
 const forget = () => {
   const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(username.value)) {
-    ElMessage.error('邮箱格式不正确')
+    ElMessage.error("邮箱格式不正确")
     return false
   }
   if (password.value.trim().length < 6) {
-    ElMessage.error('密码不能少于6位')
+    ElMessage.error("密码不能少于6位")
     return false
   }
   if (code.value.trim().length !== 6) {
-    ElMessage.error('请输入6位验证码')
+    ElMessage.error("请输入6位验证码")
     return false
   }
 
@@ -100,7 +100,7 @@ const forget = () => {
   }
 
   resetPasswordApi(user).then((res) => {
-    ElMessage.success('修改成功')
+    ElMessage.success("修改成功")
     openLogin()
   })
 }
@@ -124,7 +124,7 @@ watch(countdown, (newValue) => {
       codeMsg.value = `${countdown.value}s`
     }, 1000)
   } else {
-    codeMsg.value = '发送'
+    codeMsg.value = "发送"
     countdown.value = 60
     flag.value = false
   }

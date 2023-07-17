@@ -10,10 +10,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { oauthLoginApi } from '@/api/login'
-import { useWebStore } from '@/stores'
+import { ref, onMounted } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { oauthLoginApi } from "@/api/login"
+import { useWebStore } from "@/stores"
 
 // 获取存储的博客信息
 const store = useWebStore()
@@ -33,7 +33,7 @@ function OauthLogin() {
     console.log(res)
     store.setUser(res.data.userInfo)
     store.setToken(res.data.token)
-    router.push({ path: '/' })
+    router.push({ path: "/" })
   })
 }
 

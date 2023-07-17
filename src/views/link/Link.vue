@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import Comment from '@/components/comment/Comment.vue'
-import { ref, onMounted, computed } from 'vue'
-import { useWebStore } from '@/stores'
-import { findLinkListApi } from '@/api/link'
+import Comment from "@/components/comment/Comment.vue"
+import { ref, onMounted, computed } from "vue"
+import { useWebStore } from "@/stores"
+import { findLinkListApi } from "@/api/link"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -61,7 +61,7 @@ function listFriendLink() {
   })
 }
 
-const cover = ref(webState.getCover('link'))
+const cover = ref(webState.getCover("link"))
 
 onMounted(() => {
   listFriendLink()
@@ -160,7 +160,7 @@ blockquote {
   bottom: 0;
   left: 0;
   background: #49b1f5 !important;
-  content: '';
+  content: "";
   transition-timing-function: ease-out;
   transition-duration: 0.3s;
   transition-property: transform;

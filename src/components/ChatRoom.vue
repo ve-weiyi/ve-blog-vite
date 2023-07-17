@@ -118,25 +118,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from 'vue'
-import Recorderx, { ENCODE_TYPE } from 'recorderx'
-import Emoji from './Emoji.vue'
-import EmojiList from '@/assets/emojis/qq_emoji.json'
-import { useWebStore } from '@/stores'
-import axios from 'axios'
-import image from '@/assets/images/avatar.jpg'
-import { ElMessage } from 'element-plus'
-import { replaceEmoji } from '@/utils/emoji'
+import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from "vue"
+import Recorderx, { ENCODE_TYPE } from "recorderx"
+import Emoji from "./Emoji.vue"
+import EmojiList from "@/assets/emojis/qq_emoji.json"
+import { useWebStore } from "@/stores"
+import axios from "axios"
+import image from "@/assets/images/avatar.jpg"
+import { ElMessage } from "element-plus"
+import { replaceEmoji } from "@/utils/emoji"
+import { findChatRecordsApi } from "@/api/website"
 
 // 获取存储的博客信息
 const webState = useWebStore()
 const blogInfo = useWebStore().blogInfo
 
 const isInput = computed(() => {
-  if (typeof content.value === 'string') {
-    return content.value.trim() != '' ? 'iconfont iconzhifeiji submit-btn' : 'iconfont iconzhifeiji'
+  if (typeof content.value === "string") {
+    return content.value.trim() != "" ? "iconfont iconzhifeiji submit-btn" : "iconfont iconzhifeiji"
   }
-  return 'iconfont iconzhifeiji'
+  return "iconfont iconzhifeiji"
 })
 
 // 是否显示表情面板
@@ -146,7 +147,7 @@ const isShow = ref(false)
 // WebSocket 实例
 const websocket = ref<WebSocket | null>(null)
 // 输入框内容
-const content = ref('')
+const content = ref("")
 // 聊天记录列表
 const chatRecordList = ref([])
 // 语音消息列表
@@ -154,9 +155,9 @@ const voiceList = ref([])
 // Recorderx 实例
 const rc = ref(null)
 // IP 地址
-const ipAddress = ref('')
+const ipAddress = ref("")
 // IP 来源
-const ipSource = ref('')
+const ipSource = ref("")
 // 在线人数
 const count = ref(0)
 // 未读消息数
@@ -167,11 +168,7 @@ const isVoice = ref(false)
 const voiceActive = ref(false)
 // 开始录音时间
 const startVoiceTime = ref<Date>(null)
-// WebSocket 消息对象
-const WebsocketMessage = reactive({
-  type: null,
-  data: null,
-})
+
 // 心跳定时器
 let heartBeat: NodeJS.Timeout | null = null
 
@@ -193,9 +190,22 @@ onBeforeUnmount(() => {
 const open = () => {
   if (!websocket.value) {
     connect()
+    getChatRecords()
   }
   unreadCount.value = 0
   isShow.value = !isShow.value
+}
+
+const getChatRecords = () => {
+  findChatRecordsApi({
+    page: 1,
+    pageSize: 10,
+    orders: [{ field: "created_at", order: "desc" }],
+  }).then((res) => {
+    if (res.code === 200) {
+      chatRecordList.value = res.data.list
+    }
+  })
 }
 
 // 打开/关闭表情面板
@@ -211,7 +221,7 @@ const connect = () => {
   // 连接发生错误的回调方法
   websocket.value.onerror = (event) => {
     console.log(event)
-    console.log('连接失败')
+    console.log("连接失败")
   }
 
   // 连接成功建立的回调方法
@@ -221,7 +231,7 @@ const connect = () => {
     heartBeat = setInterval(() => {
       const beatMessage = {
         type: 6,
-        data: 'ping',
+        data: "ping",
       }
       websocket.value?.send(JSON.stringify(beatMessage))
     }, 30 * 1000)
@@ -233,31 +243,31 @@ const connect = () => {
     switch (data.type) {
       case 1:
         // 在线人数
-        count.value = data.data
+        count.value = data
         break
       case 2:
         // 聊天历史记录
-        chatRecordList.value = data.data.chatRecordList
-        ipAddress.value = data.data.ipAddress
-        ipSource.value = data.data.ipSource
+        chatRecordList.value = data.chatRecordList
+        ipAddress.value = data.ipAddress
+        ipSource.value = data.ipSource
         break
       case 3:
         // 文字消息
-        chatRecordList.value.push(data.data)
+        chatRecordList.value.push(data)
         if (!isShow.value) {
           unreadCount.value++
         }
         break
       case 4:
         // 撤回消息
-        if (data.data.isVoice) {
-          const index = voiceList.value.indexOf(data.data.id)
+        if (data.isVoice) {
+          const index = voiceList.value.indexOf(data.id)
           if (index !== -1) {
             voiceList.value.splice(index, 1)
           }
         }
         for (let i = 0; i < chatRecordList.value.length; i++) {
-          if (chatRecordList.value[i].id === data.data.id) {
+          if (chatRecordList.value[i].id === data.id) {
             chatRecordList.value.splice(i, 1)
             i--
           }
@@ -265,8 +275,8 @@ const connect = () => {
         break
       case 5:
         // 语音消息
-        voiceList.value.push(data.data.id)
-        chatRecordList.value.push(data.data)
+        voiceList.value.push(data.id)
+        chatRecordList.value.push(data)
         if (!isShow.value) {
           unreadCount.value++
         }
@@ -281,28 +291,27 @@ const connect = () => {
 // 保存消息
 const saveMessage = (e: Event) => {
   e.preventDefault()
-  if (content.value.trim() === '') {
+  if (content.value.trim() === "") {
     // 内容不能为空
-    ElMessage.error('内容不能为空')
+    ElMessage.error("内容不能为空")
     return
   }
 
   // 解析表情
   content.value = replaceEmoji(content.value)
-
-  const socketMsg = {
+  // WebSocket 消息对象
+  const WebsocketMessage = {
+    type: 3,
     nickname: webState.nickname,
     avatar: webState.avatar,
     content: content.value,
     userId: webState.userId,
-    type: 3,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   }
-  WebsocketMessage.type = 3
-  WebsocketMessage.data = socketMsg
+
   websocket.value?.send(JSON.stringify(WebsocketMessage))
-  content.value = ''
+  content.value = ""
 }
 
 // 添加表情
@@ -315,33 +324,32 @@ const backBtn = ref<any>([])
 // 展示操作菜单
 const showBack = (item: any, index: number, e: MouseEvent) => {
   backBtn.value.forEach((item) => {
-    item.style.display = 'none'
+    item.style.display = "none"
   })
 
   if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webState.userId)) {
-    backBtn.value[index].style.left = e.offsetX + 'px'
-    backBtn.value[index].style.bottom = e.offsetY + 'px'
-    backBtn.value[index].style.display = 'block'
+    backBtn.value[index].style.left = e.offsetX + "px"
+    backBtn.value[index].style.bottom = e.offsetY + "px"
+    backBtn.value[index].style.display = "block"
   }
 }
 
 // 撤回消息
 const back = (item: any, index: number) => {
-  const socketMsg = {
+  const WebsocketMessage = {
     id: item.id,
     isVoice: item.type === 5,
+    type: 4,
   }
-  WebsocketMessage.type = 4
-  WebsocketMessage.data = socketMsg
   websocket.value?.send(JSON.stringify(WebsocketMessage))
-  backBtn.value[index].style.display = 'none'
+  backBtn.value[index].style.display = "none"
 }
 
 // 关闭所有操作菜单
 const closeAll = () => {
   isEmoji.value = false
   backBtn.value.forEach((item) => {
-    item.style.display = 'none'
+    item.style.display = "none"
   })
 }
 
@@ -354,46 +362,46 @@ const translationStart = () => {
       .start()
       .then(() => {
         startVoiceTime.value = new Date()
-        console.log('start recording')
+        console.log("start recording")
       })
       .catch((error) => {
-        console.log('Recording failed.', error)
+        console.log("Recording failed.", error)
       })
   })
 }
 
 // 结束录音
 const translationEnd = () => {
-  console.log('结束')
+  console.log("结束")
   voiceActive.value = false
   rc.value.pause()
   if (new Date().getTime() - startVoiceTime.value.getTime() < 1000) {
     // 按键时间太短
-    alert('按键时间太短')
+    alert("按键时间太短")
     return
   }
   const wav = rc.value.getRecord({
     encodeTo: ENCODE_TYPE.WAV,
   })
-  const file = new File([wav], 'voice.wav', {
+  const file = new File([wav], "voice.wav", {
     type: wav.type,
   })
   const formData = new FormData()
-  formData.append('file', file)
-  formData.append('type', 5)
-  formData.append('nickname', webState.nickname)
-  formData.append('avatar', webState.avatar)
+  formData.append("file", file)
+  formData.append("type", 5)
+  formData.append("nickname", webState.nickname)
+  formData.append("avatar", webState.avatar)
   if (webState.userId !== null) {
-    formData.append('userId', webState.userId)
+    formData.append("userId", webState.userId)
   }
-  formData.append('ipAddress', ipAddress.value)
-  formData.append('ipSource', ipSource.value)
+  formData.append("ipAddress", ipAddress.value)
+  formData.append("ipSource", ipSource.value)
   const options = {
-    url: '/api/voice',
+    url: "/api/voice",
     data: formData,
-    method: 'post',
+    method: "post",
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
   }
   axios(options)
@@ -411,11 +419,11 @@ const playVoice = (item: any) => {
   const player = voices.value[index]
   if (player.paused) {
     player.play()
-    plays.value[index].$el.style.display = 'none'
-    pauses.value[index].$el.style.display = 'inline-flex'
+    plays.value[index].$el.style.display = "none"
+    pauses.value[index].$el.style.display = "inline-flex"
   } else {
-    plays.value[index].$el.style.display = 'inline-flex'
-    pauses.value[index].$el.style.display = 'none'
+    plays.value[index].$el.style.display = "inline-flex"
+    pauses.value[index].$el.style.display = "none"
     player.pause()
   }
 }
@@ -423,8 +431,8 @@ const playVoice = (item: any) => {
 // 语音结束
 const endVoice = (item: any) => {
   const index = voiceList.value.indexOf(item.id)
-  plays.value[index].$el.style.display = 'inline-flex'
-  pauses.value[index].$el.style.display = 'none'
+  plays.value[index].$el.style.display = "inline-flex"
+  pauses.value[index].$el.style.display = "none"
 }
 
 // 获取语音时长
@@ -432,13 +440,13 @@ const getVoiceTime = (item: any) => {
   const index = voiceList.value.indexOf(item.id)
   const time = voices.value[index].duration
   const roundedTime = Math.ceil(time)
-  let str = '⬝⬝⬝'
+  let str = "⬝⬝⬝"
   for (let i = 0; i < roundedTime; i++) {
     if (i % 2 === 0) {
-      str += '⬝'
+      str += "⬝"
     }
   }
-  voiceTimes.value[index].innerHTML = ' ' + str + ' ' + roundedTime + " ''"
+  voiceTimes.value[index].innerHTML = " " + str + " " + roundedTime + " ''"
 }
 
 // 计算属性
@@ -447,15 +455,15 @@ const isSelf = (item: any) => {
 }
 
 const isleft = (item: any) => {
-  return isSelf(item) ? 'user-avatar right-avatar' : 'user-avatar left-avatar'
+  return isSelf(item) ? "user-avatar right-avatar" : "user-avatar left-avatar"
 }
 
 const isMyContent = (item: any) => {
-  return isSelf(item) ? 'my-content' : 'user-content'
+  return isSelf(item) ? "my-content" : "user-content"
 }
 
 const isMyMessage = (item: any) => {
-  return isSelf(item) ? 'my-message' : 'user-message'
+  return isSelf(item) ? "my-message" : "user-message"
 }
 </script>
 
@@ -655,7 +663,7 @@ const isMyMessage = (item: any) => {
   display: block;
   height: 0;
   width: 0;
-  content: '';
+  content: "";
   border-left: 14px solid transparent;
   border-right: 14px solid transparent;
   border-top: 12px solid #fff;

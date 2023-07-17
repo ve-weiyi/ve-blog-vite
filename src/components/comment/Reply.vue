@@ -22,16 +22,16 @@
 </template>
 
 <script setup lang="ts">
-import Emoji from '../Emoji.vue'
-import EmojiList from '@/assets/emojis/qq_emoji.json'
+import Emoji from "../Emoji.vue"
+import EmojiList from "@/assets/emojis/qq_emoji.json"
 
-import { ref, watch } from 'vue'
-import { useWebStore } from '@/stores'
-import { useRoute } from 'vue-router'
-import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import { replaceEmoji } from '@/utils/emoji'
-import { createCommentApi } from '@/api/comment'
+import { ref, watch } from "vue"
+import { useWebStore } from "@/stores"
+import { useRoute } from "vue-router"
+import axios from "axios"
+import { ElMessage } from "element-plus"
+import { replaceEmoji } from "@/utils/emoji"
+import { createCommentApi } from "@/api/comment"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -63,16 +63,16 @@ const reply = ref()
 const chooseEmoji = ref(false)
 
 const index = ref(0)
-const nickname = ref('nickname')
+const nickname = ref("nickname")
 const replyUserId = ref(0)
 const parentId = ref(0)
-const commentContent = ref('')
+const commentContent = ref("")
 
 const cancelReply = () => {
-  console.log('cancelReply')
-  console.log('webState.replyInfo', webState.replyInfo)
-  console.log('webState.replyInfo.replyUserId', replyUserId)
-  reply.value.style.display = 'none'
+  console.log("cancelReply")
+  console.log("webState.replyInfo", webState.replyInfo)
+  console.log("webState.replyInfo.replyUserId", replyUserId)
+  reply.value.style.display = "none"
 }
 
 const insertReply = () => {
@@ -81,14 +81,14 @@ const insertReply = () => {
     webState.loginFlag = true
     return false
   }
-  if (commentContent.value.trim() == '') {
-    ElMessage.error('回复不能为空')
+  if (commentContent.value.trim() == "") {
+    ElMessage.error("回复不能为空")
     return false
   }
   // 解析表情
   commentContent.value = replaceEmoji(commentContent.value)
   const path = route.path
-  const arr = path.split('/')
+  const arr = path.split("/")
   var comment = {
     type: type.value,
     replyUserId: replyUserId.value,
@@ -107,13 +107,13 @@ const insertReply = () => {
 
   createCommentApi(comment)
     .then((res) => {
-      emit('reloadReply', index.value)
-      ElMessage.success('回复成功')
+      emit("reloadReply", index.value)
+      ElMessage.success("回复成功")
     })
     .catch((error) => {
       console.error(error.message)
     })
-  commentContent.value = ''
+  commentContent.value = ""
 }
 
 const addEmoji = (text) => {
@@ -123,7 +123,7 @@ watch(reply, (val) => {
   // console.log('reply', val)
 })
 watch(webState.replyInfo, (val) => {
-  console.log('webState.replyInfo', val)
+  console.log("webState.replyInfo", val)
 })
 defineExpose({
   index,
