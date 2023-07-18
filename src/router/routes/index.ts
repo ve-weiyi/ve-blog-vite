@@ -109,6 +109,10 @@ const routes: RouteRecordRaw[] = [
     path: "/oauth/login/:platform",
     component: () => import("@/components/OauthLogin.vue"),
   },
+  {
+    path: "/ai/chatbot",
+    component: () => import("@/views/chatgpt/ChatBotV1.vue"),
+  },
 ]
 
 export default routes

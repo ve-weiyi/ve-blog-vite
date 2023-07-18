@@ -37,6 +37,7 @@
     "js-cookie": "^3.0.5",
     "markdown-it": "^13.0.1",
     "markdown-it-mark": "^3.0.1",
+    "md-editor-v3": "^4.2.2",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.4",
     "recorderx": "^2.0.2",
@@ -46,6 +47,7 @@
     "vue-cropper": "^0.6.2",
     "vue-router": "^4.2.4",
     "vue3-danmaku": "^1.4.0",
+    "vue3-lottie": "^3.0.0",
     "vue3-photo-preview": "^0.3.0",
     "vuetify": "^3.3.8"
   },

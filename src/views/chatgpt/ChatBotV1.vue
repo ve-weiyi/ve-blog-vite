@@ -4,34 +4,34 @@
 * @Description:
 -->
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useSnackbarStore } from '@/stores/snackbarStore'
-import AnimationChat from '@/components/animations/AnimationChat1.vue'
-import AnimationAi from '@/components/animations/AnimationBot1.vue'
-import { read, countAndCompleteCodeBlocks } from '@/utils/aiUtils'
-import { scrollToBottom } from '@/utils/common'
-import { MdEditor } from 'md-editor-v3'
-import { useChatGPTStore } from '@/stores/chatGPTStore'
-import 'md-editor-v3/lib/style.css'
-import ApiKeyDialog from '@/components/ApiKeyDialog.vue'
+import { ref, computed, watch } from "vue"
+import { useSnackbarStore } from "@/stores/snackbarStore"
+import AnimationChat from "@/components/animations/AnimationChat1.vue"
+import AnimationAi from "@/components/animations/AnimationBot1.vue"
+import { read, countAndCompleteCodeBlocks } from "@/utils/aiUtils"
+import { scrollToBottom } from "@/utils/common"
+import { MdEditor } from "md-editor-v3"
+import { useChatGPTStore } from "@/stores/chatGPTStore"
+import "md-editor-v3/lib/style.css"
+import ApiKeyDialog from "@/components/ApiKeyDialog.vue"
 const snackbarStore = useSnackbarStore()
 const chatGPTStore = useChatGPTStore()
 
 interface Message {
   content: string
-  role: 'user' | 'assistant' | 'system'
+  role: "user" | "assistant" | "system"
 }
 // User Input Message
-const userMessage = ref('')
+const userMessage = ref("")
 
 // Prompt Message
 const promptMessage = computed(() => {
-  console.log('chatGPTStore.propmpt', chatGPTStore.propmpt)
+  console.log("chatGPTStore.propmpt", chatGPTStore.propmpt)
 
   return [
     {
       content: chatGPTStore.propmpt,
-      role: 'system',
+      role: "system",
     },
   ]
 })
@@ -52,23 +52,23 @@ const requestMessages = computed(() => {
 const isLoading = ref(false)
 
 // Send Messsage
-const sendMessage = async() => {
+const sendMessage = async () => {
   if (userMessage.value) {
     // Add the message to the list
     messages.value.push({
       content: userMessage.value,
-      role: 'user',
+      role: "user",
     })
 
     // Clear the input
-    userMessage.value = ''
+    userMessage.value = ""
 
     // Create a completion
     await createCompletion()
   }
 }
 
-const createCompletion = async() => {
+const createCompletion = async () => {
   // Check if the API key is set
   // if (!chatGPTStore.getApiKey) {
   //   snackbarStore.showErrorMessage("请先输入API KEY");
@@ -78,22 +78,23 @@ const createCompletion = async() => {
   try {
     // Create a completion (axios is not used here because it does not support streaming)
     const completion = await fetch(
-      'https://baixiang.yunrobot.cn/v1/chat/completions',
+      "https://baixiang.yunrobot.cn/v1/chat/completions",
       // "https://api.openai.com/v1/chat/completions",
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           // Authorization: `Bearer ${chatGPTStore.getApiKey}`,
         },
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           messages: requestMessages.value,
-          model: 'gpt-3.5-turbo',
+          model: "gpt-3.5-turbo",
           stream: true,
         }),
-      },
+      }
     )
 
+    console.log("completion", requestMessages.value)
     // Handle errors
     if (!completion.ok) {
       const errorData = await completion.json()
@@ -105,13 +106,13 @@ const createCompletion = async() => {
     // Create a reader
     const reader = completion.body?.getReader()
     if (!reader) {
-      snackbarStore.showErrorMessage('Cannot read the stream.')
+      snackbarStore.showErrorMessage("Cannot read the stream.")
     }
 
     // Add the bot message
     messages.value.push({
-      content: '',
-      role: 'assistant',
+      content: "",
+      role: "assistant",
     })
 
     // Read the stream
@@ -125,12 +126,12 @@ watch(
   () => messages.value,
   (val) => {
     if (val) {
-      scrollToBottom(document.querySelector('.message-container'))
+      scrollToBottom(document.querySelector(".message-container"))
     }
   },
   {
     deep: true,
-  },
+  }
 )
 
 const displayMessages = computed(() => {
@@ -145,11 +146,11 @@ const displayMessages = computed(() => {
 })
 
 const handleKeydown = (e) => {
-  if (e.key === 'Enter' && (e.altKey || e.shiftKey)) {
+  if (e.key === "Enter" && (e.altKey || e.shiftKey)) {
     // 当同时按下 alt或者shift 和 enter 时，插入一个换行符
     e.preventDefault()
-    userMessage.value += '\n'
-  } else if (e.key === 'Enter') {
+    userMessage.value += "\n"
+  } else if (e.key === "Enter") {
     // 当只按下 enter 时，发送消息
     e.preventDefault()
     sendMessage()
@@ -238,9 +239,10 @@ const inputRow = ref(1)
 
 <style scoped lang="scss">
 .chat-bot {
-  background-image: url('@/assets/images/chat-bg-2.png');
+  background-image: url("@/assets/images/chat-bg-2.png");
   background-repeat: repeat;
-  height: 100%;
+  top: -60px;
+  height: calc(100% + 60px);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -287,7 +289,7 @@ const inputRow = ref(1)
 
 .message-container {
   height: calc(100vh - 154px);
-  background-image: url('@/assets/images/chat-bg-2.png');
+  background-image: url("@/assets/images/chat-bg-2.png");
   background-repeat: repeat;
 }
 

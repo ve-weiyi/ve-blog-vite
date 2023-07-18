@@ -4,12 +4,12 @@
 * @Description:
 -->
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useChatGPTStore } from '@/stores/chatGPTStore'
-import { useLocale } from 'vuetify'
-import promptsZh from '@/data/ai/prompts-zh.json'
-import promptsEn from '@/data/ai/prompts-en.json'
-import promptsJa from '@/data/ai/prompts-ja.json'
+import { ref, computed, watch } from "vue"
+import { useChatGPTStore } from "@/stores/chatGPTStore"
+import { useLocale } from "vuetify"
+import promptsZh from "@/data/ai/prompts-zh.json"
+import promptsEn from "@/data/ai/prompts-en.json"
+import promptsJa from "@/data/ai/prompts-ja.json"
 const { current } = useLocale()
 const chatGPTStore = useChatGPTStore()
 
@@ -20,15 +20,15 @@ const close = () => {
 const apiKeyShow = ref(false)
 
 const promptList = computed(() => {
-  if (current.value === 'zhHans') {
-    return promptsZh
-  }
-  if (current.value === 'en') {
-    return promptsEn
-  }
-  if (current.value === 'ja') {
-    return promptsJa
-  }
+  // if (current.value === 'zhHans') {
+  //   return promptsZh
+  // }
+  // if (current.value === 'en') {
+  //   return promptsEn
+  // }
+  // if (current.value === 'ja') {
+  //   return promptsJa
+  // }
   return promptsZh
 })
 </script>
@@ -36,20 +36,20 @@ const promptList = computed(() => {
 <template>
   <v-dialog v-model="chatGPTStore.configDialog" width="600">
     <v-card>
-      <v-card-title class="font-weight-bold pa-5"> {{ $t('chatgpt.config.title') }}</v-card-title>
+      <v-card-title class="font-weight-bold pa-5"> {{ "chatgpt.config.title" }}</v-card-title>
       <v-divider />
       <v-card-text>
         <!-- ---------------------------------------------- -->
         <!-- APIKEY -->
         <!-- ---------------------------------------------- -->
 
-        <v-label class="font-weight-medium mb-2 ml-2">{{ $t('chatgpt.config.apikey') }}</v-label>
+        <v-label class="font-weight-medium mb-2 ml-2">{{ "chatgpt.config.apikey" }}</v-label>
         <v-text-field
           color="primary"
           variant="outlined"
           v-model="chatGPTStore.apiKey"
           class="px-2 py-1"
-          :placeholder="$t('chatgpt.config.apikeyPlaceholder')"
+          :placeholder="'chatgpt.config.apikeyPlaceholder'"
           prepend-inner-icon="mdi-key"
           autofocus
           clearable
@@ -61,7 +61,7 @@ const promptList = computed(() => {
         <!-- ---------------------------------------------- -->
         <!-- Model -->
         <!-- ---------------------------------------------- -->
-        <v-label class="font-weight-medium mb-2 ml-2 mt-5">{{ $t('chatgpt.config.model') }}</v-label>
+        <v-label class="font-weight-medium mb-2 ml-2 mt-5">{{ "chatgpt.config.model" }}</v-label>
         <div style="width: 220px" class="flex ml-2 bg-grey-lighten-3 pa-2">
           <v-btn
             :variant="chatGPTStore.model === 'gpt-3.5-turbo' ? 'flat' : 'text'"
@@ -82,7 +82,7 @@ const promptList = computed(() => {
         <!-- ---------------------------------------------- -->
         <!-- Language -->
         <!-- ---------------------------------------------- -->
-        <v-label class="font-weight-medium mb-2 ml-2 mt-5">{{ $t('chatgpt.config.role') }}</v-label>
+        <v-label class="font-weight-medium mb-2 ml-2 mt-5">{{ "chatgpt.config.role" }}</v-label>
 
         <v-select
           class="ml-2"
