@@ -19,19 +19,19 @@ class HttpRequest {
   private service: AxiosInstance
 
   // #baseUrl
-  constructor () {
+  constructor() {
     this.baseUrl = this.getBaseUrl()
     this.withCredentials = false // 跨域携带cookie
     this.timeout = 60 * 1000 // 超时配置
     this.service = this.newService()
   }
 
-  getBaseUrl (): string {
+  getBaseUrl(): string {
     return ""
   }
 
   // https://www.gxlsystem.com/APPkaifa-293852.html AxiosRequestConfig 详解
-  getConfig () {
+  getConfig() {
     const config = {
       baseURL: this.baseUrl,
       timeout: this.timeout,
@@ -43,7 +43,7 @@ class HttpRequest {
     return config
   }
 
-  private getParams (payload: any) {
+  private getParams(payload: any) {
     const { method, data } = payload
     // if (["post", "put", "patch", "delete"].indexOf(method) >= 0) {
     //   payload.data = data
@@ -65,7 +65,7 @@ class HttpRequest {
     return payload
   }
 
-  private checkStatus (status: number) {
+  private checkStatus(status: number) {
     let errMessage = ""
     switch (status) {
       case 400:
@@ -110,7 +110,7 @@ class HttpRequest {
     return errMessage
   }
 
-  private setHeader (config: AxiosRequestConfig) {
+  private setHeader(config: AxiosRequestConfig) {
     const token = cookies.get("token")
     if (token) {
       config.headers!.Authorization = token
@@ -118,7 +118,7 @@ class HttpRequest {
   }
 
   // 拦截处理
-  private newService () {
+  private newService() {
     // 创建一个 Axios 实例
     const instance = axios.create()
     // 请求拦截
@@ -189,7 +189,7 @@ class HttpRequest {
 
   /** 创建请求方法 */
 
-  request<T> (config: AxiosRequestConfig): Promise<T> {
+  request<T>(config: AxiosRequestConfig): Promise<T> {
     const baseOpt = this.getConfig()
     const params = Object.assign({}, baseOpt, config)
     return this.service(params)

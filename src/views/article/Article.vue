@@ -230,7 +230,7 @@ const config = {
 
 // 获取路由参数
 const route = useRoute()
-const articleId = route.params.articleId // 假设路由参数名为 "id"
+const articleId = route.params.articleId as string // 假设路由参数名为 "id"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -259,7 +259,7 @@ const articleRef = ref<{
     articleTitle: string
     createdAt: string
   }[]
-  tagDTOList: {
+  tagDTOList?: {
     id: number
     tagName: string
   }[]
@@ -271,6 +271,7 @@ const articleRef = ref<{
   lastArticle: {
     id: 0,
     articleCover: "",
+    articleTitle: "",
   },
   recommendArticleList: [],
   newestArticleList: [],
@@ -286,7 +287,7 @@ let commentCount = 0
 const articleCover = ref<string>("")
 const getArticle = () => {
   // 查询文章
-  findArticleApi({ id: parseInt(articleId, 10) }).then((res) => {
+  findArticleApi(parseInt(articleId, 10)).then((res) => {
     articleRef.value = res.data
     articleDetail.value = res.data
 
