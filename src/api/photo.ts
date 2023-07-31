@@ -1,55 +1,64 @@
 import http from "@/utils/request"
 
-/** 增 */
-export function createPhotoApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/photo/create",
-    method: "post",
-    data,
-  })
+interface Photo {
+	id: number // 主键
+	album_id: number // 相册id
+	photo_name: string // 照片名
+	photo_desc: string // 照片描述
+	photo_src: string // 照片地址
+	is_delete: boolean // 是否删除
+	created_at: string // 创建时间
+	updated_at: string // 更新时间
 }
 
-/** 改 */
-export function updatePhotoApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/photo/update",
-    method: "put",
-    data,
-  })
+/** 创建相片 */
+export function createPhotoApi(data: Photo): Promise<IApiResponseData<Photo>> {
+	return http.request<IApiResponseData<Photo>>({
+		url: `/api/v1//photo`,
+		method: "post",
+		data: data,
+	})
 }
 
-/** 删 删除单个*/
-export function deletePhotoApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/photo/delete",
-    method: "delete",
-    data,
-  })
+/** 更新相片 */
+export function updatePhotoApi(data: Photo): Promise<IApiResponseData<Photo>> {
+	return http.request<IApiResponseData<Photo>>({
+		url: `/api/v1//photo`,
+		method: "put",
+		data: data,
+	})
 }
 
-/** 删除 批量操作 */
-export function deleteByIdsPhotoApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/photo/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
+/** 删除相片 */
+export function deletePhotoApi(id: string): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//photo/${id}`,
+		method: "delete",
+	})
 }
 
-/** 查 */
-export function findPhotoApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/photo/find",
-    method: "post",
-    data: data,
-  })
+/** 查询相片 */
+export function findPhotoApi(id: string): Promise<IApiResponseData<Photo>> {
+	return http.request<IApiResponseData<Photo>>({
+		url: `/api/v1//photo/${id}`,
+		method: "get",
+	})
 }
 
-/** 查 列表*/
-export function findPhotoListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/photo/list",
-    method: "post",
-    data: page,
-  })
+/** 批量删除相片 */
+export function deletePhotoByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//photo/batch_delete`,
+		method: "delete",
+		data: data,
+	})
+}
+
+/** 分页获取相片列表 */
+export function findPhotoListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PageResult<Photo>>>> {
+	return http.request<IApiResponseData<PageResult<PageResult<Photo>>>>({
+		url: `/api/v1//photo/list`,
+		method: "post",
+		data: page,
+	})
 }

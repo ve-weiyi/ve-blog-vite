@@ -1,55 +1,62 @@
 import http from "@/utils/request"
 
-/** 增 */
-export function createPageApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/page/create",
-    method: "post",
-    data,
-  })
+interface Page {
+	id: number // 页面id
+	page_name: string // 页面名
+	page_label: string // 页面标签
+	page_cover: string // 页面封面
+	created_at: string // 创建时间
+	updated_at: string // 更新时间
 }
 
-/** 改 */
-export function updatePageApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/page/update",
-    method: "put",
-    data,
-  })
+/** 创建页面 */
+export function createPageApi(data: Page): Promise<IApiResponseData<Page>> {
+	return http.request<IApiResponseData<Page>>({
+		url: `/api/v1//page`,
+		method: "post",
+		data: data,
+	})
 }
 
-/** 删 删除单个*/
-export function deletePageApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/page/delete",
-    method: "delete",
-    data,
-  })
+/** 更新页面 */
+export function updatePageApi(data: Page): Promise<IApiResponseData<Page>> {
+	return http.request<IApiResponseData<Page>>({
+		url: `/api/v1//page`,
+		method: "put",
+		data: data,
+	})
 }
 
-/** 删除 批量操作 */
-export function deleteByIdsPageApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/page/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
+/** 删除页面 */
+export function deletePageApi(id: string): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//page/${id}`,
+		method: "delete",
+	})
 }
 
-/** 查 */
-export function findPageApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/page/find",
-    method: "post",
-    data: data,
-  })
+/** 查询页面 */
+export function findPageApi(id: string): Promise<IApiResponseData<Page>> {
+	return http.request<IApiResponseData<Page>>({
+		url: `/api/v1//page/${id}`,
+		method: "get",
+	})
 }
 
-/** 查 列表*/
-export function findPageListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/page/list",
-    method: "get",
-    data: page,
-  })
+/** 批量删除页面 */
+export function deletePageByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//page/batch_delete`,
+		method: "delete",
+		data: data,
+	})
+}
+
+/** 分页获取页面列表 */
+export function findPageListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PageResult<Page>>>> {
+	return http.request<IApiResponseData<PageResult<PageResult<Page>>>>({
+		url: `/api/v1//page/list`,
+		method: "post",
+		data: page,
+	})
 }

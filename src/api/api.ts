@@ -1,64 +1,75 @@
 import http from "@/utils/request"
 
-/** 增 */
-export function createResourceApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/api/create",
-    method: "post",
-    data,
-  })
+interface Api {
+	id: number // 主键id
+	name: string // api名称
+	path: string // api路径
+	method: string // api请求方法
+	group: string // api分组
+	parent_id: number // 分组id
+	traceable: number // 是否追溯操作记录 0需要，1是
+	status: number // 状态 1开，2关
+	created_at: string // 创建时间
+	updated_at: string // 更新时间
 }
 
-/** 删 */
-export function deleteResourceApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/api/delete",
-    method: "delete",
-    data,
-  })
+/** 创建接口 */
+export function createApiApi(data: Api): Promise<IApiResponseData<Api>> {
+	return http.request<IApiResponseData<Api>>({
+		url: `/api/v1//api`,
+		method: "post",
+		data: data,
+	})
 }
 
-/** 改 */
-export function updateResourceApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/api/update",
-    method: "put",
-    data,
-  })
+/** 更新接口 */
+export function updateApiApi(data: Api): Promise<IApiResponseData<Api>> {
+	return http.request<IApiResponseData<Api>>({
+		url: `/api/v1//api`,
+		method: "put",
+		data: data,
+	})
 }
 
-/** 查 查询单个*/
-export function getResourceApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/api/find",
-    method: "get",
-    data,
-  })
+/** 删除接口 */
+export function deleteApiApi(id: string): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//api/${id}`,
+		method: "delete",
+	})
 }
 
-/** 删除 批量操作 */
-export function deleteByIdsResourceApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/api/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
+/** 查询接口 */
+export function findApiApi(id: string): Promise<IApiResponseData<Api>> {
+	return http.request<IApiResponseData<Api>>({
+		url: `/api/v1//api/${id}`,
+		method: "get",
+	})
 }
 
-/** 查 列表*/
-export function getResourceListApi(page: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/api/list",
-    method: "get",
-    params: page,
-  })
+/** 批量删除接口 */
+export function deleteApiByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//api/batch_delete`,
+		method: "delete",
+		data: data,
+	})
 }
 
-/** 查 列表*/
-export function getResourceTreeApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api//v1/admin/apis",
-    method: "post",
-    data: {},
-  })
+/** 分页获取接口列表 */
+export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PageResult<Api>>>> {
+	return http.request<IApiResponseData<PageResult<PageResult<Api>>>>({
+		url: `/api/v1//api/list`,
+		method: "post",
+		data: page,
+	})
+}
+
+/** 获取api列表 */
+export function getApisApi(page: PageQuery): Promise<IApiResponseData<Api>> {
+	return http.request<IApiResponseData<Api>>({
+		url: `/api/v1//admin/apis`,
+		method: "post",
+		data: page,
+	})
 }

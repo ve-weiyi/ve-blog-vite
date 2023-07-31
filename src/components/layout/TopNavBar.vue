@@ -1,124 +1,124 @@
 <template>
-  <v-app-bar
-    :class="navClass"
-    style="overflow: visible; background-color: rgba(255, 255, 255, 0.5)"
-    elevation="0"
-    height="60"
-    scroll-behavior="hide"
-    scroll-threshold="200"
-    text
-  >
-    <!-- 手机端导航栏 -->
-    <div class="d-md-none nav-mobile-container">
-      <div style="font-size: 18px; font-weight: bold">
-        <router-link to="/">
-          {{ blogInfo.websiteConfig.websiteAuthor }}
-        </router-link>
-      </div>
-      <div style="margin-left: auto">
-        <a @click="openSearch"><i class="iconfont iconsousuo" /></a>
-        <a @click="openDrawer" style="margin-left: 10px; font-size: 20px">
-          <i class="iconfont iconhanbao" />
-        </a>
-      </div>
-    </div>
-    <!-- 电脑导航栏 -->
-    <div class="d-md-block d-none nav-container">
-      <div class="float-left blog-title">
-        <router-link to="/">
-          {{ blogInfo.websiteConfig.websiteAuthor }}
-        </router-link>
-      </div>
-      <div class="float-right nav-title">
-        <div class="menus-item">
-          <a class="menu-btn" @click="openSearch"> <i class="iconfont iconsousuo" /> 搜索 </a>
-        </div>
-        <div class="menus-item">
-          <router-link class="menu-btn"
+	<v-app-bar
+		:class="navClass"
+		style="overflow: visible; background-color: rgba(255, 255, 255, 0.5)"
+		elevation="0"
+		height="60"
+		scroll-behavior="hide"
+		scroll-threshold="200"
+		text
+	>
+		<!-- 手机端导航栏 -->
+		<div class="d-md-none nav-mobile-container">
+			<div style="font-size: 18px; font-weight: bold">
+				<router-link to="/">
+					{{ blogInfo.websiteConfig.websiteAuthor }}
+				</router-link>
+			</div>
+			<div style="margin-left: auto">
+				<a @click="openSearch"><i class="iconfont iconsousuo" /></a>
+				<a @click="openDrawer" style="margin-left: 10px; font-size: 20px">
+					<i class="iconfont iconhanbao" />
+				</a>
+			</div>
+		</div>
+		<!-- 电脑导航栏 -->
+		<div class="d-md-block d-none nav-container">
+			<div class="float-left blog-title">
+				<router-link to="/">
+					{{ blogInfo.websiteConfig.websiteAuthor }}
+				</router-link>
+			</div>
+			<div class="float-right nav-title">
+				<div class="menus-item">
+					<a class="menu-btn" @click="openSearch"> <i class="iconfont iconsousuo" /> 搜索 </a>
+				</div>
+				<div class="menus-item">
+					<router-link class="menu-btn"
 to="/"
-            ><i class="iconfont iconzhuye" />
-            首页
-          </router-link>
-        </div>
-        <div class="menus-item">
-          <a class="menu-btn">
-            <i class="iconfont iconfaxian" /> 发现
-            <i class="iconfont iconxiangxia2 expand" />
-          </a>
-          <ul class="menus-submenu">
-            <li>
-              <router-link to="/archives"><i class="iconfont iconguidang" /> 归档 </router-link>
-            </li>
-            <li>
-              <router-link to="/categories"><i class="iconfont iconfenlei" /> 分类 </router-link>
-            </li>
-            <li>
-              <router-link to="/tags"><i class="iconfont iconbiaoqian" /> 标签 </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="menus-item">
-          <a class="menu-btn">
-            <i class="iconfont iconqita" /> 娱乐
-            <i class="iconfont iconxiangxia2 expand" />
-          </a>
-          <ul class="menus-submenu">
-            <li>
-              <router-link to="/albums"><i class="iconfont iconxiangce1" /> 相册 </router-link>
-            </li>
-            <li>
-              <router-link to="/talks"><i class="iconfont iconpinglun" /> 说说 </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="menus-item">
-          <router-link class="menu-btn" to="/links"><i class="iconfont iconlianjie" /> 友链 </router-link>
-        </div>
-        <div class="menus-item">
-          <router-link class="menu-btn" to="/about"><i class="iconfont iconzhifeiji" /> 关于 </router-link>
-        </div>
-        <div class="menus-item">
-          <router-link class="menu-btn" to="/message"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
-        </div>
-        <div class="menus-item">
-          <a class="menu-btn" v-if="!webStore.userInfo.avatar" @click="openLogin">
-            <i class="iconfont icondenglu" /> 登录
-          </a>
-          <template v-else>
-            <img class="user-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
-            <ul class="menus-submenu">
-              <li>
-                <router-link to="/user"
-                  ><i class="iconfont icongerenzhongxin" />
-                  个人中心
-                </router-link>
-              </li>
-              <li>
-                <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
-              </li>
-            </ul>
-          </template>
-        </div>
-      </div>
-    </div>
-  </v-app-bar>
+						><i class="iconfont iconzhuye" />
+						首页
+					</router-link>
+				</div>
+				<div class="menus-item">
+					<a class="menu-btn">
+						<i class="iconfont iconfaxian" /> 发现
+						<i class="iconfont iconxiangxia2 expand" />
+					</a>
+					<ul class="menus-submenu">
+						<li>
+							<router-link to="/archives"><i class="iconfont iconguidang" /> 归档 </router-link>
+						</li>
+						<li>
+							<router-link to="/categories"><i class="iconfont iconfenlei" /> 分类 </router-link>
+						</li>
+						<li>
+							<router-link to="/tags"><i class="iconfont iconbiaoqian" /> 标签 </router-link>
+						</li>
+					</ul>
+				</div>
+				<div class="menus-item">
+					<a class="menu-btn">
+						<i class="iconfont iconqita" /> 娱乐
+						<i class="iconfont iconxiangxia2 expand" />
+					</a>
+					<ul class="menus-submenu">
+						<li>
+							<router-link to="/albums"><i class="iconfont iconxiangce1" /> 相册 </router-link>
+						</li>
+						<li>
+							<router-link to="/talks"><i class="iconfont iconpinglun" /> 说说 </router-link>
+						</li>
+					</ul>
+				</div>
+				<div class="menus-item">
+					<router-link class="menu-btn" to="/links"><i class="iconfont iconlianjie" /> 友链 </router-link>
+				</div>
+				<div class="menus-item">
+					<router-link class="menu-btn" to="/about"><i class="iconfont iconzhifeiji" /> 关于 </router-link>
+				</div>
+				<div class="menus-item">
+					<router-link class="menu-btn" to="/message"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
+				</div>
+				<div class="menus-item">
+					<a class="menu-btn" v-if="!webStore.userInfo.avatar" @click="openLogin">
+						<i class="iconfont icondenglu" /> 登录
+					</a>
+					<template v-else>
+						<img class="user-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
+						<ul class="menus-submenu">
+							<li>
+								<router-link to="/user"
+									><i class="iconfont icongerenzhongxin" />
+									个人中心
+								</router-link>
+							</li>
+							<li>
+								<a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
+							</li>
+						</ul>
+					</template>
+				</div>
+			</div>
+		</div>
+	</v-app-bar>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
 import { useWebStore } from "@/stores/modules/website"
-import { logoutApi } from "@/api/login"
+import { logoutApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 
 const navClass = ref("")
 
 onMounted(() => {
-  window.addEventListener("scroll", scroll)
+	window.addEventListener("scroll", scroll)
 })
 
 const scroll = () => {
-  const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
-  navClass.value = scrollTop > 60 ? "nav-fixed" : "nav"
+	const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+	navClass.value = scrollTop > 60 ? "nav-fixed" : "nav"
 }
 
 // 获取存储的博客信息
@@ -126,177 +126,177 @@ const webStore = useWebStore()
 const blogInfo = useWebStore().blogInfo
 
 const openSearch = () => {
-  webStore.searchFlag = true
+	webStore.searchFlag = true
 }
 
 const openDrawer = () => {
-  webStore.drawer = true
+	webStore.drawer = true
 }
 
 const openLogin = () => {
-  webStore.loginFlag = true
+	webStore.loginFlag = true
 }
 
 const logout = () => {
-  webStore.logout()
-  logoutApi().then(() => {
-    ElMessage.success("注销成功")
-  })
+	webStore.logout()
+	logoutApi().then(() => {
+		ElMessage.success("注销成功")
+	})
 }
 </script>
 
 <style scoped>
 i {
-  margin-right: 4px;
+	margin-right: 4px;
 }
 
 ul {
-  list-style: none;
+	list-style: none;
 }
 
 .nav {
-  background: rgba(0, 0, 0, 0) !important;
+	background: rgba(0, 0, 0, 0) !important;
 }
 
 .nav a {
-  color: #eee !important;
+	color: #eee !important;
 }
 
 .nav .menu-btn {
-  text-shadow: 0.05rem 0.05rem 0.1rem rgba(0, 0, 0, 0.3);
+	text-shadow: 0.05rem 0.05rem 0.1rem rgba(0, 0, 0, 0.3);
 }
 
 .nav .blog-title a {
-  text-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15);
+	text-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15);
 }
 
 .theme--light.nav-fixed {
-  background: rgba(255, 255, 255, 0.8) !important;
-  box-shadow: 0 5px 6px -5px rgba(133, 133, 133, 0.6);
+	background: rgba(255, 255, 255, 0.8) !important;
+	box-shadow: 0 5px 6px -5px rgba(133, 133, 133, 0.6);
 }
 
 .theme--dark.nav-fixed {
-  background: rgba(18, 18, 18, 0.8) !important;
+	background: rgba(18, 18, 18, 0.8) !important;
 }
 
 .theme--dark.nav-fixed a {
-  color: rgba(255, 255, 255, 0.8) !important;
+	color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .theme--light.nav-fixed a {
-  color: #4c4948 !important;
+	color: #4c4948 !important;
 }
 
 .nav-fixed .menus-item a,
 .nav-fixed .blog-title a {
-  text-shadow: none;
+	text-shadow: none;
 }
 
 .nav-container {
-  font-size: 14px;
-  width: 100%;
-  height: 100%;
+	font-size: 14px;
+	width: 100%;
+	height: 100%;
 }
 
 .nav-mobile-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
+	width: 100%;
+	display: flex;
+	align-items: center;
 }
 
 .blog-title,
 .nav-title {
-  display: flex;
-  align-items: center;
-  height: 100%;
+	display: flex;
+	align-items: center;
+	height: 100%;
 }
 
 .blog-title a {
-  font-size: 18px;
-  font-weight: bold;
+	font-size: 18px;
+	font-weight: bold;
 }
 
 .menus-item {
-  position: relative;
-  display: inline-block;
-  margin: 0 0 0 0.875rem;
+	position: relative;
+	display: inline-block;
+	margin: 0 0 0 0.875rem;
 }
 
 .menus-item a {
-  transition: all 0.2s;
+	transition: all 0.2s;
 }
 
 .nav-fixed .menu-btn:hover {
-  color: #49b1f5 !important;
+	color: #49b1f5 !important;
 }
 
 .menu-btn:hover:after {
-  width: 100%;
+	width: 100%;
 }
 
 .menus-item a:after {
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  z-index: -1;
-  width: 0;
-  height: 3px;
-  background-color: #80c8f8;
-  content: "";
-  transition: all 0.3s ease-in-out;
+	position: absolute;
+	bottom: -5px;
+	left: 0;
+	z-index: -1;
+	width: 0;
+	height: 3px;
+	background-color: #80c8f8;
+	content: "";
+	transition: all 0.3s ease-in-out;
 }
 
 .user-avatar {
-  cursor: pointer;
-  border-radius: 50%;
+	cursor: pointer;
+	border-radius: 50%;
 }
 
 .menus-item:hover .menus-submenu {
-  display: block;
+	display: block;
 }
 
 .menus-submenu {
-  position: absolute;
-  display: none;
-  right: 0;
-  width: max-content;
-  margin-top: 8px;
-  box-shadow: 0 5px 20px -4px rgba(0, 0, 0, 0.5);
-  background-color: #fff;
-  animation: submenu 0.3s 0.1s ease both;
+	position: absolute;
+	display: none;
+	right: 0;
+	width: max-content;
+	margin-top: 8px;
+	box-shadow: 0 5px 20px -4px rgba(0, 0, 0, 0.5);
+	background-color: #fff;
+	animation: submenu 0.3s 0.1s ease both;
 }
 
 .menus-submenu:before {
-  position: absolute;
-  top: -8px;
-  left: 0;
-  width: 100%;
-  height: 20px;
-  content: "";
+	position: absolute;
+	top: -8px;
+	left: 0;
+	width: 100%;
+	height: 20px;
+	content: "";
 }
 
 .menus-submenu a {
-  line-height: 2;
-  color: #4c4948 !important;
-  text-shadow: none;
-  display: block;
-  padding: 6px 14px;
+	line-height: 2;
+	color: #4c4948 !important;
+	text-shadow: none;
+	display: block;
+	padding: 6px 14px;
 }
 
 .menus-submenu a:hover {
-  background: #4ab1f4;
+	background: #4ab1f4;
 }
 
 @keyframes submenu {
-  0% {
-    opacity: 0;
-    filter: alpha(opacity=0);
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    filter: none;
-    transform: translateY(0);
-  }
+	0% {
+		opacity: 0;
+		filter: alpha(opacity=0);
+		transform: translateY(10px);
+	}
+	100% {
+		opacity: 1;
+		filter: none;
+		transform: translateY(0);
+	}
 }
 </style>

@@ -1,64 +1,75 @@
 import http from "@/utils/request"
 
-/** 增 */
-export function createMenuApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/menu/create",
-    method: "post",
-    data,
-  })
+interface Menu {
+	id: number // 主键
+	name: string // 菜单名
+	path: string // 菜单路径
+	component: string // 组件
+	icon: string // 菜单icon
+	rank: number // 排序
+	parent_id: number // 父id
+	is_hidden: boolean // 是否隐藏  0否1是
+	created_at: string // 创建时间
+	updated_at: string // 更新时间
 }
 
-/** 删 删除单个*/
-export function deleteMenuApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/menu/delete",
-    method: "delete",
-    data,
-  })
+/** 创建菜单 */
+export function createMenuApi(data: Menu): Promise<IApiResponseData<Menu>> {
+	return http.request<IApiResponseData<Menu>>({
+		url: `/api/v1//menu`,
+		method: "post",
+		data: data,
+	})
 }
 
-/** 改 */
-export function updateMenuApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/menu/update",
-    method: "put",
-    data,
-  })
+/** 更新菜单 */
+export function updateMenuApi(data: Menu): Promise<IApiResponseData<Menu>> {
+	return http.request<IApiResponseData<Menu>>({
+		url: `/api/v1//menu`,
+		method: "put",
+		data: data,
+	})
 }
 
-/** 查 查询单个*/
-export function getMenuApi(data: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/menu/find",
-    method: "get",
-    data,
-  })
+/** 删除菜单 */
+export function deleteMenuApi(id: string): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//menu/${id}`,
+		method: "delete",
+	})
 }
 
-/** 删除 批量操作 */
-export function deleteByIdsMenuApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/menu/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
+/** 查询菜单 */
+export function findMenuApi(id: string): Promise<IApiResponseData<Menu>> {
+	return http.request<IApiResponseData<Menu>>({
+		url: `/api/v1//menu/${id}`,
+		method: "get",
+	})
 }
 
-/** 查 列表*/
-export function getMenuListApi(page: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/menu/list",
-    method: "get",
-    params: page,
-  })
+/** 批量删除菜单 */
+export function deleteMenuByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
+	return http.request<IApiResponseData<any>>({
+		url: `/api/v1//menu/batch_delete`,
+		method: "delete",
+		data: data,
+	})
 }
 
-/** 查 列表*/
-export function getMenuTreeApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/admin/menus",
-    method: "post",
-    data: {},
-  })
+/** 分页获取菜单列表 */
+export function findMenuListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PageResult<Menu>>>> {
+	return http.request<IApiResponseData<PageResult<PageResult<Menu>>>>({
+		url: `/api/v1//menu/list`,
+		method: "post",
+		data: page,
+	})
+}
+
+/** 获取菜单列表 */
+export function getMenusApi(page: PageQuery): Promise<IApiResponseData<Menu>> {
+	return http.request<IApiResponseData<Menu>>({
+		url: `/api/v1//admin/menus`,
+		method: "post",
+		data: page,
+	})
 }

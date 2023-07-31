@@ -5,6 +5,8 @@ interface IApiResponseData<T> {
   message: string
 }
 
+interface Response implements IApiResponseData<object> {}
+
 interface PageResult<T> {
   list: T[]
   page: number
@@ -12,14 +14,14 @@ interface PageResult<T> {
   total: number
 }
 
-interface Page {
+interface PageQuery {
   page?: number
   page_size?: number
-  orders?: Order[]
+  sorts?: Sort[]
   conditions?: Condition[]
 }
 
-interface Order {
+interface Sort {
   field: string
   rule: string
 }
