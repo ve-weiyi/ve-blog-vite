@@ -19,13 +19,13 @@
               <!-- 文章标题 -->
               <div>
                 <router-link :to="'/articles/' + item.id">
-                  {{ item.articleTitle }}
+                  {{ item.article_title }}
                 </router-link>
               </div>
               <div style="margin-top: 0.375rem">
                 <!-- 发表时间 -->
                 <v-icon size="20">mdi-clock-outline</v-icon>
-                {{ formatDate(item.createdAt) }}
+                {{ formatDate(item.created_at) }}
 
                 <!-- 文章分类 -->
                 <router-link :to="'/categories/' + item.categoryId" class="float-right">

@@ -18,7 +18,7 @@
               <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram </v-icon>
             </div>
             <!-- 发表时间 -->
-            <div class="time">{{ talkInfo.createdAt }}</div>
+            <div class="time">{{ talkInfo.created_at }}</div>
             <!-- 说说信息 -->
             <div class="talk-content" v-html="talkInfo.content" />
             <!-- 图片列表 -->
@@ -58,7 +58,7 @@ import { ref, onMounted, computed } from "vue"
 import Comment from "../../components/comment/TalkComment.vue"
 import axios from "axios"
 import { useWebStore } from "@/stores"
-import { findTalkApi } from "@/api/talk"
+import { findTalkDetailApi, TalkDetails } from "@/api/talk"
 import { useRoute } from "vue-router"
 
 // 获取存储的博客信息
@@ -71,29 +71,26 @@ const talkId = route.params.talkId ? parseInt(route.params.talkId as string) : 0
 
 const commentType = 3
 const commentCount = ref(0)
-const talkInfo = ref<any>({
+const talkInfo = ref<TalkDetails>({
   id: 49,
-  userId: 2,
+  user_id: 2,
   nickname: "ve77",
   avatar: "https://ve77.cn/images/avatar.jpg",
   content: "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。",
   images: "",
-  isTop: true,
-  status: true,
-  createdAt: "2022-01-24T23:34:59+08:00",
-  updatedAt: "2022-02-11T23:19:59+08:00",
+  is_top: 1,
+  status: 1,
+  like_count: 0,
+  created_at: "2022-01-24T23:34:59+08:00",
+  updated_at: "2022-02-11T23:19:59+08:00",
 })
 const previewList = ref([])
 
 function getTalkById() {
-  findTalkApi({
-    id: talkId,
-  }).then((res) => {
+  findTalkDetailApi(talkId).then((res) => {
     console.log(res)
     talkInfo.value = res.data
-    talkInfo.value.avatar = ""
-    talkInfo.value.nickname = ""
-    previewList.value = talkInfo.value.imgList
+    previewList.value = talkInfo.value.images.split(",")
   })
 }
 

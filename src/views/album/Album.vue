@@ -9,10 +9,10 @@
       <v-row>
         <v-col :md="6" v-for="item of photoAlbumList" :key="item.id">
           <div class="album-item">
-            <v-img class="album-cover" :src="item.albumCover" />
+            <v-img class="album-cover" :src="item.album_cover" />
             <router-link :to="'/albums/' + item.id" class="album-wrapper">
-              <div class="album-name">{{ item.albumName }}</div>
-              <div class="album-desc">{{ item.albumDesc }}</div>
+              <div class="album-name">{{ item.album_name }}</div>
+              <div class="album-desc">{{ item.album_desc }}</div>
             </router-link>
           </div>
         </v-col>
@@ -24,13 +24,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { findPhotoAlbumListApi } from "@/api/photo_album"
+import { findPhotoAlbumListApi, PhotoAlbum } from "@/api/photo_album"
 
 // 获取存储的博客信息
 const webState = useWebStore()
 const cover = ref(webState.getCover("album"))
 
-const photoAlbumList = ref([])
+const photoAlbumList = ref<PhotoAlbum[]>([])
 
 onMounted(() => {
   listPhotoAlbums()

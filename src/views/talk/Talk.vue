@@ -20,7 +20,7 @@
               </div>
               <!-- 发表时间 -->
               <div class="time">
-                {{ item.createdAt }}
+                {{ item.created_at }}
                 <span class="top" v-if="item.isTop == 1"> <i class="iconfont iconzhiding" /> 置顶 </span>
               </div>
               <!-- 说说信息 -->
@@ -70,7 +70,7 @@ import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStore } from "@/stores"
 import axios from "axios"
-import { findTalkListApi } from "@/api/talk"
+import { findTalkDetailListApi, TalkDetails } from "@/api/talk"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -78,22 +78,22 @@ const cover = ref(webState.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
-const talkList = ref([])
+const talkList = ref<TalkDetails[]>([])
 const count = ref(0)
 const previewList = ref([])
 
 const router = useRouter()
 
 const listTalks = () => {
-  findTalkListApi({}).then((res) => {
+  findTalkDetailListApi({}).then((res) => {
     if (current.value === 1) {
       talkList.value = res.data.list
     } else {
       talkList.value.push(...res.data.list)
     }
     talkList.value.forEach((item) => {
-      if (item.imgList) {
-        previewList.value.push(...item.imgList)
+      if (item.images) {
+        previewList.value.push(...item.images.split(","))
       }
     })
     current.value++
@@ -102,10 +102,10 @@ const listTalks = () => {
 }
 
 const previewImg = (img) => {
-  $imagePreview({
-    images: previewList.value,
-    index: previewList.value.indexOf(img),
-  })
+  // $imagePreview({
+  //   images: previewList.value,
+  //   index: previewList.value.indexOf(img),
+  // })
 }
 
 const like = (talk) => {

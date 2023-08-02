@@ -10,8 +10,8 @@
       <ul class="category-list">
         <li class="category-list-item" v-for="item of categoryList" :key="item.id">
           <router-link :to="'/categories/' + item.id">
-            {{ item.categoryName }}
-            <span class="category-count">({{ item.articleCount }})</span>
+            {{ item.category_name }}
+            <span class="category-count">({{ item.article_count }})</span>
           </router-link>
         </li>
       </ul>
@@ -22,13 +22,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { findCategoryListApi } from "@/api/category"
+import { CategoryDTO, findCategoryDetailListApi } from "@/api/category"
 
 // 获取存储的博客信息
 const webState = useWebStore()
 const cover = ref(webState.getCover("talk"))
 
-const categoryList = ref([])
+const categoryList = ref<CategoryDTO[]>([])
 const count = ref(0)
 
 onMounted(() => {
@@ -36,7 +36,7 @@ onMounted(() => {
 })
 
 function listCategories() {
-  findCategoryListApi({ page: 1, page_size: 100 }).then((res) => {
+  findCategoryDetailListApi({ page: 1, page_size: 100 }).then((res) => {
     categoryList.value = res.data.list
     count.value = res.data.total
   })

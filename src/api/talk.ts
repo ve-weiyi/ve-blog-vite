@@ -11,6 +11,20 @@ export interface Talk {
   updated_at: string // 更新时间
 }
 
+export interface TalkDetails {
+  id: number
+  user_id: number // 用户ID
+  nickname: string // 用户昵称
+  avatar: string // 用户头像
+  content: string // 评论内容
+  images: string // 评论图片
+  is_top: number // 是否置顶
+  status: number // 状态
+  like_count: number // 点赞量
+  created_at: string // 创建时间
+  updated_at: string // 更新时间
+}
+
 /** 创建说说 */
 export function createTalkApi(data: Talk): Promise<IApiResponseData<Talk>> {
   return http.request<IApiResponseData<Talk>>({
@@ -60,5 +74,22 @@ export function findTalkListApi(page: PageQuery): Promise<IApiResponseData<PageR
     url: `/api/v1/talk/list`,
     method: "post",
     data: page,
+  })
+}
+
+/** 分页获取说说详情列表 */
+export function findTalkDetailListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TalkDetails>>> {
+  return http.request<IApiResponseData<PageResult<TalkDetails>>>({
+    url: `/api/v1/talk/list/details`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 分页获取说说详情列表 */
+export function findTalkDetailApi(id: number): Promise<IApiResponseData<TalkDetails>> {
+  return http.request<IApiResponseData<TalkDetails>>({
+    url: `/api/v1/talk/${id}/details`,
+    method: "get",
   })
 }

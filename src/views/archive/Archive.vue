@@ -10,10 +10,10 @@
         <v-timeline-item dot-color="pink" size="large"> 目前共计{{ count }}篇文章，继续加油 </v-timeline-item>
         <v-timeline-item dot-color="pink" size="small" v-for="item of archiveList" :key="item.id">
           <!-- 日期 -->
-          <span class="time">{{ item.createdAt }}</span>
+          <span class="time">{{ item.created_at }}</span>
           <!-- 文章标题 -->
           <router-link :to="'/articles/' + item.id" style="color: #666; text-decoration: none">
-            {{ item.articleTitle }}
+            {{ item.article_title }}
           </router-link>
         </v-timeline-item>
       </v-timeline>

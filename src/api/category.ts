@@ -7,6 +7,14 @@ export interface Category {
   updated_at: string // 更新时间
 }
 
+export interface CategoryDTO {
+  id: number
+  category_name: string // 分类名
+  article_count: number
+  created_at: string // 创建时间
+  updated_at: string // 更新时间
+}
+
 /** 创建文章分类 */
 export function createCategoryApi(data: Category): Promise<IApiResponseData<Category>> {
   return http.request<IApiResponseData<Category>>({
@@ -60,9 +68,9 @@ export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<P
 }
 
 /** 分页获取文章分类详情列表 */
-export function findCategoryDetailListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Category>>> {
-  return http.request<IApiResponseData<PageResult<Category>>>({
-    url: `/api/v1/categories`,
+export function findCategoryDetailListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDTO>>> {
+  return http.request<IApiResponseData<PageResult<CategoryDTO>>>({
+    url: `/api/v1/category/list/details`,
     method: "post",
     data: page,
   })

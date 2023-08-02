@@ -14,7 +14,7 @@
           :key="item.id"
           :to="'/tags/' + item.id"
         >
-          {{ item.tagName }}
+          {{ item.tag_name }}
         </router-link>
       </div>
     </v-card>
@@ -24,14 +24,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { findTagListApi } from "@/api/tag"
+import { findTagListApi, Tag } from "@/api/tag"
 
 // 获取存储的博客信息
 const webState = useWebStore()
 // 获取背景图片
 const cover = ref(webState.getCover("talk"))
 
-const tagList = ref([])
+const tagList = ref<Tag[]>([])
 const count = ref(0)
 
 onMounted(() => {
