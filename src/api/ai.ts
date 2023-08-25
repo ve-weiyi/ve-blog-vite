@@ -1,19 +1,20 @@
 import http from "@/utils/request"
+import {} from "./types"
 
-/** 增 */
-export function aiChatApi(data: object): Promise<IApiResponseData<any>> {
-	return http.request<IApiResponseData<any>>({
-		url: "/api//v1/ai/chat",
-		method: "post",
-		data,
-	})
+/** 和Chatgpt聊天 */
+export function chatAIApi(data: ChatMessage[]): Promise<IApiResponseData> {
+  return http.request<IApiResponseData>({
+    url: `/api/v1/ai/chat`,
+    method: "post",
+    data: data,
+  })
 }
 
-/** 删 */
-export function aiCosApi(data: object): Promise<IApiResponseData<any>> {
-	return http.request<IApiResponseData<any>>({
-		url: "/api//v1/ai/cos",
-		method: "post",
-		data,
-	})
+/** Chatgpt扮演角色 */
+export function chatCosApi(data: string): Promise<IApiResponseData> {
+  return http.request<IApiResponseData>({
+    url: `/api/v1/ai/cos`,
+    method: "post",
+    data: data,
+  })
 }

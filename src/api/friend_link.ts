@@ -1,14 +1,5 @@
 import http from "@/utils/request"
-
-export interface FriendLink {
-  id: number
-  link_name: string // 链接名
-  link_avatar: string // 链接头像
-  link_address: string // 链接地址
-  link_intro: string // 链接介绍
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { FriendLink } from "./types"
 
 /** 创建友链 */
 export function createFriendLinkApi(data: FriendLink): Promise<IApiResponseData<FriendLink>> {

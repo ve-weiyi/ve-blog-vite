@@ -1,17 +1,5 @@
 import http from "@/utils/request"
-
-export interface Menu {
-  id: number // 主键
-  name: string // 菜单名
-  path: string // 菜单路径
-  component: string // 组件
-  icon: string // 菜单icon
-  rank: number // 排序
-  parent_id: number // 父id
-  is_hidden: boolean // 是否隐藏  0否1是
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Menu } from "./types"
 
 /** 创建菜单 */
 export function createMenuApi(data: Menu): Promise<IApiResponseData<Menu>> {
@@ -66,9 +54,9 @@ export function findMenuListApi(page: PageQuery): Promise<IApiResponseData<PageR
 }
 
 /** 获取菜单列表 */
-export function getMenusApi(page: PageQuery): Promise<IApiResponseData<Menu>> {
-  return http.request<IApiResponseData<Menu>>({
-    url: `/api/v1/menus`,
+export function findMenuListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<MenuDetails>>> {
+  return http.request<IApiResponseData<PageResult<MenuDetails>>>({
+    url: `/api/v1/menu/list/details`,
     method: "post",
     data: page,
   })

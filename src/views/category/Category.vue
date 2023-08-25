@@ -22,7 +22,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { CategoryDTO, findCategoryDetailListApi } from "@/api/category"
+import { findCategoryListDetailsApi } from "@/api/category"
+import { CategoryDTO } from "@/api/types"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -36,7 +37,7 @@ onMounted(() => {
 })
 
 function listCategories() {
-  findCategoryDetailListApi({ page: 1, page_size: 100 }).then((res) => {
+  findCategoryListDetailsApi({ page: 1, page_size: 100 }).then((res) => {
     categoryList.value = res.data.list
     count.value = res.data.total
   })

@@ -1,16 +1,5 @@
 import http from "@/utils/request"
-
-export interface Role {
-  id: number // 主键id
-  role_pid: number // 父角色id
-  role_domain: string // 角色域
-  role_name: string // 角色名
-  role_comment: string // 角色备注
-  is_disable: boolean // 是否禁用  0否 1是
-  is_default: boolean // 是否默认角色 0否 1是
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Role } from "./types"
 
 /** 创建角色 */
 export function createRoleApi(data: Role): Promise<IApiResponseData<Role>> {
@@ -65,9 +54,9 @@ export function findRoleListApi(page: PageQuery): Promise<IApiResponseData<PageR
 }
 
 /** 获取角色列表 */
-export function getRolesApi(page: PageQuery): Promise<IApiResponseData<Role>> {
-  return http.request<IApiResponseData<Role>>({
-    url: `/api/v1/roles`,
+export function findRoleListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<Role>>> {
+  return http.request<IApiResponseData<PageResult<Role>>>({
+    url: `/api/v1/role/list/details`,
     method: "post",
     data: page,
   })

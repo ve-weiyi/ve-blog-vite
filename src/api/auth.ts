@@ -1,30 +1,9 @@
 import http from "@/utils/request"
-
-export interface User {
-  username: string
-  password: string
-  code: string
-}
-
-export interface UserEmail {
-  username: string
-}
-
-export interface ResetPasswordReq {
-  username: string
-  password: string
-  code: string
-}
-
-export interface OauthLoginReq {
-  platform: string // 平台
-  code: string // 授权码
-  state: string // 状态
-}
+import { User, Login, UserEmail, ResetPasswordReq, OauthLoginReq, OauthLoginUrl } from "./types"
 
 /** 登录 */
-export function loginApi(data: User): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function loginApi(data: User): Promise<IApiResponseData<Login>> {
+  return http.request<IApiResponseData<Login>>({
     url: `/api/v1/login`,
     method: "post",
     data: data,

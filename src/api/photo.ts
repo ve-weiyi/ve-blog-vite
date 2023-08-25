@@ -1,15 +1,5 @@
 import http from "@/utils/request"
-
-export interface Photo {
-  id: number // 主键
-  album_id: number // 相册id
-  photo_name: string // 照片名
-  photo_desc: string // 照片描述
-  photo_src: string // 照片地址
-  is_delete: boolean // 是否删除
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Photo } from "./types"
 
 /** 创建相片 */
 export function createPhotoApi(data: Photo): Promise<IApiResponseData<Photo>> {

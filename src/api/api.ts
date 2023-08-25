@@ -1,17 +1,5 @@
 import http from "@/utils/request"
-
-export interface Api {
-  id: number // 主键id
-  name: string // api名称
-  path: string // api路径
-  method: string // api请求方法
-  group: string // api分组
-  parent_id: number // 分组id
-  traceable: number // 是否追溯操作记录 0需要，1是
-  status: number // 状态 1开，2关
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Api } from "./types"
 
 /** 创建接口 */
 export function createApiApi(data: Api): Promise<IApiResponseData<Api>> {
@@ -66,9 +54,9 @@ export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageRe
 }
 
 /** 获取api列表 */
-export function getApisApi(page: PageQuery): Promise<IApiResponseData<Api>> {
-  return http.request<IApiResponseData<Api>>({
-    url: `/api/v1/apis`,
+export function findApiListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<ApiDetails>>> {
+  return http.request<IApiResponseData<PageResult<ApiDetails>>>({
+    url: `/api/v1/api/list/details`,
     method: "post",
     data: page,
   })

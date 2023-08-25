@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue"
 import { useWebStore } from "@/stores"
-import { getArticleArchivesApi } from "@/api/article"
+import { findArticleArchivesApi } from "@/api/article"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -46,7 +46,7 @@ watch(current, (value) => {
 })
 
 function listArchives(page = current.value) {
-  getArticleArchivesApi().then((res) => {
+  findArticleArchivesApi({}).then((res) => {
     archiveList.value = res.data.list
     count.value = res.data.total
   })

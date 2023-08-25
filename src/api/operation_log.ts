@@ -1,25 +1,5 @@
 import http from "@/utils/request"
-
-export interface OperationLog {
-  id: number // 主键id
-  opt_module: string // 操作模块
-  opt_type: string // 操作类型
-  opt_method: string // 操作方法
-  opt_desc: string // 操作描述
-  cost: string // 耗时（ms）
-  status: number // 响应状态码
-  request_url: string // 操作url
-  request_method: string // 请求方式
-  request_header: string // 请求头
-  request_param: string // 请求参数
-  response_data: string // 返回数据
-  user_id: number // 用户id
-  nickname: string // 用户昵称
-  ip_address: string // 操作ip
-  ip_source: string // 操作地址
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { OperationLog } from "./types"
 
 /** 创建操作记录 */
 export function createOperationLogApi(data: OperationLog): Promise<IApiResponseData<OperationLog>> {

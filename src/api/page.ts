@@ -1,13 +1,5 @@
 import http from "@/utils/request"
-
-export interface Page {
-  id: number // 页面id
-  page_name: string // 页面名
-  page_label: string // 页面标签
-  page_cover: string // 页面封面
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Page } from "./types"
 
 /** 创建页面 */
 export function createPageApi(data: Page): Promise<IApiResponseData<Page>> {

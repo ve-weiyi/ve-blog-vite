@@ -24,7 +24,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useWebStore } from "@/stores"
-import { findTagListApi, Tag } from "@/api/tag"
+import { findTagListApi } from "@/api/tag"
+import { Tag } from "@/api/types"
 
 // 获取存储的博客信息
 const webState = useWebStore()

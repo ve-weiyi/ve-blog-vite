@@ -1,46 +1,5 @@
 import http from "@/utils/request"
-
-export interface UserInformation {
-  id: number // id
-  user_id: number // 用户id
-  email: string // 用户邮箱
-  nickname: string // 用户昵称
-  avatar: string // 用户头像
-  phone: string // 用户手机号
-  intro: string // 个人简介
-  web_site: string // 个人网站
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
-
-export interface Upload {
-  id: number // id
-  user_id: number // 用户id
-  label: string // 标签
-  file_name: string // 文件名称
-  file_size: number // 文件大小
-  file_md5: string // 文件md5值
-  file_url: string // 上传路径
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
-
-export interface UserAccount {
-  id: number // id
-  username: string // 用户名
-  password: string // 密码
-  status: number // 状态: 0删除 1正常 2禁用
-  register_type: string // 注册方式
-  ip_address: string // 注册ip
-  ip_source: string // 注册ip 源
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
-
-export interface UpdateUserRoles {
-  user_id: number
-  role_ids: number[]
-}
+import { UserInformation, Upload, UserAccount, UpdateUserRoles, Role } from "./types"
 
 /** 获取用户菜单权限 */
 export function getUserMenusApi(): Promise<IApiResponseData<any>> {

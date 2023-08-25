@@ -1,19 +1,5 @@
 import http from "@/utils/request"
-
-export interface Category {
-  id: number
-  category_name: string // 分类名
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
-
-export interface CategoryDTO {
-  id: number
-  category_name: string // 分类名
-  article_count: number
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Category, CategoryDTO } from "./types"
 
 /** 创建文章分类 */
 export function createCategoryApi(data: Category): Promise<IApiResponseData<Category>> {
@@ -68,7 +54,7 @@ export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<P
 }
 
 /** 分页获取文章分类详情列表 */
-export function findCategoryDetailListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDTO>>> {
+export function findCategoryListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDTO>>> {
   return http.request<IApiResponseData<PageResult<CategoryDTO>>>({
     url: `/api/v1/category/list/details`,
     method: "post",

@@ -1,11 +1,5 @@
 import http from "@/utils/request"
-
-export interface Tag {
-  id: number
-  tag_name: string // 标签名
-  created_at: string // 创建时间
-  updated_at: string // 更新时间
-}
+import { Tag } from "./types"
 
 /** 创建文章标签 */
 export function createTagApi(data: Tag): Promise<IApiResponseData<Tag>> {

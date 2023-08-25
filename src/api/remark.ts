@@ -1,17 +1,5 @@
 import http from "@/utils/request"
-
-export interface Remark {
-  id: number // 主键id
-  nickname: string // 昵称
-  avatar: string // 头像
-  message_content: string // 留言内容
-  ip_address: string // 用户ip
-  ip_source: string // 用户地址
-  time: number // 弹幕速度
-  is_review: boolean // 是否审核
-  created_at: string // 发布时间
-  updated_at: string // 修改时间
-}
+import { Remark } from "./types"
 
 /** 创建留言 */
 export function createRemarkApi(data: Remark): Promise<IApiResponseData<Remark>> {
