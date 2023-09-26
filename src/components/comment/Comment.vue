@@ -149,7 +149,7 @@ import { useWebStore } from "@/stores"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { useRoute } from "vue-router"
-import { createCommentApi, findCommentListDetailsApi, findCommentReplyListApi, likeCommentApi } from "@/api/comment"
+import { createCommentApi, findCommentDetailsListApi, findCommentReplyListApi, likeCommentApi } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
 import { Comment } from "@/api/types"
 
@@ -211,7 +211,7 @@ const listComments = () => {
     default:
       break
   }
-  findCommentListDetailsApi({
+  findCommentDetailsListApi({
     page: paginationData.currentPage,
     page_size: paginationData.pageSize,
     sorts: order,

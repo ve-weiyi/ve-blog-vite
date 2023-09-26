@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Article, ArticleDetails } from "./types"
+import { Article, BatchResult, ArticleDetails, ArticleCondition, ArticleConditionDTO } from "./types"
 
 /** 创建文章 */
 export function createArticleApi(data: Article): Promise<IApiResponseData<Article>> {
@@ -36,8 +36,8 @@ export function findArticleApi(id: number): Promise<IApiResponseData<Article>> {
 }
 
 /** 批量删除文章 */
-export function deleteArticleByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteArticleByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/article/batch_delete`,
     method: "delete",
     data: data,
@@ -79,7 +79,7 @@ export function findArticleArchivesApi(page: PageQuery): Promise<IApiResponseDat
 }
 
 /** 分页获取文章详情列表 */
-export function findArticleListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<Article>>> {
+export function findArticleDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Article>>> {
   return http.request<IApiResponseData<PageResult<Article>>>({
     url: `/api/v1/article/list/details`,
     method: "post",
@@ -88,10 +88,10 @@ export function findArticleListDetailsApi(page: PageQuery): Promise<IApiResponse
 }
 
 /** 通过标签或者id获取文章列表 */
-export function findArticleListByConditionApi(page: PageQuery): Promise<IApiResponseData<PageResult<Article>>> {
-  return http.request<IApiResponseData<PageResult<Article>>>({
+export function findArticleListByConditionApi(data: ArticleCondition): Promise<IApiResponseData<ArticleConditionDTO>> {
+  return http.request<IApiResponseData<ArticleConditionDTO>>({
     url: `/api/v1/article/list/condition`,
     method: "post",
-    data: page,
+    data: data,
   })
 }

@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Remark } from "./types"
+import { Remark, BatchResult } from "./types"
 
 /** 创建留言 */
 export function createRemarkApi(data: Remark): Promise<IApiResponseData<Remark>> {
@@ -36,8 +36,8 @@ export function findRemarkApi(id: number): Promise<IApiResponseData<Remark>> {
 }
 
 /** 批量删除留言 */
-export function deleteRemarkByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteRemarkByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/remark/batch_delete`,
     method: "delete",
     data: data,

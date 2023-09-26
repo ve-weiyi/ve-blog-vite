@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { PhotoAlbum } from "./types"
+import { PhotoAlbum, BatchResult } from "./types"
 
 /** 创建相册 */
 export function createPhotoAlbumApi(data: PhotoAlbum): Promise<IApiResponseData<PhotoAlbum>> {
@@ -36,8 +36,8 @@ export function findPhotoAlbumApi(id: number): Promise<IApiResponseData<PhotoAlb
 }
 
 /** 批量删除相册 */
-export function deletePhotoAlbumByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deletePhotoAlbumByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/photo_album/batch_delete`,
     method: "delete",
     data: data,

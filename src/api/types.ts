@@ -255,6 +255,7 @@ export interface UserLoginHistory {
   id?: number // id
   user_id?: number // 用户id
   login_type?: string // 登录类型
+  agent?: string // 代理
   ip_address?: string // ip host
   ip_source?: string // ip 源
   created_at?: string // 创建时间
@@ -350,6 +351,25 @@ export interface UpdateRoleResources {
   resource_ids?: number[]
 }
 
+export interface spanContext {
+  trace_id?: string // TraceID 表示tracer的全局唯一ID
+  span_id?: string // SpanId 标示单个trace中某一个span的唯一ID，在trace中唯一
+}
+
+export interface Span {
+  ctx?: spanContext // 传递的上下文
+  service_name?: string // 服务名
+  operation_name?: string // 操作
+  start_time?: string // 开始时间戳
+  flag?: string // 标记开启trace是 server 还是 client
+  children?: number // 本 span fork出来的 childsnums
+}
+
+export interface WebsiteConfigRequest {
+  key?: string
+  value?: string
+}
+
 export interface ArticleDTO {
   id?: number // 文章ID
   article_cover?: string // 文章缩略图
@@ -396,6 +416,12 @@ export interface TagDTO {
   tag_name?: string // 标签名
 }
 
+export interface CategoryDTO {
+  id?: number
+  category_name?: string // 分类名
+  article_count?: number
+}
+
 export interface ArticlePaginationDTO {
   id?: number // 文章ID
   article_cover?: string // 文章缩略图
@@ -416,7 +442,7 @@ export interface ArticleArchivesDTO {
   created_at?: string // 创建时间
 }
 
-export interface BlogHomeInfoDTO {
+export interface WebsiteHomeInfoDTO {
   article_count?: number // 文章数量
   category_count?: number // 分类数量
   tag_count?: number // 标签数量
@@ -429,7 +455,7 @@ export interface WebsiteConfigVO {}
 
 export interface PageVO {}
 
-export interface BlogBackInfoDTO {
+export interface WebsiteAdminHomeInfo {
   views_count?: number // 访问量
   message_count?: number // 留言量
   user_count?: number // 用户量
@@ -463,10 +489,18 @@ export interface CaptchaResp {
   length?: number
 }
 
-export interface CategoryDTO {
+export interface CategoryDetailsDTO {
   id?: number
   category_name?: string // 分类名
   article_count?: number
+  created_at?: string // 创建时间
+  updated_at?: string // 更新时间
+}
+
+export interface TagDetailsDTO {
+  id?: number // 标签ID
+  tag_name?: string // 标签名
+  article_count?: number // 文章数量
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
 }
@@ -511,31 +545,43 @@ export interface CommentBackDTO {
   created_at?: string
 }
 
-export interface Login {
-  token?: string
-  userinfo?: UserDetail
-  last_login_history?: LoginHistory
+export interface Login extends Token {
+  user_info?: UserInfo
+  login_info?: LoginHistory
 }
 
-export interface OauthLoginUrl {
-  url?: string // 授权地址
+export interface Token {
+  token_type?: string // token类型,Bearer
+  access_token?: string // 访问token,过期时间较短。2h
+  expires_in?: number // 访问token过期时间
+  refresh_token?: string // 刷新token,过期时间较长。30d
+  refresh_expires_in?: number // 刷新token过期时间
+  uid?: number // 用户id
 }
 
-export interface UserDetail {
+export interface UserInfo {
   id?: number
   username?: string
+  status?: number
   nickname?: string
   avatar?: string
   intro?: string
   email?: string
+  created_at?: string
   roles?: Role[]
 }
 
 export interface LoginHistory {
+  id?: number
   login_type?: string // 登录类型
+  agent?: string // 代理
   ip_address?: string // ip host
   ip_source?: string // ip 源
   login_time?: string // 创建时间
+}
+
+export interface OauthLoginUrl {
+  url?: string // 授权地址
 }
 
 export interface UserMenu {
@@ -547,6 +593,12 @@ export interface UserMenu {
   rank?: number
   is_hidden?: boolean
   children?: UserMenu[]
+}
+
+export interface BatchResult {
+  total_count?: number // 总数量
+  success_count?: number // 成功数量
+  fail_count?: number // 失败数量
 }
 
 export interface ApiDetails extends Api {
@@ -579,4 +631,40 @@ export interface TalkDetails {
 export interface UserArea {
   name?: string
   value?: number
+}
+
+export interface ChatRequest {
+  model?: string // 模型名称
+  messages?: ChatMessage[] // 对话消息列表
+}
+
+export interface ChatMessage {
+  role?: string // 角色：system 或 user ，assistant ChatGPT 生成的响应
+  content?: string // 消息内容
+}
+
+export interface ChatResponse {
+  id?: string // 对话 ID
+  object?: string // 对象类型
+  created?: number // 创建时间戳
+  model?: string // 模型名称
+  choices?: ChatChoice[] // 生成的回复列表
+  usage?: ChatUsage // API 调用的使用情况
+}
+
+export interface ChatChoice {
+  index?: number // 回复的索引
+  message?: ChatMessage // 回复的消息
+  finish_reason?: string // 回复的完成原因
+}
+
+export interface ChatUsage {
+  prompt_tokens?: number // 提示 tokens 数量
+  completion_tokens?: number // 生成回复的 tokens 数量
+  total_tokens?: number // 总 tokens 数量
+}
+
+export interface ChatRole {
+  act?: string
+  prompt?: string
 }

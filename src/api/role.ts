@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Role } from "./types"
+import { Role, BatchResult } from "./types"
 
 /** 创建角色 */
 export function createRoleApi(data: Role): Promise<IApiResponseData<Role>> {
@@ -36,8 +36,8 @@ export function findRoleApi(id: number): Promise<IApiResponseData<Role>> {
 }
 
 /** 批量删除角色 */
-export function deleteRoleByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteRoleByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/role/batch_delete`,
     method: "delete",
     data: data,
@@ -54,7 +54,7 @@ export function findRoleListApi(page: PageQuery): Promise<IApiResponseData<PageR
 }
 
 /** 获取角色列表 */
-export function findRoleListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<Role>>> {
+export function findRoleDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Role>>> {
   return http.request<IApiResponseData<PageResult<Role>>>({
     url: `/api/v1/role/list/details`,
     method: "post",

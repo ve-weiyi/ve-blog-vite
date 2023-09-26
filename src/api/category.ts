@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Category, CategoryDTO } from "./types"
+import { Category, BatchResult, CategoryDetailsDTO } from "./types"
 
 /** 创建文章分类 */
 export function createCategoryApi(data: Category): Promise<IApiResponseData<Category>> {
@@ -36,8 +36,8 @@ export function findCategoryApi(id: number): Promise<IApiResponseData<Category>>
 }
 
 /** 批量删除文章分类 */
-export function deleteCategoryByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteCategoryByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/category/batch_delete`,
     method: "delete",
     data: data,
@@ -54,8 +54,8 @@ export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<P
 }
 
 /** 分页获取文章分类详情列表 */
-export function findCategoryListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDTO>>> {
-  return http.request<IApiResponseData<PageResult<CategoryDTO>>>({
+export function findCategoryDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDetailsDTO>>> {
+  return http.request<IApiResponseData<PageResult<CategoryDetailsDTO>>>({
     url: `/api/v1/category/list/details`,
     method: "post",
     data: page,

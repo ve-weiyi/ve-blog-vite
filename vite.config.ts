@@ -194,6 +194,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
 
       eslintPlugin({
         include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
+        emitWarning: false,
       }),
       /**
        * 自动导入组件，不用每次都 import

@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Talk, TalkDetails } from "./types"
+import { Talk, BatchResult, TalkDetails } from "./types"
 
 /** 创建说说 */
 export function createTalkApi(data: Talk): Promise<IApiResponseData<Talk>> {
@@ -36,8 +36,8 @@ export function findTalkApi(id: number): Promise<IApiResponseData<Talk>> {
 }
 
 /** 批量删除说说 */
-export function deleteTalkByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteTalkByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/talk/batch_delete`,
     method: "delete",
     data: data,
@@ -54,7 +54,7 @@ export function findTalkListApi(page: PageQuery): Promise<IApiResponseData<PageR
 }
 
 /** 分页获取说说详情列表 */
-export function findTalkListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<TalkDetails>>> {
+export function findTalkDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TalkDetails>>> {
   return http.request<IApiResponseData<PageResult<TalkDetails>>>({
     url: `/api/v1/talk/list/details`,
     method: "post",

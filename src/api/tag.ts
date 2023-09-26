@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Tag } from "./types"
+import { Tag, BatchResult, TagDetailsDTO } from "./types"
 
 /** 创建文章标签 */
 export function createTagApi(data: Tag): Promise<IApiResponseData<Tag>> {
@@ -36,8 +36,8 @@ export function findTagApi(id: number): Promise<IApiResponseData<Tag>> {
 }
 
 /** 批量删除文章标签 */
-export function deleteTagByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteTagByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/tag/batch_delete`,
     method: "delete",
     data: data,
@@ -48,6 +48,15 @@ export function deleteTagByIdsApi(data: number[]): Promise<IApiResponseData<any>
 export function findTagListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Tag>>> {
   return http.request<IApiResponseData<PageResult<Tag>>>({
     url: `/api/v1/tag/list`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 分页获取文章分类详情列表 */
+export function findTagDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TagDetailsDTO>>> {
+  return http.request<IApiResponseData<PageResult<TagDetailsDTO>>>({
+    url: `/api/v1/tag/list/details`,
     method: "post",
     data: page,
   })

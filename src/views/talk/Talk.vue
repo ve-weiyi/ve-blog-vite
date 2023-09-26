@@ -70,7 +70,8 @@ import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStore } from "@/stores"
 import axios from "axios"
-import { findTalkDetailListApi, TalkDetails } from "@/api/talk"
+import { findTalkDetailsListApi } from "@/api/talk"
+import { TalkDetails } from "@/api/types.ts"
 
 // 获取存储的博客信息
 const webState = useWebStore()
@@ -85,7 +86,7 @@ const previewList = ref([])
 const router = useRouter()
 
 const listTalks = () => {
-  findTalkDetailListApi({}).then((res) => {
+  findTalkDetailsListApi({}).then((res) => {
     if (current.value === 1) {
       talkList.value = res.data.list
     } else {

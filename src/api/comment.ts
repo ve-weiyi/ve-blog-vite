@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Comment } from "./types"
+import { Comment, BatchResult } from "./types"
 
 /** 创建评论 */
 export function createCommentApi(data: Comment): Promise<IApiResponseData<Comment>> {
@@ -36,8 +36,8 @@ export function findCommentApi(id: number): Promise<IApiResponseData<Comment>> {
 }
 
 /** 批量删除评论 */
-export function deleteCommentByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteCommentByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/comment/batch_delete`,
     method: "delete",
     data: data,
@@ -54,7 +54,7 @@ export function findCommentListApi(page: PageQuery): Promise<IApiResponseData<Pa
 }
 
 /** 分页获取评论列表 */
-export function findCommentListDetailsApi(page: PageQuery): Promise<IApiResponseData<PageResult<Comment>>> {
+export function findCommentDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Comment>>> {
   return http.request<IApiResponseData<PageResult<Comment>>>({
     url: `/api/v1/comment/list/details`,
     method: "post",

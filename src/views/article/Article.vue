@@ -217,12 +217,11 @@ import Clipboard from "clipboard"
 import Comment from "../../components/comment/Comment.vue"
 import { ElMessage } from "element-plus"
 import tocbot from "tocbot"
-import { useWebStore } from "@/stores"
-
 import { useRoute } from "vue-router"
-import { ArticleDetails, getArticleDetailsApi } from "@/api/article"
-
+import { useWebStore } from "@/stores"
 import { markdownToHtml } from "@/utils/markdown"
+import { getArticleDetailsApi } from "@/api/article"
+import { ArticleDetails } from "@/api/types.ts"
 
 const config = {
   sites: ["qzone", "wechat", "weibo", "qq"],

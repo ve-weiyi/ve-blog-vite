@@ -1,34 +1,71 @@
 import http from "@/utils/request"
-import { UserInformation, Upload, UserAccount, UpdateUserRoles, Role } from "./types"
+import {
+  LoginHistory,
+  MenuDetails,
+  ApiDetails,
+  UserInfo,
+  UserInformation,
+  Upload,
+  UserAccount,
+  UpdateUserRoles,
+  Role,
+} from "./types"
+
+/** 获取用户列表 */
+export function findUserListApi(page: PageQuery): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: `/api/v1/user/list`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 获取用户地区 */
+export function findUserListAreasApi(page: PageQuery): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: `/api/v1/user/list/areas`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 获取用户登录历史 */
+export function findUserLoginHistoryListApi(page: PageQuery): Promise<IApiResponseData<PageResult<LoginHistory>>> {
+  return http.request<IApiResponseData<PageResult<LoginHistory>>>({
+    url: `/api/v1/user/login_history`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 批量删除登录历史 */
+export function deleteUserLoginHistoryByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: `/api/v1/user/login_history/batch_delete`,
+    method: "delete",
+    data: data,
+  })
+}
 
 /** 获取用户菜单权限 */
-export function getUserMenusApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function getUserMenusApi(): Promise<IApiResponseData<MenuDetails>> {
+  return http.request<IApiResponseData<MenuDetails>>({
     url: `/api/v1/user/menus`,
     method: "get",
   })
 }
 
 /** 获取用户接口权限 */
-export function getUserApisApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function getUserApisApi(): Promise<IApiResponseData<ApiDetails>> {
+  return http.request<IApiResponseData<ApiDetails>>({
     url: `/api/v1/user/apis`,
     method: "get",
   })
 }
 
-/** 获取用户登录历史 */
-export function getLoginHistoryApi(page: PageQuery): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/user/login_history`,
-    method: "get",
-    data: page,
-  })
-}
-
 /** 获取用户信息 */
-export function getUserInfoApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function getUserInfoApi(): Promise<IApiResponseData<UserInfo>> {
+  return http.request<IApiResponseData<UserInfo>>({
     url: `/api/v1/user/info`,
     method: "get",
   })
@@ -49,24 +86,6 @@ export function updateUserAvatarApi(data: Upload): Promise<IApiResponseData<Uplo
     url: `/api/v1/user/avatar`,
     method: "post",
     data: data,
-  })
-}
-
-/** 获取用户列表 */
-export function getUserListApi(page: PageQuery): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/users`,
-    method: "post",
-    data: page,
-  })
-}
-
-/** 获取用户地区 */
-export function getUserAreasApi(page: PageQuery): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/user/areas`,
-    method: "post",
-    data: page,
   })
 }
 

@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Photo } from "./types"
+import { Photo, BatchResult } from "./types"
 
 /** 创建相片 */
 export function createPhotoApi(data: Photo): Promise<IApiResponseData<Photo>> {
@@ -36,8 +36,8 @@ export function findPhotoApi(id: number): Promise<IApiResponseData<Photo>> {
 }
 
 /** 批量删除相片 */
-export function deletePhotoByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deletePhotoByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/photo/batch_delete`,
     method: "delete",
     data: data,

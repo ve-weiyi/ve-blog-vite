@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { OperationLog } from "./types"
+import { OperationLog, BatchResult } from "./types"
 
 /** 创建操作记录 */
 export function createOperationLogApi(data: OperationLog): Promise<IApiResponseData<OperationLog>> {
@@ -36,8 +36,8 @@ export function findOperationLogApi(id: number): Promise<IApiResponseData<Operat
 }
 
 /** 批量删除操作记录 */
-export function deleteOperationLogByIdsApi(data: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function deleteOperationLogByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
     url: `/api/v1/operation_log/batch_delete`,
     method: "delete",
     data: data,
