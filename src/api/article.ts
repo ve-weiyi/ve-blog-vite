@@ -88,10 +88,10 @@ export function findArticleDetailsListApi(page: PageQuery): Promise<IApiResponse
 }
 
 /** 通过标签或者id获取文章列表 */
-export function findArticleListByConditionApi(data: ArticleCondition): Promise<IApiResponseData<ArticleConditionDTO>> {
+export function findArticleListByConditionApi(page: ArticleCondition): Promise<IApiResponseData<ArticleConditionDTO>> {
   return http.request<IApiResponseData<ArticleConditionDTO>>({
     url: `/api/v1/article/list/condition`,
     method: "post",
-    data: data,
+    data: page,
   })
 }

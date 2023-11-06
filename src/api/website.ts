@@ -62,9 +62,9 @@ export function findChatRecordsApi(page: PageQuery): Promise<IApiResponseData<Ch
 }
 
 /** 获取服务器信息 */
-export function getSystemInfoApi(): Promise<IApiResponseData<WebsiteAdminHomeInfo>> {
+export function getSystemStateApi(): Promise<IApiResponseData<WebsiteAdminHomeInfo>> {
   return http.request<IApiResponseData<WebsiteAdminHomeInfo>>({
-    url: `/api/v1/admin/system/info`,
+    url: `/api/v1/admin/system/state`,
     method: "get",
   })
 }

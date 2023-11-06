@@ -22,7 +22,7 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
 import Clipboard from "clipboard"
 import { useWebStore } from "@/stores"
-import { getAboutApi } from "@/api/website"
+import { getAboutMeApi } from "@/api/website"
 import { ElMessage } from "element-plus"
 import { markdownToHtml } from "@/utils/markdown"
 
@@ -35,7 +35,7 @@ const clipboard = ref<Clipboard | null>(null)
 const imgList = ref<string[]>([])
 
 const getAboutContent = () => {
-  getAboutApi().then((res) => {
+  getAboutMeApi().then((res) => {
     // 将markdown替换为html标签
     aboutContent.value = markdownToHtml(res.data)
     nextTick(() => {

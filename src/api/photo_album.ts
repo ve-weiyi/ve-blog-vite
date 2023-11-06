@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { PhotoAlbum, BatchResult } from "./types"
+import { PhotoAlbum, BatchResult, PhotoAlbumDetails } from "./types"
 
 /** 创建相册 */
 export function createPhotoAlbumApi(data: PhotoAlbum): Promise<IApiResponseData<PhotoAlbum>> {
@@ -50,5 +50,24 @@ export function findPhotoAlbumListApi(page: PageQuery): Promise<IApiResponseData
     url: `/api/v1/photo_album/list`,
     method: "post",
     data: page,
+  })
+}
+
+/** 获取相册详情列表 */
+export function findPhotoAlbumDetailsListApi(
+  page: PageQuery
+): Promise<IApiResponseData<PageResult<PhotoAlbumDetails>>> {
+  return http.request<IApiResponseData<PageResult<PhotoAlbumDetails>>>({
+    url: `/api/v1/photo_album/list/details`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 获取相册详情 */
+export function findPhotoAlbumDetailsApi(id: number): Promise<IApiResponseData<PhotoAlbumDetails>> {
+  return http.request<IApiResponseData<PhotoAlbumDetails>>({
+    url: `/api/v1/photo_album/${id}/details`,
+    method: "get",
   })
 }
