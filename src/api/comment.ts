@@ -56,14 +56,14 @@ export function findCommentListApi(page: PageQuery): Promise<IApiResponseData<Pa
 /** 分页获取评论列表 */
 export function findCommentDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Comment>>> {
   return http.request<IApiResponseData<PageResult<Comment>>>({
-    url: `/api/v1/comment/list/details`,
+    url: `/api/v1/comment/details_list`,
     method: "post",
     data: page,
   })
 }
 
 /** 获取用户评论列表 */
-export function findCommentListBackApi(page: PageQuery): Promise<IApiResponseData<any>> {
+export function findCommentBackListApi(page: PageQuery): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/comment/list/back`,
     method: "post",

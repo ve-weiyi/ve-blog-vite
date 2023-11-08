@@ -4,10 +4,12 @@ import Qinglong from "@/assets/images/qinglong.jpg"
 // @ts-ignore
 import Avatar from "@/assets/images/avatar.jpg"
 import cookies from "@/utils/cookies"
+import { store } from "@/stores"
 
 export const useWebStore = defineStore({
   id: "store",
-  state: (): any => ({
+  state: () => ({
+    adminUrl: "http://localhost:7777",
     searchFlag: false,
     loginFlag: false,
     registerFlag: false,
@@ -26,8 +28,13 @@ export const useWebStore = defineStore({
     commentLikeSet: [],
     talkLikeSet: [],
     defaultCover: "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg",
-    userInfo: {},
+    userInfo: {
+      avatar: "https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg",
+    },
     blogInfo: {
+      articleCount: 999,
+      categoryCount: 999,
+      tagCount: 999,
       viewsCount: 999,
       websiteConfig: {
         alipayQRCode: "https://veport.oss-cn-beijing.aliyuncs.com/config/17f234dc487c1bb5bbb732869be0eb53.jpg",
@@ -65,12 +72,12 @@ export const useWebStore = defineStore({
     replyInfo: {},
   }),
   actions: {
-    getCover (page: string) {
+    getCover(page: string) {
       const cover = this.blogInfo.pageList.find((item: any) => item.pageLabel === page)?.pageCover
       const pageCover = cover ? cover : this.defaultCover
       return `background: url(${pageCover}) center center / cover no-repeat`
     },
-    setUser (user) {
+    setUser(user) {
       this.userInfo = user
       this.userId = user.id
       this.avatar = user.avatar
@@ -83,10 +90,10 @@ export const useWebStore = defineStore({
       this.email = user.email
       this.loginType = user.loginType
     },
-    isLogin () {
+    isLogin() {
       return this.getToken() != undefined
     },
-    logout () {
+    logout() {
       this.setToken(undefined)
       this.userInfo = {}
       this.userId = null
@@ -100,40 +107,40 @@ export const useWebStore = defineStore({
       this.email = null
       this.loginType = null
     },
-    saveLoginUrl (url) {
+    saveLoginUrl(url) {
       this.loginUrl = url
     },
-    setToken (token) {
+    setToken(token) {
       cookies.set("token", token)
       console.log("setToken", cookies.get("token"))
     },
-    getToken () {
+    getToken() {
       return cookies.get("token")
     },
-    saveEmail (email) {
+    saveEmail(email) {
       this.email = email
     },
-    updateUserInfo (user) {
+    updateUserInfo(user) {
       this.nickname = user.nickname
       this.intro = user.intro
       this.webSite = user.webSite
     },
-    savePageInfo (pageList) {
+    savePageInfo(pageList) {
       this.pageList = pageList
     },
-    updateAvatar (avatar) {
+    updateAvatar(avatar) {
       this.avatar = avatar
     },
-    checkBlogInfo (blogInfo) {
+    checkBlogInfo(blogInfo) {
       this.blogInfo = blogInfo
     },
-    closeModel () {
+    closeModel() {
       this.registerFlag = false
       this.loginFlag = false
       this.searchFlag = false
       this.emailFlag = false
     },
-    articleLike (articleId) {
+    articleLike(articleId) {
       var articleLikeSet = this.articleLikeSet
       if (articleLikeSet.indexOf(articleId) != -1) {
         articleLikeSet.splice(articleLikeSet.indexOf(articleId), 1)
@@ -141,7 +148,7 @@ export const useWebStore = defineStore({
         articleLikeSet.push(articleId)
       }
     },
-    commentLike (commentId) {
+    commentLike(commentId) {
       var commentLikeSet = this.commentLikeSet
       if (commentLikeSet.indexOf(commentId) != -1) {
         commentLikeSet.splice(commentLikeSet.indexOf(commentId), 1)
@@ -149,7 +156,7 @@ export const useWebStore = defineStore({
         commentLikeSet.push(commentId)
       }
     },
-    talkLike (talkId) {
+    talkLike(talkId) {
       var talkLikeSet = this.talkLikeSet
       if (talkLikeSet.indexOf(talkId) != -1) {
         talkLikeSet.splice(talkLikeSet.indexOf(talkId), 1)
@@ -159,3 +166,7 @@ export const useWebStore = defineStore({
     },
   },
 })
+
+export function useWebStoreHook() {
+  return useWebStore(store)
+}

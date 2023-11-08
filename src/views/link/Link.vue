@@ -45,12 +45,12 @@
 <script setup lang="ts">
 import Comment from "@/components/comment/Comment.vue"
 import { ref, onMounted, computed } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { findFriendLinkListApi } from "@/api/friend_link"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
+const blogInfo = webStore.blogInfo
 
 const friendLinkList = ref([])
 const commentType = ref(2)
@@ -61,7 +61,7 @@ function listFriendLink() {
   })
 }
 
-const cover = ref(webState.getCover("link"))
+const cover = ref(webStore.getCover("link"))
 
 onMounted(() => {
   listFriendLink()

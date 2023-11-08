@@ -36,10 +36,10 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 const email = ref("")
 const code = ref("")

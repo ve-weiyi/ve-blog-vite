@@ -1,11 +1,20 @@
 import http from "@/utils/request"
-import { WebsiteConfigRequest, WebsiteAdminHomeInfo, ChatRecord } from "./types"
+import { ChatRecord, WebsiteConfigRequest, WebsiteAdminHomeInfo } from "./types"
 
 /** 查询聊天记录 */
 export function webSocketApi(): Promise<any> {
   return http.request<any>({
     url: `/api/v1/ws`,
     method: "get",
+  })
+}
+
+/** 查询聊天记录 */
+export function findChatRecordsApi(page: PageQuery): Promise<IApiResponseData<PageResult<ChatRecord>>> {
+  return http.request<IApiResponseData<PageResult<ChatRecord>>>({
+    url: `/api/v1/chat/records`,
+    method: "post",
+    data: page,
   })
 }
 
@@ -49,15 +58,6 @@ export function getAdminHomeInfoApi(): Promise<IApiResponseData<WebsiteAdminHome
   return http.request<IApiResponseData<WebsiteAdminHomeInfo>>({
     url: `/api/v1/admin/home`,
     method: "get",
-  })
-}
-
-/** 查询聊天记录 */
-export function findChatRecordsApi(page: PageQuery): Promise<IApiResponseData<ChatRecord>> {
-  return http.request<IApiResponseData<ChatRecord>>({
-    url: `/api/v1/chat/records`,
-    method: "post",
-    data: page,
   })
 }
 

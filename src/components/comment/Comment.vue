@@ -5,8 +5,8 @@
     <div class="comment-input-wrapper">
       <div style="display: flex">
         <v-avatar size="40">
-          <img height="40" v-if="webState.avatar" :src="webState.avatar" />
-          <img height="40" v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
+          <img height="40" v-if="webStore.avatar" :src="webStore.avatar" />
+          <img height="40" v-else :src="webStore.blogInfo.websiteConfig.touristAvatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -145,7 +145,7 @@ import { ref, reactive, watch, nextTick, onMounted, computed } from "vue"
 import Reply from "./Reply.vue"
 import Paging from "../Paging.vue"
 import Emoji from "../Emoji.vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { useRoute } from "vue-router"
@@ -164,7 +164,7 @@ const props = defineProps({
 })
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 
 // 获取路由参数
 const route = useRoute()
@@ -231,8 +231,8 @@ const listComments = () => {
 
 const insertComment = () => {
   // 判断登录
-  if (!webState.isLogin()) {
-    webState.loginFlag = true
+  if (!webStore.isLogin()) {
+    webStore.loginFlag = true
     return false
   }
   // 判空
@@ -265,7 +265,7 @@ const insertComment = () => {
       // 查询最新评论
       paginationData.currentPage = 1
       listComments()
-      const isReview = webState.blogInfo.websiteConfig.isCommentReview
+      const isReview = webStore.blogInfo.websiteConfig.isCommentReview
       if (isReview) {
         ElMessage.success("评论成功，正在审核中")
       } else {
@@ -290,7 +290,7 @@ const replyComment = (index, item) => {
   }
   showReplyBlock.value = index
 
-  webState.replyInfo = item
+  webStore.replyInfo = item
 
   const childComponent = replyRef.value[index]
   console.log("replyRef", replyRef.value[0])
@@ -370,25 +370,25 @@ const addEmoji = (emoji) => {
 
 const like = (comment) => {
   // 判断登录
-  if (!webState.isLogin()) {
-    webState.loginFlag = true
+  if (!webStore.isLogin()) {
+    webStore.loginFlag = true
     return false
   }
 
   likeCommentApi(comment.id).then((res) => {
     ElMessage.success("点赞成功")
-    const commentLikeSet = webState.commentLikeSet
+    const commentLikeSet = webStore.commentLikeSet
     if (commentLikeSet.indexOf(comment.id) !== -1) {
       comment.likeCount--
     } else {
       comment.likeCount++
     }
-    webState.commentLike(comment.id)
+    webStore.commentLike(comment.id)
   })
 }
 
 const isLike = (commentId) => {
-  var commentLikeSet = webState.commentLikeSet
+  var commentLikeSet = webStore.commentLikeSet
   return commentLikeSet.indexOf(commentId) != -1 ? "like-active" : "like"
 }
 

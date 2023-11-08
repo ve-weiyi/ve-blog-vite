@@ -61,7 +61,7 @@
         <router-link to="/about"> <i class="iconfont iconzhifeiji" /> 关于 </router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/message"> <i class="iconfont iconpinglunzu" /> 留言 </router-link>
+        <router-link to="/remark"> <i class="iconfont iconpinglunzu" /> 留言 </router-link>
       </div>
       <div class="menus-item" v-if="!avatar">
         <a @click="openLogin"><i class="iconfont icondenglu" /> 登录 </a>
@@ -71,12 +71,62 @@
           <router-link to="/user"> <i class="iconfont icongerenzhongxin" /> 个人中心 </router-link>
         </div>
         <div class="menus-item">
+          <a :href="webStore.adminUrl" target="_blank"><i class="iconfont icon-sketch" />管理平台</a>
+        </div>
+        <div class="menus-item">
           <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
         </div>
       </div>
     </div>
   </v-navigation-drawer>
 </template>
+
+<script setup lang="ts">
+import { ref, computed } from "vue"
+import { useRouter } from "vue-router"
+import { useWebStoreHook } from "@/stores/modules/website"
+import axios from "axios"
+
+// 获取存储的博客信息
+const webStore = useWebStoreHook()
+const blogInfo = webStore.blogInfo
+const router = useRouter()
+
+const avatar = computed<string>(() => {
+  return webStore.userInfo.avatar
+})
+
+const drawer = computed<boolean>({
+  get() {
+    return webStore.drawer
+  },
+  set(value) {
+    webStore.drawer = value
+  },
+})
+
+const isLogin = computed<boolean>(() => {
+  return webStore.userId
+})
+
+const openLogin = () => {
+  webStore.loginFlag = true
+}
+
+const logout = () => {
+  if (router.currentRoute.value.path === "/user") {
+    router.go(-1)
+  }
+  axios.get("/api/logout").then(({ data }) => {
+    if (data.flag) {
+      webStore.logout()
+      // toast({ type: "success", message: "注销成功" })
+    } else {
+      // toast({ type: "error", message: data.message })
+    }
+  })
+}
+</script>
 
 <style scoped>
 .blogger-info {
@@ -118,50 +168,3 @@ hr {
   }
 }
 </style>
-
-<script setup lang="ts">
-import { ref, computed } from "vue"
-import { useRouter } from "vue-router"
-import { useWebStore } from "@/stores"
-import axios from "axios"
-
-// 获取存储的博客信息
-const store = useWebStore()
-const blogInfo = useWebStore().blogInfo
-const router = useRouter()
-
-const avatar = computed<string>(() => {
-  return store.userInfo.avatar
-})
-
-const drawer = computed<boolean>({
-  get() {
-    return store.drawer
-  },
-  set(value) {
-    store.drawer = value
-  },
-})
-
-const isLogin = computed<boolean>(() => {
-  return store.userId
-})
-
-const openLogin = () => {
-  store.loginFlag = true
-}
-
-const logout = () => {
-  if (router.currentRoute.value.path === "/user") {
-    router.go(-1)
-  }
-  axios.get("/api/logout").then(({ data }) => {
-    if (data.flag) {
-      store.commit("logout")
-      toast({ type: "success", message: "注销成功" })
-    } else {
-      toast({ type: "error", message: data.message })
-    }
-  })
-}
-</script>

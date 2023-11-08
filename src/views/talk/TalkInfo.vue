@@ -22,8 +22,8 @@
             <!-- 说说信息 -->
             <div class="talk-content" v-html="talkInfo.content" />
             <!-- 图片列表 -->
-            <v-row class="talk-images" v-if="talkInfo.imgList">
-              <v-col :md="4" :cols="6" v-for="(img, index) of talkInfo.imgList" :key="index">
+            <v-row class="talk-images" v-if="talkInfo.img_list">
+              <v-col :md="4" :cols="6" v-for="(img, index) of talkInfo.img_list" :key="index">
                 <v-img class="images-items" :src="img" aspect-ratio="1" max-height="200" @click="previewImg(img)" />
               </v-col>
             </v-row>
@@ -34,7 +34,7 @@
                   mdi-thumb-up
                 </v-icon>
                 <div class="operation-count">
-                  {{ talkInfo.likeCount === null ? 0 : talkInfo.likeCount }}
+                  {{ talkInfo.like_count === null ? 0 : talkInfo.like_count }}
                 </div>
               </div>
               <div class="talk-operation-item">
@@ -57,13 +57,14 @@
 import { ref, onMounted, computed } from "vue"
 import Comment from "../../components/comment/TalkComment.vue"
 import axios from "axios"
-import { useWebStore } from "@/stores"
-import { findTalkDetailApi, TalkDetails } from "@/api/talk"
+import { useWebStoreHook } from "@/stores/modules/website"
+import { findTalkDetailApi } from "@/api/talk"
 import { useRoute } from "vue-router"
+import { TalkDetails } from "@/api/types.ts"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
@@ -77,7 +78,7 @@ const talkInfo = ref<TalkDetails>({
   nickname: "ve77",
   avatar: "https://ve77.cn/images/avatar.jpg",
   content: "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。",
-  images: "",
+  img_list: [],
   is_top: 1,
   status: 1,
   like_count: 0,
@@ -90,7 +91,7 @@ function getTalkById() {
   findTalkDetailApi(talkId).then((res) => {
     console.log(res)
     talkInfo.value = res.data
-    previewList.value = talkInfo.value.images.split(",")
+    previewList.value = talkInfo.value.img_list
   })
 }
 
@@ -105,28 +106,28 @@ function previewImg(img) {
   // })
 }
 
-function like(talk) {
+function like(talk: TalkDetails) {
   // 判断登录
-  if (!webState.userId) {
-    webState.loginFlag = true
+  if (!webStore.userId) {
+    webStore.loginFlag = true
     return false
   }
   // 发送请求
   axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
     if (data.flag) {
       // 判断是否点赞
-      if (webState.talkLikeSet.indexOf(talk.id) !== -1) {
-        talk.likeCount -= 1
+      if (webStore.talkLikeSet.indexOf(talk.id) !== -1) {
+        talk.like_count -= 1
       } else {
-        talk.likeCount += 1
+        talk.like_count += 1
       }
-      // $store.commit('talkLike', talk.id)
+      webStore.talkLike(talk.id)
     }
   })
 }
 
-function isLike(talkId) {
-  const talkLikeSet = webState.talkLikeSet
+function isLike(talkId: number) {
+  const talkLikeSet = webStore.talkLikeSet
   return talkLikeSet.indexOf(talkId) !== -1 ? "#eb5055" : "#999"
 }
 getTalkById()

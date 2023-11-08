@@ -23,12 +23,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findPhotoAlbumListApi, PhotoAlbum } from "@/api/photo_album"
+import { useWebStoreHook } from "@/stores/modules/website"
+import { findPhotoAlbumListApi } from "@/api/photo_album"
+import { PhotoAlbum } from "@/api/types.ts"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("album"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("album"))
 
 const photoAlbumList = ref<PhotoAlbum[]>([])
 

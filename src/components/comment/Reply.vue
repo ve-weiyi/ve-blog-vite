@@ -26,7 +26,7 @@ import Emoji from "../Emoji.vue"
 import EmojiList from "@/assets/emojis/qq_emoji.json"
 
 import { ref, watch } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { useRoute } from "vue-router"
 import axios from "axios"
 import { ElMessage } from "element-plus"
@@ -52,7 +52,7 @@ const emit = defineEmits([
 ])
 
 // 获取存储的缓存信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 
 // 获取路由参数
 const route = useRoute()
@@ -70,15 +70,15 @@ const commentContent = ref("")
 
 const cancelReply = () => {
   console.log("cancelReply")
-  console.log("webState.replyInfo", webState.replyInfo)
-  console.log("webState.replyInfo.replyUserId", replyUserId)
+  console.log("webStore.replyInfo", webStore.replyInfo)
+  console.log("webStore.replyInfo.replyUserId", replyUserId)
   reply.value.style.display = "none"
 }
 
 const insertReply = () => {
   // 判断登录
-  if (!webState.isLogin()) {
-    webState.loginFlag = true
+  if (!webStore.isLogin()) {
+    webStore.loginFlag = true
     return false
   }
   if (commentContent.value.trim() == "") {
@@ -122,8 +122,8 @@ const addEmoji = (text) => {
 watch(reply, (val) => {
   // console.log('reply', val)
 })
-watch(webState.replyInfo, (val) => {
-  console.log("webState.replyInfo", val)
+watch(webStore.replyInfo, (val) => {
+  console.log("webStore.replyInfo", val)
 })
 defineExpose({
   index,

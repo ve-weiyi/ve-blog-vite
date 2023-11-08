@@ -56,7 +56,7 @@ export function findTagListApi(page: PageQuery): Promise<IApiResponseData<PageRe
 /** 分页获取文章分类详情列表 */
 export function findTagDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TagDetailsDTO>>> {
   return http.request<IApiResponseData<PageResult<TagDetailsDTO>>>({
-    url: `/api/v1/tag/list/details`,
+    url: `/api/v1/tag/details_list`,
     method: "post",
     data: page,
   })

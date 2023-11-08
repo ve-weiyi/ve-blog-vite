@@ -51,11 +51,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import AvatarCropper from "@/components/AvatarCropper.vue"
 
 // 获取存储的博客信息
-const store = useWebStore()
+const store = useWebStoreHook()
 
 const userInfo = store
 

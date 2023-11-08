@@ -56,7 +56,7 @@ export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<P
 /** 分页获取文章分类详情列表 */
 export function findCategoryDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDetailsDTO>>> {
   return http.request<IApiResponseData<PageResult<CategoryDetailsDTO>>>({
-    url: `/api/v1/category/list/details`,
+    url: `/api/v1/category/details_list`,
     method: "post",
     data: page,
   })

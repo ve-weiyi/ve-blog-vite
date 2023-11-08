@@ -6,7 +6,7 @@
       <div class="message-container">
         <h1 class="message-title">留言板</h1>
         <div class="animated fadeInUp message-input-wrapper">
-          <input v-model="messageContent" @click="show = true" @keyup.enter="addToList" placeholder="说点什么吧" />
+          <input v-model="addMessageContent" @click="show = true" @keyup.enter="addToList" placeholder="说点什么吧" />
           <button class="ml-3 animated bounceInLeft" @click="addToList" v-show="show">发送</button>
         </div>
       </div>
@@ -16,7 +16,7 @@
           <span class="barrage-items">
             <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" alt="img" />
             <span class="ml-2">{{ danmu.nickname }} :</span>
-            <span class="ml-2">{{ danmu.messageContent }}</span>
+            <span class="ml-2">{{ danmu.message_content }}</span>
           </span>
         </template>
       </vue-danmaku>
@@ -26,10 +26,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import VueDanmaku from "vue3-danmaku"
 import { ElMessage } from "element-plus"
 import { createRemarkApi, findRemarkListApi } from "@/api/remark"
+import { Remark } from "@/api/types.ts"
+
+// 获取存储的博客信息
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("message"))
 
 const config = ref({
   channels: 7, // 轨道数量，为0则弹幕轨道数会撑满容器
@@ -43,28 +48,25 @@ const config = ref({
   randomChannel: true, // 随机弹幕轨道
 })
 
-// 获取存储的博客信息
-const webState = useWebStore()
-
 const danmakuRef = ref(null)
 const show = ref(false)
-const messageContent = ref("")
-const barrageList = ref([])
+const addMessageContent = ref("")
+const barrageList = ref<Remark[]>([])
 
 const addToList = () => {
-  if (messageContent.value.trim() == "") {
+  if (addMessageContent.value.trim() == "") {
     ElMessage({ type: "error", message: "留言不能为空" })
     return false
   }
-  const userAvatar = webState.avatar ? webState.avatar : webState.blogInfo.websiteConfig.touristAvatar
-  const userNickname = webState.nickname ? webState.nickname : "游客"
+  const userAvatar = webStore.avatar ? webStore.avatar : webStore.blogInfo.websiteConfig.touristAvatar
+  const userNickname = webStore.nickname ? webStore.nickname : "游客"
   const message = {
     avatar: userAvatar,
     nickname: userNickname,
-    messageContent: messageContent.value,
+    messageContent: addMessageContent.value,
     time: Math.floor(Math.random() * (10 - 7)) + 7,
   }
-  messageContent.value = ""
+  addMessageContent.value = ""
   createRemarkApi(message).then((res) => {
     barrageList.value.push(message)
     ElMessage({ type: "success", message: "留言成功" })
@@ -76,8 +78,6 @@ const listMessage = () => {
     barrageList.value = res.data.list
   })
 }
-
-const cover = ref(webState.getCover("message"))
 
 onMounted(() => {
   listMessage()

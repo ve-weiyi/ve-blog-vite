@@ -21,13 +21,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { findCategoryDetailsListApi } from "@/api/category"
 import { CategoryDTO } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 const categoryList = ref<CategoryDTO[]>([])
 const count = ref(0)

@@ -17,10 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { useWebStore } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/stores/modules/website"
 
 // 获取存储的博客信息
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
+const blogInfo = webStore.blogInfo
 
 // 网站信息
 const websiteConfig = blogInfo.websiteConfig

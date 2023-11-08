@@ -28,9 +28,9 @@
                 {{ formatDate(item.created_at) }}
 
                 <!-- 文章分类 -->
-                <router-link :to="'/categories/' + item.category_id" class="float-right">
+                <router-link :to="'/categories/' + item.article_category.id" class="float-right">
                   <v-icon>mdi-bookmark</v-icon>
-                  {{ item.category_name }}
+                  {{ item.article_category.category_name }}
                 </router-link>
               </div>
             </div>
@@ -56,23 +56,22 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findArticleListApi, findArticleListByConditionApi } from "@/api/article"
+import { useWebStoreHook } from "@/stores/modules/website"
+import { findArticleSeriesApi } from "@/api/article"
 import { useRoute } from "vue-router"
-import { usePagination } from "@/hooks/usePagination"
 import { formatDate } from "@/utils/format"
-import { ArticleDTO } from "@/api/types.ts"
+import { ArticleHome } from "@/api/types.ts"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
-const tagId = route.params.tagId ? parseInt(route.params.tagId) : 0 // 假设路由参数名为 "id"
-const categoryId = route.params.categoryId ? parseInt(route.params.categoryId) : 0 // 假设路由参数名为 "id"
+const tagId = route.params.tagId ? parseInt(route.params.tagId as string) : 0 // 假设路由参数名为 "id"
+const categoryId = route.params.categoryId ? parseInt(route.params.categoryId as string) : 0 // 假设路由参数名为 "id"
 
-const articleList = ref<ArticleDTO[]>([])
+const articleList = ref<ArticleHome[]>([])
 const name = ref("")
 const title = ref("")
 
@@ -88,7 +87,7 @@ onMounted(() => {
 })
 
 const getArticleList = (categoryId, tagId) => {
-  findArticleListByConditionApi({
+  findArticleSeriesApi({
     category_id: categoryId,
     tag_id: tagId,
   }).then((res) => {

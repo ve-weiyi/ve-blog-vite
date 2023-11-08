@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: "/",
     name: "home",
-    component: () => import("@/views/home/home.vue"),
+    component: () => import("@/views/home/Home.vue"),
     meta: {
       title: "Home",
     },
@@ -92,8 +92,8 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: "/message",
-    component: () => import("@/views/message/Message.vue"),
+    path: "/remark",
+    component: () => import("@/views/remark/Remark.vue"),
     meta: {
       title: "留言板",
     },

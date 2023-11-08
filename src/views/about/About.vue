@@ -21,13 +21,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
 import Clipboard from "clipboard"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { getAboutMeApi } from "@/api/website"
 import { ElMessage } from "element-plus"
 import { markdownToHtml } from "@/utils/markdown"
 
 // 获取存储的博客信息
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
+const cover = webStore.getCover("about")
 
 const aboutRef = ref(null)
 const aboutContent = ref("")
@@ -73,9 +74,7 @@ onBeforeUnmount(() => {
   }
 })
 
-const avatar = blogInfo.websiteConfig.websiteAvatar
-const url = "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg"
-const cover = "background: url(" + url + ") center center / cover no-repeat"
+const avatar = webStore.blogInfo.websiteConfig.websiteAvatar
 </script>
 
 <style scoped>

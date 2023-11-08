@@ -25,17 +25,18 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { findArticleArchivesApi } from "@/api/article"
+import { ArticlePreviewDTO } from "@/api/types.ts"
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 // 获取背景图片
-const cover = ref(webState.getCover("talk"))
+const cover = ref(webStore.getCover("archive"))
 
 const current = ref(1)
 const count = ref(0)
-const archiveList = ref([])
+const archiveList = ref<ArticlePreviewDTO[]>([])
 
 onMounted(() => {
   listArchives()
@@ -46,7 +47,9 @@ watch(current, (value) => {
 })
 
 function listArchives(page = current.value) {
-  findArticleArchivesApi({}).then((res) => {
+  findArticleArchivesApi({
+    page: page,
+  }).then((res) => {
     archiveList.value = res.data.list
     count.value = res.data.total
   })

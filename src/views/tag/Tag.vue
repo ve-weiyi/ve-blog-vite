@@ -9,7 +9,7 @@
       <div class="tag-cloud-title">标签 - {{ count }}</div>
       <div class="tag-cloud">
         <router-link
-          :style="{ 'font-size': getRandomFontSize() }"
+          :style="{ 'font-size': getRandomFontSize(), color: getRandomFontColor() }"
           v-for="item of tagList"
           :key="item.id"
           :to="'/tags/' + item.id"
@@ -23,21 +23,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { findTagListApi } from "@/api/tag"
 import { Tag } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 // 获取背景图片
-const cover = ref(webState.getCover("talk"))
+const cover = ref(webStore.getCover("tag"))
 
 const tagList = ref<Tag[]>([])
 const count = ref(0)
-
-onMounted(() => {
-  listTags()
-})
 
 function listTags() {
   findTagListApi({ page: 1, page_size: 100 }).then((res) => {
@@ -47,8 +43,19 @@ function listTags() {
 }
 
 function getRandomFontSize() {
-  return `${Math.floor(Math.random() * 10) + 18}px`
+  return `${Math.floor(Math.random() * 20) + 14}px`
 }
+
+function getRandomFontColor() {
+  const r = Math.floor(Math.random() * 196) + 32
+  const g = Math.floor(Math.random() * 196) + 32
+  const b = Math.floor(Math.random() * 196) + 32
+  return `rgb(${r},${g},${b})`
+}
+
+onMounted(() => {
+  listTags()
+})
 </script>
 
 <style scoped>

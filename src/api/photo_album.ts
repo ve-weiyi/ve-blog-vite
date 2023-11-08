@@ -58,7 +58,7 @@ export function findPhotoAlbumDetailsListApi(
   page: PageQuery
 ): Promise<IApiResponseData<PageResult<PhotoAlbumDetails>>> {
   return http.request<IApiResponseData<PageResult<PhotoAlbumDetails>>>({
-    url: `/api/v1/photo_album/list/details`,
+    url: `/api/v1/photo_album/details_list`,
     method: "post",
     data: page,
   })

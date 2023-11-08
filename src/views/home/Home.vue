@@ -64,7 +64,7 @@
             </div>
             <div class="article-info">
               <!-- 是否置顶 -->
-              <span v-if="item.isTop === 1">
+              <span v-if="item.is_top === 1">
                 <span style="color: #ff7242"> <i class="iconfont iconzhiding"></i> 置顶 </span>
                 <span class="separator">|</span>
               </span>
@@ -73,9 +73,9 @@
               {{ item.created_at }}
               <span class="separator">|</span>
               <!-- 文章分类 -->
-              <router-link :to="'/categories/' + item.category_id">
+              <router-link :to="'/categories/' + item.article_category.id">
                 <v-icon size="14">mdi-inbox-full</v-icon>
-                {{ item.category_name }}
+                {{ item.article_category.category_name }}
               </router-link>
               <span class="separator">|</span>
               <!-- 文章标签 -->
@@ -83,11 +83,11 @@
                 style="display: inline-block"
                 :to="'/tags/' + tag.id"
                 class="mr-1"
-                v-for="tag of item.tag_dto_list"
+                v-for="tag of item.article_tag_list"
                 :key="tag.id"
               >
                 <v-icon size="14">mdi-tag-multiple</v-icon>
-                {{ tag.tagName }}
+                {{ tag.tag_name }}
               </router-link>
             </div>
             <!-- 文章内容 -->
@@ -212,15 +212,17 @@ import { defineComponent, ref, onMounted, computed, onUnmounted } from "vue"
 import Swiper from "../../components/Swiper.vue"
 import EasyTyper from "easy-typer-js"
 import MarkdownIt from "markdown-it"
-import { useWebStore } from "@/stores"
 import { usePagination } from "@/hooks/usePagination"
-import { findArticleListApi, Article } from "@/api/article"
-import { findTalkListApi, Talk } from "@/api/talk"
+import { findArticleHomeListApi } from "@/api/article"
+import { findTalkListApi } from "@/api/talk"
+import { ArticleHome, Talk } from "@/api/types.ts"
+import { useWebStoreHook } from "@/stores/modules/website"
+import { storeToRefs } from "pinia"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 // 数据响应式
 const showTips = ref(false)
@@ -241,7 +243,7 @@ const obj = ref({
 // 说说列表
 const talkList = ref<Talk[]>([])
 // 文章列表
-const articleList = ref<Article[]>([
+const articleList = ref<ArticleHome[]>([
   // {
   //   article_content: '恭喜你成功运行博客！\n',
   //   article_cover: 'http://static.ve77.cn/articles/3a4b4e40fb8aa5fcc016f0228938d321.jpg',
@@ -288,7 +290,7 @@ const listHomeTalks = () => {
 }
 
 const listHomeArticles = () => {
-  findArticleListApi({
+  findArticleHomeListApi({
     page: paginationData.currentPage,
     page_size: paginationData.pageSize,
   }).then((res) => {

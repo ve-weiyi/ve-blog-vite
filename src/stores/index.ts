@@ -1,3 +1,6 @@
-export * from "./modules/message"
-export * from "./modules/app"
-export * from "./modules/website"
+import type { App } from "vue"
+import { createPinia } from "pinia"
+
+const store = createPinia()
+
+export { store }

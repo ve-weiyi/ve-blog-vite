@@ -19,8 +19,8 @@ export interface Article {
   article_content?: string // 内容
   type?: number // 文章类型 1原创 2转载 3翻译
   original_url?: string // 原文链接
-  is_top?: boolean // 是否置顶 0否 1是
-  is_delete?: boolean // 是否删除  0否 1是
+  is_top?: number // 是否置顶 0否 1是
+  is_delete?: number // 是否删除  0否 1是
   status?: number // 状态值 1公开 2私密 3评论可见
   created_at?: string // 发表时间
   updated_at?: string // 更新时间
@@ -72,7 +72,7 @@ export interface Comment {
   parent_id?: number // 父评论id
   type?: number // 评论类型 1.文章 2.友链 3.说说
   is_delete?: number // 是否删除  0否 1是
-  is_review?: boolean // 是否审核
+  is_review?: number // 是否审核
   created_at?: string // 评论时间
   updated_at?: string // 更新时间
 }
@@ -95,7 +95,7 @@ export interface Menu {
   icon?: string // 菜单icon
   rank?: number // 排序
   parent_id?: number // 父id
-  is_hidden?: boolean // 是否隐藏  0否1是
+  is_hidden?: number // 是否隐藏  0否1是
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
 }
@@ -136,7 +136,7 @@ export interface Photo {
   photo_name?: string // 照片名
   photo_desc?: string // 照片描述
   photo_src?: string // 照片地址
-  is_delete?: boolean // 是否删除
+  is_delete?: number // 是否删除
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
 }
@@ -146,7 +146,7 @@ export interface PhotoAlbum {
   album_name?: string // 相册名
   album_desc?: string // 相册描述
   album_cover?: string // 相册封面
-  is_delete?: boolean // 是否删除
+  is_delete?: number // 是否删除
   status?: number // 状态值 1公开 2私密
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
@@ -160,7 +160,7 @@ export interface Remark {
   ip_address?: string // 用户ip
   ip_source?: string // 用户地址
   time?: number // 弹幕速度
-  is_review?: boolean // 是否审核
+  is_review?: number // 是否审核
   created_at?: string // 发布时间
   updated_at?: string // 修改时间
 }
@@ -171,8 +171,8 @@ export interface Role {
   role_domain?: string // 角色域
   role_name?: string // 角色名
   role_comment?: string // 角色备注
-  is_disable?: boolean // 是否禁用  0否 1是
-  is_default?: boolean // 是否默认角色 0否 1是
+  is_disable?: number // 是否禁用  0否 1是
+  is_default?: number // 是否默认角色 0否 1是
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
 }
@@ -214,7 +214,7 @@ export interface UniqueView {
   updated_at?: string // 更新时间
 }
 
-export interface Upload {
+export interface UploadRecord {
   id?: number // id
   user_id?: number // 用户id
   label?: string // 标签
@@ -230,7 +230,7 @@ export interface UserAccount {
   id?: number // id
   username?: string // 用户名
   password?: string // 密码
-  status?: number // 状态: 0删除 1正常 2禁用
+  status?: number // 状态: -1删除 0正常 1禁用
   register_type?: string // 注册方式
   ip_address?: string // 注册ip
   ip_source?: string // 注册ip 源
@@ -288,6 +288,33 @@ export interface WebsiteConfig {
 export interface ArticleCondition {
   tag_id?: number // 文章标签ID
   category_id?: number // 文章分类ID
+}
+
+export interface ArticleTopReq {
+  id?: number // 文章ID
+  is_top?: number // 是否置顶
+}
+
+export interface ArticleDeleteReq {
+  id?: number // 文章ID
+  is_delete?: number // 是否删除
+}
+
+export interface ArticleDetailsReq {
+  id?: number // 文章ID
+  article_cover?: string // 文章缩略图
+  article_title?: string // 标题
+  article_content?: string // 内容
+  like_count?: number // 点赞量
+  views_count?: number // 浏览量
+  type?: number // 文章类型
+  original_url?: string // 原文链接
+  is_top?: number // 是否置顶
+  status?: number // 状态值 1 公开 2 私密 3 评论可见
+  created_at?: string // 发表时间
+  updated_at?: string // 更新时间
+  category_name?: string // 文章分类名
+  tag_name_list?: string[] // 文章标签列表
 }
 
 export interface Captcha {
@@ -351,23 +378,19 @@ export interface UpdateRoleResources {
   resource_ids?: number[]
 }
 
-export interface spanContext {
-  trace_id?: string // TraceID 表示tracer的全局唯一ID
-  span_id?: string // SpanId 标示单个trace中某一个span的唯一ID，在trace中唯一
-}
-
-export interface Span {
-  ctx?: spanContext // 传递的上下文
-  service_name?: string // 服务名
-  operation_name?: string // 操作
-  start_time?: string // 开始时间戳
-  flag?: string // 标记开启trace是 server 还是 client
-  children?: number // 本 span fork出来的 childsnums
-}
-
 export interface WebsiteConfigRequest {
   key?: string
   value?: string
+}
+
+export interface ArticleHome extends ArticleDTO {
+  article_category?: CategoryDTO // 文章分类
+  article_tag_list?: TagDTO[] // 文章标签列表
+}
+
+export interface ArticleBack extends ArticleDTO {
+  category_name?: string // 文章分类名
+  tag_name_list?: string[] // 文章标签列表
 }
 
 export interface ArticleDTO {
@@ -379,36 +402,23 @@ export interface ArticleDTO {
   views_count?: number // 浏览量
   type?: number // 文章类型
   original_url?: string // 原文链接
+  is_top?: number // 是否置顶
+  is_delete?: number // 是否删除
+  status?: number // 状态值 1 公开 2 私密 3 评论可见
   created_at?: string // 发表时间
   updated_at?: string // 更新时间
-  category_id?: number // 文章分类ID
-  category_name?: string // 文章分类名
-  article_tag_list?: TagDTO[] // 文章标签列表
 }
 
 export interface ArticleConditionDTO {
-  article_dto_list?: ArticleDTO[] // 文章列表
+  article_dto_list?: ArticleHome[] // 文章列表
   condition_name?: string // 条件名
 }
 
-export interface ArticleDetails {
-  id?: number // 文章ID
-  article_cover?: string // 文章缩略图
-  article_title?: string // 标题
-  article_content?: string // 内容
-  like_count?: number // 点赞量
-  views_count?: number // 浏览量
-  type?: number // 文章类型
-  original_url?: string // 原文链接
-  created_at?: string // 发表时间
-  updated_at?: string // 更新时间
-  category_id?: number // 文章分类ID
-  category_name?: string // 文章分类名
-  article_tag_list?: TagDTO[] // 文章标签列表
-  last_article?: ArticlePaginationDTO // 上一篇文章
-  next_article?: ArticlePaginationDTO // 下一篇文章
-  recommend_article_list?: ArticleRecommendDTO[] // 推荐文章列表
-  newest_article_list?: ArticleRecommendDTO[] // 最新文章列表
+export interface ArticlePageDetails extends ArticleHome {
+  last_article?: ArticlePreviewDTO // 上一篇文章
+  next_article?: ArticlePreviewDTO // 下一篇文章
+  recommend_article_list?: ArticlePreviewDTO[] // 推荐文章列表
+  newest_article_list?: ArticlePreviewDTO[] // 最新文章列表
 }
 
 export interface TagDTO {
@@ -419,23 +429,9 @@ export interface TagDTO {
 export interface CategoryDTO {
   id?: number
   category_name?: string // 分类名
-  article_count?: number
 }
 
-export interface ArticlePaginationDTO {
-  id?: number // 文章ID
-  article_cover?: string // 文章缩略图
-  article_title?: string // 标题
-}
-
-export interface ArticleRecommendDTO {
-  id?: number // 文章ID
-  article_cover?: string // 文章缩略图
-  article_title?: string // 标题
-  created_at?: string // 创建时间
-}
-
-export interface ArticleArchivesDTO {
+export interface ArticlePreviewDTO {
   id?: number // 文章ID
   article_cover?: string // 文章缩略图
   article_title?: string // 标题
@@ -541,7 +537,7 @@ export interface CommentBackDTO {
   article_title?: string
   comment_content?: string
   type?: number
-  is_review?: boolean
+  is_review?: number
   created_at?: string
 }
 
@@ -624,10 +620,11 @@ export interface TalkDetails {
   nickname?: string // 用户昵称
   avatar?: string // 用户头像
   content?: string // 评论内容
-  images?: string // 评论图片
+  img_list?: string[] // 图片URL列表
   is_top?: number // 是否置顶
   status?: number // 状态
   like_count?: number // 点赞量
+  comment_count?: number // 评论量
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
 }

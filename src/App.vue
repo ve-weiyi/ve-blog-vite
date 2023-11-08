@@ -24,9 +24,9 @@
       <!-- 绑定邮箱模态框 -->
       <EmailModel></EmailModel>
       <!-- 音乐播放器 -->
-      <Player v-if="webState.blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" />
+      <Player v-if="webStore.blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" />
       <!-- 聊天室 -->
-      <ChatRoom v-if="webState.blogInfo.websiteConfig.isChatRoom === 1"></ChatRoom>
+      <ChatRoom v-if="webStore.blogInfo.websiteConfig.isChatRoom === 1"></ChatRoom>
     </el-config-provider>
   </v-app>
 </template>
@@ -47,16 +47,18 @@ import EmailModel from "./components/model/EmailModel.vue"
 import { ElConfigProvider, ElMessage } from "element-plus"
 import zh from "element-plus/es/locale/lang/zh-cn"
 import en from "element-plus/es/locale/lang/en"
-import { useAppStore, useWebStore } from "@/stores"
 import { getUserInfoApi } from "@/api/user"
 import cookies from "@/utils/cookies"
+import { useWebStoreHook } from "@/stores/modules/website"
+import { useAppStore } from "@/stores/modules/app.ts"
 
 const appStore = useAppStore()
+// 获取存储的博客信息
+const webStore = useWebStoreHook()
+
 const locale = computed(() => (appStore.lang === "zh" ? zh : en))
 const size = computed(() => appStore.size)
 
-// 获取存储的博客信息
-const webState = useWebStore()
 const isMobile = computed(() => {
   const flag = navigator.userAgent.match(
     /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
@@ -68,7 +70,7 @@ const getUserinfo = () => {
   getUserInfoApi()
     .then((res) => {
       console.log("getUserInfoApi", res)
-      useWebStore().setUser(res.data)
+      webStore.setUser(res.data)
     })
     .catch((err) => {
       cookies.clearAll()
@@ -78,7 +80,7 @@ const getUserinfo = () => {
 // 在组件挂载时启动定时器
 onMounted(() => {
   // 页面刷新后自动获取用户信息
-  const token = useWebStore().getToken()
+  const token = webStore.getToken()
   console.log("token", token)
   if (token != undefined) {
     getUserinfo()

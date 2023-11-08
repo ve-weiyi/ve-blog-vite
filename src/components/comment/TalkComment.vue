@@ -5,8 +5,8 @@
     <div class="comment-wrapper">
       <div style="display: flex; width: 100%">
         <v-avatar size="36">
-          <img v-if="webState.avatar" :src="webState.avatar" />
-          <img v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
+          <img v-if="webStore.avatar" :src="webStore.avatar" />
+          <img v-else :src="webStore.blogInfo.websiteConfig.touristAvatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -85,8 +85,8 @@
           <div v-if="replyCommentIndex === index && replyToCommentId === item.id" class="comment-wrapper">
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
-                <img v-if="webState.avatar" :src="webState.avatar" />
-                <img v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
+                <img v-if="webStore.avatar" :src="webStore.avatar" />
+                <img v-else :src="webStore.blogInfo.websiteConfig.touristAvatar" />
               </v-avatar>
               <div style="width: 100%" class="ml-3">
                 <div class="comment-input">
@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { findCommentListApi, queryCommentApi } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
 import { useRoute } from "vue-router"
@@ -134,7 +134,7 @@ const props = defineProps({
 })
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 // 获取路由参数
 const route = useRoute()
 

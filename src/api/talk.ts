@@ -56,7 +56,7 @@ export function findTalkListApi(page: PageQuery): Promise<IApiResponseData<PageR
 /** 分页获取说说详情列表 */
 export function findTalkDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TalkDetails>>> {
   return http.request<IApiResponseData<PageResult<TalkDetails>>>({
-    url: `/api/v1/talk/list/details`,
+    url: `/api/v1/talk/details_list`,
     method: "post",
     data: page,
   })

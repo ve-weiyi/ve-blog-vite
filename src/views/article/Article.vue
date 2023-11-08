@@ -28,8 +28,8 @@
             <!-- 文章分类 -->
             <span class="article-category">
               <i class="iconfont iconfenlei1" />
-              <router-link :to="'/categories/' + articleDetail.category_id">
-                {{ articleDetail.category_name }}
+              <router-link :to="'/categories/' + articleDetail.article_category.id">
+                {{ articleDetail.article_category.category_name }}
               </router-link>
             </span>
           </div>
@@ -72,7 +72,7 @@
             <div>
               <span>文章作者：</span>
               <router-link to="/">
-                {{ blogInfo.websiteConfig.websiteAuthor }}
+                {{ webStore.blogInfo.websiteConfig.websiteAuthor }}
               </router-link>
             </div>
             <div>
@@ -89,7 +89,7 @@
           <div class="article-operation">
             <div class="tag-container">
               <router-link v-for="item of articleDetail.article_tag_list" :key="item.id" :to="'/tags/' + item.id">
-                {{ item.tagName }}
+                {{ item.tag_name }}
               </router-link>
             </div>
             <!--            <share style="margin-left: auto" :config="config" />-->
@@ -101,18 +101,18 @@
               <i class="iconfont icondianzan" /> 点赞
               <span v-show="articleDetail.like_count > 0">{{ articleDetail.like_count }}</span>
             </a>
-            <a class="reward-btn" v-if="blogInfo.websiteConfig.isReward == 1">
+            <a class="reward-btn" v-if="webStore.blogInfo.websiteConfig.isReward == 1">
               <!-- 打赏按钮 -->
               <i class="iconfont iconerweima" /> 打赏
               <!-- 二维码 -->
               <div class="animated fadeInDown reward-main">
                 <ul class="reward-all">
                   <li class="reward-item">
-                    <img class="reward-img" :src="blogInfo.websiteConfig.weiXinQRCode" />
+                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.weiXinQRCode" />
                     <div class="reward-desc">微信</div>
                   </li>
                   <li class="reward-item">
-                    <img class="reward-img" :src="blogInfo.websiteConfig.alipayQRCode" />
+                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.alipayQRCode" />
                     <div class="reward-desc">支付宝</div>
                   </li>
                 </ul>
@@ -218,10 +218,10 @@ import Comment from "../../components/comment/Comment.vue"
 import { ElMessage } from "element-plus"
 import tocbot from "tocbot"
 import { useRoute } from "vue-router"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { markdownToHtml } from "@/utils/markdown"
-import { getArticleDetailsApi } from "@/api/article"
-import { ArticleDetails } from "@/api/types.ts"
+import { findArticleDetailsApi } from "@/api/article"
+import { ArticlePageDetails } from "@/api/types.ts"
 
 const config = {
   sites: ["qzone", "wechat", "weibo", "qq"],
@@ -232,12 +232,11 @@ const route = useRoute()
 const articleId = route.params.articleId as string // 假设路由参数名为 "id"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
 
 const imgList = ref<string[]>([])
 const articleRef = ref()
-const articleDetail = ref<ArticleDetails>(null)
+const articleDetail = ref<ArticlePageDetails>(null)
 
 const wordNum = ref<number>()
 const readTime = ref<string>()
@@ -248,7 +247,7 @@ let commentCount = 0
 const articleCover = ref<string>("")
 const getArticle = () => {
   // 查询文章
-  getArticleDetailsApi(parseInt(articleId, 10)).then((res) => {
+  findArticleDetailsApi(parseInt(articleId, 10)).then((res) => {
     articleDetail.value = res.data
 
     document.title = res.data.article_title
@@ -302,8 +301,8 @@ const getArticle = () => {
 
 const like = () => {
   // 判断登录
-  if (!blogInfo.userId) {
-    blogInfo.loginFlag = true
+  if (!webStore.userId) {
+    webStore.loginFlag = true
     return false
   }
   // 发送请求
@@ -324,7 +323,7 @@ const deleteHTMLTag = (content: string) => {
 }
 
 function isLike() {
-  const articleLikeSet = webState.articleLikeSet
+  const articleLikeSet = webStore.articleLikeSet
   return articleLikeSet.indexOf(articleDetail.value.id) != -1 ? "like-btn-active" : "like-btn"
 }
 

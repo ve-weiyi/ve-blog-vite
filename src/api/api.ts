@@ -56,7 +56,7 @@ export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageRe
 /** 获取api列表 */
 export function findApiDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ApiDetails>>> {
   return http.request<IApiResponseData<PageResult<ApiDetails>>>({
-    url: `/api/v1/api/list/details`,
+    url: `/api/v1/api/details_list`,
     method: "post",
     data: page,
   })

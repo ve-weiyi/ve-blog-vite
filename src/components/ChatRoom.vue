@@ -22,8 +22,8 @@
         <div
           v-show="voiceActive"
           class="voice"
-          @mousemove.prevent.stop="translationmove($event)"
-          @mouseup.prevent.stop="translationEnd($event)"
+          @mousemove.prevent.stop="translationMove"
+          @mouseup.prevent.stop="translationEnd"
         >
           <v-icon ref="voiceClose" class="close-voice">mdi-close</v-icon>
         </div>
@@ -75,8 +75,8 @@
         </div>
         <div class="emoji-border" v-show="isEmoji" />
         <!-- 切换输入方式 -->
-        <v-icon v-show="!isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-microphone </v-icon>
-        <v-icon v-show="isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-keyboard </v-icon>
+        <v-icon v-show="!isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-microphone</v-icon>
+        <v-icon v-show="isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-keyboard</v-icon>
         <!-- 文字输入 -->
         <textarea
           v-show="!isVoice"
@@ -90,10 +90,10 @@
           class="voice-btn"
           v-show="isVoice"
           @mousedown.prevent.stop="translationStart"
-          @mouseup.prevent.stop="translationEnd($event)"
+          @mouseup.prevent.stop="translationEnd"
           @touchstart.prevent.stop="translationStart"
-          @touchend.prevent.stop="translationEnd($event)"
-          @touchmove.prevent.stop="translationmove($event)"
+          @touchend.prevent.stop="translationEnd"
+          @touchmove.prevent.stop="translationMove"
         >
           按住说话
         </button>
@@ -122,16 +122,16 @@ import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from "vue"
 import Recorderx, { ENCODE_TYPE } from "recorderx"
 import Emoji from "./Emoji.vue"
 import EmojiList from "@/assets/emojis/qq_emoji.json"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import axios from "axios"
 import image from "@/assets/images/avatar.jpg"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { findChatRecordsApi } from "@/api/website"
-
+import { ChatRecord } from "@/api/types.ts"
 // 获取存储的博客信息
-const webState = useWebStore()
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
+const blogInfo = webStore.blogInfo
 
 const isInput = computed(() => {
   if (typeof content.value === "string") {
@@ -149,7 +149,7 @@ const websocket = ref<WebSocket | null>(null)
 // 输入框内容
 const content = ref("")
 // 聊天记录列表
-const chatRecordList = ref([])
+const chatRecordList = ref<ChatRecord[]>([])
 // 语音消息列表
 const voiceList = ref([])
 // Recorderx 实例
@@ -203,7 +203,7 @@ const getChatRecords = () => {
     sorts: [{ field: "created_at", order: "desc" }],
   }).then((res) => {
     if (res.code === 200) {
-      chatRecordList.value = res.data.list
+      chatRecordList.value = res.data.list.reverse()
     }
   })
 }
@@ -302,10 +302,10 @@ const saveMessage = (e: Event) => {
   // WebSocket 消息对象
   const WebsocketMessage = {
     type: 3,
-    nickname: webState.nickname,
-    avatar: webState.avatar,
+    nickname: webStore.nickname,
+    avatar: webStore.avatar,
     content: content.value,
-    userId: webState.userId,
+    userId: webStore.userId,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   }
@@ -327,7 +327,7 @@ const showBack = (item: any, index: number, e: MouseEvent) => {
     item.style.display = "none"
   })
 
-  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webState.userId)) {
+  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webStore.userId)) {
     backBtn.value[index].style.left = e.offsetX + "px"
     backBtn.value[index].style.bottom = e.offsetY + "px"
     backBtn.value[index].style.display = "block"
@@ -354,7 +354,7 @@ const closeAll = () => {
 }
 
 // 开始录音
-const translationStart = () => {
+const translationStart = (event: Event) => {
   voiceActive.value = true
   rc.value = new Recorderx()
   nextTick(() => {
@@ -370,8 +370,10 @@ const translationStart = () => {
   })
 }
 
+const translationMove = (event: Event) => {}
+
 // 结束录音
-const translationEnd = () => {
+const translationEnd = (event: Event) => {
   console.log("结束")
   voiceActive.value = false
   rc.value.pause()
@@ -389,10 +391,10 @@ const translationEnd = () => {
   const formData = new FormData()
   formData.append("file", file)
   formData.append("type", 5)
-  formData.append("nickname", webState.nickname)
-  formData.append("avatar", webState.avatar)
-  if (webState.userId !== null) {
-    formData.append("userId", webState.userId)
+  formData.append("nickname", webStore.nickname)
+  formData.append("avatar", webStore.avatar)
+  if (webStore.userId !== null) {
+    formData.append("userId", webStore.userId)
   }
   formData.append("ipAddress", ipAddress.value)
   formData.append("ipSource", ipSource.value)
@@ -406,8 +408,6 @@ const translationEnd = () => {
   }
   axios(options)
 }
-
-const translationmove = () => {}
 
 const voices = ref([])
 const plays = ref([])
@@ -451,7 +451,7 @@ const getVoiceTime = (item: any) => {
 
 // 计算属性
 const isSelf = (item: any) => {
-  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webState.userId)
+  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webStore.userId)
 }
 
 const isleft = (item: any) => {

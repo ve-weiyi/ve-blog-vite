@@ -32,14 +32,14 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/stores/modules/website"
 import { findArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
 const router = useRouter()
 
 // 获取存储的博客信息
-const webStore = useWebStore()
-// const webState = ref(webStore)
+const webStore = useWebStoreHook()
+// const webStore = ref(webStore)
 
 const isMobile = computed(() => {
   const clientWidth = document.documentElement.clientWidth
