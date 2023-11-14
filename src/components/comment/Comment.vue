@@ -151,7 +151,7 @@ import { replaceEmoji } from "@/utils/emoji"
 import { useRoute } from "vue-router"
 import { createCommentApi, findCommentDetailsListApi, findCommentReplyListApi, likeCommentApi } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
-import { Comment } from "@/api/types"
+import { Comment, CommentDTO } from "@/api/types"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -170,7 +170,7 @@ const webStore = useWebStoreHook()
 const route = useRoute()
 
 const commentContent = ref("")
-const commentList = ref([])
+const commentList = ref<CommentDTO[]>([])
 const chooseEmoji = ref(false)
 // const reply = ref([])
 const check = ref([])
@@ -181,7 +181,7 @@ const listComments = () => {
   const order = [
     {
       field: "created_at",
-      rule: "desc",
+      order: "desc",
     },
   ]
   const conditions: Condition[] = [
@@ -310,7 +310,7 @@ const reloadReply = (index) => {
     sorts: [
       {
         field: "created_at",
-        rule: "desc",
+        order: "desc",
       },
     ],
     conditions: [
@@ -329,7 +329,7 @@ const viewReply = (index, item) => {
   const sorts = [
     {
       field: "created_at",
-      rule: "desc",
+      order: "desc",
     },
   ]
   const conditions: Condition[] = [

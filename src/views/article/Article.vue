@@ -221,7 +221,7 @@ import { useRoute } from "vue-router"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { markdownToHtml } from "@/utils/markdown"
 import { findArticleDetailsApi } from "@/api/article"
-import { ArticlePageDetails } from "@/api/types.ts"
+import { ArticlePageDetails } from "@/api/types"
 
 const config = {
   sites: ["qzone", "wechat", "weibo", "qq"],

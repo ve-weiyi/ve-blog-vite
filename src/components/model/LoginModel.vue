@@ -166,8 +166,8 @@ const emailLogin = () => {
       ElMessage.success("登录成功")
       console.log(res)
 
-      cookies.set("token", res.data.token)
-      webStore.userInfo = res.data.userInfo
+      cookies.set("token", res.data.access_token)
+      webStore.setUser(res.data.user_info)
       webStore.loginFlag = false
     })
     .catch((err) => {

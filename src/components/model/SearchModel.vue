@@ -24,7 +24,9 @@
           </li>
         </ul>
         <!-- 搜索结果不存在提示 -->
-        <div v-show="flag && articleList === []" style="font-size: 0.875rem">找不到您查询的内容：{{ keywords }}</div>
+        <div v-show="flag && articleList.length === 0" style="font-size: 0.875rem">
+          找不到您查询的内容：{{ keywords }}
+        </div>
       </div>
     </v-card>
   </v-dialog>
@@ -94,8 +96,7 @@ watch(
       findArticleListApi({
         page: 1,
         page_size: 10,
-        order: "created_at",
-        order_key: "desc",
+        sorts: [{ field: "created_at", order: "desc" }],
         conditions: conditions,
       }).then((res) => {
         console.log(res)

@@ -25,7 +25,7 @@
 import { ref, onMounted } from "vue"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { findPhotoAlbumListApi } from "@/api/photo_album"
-import { PhotoAlbum } from "@/api/types.ts"
+import { PhotoAlbum } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()

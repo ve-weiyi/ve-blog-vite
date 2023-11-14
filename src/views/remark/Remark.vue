@@ -30,7 +30,7 @@ import { useWebStoreHook } from "@/stores/modules/website"
 import VueDanmaku from "vue3-danmaku"
 import { ElMessage } from "element-plus"
 import { createRemarkApi, findRemarkListApi } from "@/api/remark"
-import { Remark } from "@/api/types.ts"
+import { Remark } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()

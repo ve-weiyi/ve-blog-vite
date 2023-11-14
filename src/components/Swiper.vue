@@ -34,7 +34,7 @@ const props = defineProps({
     type: Number,
   },
   list: {
-    type: Array,
+    type: Array<any>,
     default: () => [],
   },
 })

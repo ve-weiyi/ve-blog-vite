@@ -447,9 +447,11 @@ export interface WebsiteHomeInfoDTO {
   page_list?: PageVO[] // 页面列表
 }
 
-export interface WebsiteConfigVO {}
+export interface WebsiteConfigVO {
+}
 
-export interface PageVO {}
+export interface PageVO {
+}
 
 export interface WebsiteAdminHomeInfo {
   views_count?: number // 访问量
@@ -669,3 +671,4 @@ export interface ChatRole {
   act?: string
   prompt?: string
 }
+

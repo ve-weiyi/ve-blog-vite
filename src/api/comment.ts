@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Comment, BatchResult } from "./types"
+import { Comment, BatchResult, CommentDTO, CommentBackDTO, ReplyDTO } from "./types"
 
 /** 创建评论 */
 export function createCommentApi(data: Comment): Promise<IApiResponseData<Comment>> {
@@ -54,8 +54,8 @@ export function findCommentListApi(page: PageQuery): Promise<IApiResponseData<Pa
 }
 
 /** 分页获取评论列表 */
-export function findCommentDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Comment>>> {
-  return http.request<IApiResponseData<PageResult<Comment>>>({
+export function findCommentDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CommentDTO>>> {
+  return http.request<IApiResponseData<PageResult<CommentDTO>>>({
     url: `/api/v1/comment/details_list`,
     method: "post",
     data: page,
@@ -63,8 +63,8 @@ export function findCommentDetailsListApi(page: PageQuery): Promise<IApiResponse
 }
 
 /** 获取用户评论列表 */
-export function findCommentBackListApi(page: PageQuery): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function findCommentBackListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CommentBackDTO>>> {
+  return http.request<IApiResponseData<PageResult<CommentBackDTO>>>({
     url: `/api/v1/comment/list/back`,
     method: "post",
     data: page,
@@ -72,8 +72,8 @@ export function findCommentBackListApi(page: PageQuery): Promise<IApiResponseDat
 }
 
 /** 查询评论回复列表 */
-export function findCommentReplyListApi(id: number, page: PageQuery): Promise<IApiResponseData<Comment>> {
-  return http.request<IApiResponseData<Comment>>({
+export function findCommentReplyListApi(id: number, page: PageQuery): Promise<IApiResponseData<ReplyDTO>> {
+  return http.request<IApiResponseData<ReplyDTO>>({
     url: `/api/v1/comment/${id}/reply_list`,
     method: "post",
     data: page,
@@ -81,8 +81,8 @@ export function findCommentReplyListApi(id: number, page: PageQuery): Promise<IA
 }
 
 /** 点赞评论 */
-export function likeCommentApi(id: number): Promise<IApiResponseData<Comment>> {
-  return http.request<IApiResponseData<Comment>>({
+export function likeCommentApi(id: number): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
     url: `/api/v1/comment/${id}/like`,
     method: "post",
   })

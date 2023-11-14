@@ -390,7 +390,7 @@ const translationEnd = (event: Event) => {
   })
   const formData = new FormData()
   formData.append("file", file)
-  formData.append("type", 5)
+  formData.append("type", "5")
   formData.append("nickname", webStore.nickname)
   formData.append("avatar", webStore.avatar)
   if (webStore.userId !== null) {

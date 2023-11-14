@@ -1,16 +1,5 @@
 import http from "@/utils/request"
-import {
-  ArticleDetailsReq,
-  ArticleBack,
-  ArticleDeleteReq,
-  ArticleTopReq,
-  ArticlePreviewDTO,
-  ArticleCondition,
-  ArticleConditionDTO,
-  ArticlePageDetails,
-  ArticleHome,
-  Article,
-} from "./types"
+import { ArticleDetailsReq, ArticleBack, ArticleDeleteReq, ArticleTopReq, ArticlePreviewDTO, ArticleCondition, ArticleConditionDTO, ArticlePageDetails, ArticleHome, Article } from "./types"
 
 /** 保存文章 */
 export function saveArticleApi(data: ArticleDetailsReq): Promise<IApiResponseData<any>> {

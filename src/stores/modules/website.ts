@@ -9,7 +9,7 @@ import { store } from "@/stores"
 export const useWebStore = defineStore({
   id: "store",
   state: () => ({
-    adminUrl: "http://localhost:7777",
+    adminUrl: "http://localhost:7777/admin/",
     searchFlag: false,
     loginFlag: false,
     registerFlag: false,

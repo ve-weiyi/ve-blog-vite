@@ -40,7 +40,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
      * 项目部署目录路径
      * @description 见项目根目录下的 `config` 文件夹说明
      */
-    base: env.VITE_DEPLOY_BASE_URL,
+    base: "/blog",
     resolve: {
       /**
        * 配置目录别名
@@ -84,7 +84,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         },
         // 前缀
         "/api": {
-          target: "http://127.0.0.1:9999/", // 代理后的地址 =target/path
+          target: env.VITE_API_BASE_URL, // 代理后的地址 =target/path
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true,
@@ -119,10 +119,9 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         },
       },
       /** 打包文件的输出目录,默认值为 dist */
-      outDir: "dist",
+      outDir: "blog",
       /** 打包后静态资源目录 */
       assetsDir: "static",
-      path: "./",
       sourcemap: false,
       brotliSize: false,
       rollupOptions: {
@@ -144,12 +143,11 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           // assetFileNames: ({ name }) => {
           //   return `assets/${name}-[hash].[ext]`
           // },
-
           /**
-           * 打包优化，避免全部打包到一个很大的 Chunk 里
+           * 打包优化，避免全部打包到一个很大的 Chunk 里  会出现 'cannot access 'X' before initialization'
            * @description 根据包名生成不同的 Chunk 文件，方便按需加载
            */
-          manualChunks,
+          // manualChunks,
         },
       },
     },

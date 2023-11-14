@@ -1,14 +1,5 @@
 import http from "@/utils/request"
-import {
-  LoginHistory,
-  MenuDetails,
-  ApiDetails,
-  UserInfo,
-  UserInformation,
-  UserAccount,
-  UpdateUserRoles,
-  Role,
-} from "./types"
+import { LoginHistory, MenuDetails, ApiDetails, UserInfo, UserInformation, UserAccount, UpdateUserRoles, Role } from "./types"
 
 /** 获取用户列表 */
 export function findUserListApi(page: PageQuery): Promise<IApiResponseData<any>> {

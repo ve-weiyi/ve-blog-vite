@@ -63,8 +63,8 @@ export function resetPasswordApi(data: ResetPasswordReq): Promise<IApiResponseDa
 }
 
 /** 获取授权地址 */
-export function oauthLoginApi(data: OauthLoginReq): Promise<IApiResponseData<OauthLoginUrl>> {
-  return http.request<IApiResponseData<OauthLoginUrl>>({
+export function oauthLoginApi(data: OauthLoginReq): Promise<IApiResponseData<Login>> {
+  return http.request<IApiResponseData<Login>>({
     url: `/api/v1/oauth/login`,
     method: "post",
     data: data,

@@ -23,13 +23,13 @@
 import { ref, onMounted } from "vue"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { findCategoryDetailsListApi } from "@/api/category"
-import { CategoryDTO } from "@/api/types"
+import { CategoryDetailsDTO } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
 const cover = ref(webStore.getCover("talk"))
 
-const categoryList = ref<CategoryDTO[]>([])
+const categoryList = ref<CategoryDetailsDTO[]>([])
 const count = ref(0)
 
 onMounted(() => {

@@ -60,7 +60,7 @@ import axios from "axios"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { findTalkDetailApi } from "@/api/talk"
 import { useRoute } from "vue-router"
-import { TalkDetails } from "@/api/types.ts"
+import { TalkDetails } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()

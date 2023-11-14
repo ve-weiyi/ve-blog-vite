@@ -26,13 +26,13 @@ const router = useRouter()
 function OauthLogin() {
   // 获取token
   oauthLoginApi({
-    platform: platform,
+    platform: platform as string,
     code: route.query.code as string,
     state: route.query.state as string,
   }).then((res) => {
     console.log(res)
-    store.setUser(res.data.userInfo)
-    store.setToken(res.data.token)
+    store.setUser(res.data.user_info)
+    store.setToken(res.data.access_token)
     router.push({ path: "/" })
   })
 }

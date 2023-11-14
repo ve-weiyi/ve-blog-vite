@@ -29,25 +29,15 @@ import { store } from "@/stores"
 
 const app = createApp(App)
 
-app.use(router)
-app.use(store)
-app.use(vuetify)
+const initApp = async () => {
+  app.use(router)
+  app.use(store)
+  app.use(vuetify)
 
-app.use(ElementPlus)
+  app.use(ElementPlus)
 
-usePhotoPreview(app)
-await router.isReady()
-app.mount("#app")
-
-// const initApp = async () => {
-//   app.use(router)
-//   app.use(createPinia())
-//   app.use(vuetify)
-//
-//   app.use(ElementPlus)
-//
-//   usePhotoPreview(app)
-//   await router.isReady()
-//   app.mount('#app')
-// }
-// initApp()
+  usePhotoPreview(app)
+  await router.isReady()
+  app.mount("#app")
+}
+initApp()

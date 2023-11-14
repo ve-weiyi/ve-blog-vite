@@ -5,8 +5,11 @@
       <div class="banner-container">
         <!-- 联系方式 -->
         <h1 class="blog-title animated zoomIn">
-          {{ webStore.blogInfo.websiteConfig.websiteName }}
+          {{ title }}
         </h1>
+        <h4 class="animated zoomIn">
+          {{ author }}
+        </h4>
         <!-- 一言 -->
         <div class="blog-intro">{{ obj.output }} <span class="typed-cursor">|</span></div>
         <!-- 联系方式 -->
@@ -215,7 +218,7 @@ import MarkdownIt from "markdown-it"
 import { usePagination } from "@/hooks/usePagination"
 import { findArticleHomeListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
-import { ArticleHome, Talk } from "@/api/types.ts"
+import { ArticleHome, Talk } from "@/api/types"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { storeToRefs } from "pinia"
 
@@ -240,44 +243,55 @@ const obj = ref({
   sentencePause: true,
 })
 
+// 诗篇名称
+const title = ref("")
+
+// 作者
+const author = ref("")
+
 // 说说列表
 const talkList = ref<Talk[]>([])
 // 文章列表
-const articleList = ref<ArticleHome[]>([
-  // {
-  //   article_content: '恭喜你成功运行博客！\n',
-  //   article_cover: 'http://static.ve77.cn/articles/3a4b4e40fb8aa5fcc016f0228938d321.jpg',
-  //   article_title: '测试文章',
-  //   category_id: 187,
-  //   created_at: '2022-01-18T00:29:02+08:00',
-  //   id: 54,
-  //   isDelete: false,
-  //   isTop: false,
-  //   originalUrl: '',
-  //   status: 1,
-  //   type: 1,
-  //   updated_at: '2022-01-19T23:10:07+08:00',
-  //   userId: 2,
-  // },
-])
+const articleList = ref<ArticleHome[]>([])
 
 // 初始化
 const init = () => {
   document.title = webStore.blogInfo.websiteConfig.websiteName
   // 一言Api进行打字机循环输出效果
-  fetch("https://v1.hitokoto.cn?c=i")
-    .then((res) => {
-      return res.json()
-    })
-    .then(({ hitokoto }) => {
-      initTyped(hitokoto, null, null)
-    })
+  getHitokoto()
 
   // 获取首页说说
   listHomeTalks()
 
   // 获取首页文章
   listHomeArticles()
+}
+
+interface Hitokoto {
+  id: number
+  uuid: string
+  hitokoto: string
+  type: string
+  from: string
+  from_who: string
+  creator: string
+  creator_uid: number
+  reviewer: number
+  commit_from: string
+  created_at: string
+  length: number
+}
+
+const getHitokoto = () => {
+  fetch("https://v1.hitokoto.cn?c=i")
+    .then((res) => {
+      return res.json()
+    })
+    .then((res: Hitokoto) => {
+      author.value = res.from_who
+      title.value = res.from
+      initTyped(res.hitokoto, null, null)
+    })
 }
 
 const listHomeTalks = () => {

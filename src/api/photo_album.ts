@@ -54,9 +54,7 @@ export function findPhotoAlbumListApi(page: PageQuery): Promise<IApiResponseData
 }
 
 /** 获取相册详情列表 */
-export function findPhotoAlbumDetailsListApi(
-  page: PageQuery
-): Promise<IApiResponseData<PageResult<PhotoAlbumDetails>>> {
+export function findPhotoAlbumDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PhotoAlbumDetails>>> {
   return http.request<IApiResponseData<PageResult<PhotoAlbumDetails>>>({
     url: `/api/v1/photo_album/details_list`,
     method: "post",

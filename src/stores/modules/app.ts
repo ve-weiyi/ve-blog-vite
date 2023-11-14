@@ -7,7 +7,7 @@ export type appType = {
     withoutAnimation: boolean
   }
   device: string
-  size: string
+  size: "" | "default" | "small" | "large"
   lang: string
 }
 
@@ -26,7 +26,7 @@ export const useAppStore = defineStore({
     }
   },
   actions: {
-    TOGGLE_SIDEBAR () {
+    TOGGLE_SIDEBAR() {
       this.sidebar.opened = !this.sidebar.opened
       this.sidebar.withoutAnimation = false
       if (this.sidebar.opened) {
@@ -35,19 +35,19 @@ export const useAppStore = defineStore({
         cookies.set("sidebarStatus", 0)
       }
     },
-    CLOSE_SIDEBAR (withoutAnimation: boolean) {
+    CLOSE_SIDEBAR(withoutAnimation: boolean) {
       cookies.set("sidebarStatus", 0)
       this.sidebar.opened = false
       this.sidebar.withoutAnimation = withoutAnimation
     },
-    TOGGLE_DEVICE (device: string) {
+    TOGGLE_DEVICE(device: string) {
       this.device = device
     },
-    SET_SIZE (size: string) {
+    SET_SIZE(size: string) {
       this.size = size
       cookies.set("size", size)
     },
-    SET_LANG (lang: string) {
+    SET_LANG(lang: string) {
       this.lang = lang
       cookies.set("lang", lang)
     },

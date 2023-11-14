@@ -60,7 +60,7 @@ import { useWebStoreHook } from "@/stores/modules/website"
 import { findArticleSeriesApi } from "@/api/article"
 import { useRoute } from "vue-router"
 import { formatDate } from "@/utils/format"
-import { ArticleHome } from "@/api/types.ts"
+import { ArticleHome } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
