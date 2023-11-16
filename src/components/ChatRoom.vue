@@ -216,7 +216,7 @@ const openEmoji = () => {
 
 // 连接 WebSocket
 const connect = () => {
-  websocket.value = new WebSocket(blogInfo.websiteConfig.websocketUrl)
+  websocket.value = new WebSocket(blogInfo.websiteConfig.websocket_url)
 
   // 连接发生错误的回调方法
   websocket.value.onerror = (event) => {

@@ -6,7 +6,7 @@
       <div style="display: flex">
         <v-avatar size="40">
           <img height="40" v-if="webStore.avatar" :src="webStore.avatar" />
-          <img height="40" v-else :src="webStore.blogInfo.websiteConfig.touristAvatar" />
+          <img height="40" v-else :src="webStore.blogInfo.websiteConfig.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -265,7 +265,7 @@ const insertComment = () => {
       // 查询最新评论
       paginationData.currentPage = 1
       listComments()
-      const isReview = webStore.blogInfo.websiteConfig.isCommentReview
+      const isReview = webStore.blogInfo.websiteConfig.is_comment_review
       if (isReview) {
         ElMessage.success("评论成功，正在审核中")
       } else {

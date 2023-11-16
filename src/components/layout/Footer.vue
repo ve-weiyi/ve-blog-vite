@@ -5,12 +5,12 @@
         {{ link }}
       </v-btn>
       <div>
-        ©{{ websiteConfig.websiteCreateTime }} - {{ new Date().getFullYear() }}
+        ©{{ websiteConfig.website_create_time }} - {{ new Date().getFullYear() }}
         By
-        {{ websiteConfig.websiteAuthor }}
+        {{ websiteConfig.website_author }}
       </div>
       <a href="https://beian.miit.gov.cn/" target="_blank">
-        {{ websiteConfig.websiteRecordNo }}
+        {{ websiteConfig.website_record_no }}
       </a>
     </div>
   </v-footer>

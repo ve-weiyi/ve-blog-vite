@@ -30,9 +30,9 @@
         添加友链
       </div>
       <blockquote>
-        <div>名称：{{ blogInfo.websiteConfig.websiteName }}</div>
-        <div>简介：{{ blogInfo.websiteConfig.websiteIntro }}</div>
-        <div>头像：{{ blogInfo.websiteConfig.websiteAvatar }}</div>
+        <div>名称：{{ blogInfo.websiteConfig.website_name }}</div>
+        <div>简介：{{ blogInfo.websiteConfig.website_intro }}</div>
+        <div>头像：{{ blogInfo.websiteConfig.website_avatar }}</div>
       </blockquote>
       <div class="mt-5 mb-5">需要交换友链的可在下方留言💖</div>
       <blockquote class="mb-10">友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像</blockquote>

@@ -116,13 +116,13 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="webStore.blogInfo.websiteConfig.websiteAvatar" />
+                <img class="author-avatar" :src="webStore.blogInfo.websiteConfig.website_avatar" />
               </v-avatar>
               <div style="font-size: 1.375rem; margin-top: 0.625rem">
-                {{ webStore.blogInfo.websiteConfig.websiteAuthor }}
+                {{ webStore.blogInfo.websiteConfig.website_author }}
               </div>
               <div style="font-size: 0.875rem">
-                {{ webStore.blogInfo.websiteConfig.websiteIntro }}
+                {{ webStore.blogInfo.websiteConfig.website_intro }}
               </div>
             </div>
             <!-- 博客信息 -->
@@ -184,7 +184,7 @@
               公告
             </div>
             <div style="font-size: 0.875rem">
-              {{ webStore.blogInfo.websiteConfig.websiteNotice }}
+              {{ webStore.blogInfo.websiteConfig.website_notice }}
             </div>
           </v-card>
           <!-- 网站信息 -->
@@ -256,7 +256,7 @@ const articleList = ref<ArticleHome[]>([])
 
 // 初始化
 const init = () => {
-  document.title = webStore.blogInfo.websiteConfig.websiteName
+  document.title = webStore.blogInfo.websiteConfig.website_name
   // 一言Api进行打字机循环输出效果
   getHitokoto()
 
@@ -338,7 +338,7 @@ const scrollDown = () => {
 }
 
 const runTime = () => {
-  const timeold = new Date().getTime() - new Date(webStore.blogInfo.websiteConfig.websiteCreateTime).getTime()
+  const timeold = new Date().getTime() - new Date(webStore.blogInfo.websiteConfig.website_create_time).getTime()
   const msPerDay = 24 * 60 * 60 * 1000
   const daysold = Math.floor(timeold / msPerDay)
   let str = ""
@@ -362,7 +362,7 @@ const isRight = computed(() => {
 
 const isShowSocial = computed(() => {
   return function (social) {
-    return webStore.blogInfo.websiteConfig.socialUrlList.indexOf(social) != -1
+    return webStore.blogInfo.websiteConfig.social_url_list.indexOf(social) != -1
   }
 })
 
@@ -631,6 +631,8 @@ onUnmounted(() => {
 }
 
 .author-avatar {
+  height: 100%;
+  width: 100%;
   transition: all 0.5s;
 }
 

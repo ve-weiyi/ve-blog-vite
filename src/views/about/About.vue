@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
   }
 })
 
-const avatar = webStore.blogInfo.websiteConfig.websiteAvatar
+const avatar = webStore.blogInfo.websiteConfig.website_avatar
 </script>
 
 <style scoped>
@@ -89,6 +89,8 @@ const avatar = webStore.blogInfo.websiteConfig.websiteAvatar
 }
 
 .author-avatar {
+  height: 100%;
+  width: 100%;
   transition: all 0.5s;
 }
 

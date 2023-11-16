@@ -3,7 +3,7 @@
     <!-- 博主介绍 -->
     <div class="blogger-info">
       <v-avatar size="110" style="margin-bottom: 0.5rem">
-        <img :src="blogInfo.websiteConfig.websiteAvatar" />
+        <img :src="blogInfo.websiteConfig.website_avatar" />
       </v-avatar>
     </div>
     <!-- 博客信息 -->
@@ -71,7 +71,10 @@
           <router-link to="/user"> <i class="iconfont icongerenzhongxin" /> 个人中心 </router-link>
         </div>
         <div class="menus-item">
-          <a :href="webStore.adminUrl" target="_blank"><i class="iconfont icon-sketch" />管理平台</a>
+          <a :href="webStore.blogInfo.websiteConfig.admin_url"
+target="_blank"
+            ><i class="iconfont icon-sketch" />管理平台</a
+          >
         </div>
         <div class="menus-item">
           <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>

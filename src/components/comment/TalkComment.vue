@@ -6,7 +6,7 @@
       <div style="display: flex; width: 100%">
         <v-avatar size="36">
           <img v-if="webStore.avatar" :src="webStore.avatar" />
-          <img v-else :src="webStore.blogInfo.websiteConfig.touristAvatar" />
+          <img v-else :src="webStore.blogInfo.websiteConfig.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -86,7 +86,7 @@
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
                 <img v-if="webStore.avatar" :src="webStore.avatar" />
-                <img v-else :src="webStore.blogInfo.websiteConfig.touristAvatar" />
+                <img v-else :src="webStore.blogInfo.websiteConfig.tourist_avatar" />
               </v-avatar>
               <div style="width: 100%" class="ml-3">
                 <div class="comment-input">

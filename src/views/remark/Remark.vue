@@ -58,7 +58,7 @@ const addToList = () => {
     ElMessage({ type: "error", message: "留言不能为空" })
     return false
   }
-  const userAvatar = webStore.avatar ? webStore.avatar : webStore.blogInfo.websiteConfig.touristAvatar
+  const userAvatar = webStore.avatar ? webStore.avatar : webStore.blogInfo.websiteConfig.tourist_avatar
   const userNickname = webStore.nickname ? webStore.nickname : "游客"
   const message = {
     avatar: userAvatar,

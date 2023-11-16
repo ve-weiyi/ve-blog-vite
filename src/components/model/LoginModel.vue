@@ -108,7 +108,7 @@ const isMobile = computed(() => {
   return clientWidth <= 960
 })
 
-const socialLoginList = computed(() => webStore.blogInfo.websiteConfig.socialLoginList)
+const socialLoginList = computed(() => webStore.blogInfo.websiteConfig.social_login_list)
 
 const showLogin = (type) => socialLoginList.value.includes(type)
 

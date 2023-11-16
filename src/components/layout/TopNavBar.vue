@@ -12,7 +12,7 @@
     <div class="d-md-none nav-mobile-container">
       <div style="font-size: 18px; font-weight: bold">
         <router-link to="/">
-          {{ blogInfo.websiteConfig.websiteAuthor }}
+          {{ blogInfo.websiteConfig.website_author }}
         </router-link>
       </div>
       <div style="margin-left: auto">
@@ -26,7 +26,7 @@
     <div class="d-md-block d-none nav-container">
       <div class="float-left blog-title">
         <router-link to="/">
-          {{ blogInfo.websiteConfig.websiteAuthor }}
+          {{ blogInfo.websiteConfig.website_author }}
         </router-link>
       </div>
       <div class="float-right nav-title">
@@ -93,7 +93,10 @@
                 </router-link>
               </li>
               <li>
-                <a :href="webStore.adminUrl" target="_blank"><i class="iconfont icon-sketch" />管理平台</a>
+                <a :href="webStore.blogInfo.websiteConfig.admin_url"
+target="_blank"
+                  ><i class="iconfont icon-sketch" />管理平台</a
+                >
               </li>
               <li>
                 <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>

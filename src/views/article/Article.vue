@@ -72,7 +72,7 @@
             <div>
               <span>文章作者：</span>
               <router-link to="/">
-                {{ webStore.blogInfo.websiteConfig.websiteAuthor }}
+                {{ webStore.blogInfo.websiteConfig.website_author }}
               </router-link>
             </div>
             <div>
@@ -101,18 +101,18 @@
               <i class="iconfont icondianzan" /> 点赞
               <span v-show="articleDetail.like_count > 0">{{ articleDetail.like_count }}</span>
             </a>
-            <a class="reward-btn" v-if="webStore.blogInfo.websiteConfig.isReward == 1">
+            <a class="reward-btn" v-if="webStore.blogInfo.websiteConfig.is_reward == 1">
               <!-- 打赏按钮 -->
               <i class="iconfont iconerweima" /> 打赏
               <!-- 二维码 -->
               <div class="animated fadeInDown reward-main">
                 <ul class="reward-all">
                   <li class="reward-item">
-                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.weiXinQRCode" />
+                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.weixin_qr_code" />
                     <div class="reward-desc">微信</div>
                   </li>
                   <li class="reward-item">
-                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.alipayQRCode" />
+                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.alipay_qr_code" />
                     <div class="reward-desc">支付宝</div>
                   </li>
                 </ul>

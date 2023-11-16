@@ -36,18 +36,26 @@ export function updateAboutMeApi(data: string): Promise<IApiResponseData<any>> {
 }
 
 /** 获取网站配置 */
-export function getWebsiteConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseData<any>> {
+export function getWebsiteConfigApi(): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: `/api/v1/admin/website/config`,
+    url: `/api/v1/website/config`,
+    method: "get",
+  })
+}
+
+/** 获取配置 */
+export function getConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: `/api/v1/admin/config`,
     method: "post",
     data: data,
   })
 }
 
-/** 更新网站配置 */
-export function updateWebsiteConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseData<any>> {
+/** 更新配置 */
+export function updateConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
-    url: `/api/v1/admin/website/config`,
+    url: `/api/v1/admin/config`,
     method: "put",
     data: data,
   })
