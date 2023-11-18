@@ -4,7 +4,7 @@ import Qinglong from "@/assets/images/qinglong.jpg"
 // @ts-ignore
 import Avatar from "@/assets/images/avatar.jpg"
 import cookies from "@/utils/cookies"
-import { store } from "@/stores"
+import store from "@/stores"
 
 export const useWebStore = defineStore({
   id: "store",

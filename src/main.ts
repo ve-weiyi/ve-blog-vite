@@ -1,6 +1,6 @@
 import { createApp } from "vue"
-import { createPinia } from "pinia"
 import App from "@/App.vue"
+import store from "@/stores"
 import router from "@/router"
 
 // 导入公共样式
@@ -25,7 +25,6 @@ import { vuetify } from "@/plugins/vuetify"
 import ElementPlus from "element-plus"
 import "element-plus/dist/index.css"
 import { usePhotoPreview } from "@/plugins/imagePreview"
-import { store } from "@/stores"
 
 const app = createApp(App)
 
