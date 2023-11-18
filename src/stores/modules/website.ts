@@ -5,6 +5,7 @@ import Qinglong from "@/assets/images/qinglong.jpg"
 import Avatar from "@/assets/images/avatar.jpg"
 import cookies from "@/utils/cookies"
 import store from "@/stores"
+import { BlogHomeInfo, LoginHistory, Token, UserInfo } from "@/api/types.ts"
 
 export const useWebStore = defineStore({
   id: "store",
@@ -15,27 +16,43 @@ export const useWebStore = defineStore({
     forgetFlag: false,
     emailFlag: false,
     drawer: false,
-    loginUrl: "",
-    userId: null,
-    avatar: "https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg",
-    nickname: null,
-    intro: null,
-    webSite: null,
-    loginType: null,
-    email: null,
-    articleLikeSet: [],
-    commentLikeSet: [],
-    talkLikeSet: [],
+    loginUrl: "", // 登录之前的页面
     defaultCover: "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg",
     userInfo: {
-      avatar: "https://veport.oss-cn-beijing.aliyuncs.com/config/041a0d1c7fdfb5a610c307e7e44d4f39.jpg",
+      id: null,
+      username: "admin@qq.com",
+      nickname: "admin@qq.com",
+      avatar: "http://rxb1y0x1n.hn-bkt.clouddn.com/blog/avatar/43b90920409618f188bfc6923f16b9fa_20230713143425.jpg",
+      intro: "测试",
+      website: "",
+      email: "",
+      article_like_set: [],
+      comment_like_set: [],
+      talk_like_set: [],
+      roles: [
+        {
+          role_name: "admin",
+          role_comment: "管理员",
+        },
+        {
+          role_name: "user",
+          role_comment: "用户",
+        },
+      ],
+    },
+    loginHistory: {
+      login_type: "email",
+      agent: "PostmanRuntime/7.35.0",
+      ip_address: "127.0.0.1",
+      ip_source: "localhost",
+      login_time: "2023-11-19 03:17:53.846649 +0800 CST m=+14.125751626",
     },
     blogInfo: {
-      articleCount: 999,
-      categoryCount: 999,
-      tagCount: 999,
-      viewsCount: 999,
-      websiteConfig: {
+      article_count: 999,
+      category_count: 999,
+      tag_count: 999,
+      views_count: 999,
+      website_config: {
         admin_url: "http://localhost:7777/admin/",
         alipay_qr_code: "https://veport.oss-cn-beijing.aliyuncs.com/config/17f234dc487c1bb5bbb732869be0eb53.jpg",
         gitee: "https://gitee.com/wy791422171",
@@ -62,10 +79,10 @@ export const useWebStore = defineStore({
         websocket_url: "ws://127.0.0.1:9999/api/v1/ws",
         weixin_qr_code: "https://veport.oss-cn-beijing.aliyuncs.com/config/6bed8a1130b170546341ece729e8819f.jpg",
       },
-      pageList: [
+      page_list: [
         {
-          pageLabel: "home",
-          pageCover: Qinglong,
+          page_label: "home",
+          page_cover: Qinglong,
         },
       ],
     },
@@ -73,66 +90,35 @@ export const useWebStore = defineStore({
   }),
   actions: {
     getCover(page: string) {
-      const cover = this.blogInfo.pageList.find((item: any) => item.pageLabel === page)?.pageCover
+      const cover = this.blogInfo.page_list.find((item: any) => item.page_label === page)?.page_cover
       const pageCover = cover ? cover : this.defaultCover
       return `background: url(${pageCover}) center center / cover no-repeat`
     },
-    setUser(user) {
+    setBlogInfo(blogInfo: BlogHomeInfo) {
+      this.blogInfo = blogInfo
+    },
+    setUser(user: UserInfo) {
       this.userInfo = user
-      this.userId = user.id
-      this.avatar = user.avatar
-      this.nickname = user.nickname
-      this.intro = user.intro
-      this.webSite = user.webSite
-      this.articleLikeSet = user.articleLikeSet ? user.articleLikeSet : []
-      this.commentLikeSet = user.commentLikeSet ? user.commentLikeSet : []
-      this.talkLikeSet = user.talkLikeSet ? user.talkLikeSet : []
-      this.email = user.email
-      this.loginType = user.loginType
+    },
+    setLoginHistory(loginHistory: LoginHistory) {
+      this.loginHistory = loginHistory
     },
     isLogin() {
       return this.getToken() != undefined
     },
     logout() {
       this.setToken(undefined)
-      this.userInfo = {}
-      this.userId = null
-      this.avatar = null
-      this.nickname = null
-      this.intro = null
-      this.webSite = null
-      this.articleLikeSet = []
-      this.commentLikeSet = []
-      this.talkLikeSet = []
-      this.email = null
-      this.loginType = null
+      this.setUser({})
+      this.setLoginHistory({})
     },
-    saveLoginUrl(url) {
-      this.loginUrl = url
-    },
-    setToken(token) {
+    setToken(token: string) {
       cookies.set("token", token)
-      console.log("setToken", cookies.get("token"))
     },
     getToken() {
       return cookies.get("token")
     },
-    saveEmail(email) {
-      this.email = email
-    },
-    updateUserInfo(user) {
-      this.nickname = user.nickname
-      this.intro = user.intro
-      this.webSite = user.webSite
-    },
-    savePageInfo(pageList) {
-      this.pageList = pageList
-    },
-    updateAvatar(avatar) {
-      this.avatar = avatar
-    },
-    checkBlogInfo(blogInfo) {
-      this.blogInfo = blogInfo
+    saveLoginUrl(url) {
+      this.loginUrl = url
     },
     closeModel() {
       this.registerFlag = false
@@ -140,29 +126,38 @@ export const useWebStore = defineStore({
       this.searchFlag = false
       this.emailFlag = false
     },
-    articleLike(articleId) {
-      var articleLikeSet = this.articleLikeSet
+    articleLike(articleId: number) {
+      const articleLikeSet = this.userInfo.article_like_set
       if (articleLikeSet.indexOf(articleId) != -1) {
         articleLikeSet.splice(articleLikeSet.indexOf(articleId), 1)
       } else {
         articleLikeSet.push(articleId)
       }
     },
-    commentLike(commentId) {
-      var commentLikeSet = this.commentLikeSet
+    commentLike(commentId: number) {
+      const commentLikeSet = this.userInfo.comment_like_set
       if (commentLikeSet.indexOf(commentId) != -1) {
         commentLikeSet.splice(commentLikeSet.indexOf(commentId), 1)
       } else {
         commentLikeSet.push(commentId)
       }
     },
-    talkLike(talkId) {
-      var talkLikeSet = this.talkLikeSet
+    talkLike(talkId: number) {
+      const talkLikeSet = this.userInfo.talk_like_set
       if (talkLikeSet.indexOf(talkId) != -1) {
         talkLikeSet.splice(talkLikeSet.indexOf(talkId), 1)
       } else {
         talkLikeSet.push(talkId)
       }
+    },
+    isArticleLike(articleId: number) {
+      return this.userInfo.article_like_set.indexOf(articleId) != -1
+    },
+    isCommentLike(commentId: number) {
+      return this.userInfo.comment_like_set.indexOf(commentId) != -1
+    },
+    isTalkLike(talkId: number) {
+      return this.userInfo.talk_like_set.indexOf(talkId) != -1
     },
   },
 })

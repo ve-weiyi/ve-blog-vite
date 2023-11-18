@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="loginFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close </v-icon>
+      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close</v-icon>
       <div class="login-title">登录账号</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -39,7 +39,7 @@
           </div>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录 </v-btn>
+        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录</v-btn>
         <!-- 注册和找回密码 -->
         <div class="mt-10 login-tip">
           <span @click="openRegister">立即注册</span>
@@ -85,6 +85,7 @@ import { ElMessage } from "element-plus"
 import { getAuthorizeUrlApi, loginApi } from "@/api/auth"
 import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from "@/api/captcha"
 import cookies from "@/utils/cookies"
+import router from "@/router"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -108,7 +109,7 @@ const isMobile = computed(() => {
   return clientWidth <= 960
 })
 
-const socialLoginList = computed(() => webStore.blogInfo.websiteConfig.social_login_list)
+const socialLoginList = computed(() => webStore.blogInfo.website_config.social_login_list)
 
 const showLogin = (type) => socialLoginList.value.includes(type)
 
@@ -161,14 +162,16 @@ const login = () => {
   }
 }
 const emailLogin = () => {
+  webStore.saveLoginUrl(router.currentRoute.value.path)
   loginApi({ username: username.value, password: password.value, code: code.value })
     .then((res) => {
       ElMessage.success("登录成功")
       console.log(res)
 
-      cookies.set("token", res.data.access_token)
+      webStore.setToken(res.data.access_token)
       webStore.setUser(res.data.user_info)
-      webStore.loginFlag = false
+      webStore.setLoginHistory(res.data.login_info)
+      webStore.closeModel()
     })
     .catch((err) => {
       console.log(err)
@@ -176,7 +179,7 @@ const emailLogin = () => {
 }
 
 const qqLogin = () => {
-  // $store.commit('saveLoginUrl', $route.path)
+  webStore.saveLoginUrl(router.currentRoute.value.path)
   if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i)) {
     // eslint-disable-next-line no-undef
     // QC.Login.showPopup({
@@ -191,14 +194,14 @@ const qqLogin = () => {
 }
 
 const weiboLogin = () => {
-  // $store.commit('saveLoginUrl', $route.path)
+  webStore.saveLoginUrl(router.currentRoute.value.path)
   getAuthorizeUrlApi({ platform: "weibo" }).then((res) => {
     window.open(res.data.url)
   })
 }
 
 const feishuLogin = () => {
-  // $store.commit('saveLoginUrl', $route.path)
+  webStore.saveLoginUrl(router.currentRoute.value.path)
   getAuthorizeUrlApi({ platform: "feishu" }).then((res) => {
     window.open(res.data.url)
   })

@@ -24,7 +24,7 @@ const webStore = useWebStoreHook()
 const blogInfo = webStore.blogInfo
 
 // 网站信息
-const websiteConfig = blogInfo.websiteConfig
+const websiteConfig = blogInfo.website_config
 
 function getCurrentYear() {
   return new Date().getFullYear()

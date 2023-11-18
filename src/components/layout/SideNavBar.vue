@@ -3,7 +3,7 @@
     <!-- 博主介绍 -->
     <div class="blogger-info">
       <v-avatar size="110" style="margin-bottom: 0.5rem">
-        <img :src="blogInfo.websiteConfig.website_avatar" />
+        <img :src="blogInfo.website_config.website_avatar" />
       </v-avatar>
     </div>
     <!-- 博客信息 -->
@@ -12,7 +12,7 @@
         <router-link to="/archives">
           <div style="font-size: 0.875rem">文章</div>
           <div style="font-size: 1.125rem">
-            {{ blogInfo.articleCount }}
+            {{ blogInfo.article_count }}
           </div>
         </router-link>
       </div>
@@ -20,7 +20,7 @@
         <router-link to="/categories">
           <div style="font-size: 0.875rem">分类</div>
           <div style="font-size: 1.125rem">
-            {{ blogInfo.categoryCount }}
+            {{ blogInfo.category_count }}
           </div>
         </router-link>
       </div>
@@ -28,7 +28,7 @@
         <router-link to="/tags">
           <div style="font-size: 0.875rem">标签</div>
           <div style="font-size: 1.125rem">
-            {{ blogInfo.tagCount }}
+            {{ blogInfo.tag_count }}
           </div>
         </router-link>
       </div>
@@ -71,10 +71,10 @@
           <router-link to="/user"> <i class="iconfont icongerenzhongxin" /> 个人中心 </router-link>
         </div>
         <div class="menus-item">
-          <a :href="webStore.blogInfo.websiteConfig.admin_url"
-target="_blank"
-            ><i class="iconfont icon-sketch" />管理平台</a
-          >
+          <a :href="webStore.blogInfo.website_config.admin_url" target="_blank">
+            <i class="iconfont icon-sketch" />
+            管理平台
+          </a>
         </div>
         <div class="menus-item">
           <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
@@ -89,6 +89,8 @@ import { ref, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/stores/modules/website"
 import axios from "axios"
+import { logoutApi } from "@/api/auth.ts"
+import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -109,7 +111,7 @@ const drawer = computed<boolean>({
 })
 
 const isLogin = computed<boolean>(() => {
-  return webStore.userId
+  return webStore.userInfo.id
 })
 
 const openLogin = () => {
@@ -120,13 +122,9 @@ const logout = () => {
   if (router.currentRoute.value.path === "/user") {
     router.go(-1)
   }
-  axios.get("/api/logout").then(({ data }) => {
-    if (data.flag) {
-      webStore.logout()
-      // toast({ type: "success", message: "注销成功" })
-    } else {
-      // toast({ type: "error", message: data.message })
-    }
+  logoutApi().then((res) => {
+    ElMessage.success("注销成功")
+    webStore.logout()
   })
 }
 </script>

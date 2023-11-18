@@ -16,13 +16,14 @@ import { oauthLoginApi } from "@/api/auth"
 import { useWebStoreHook } from "@/stores/modules/website"
 
 // 获取存储的博客信息
-const store = useWebStoreHook()
+const webStore = useWebStoreHook()
 // 获取路由参数
 const route = useRoute()
 const platform = route.params.platform // 假设路由参数名为 "id"
 
 // 路由
 const router = useRouter()
+
 function OauthLogin() {
   // 获取token
   oauthLoginApi({
@@ -31,9 +32,14 @@ function OauthLogin() {
     state: route.query.state as string,
   }).then((res) => {
     console.log(res)
-    store.setUser(res.data.user_info)
-    store.setToken(res.data.access_token)
-    router.push({ path: "/" })
+    webStore.setToken(res.data.access_token)
+    webStore.setUser(res.data.user_info)
+    webStore.setLoginHistory(res.data.login_info)
+    if (webStore.loginUrl) {
+      router.push({ path: webStore.loginUrl })
+    } else {
+      router.push({ path: "/" })
+    }
   })
 }
 

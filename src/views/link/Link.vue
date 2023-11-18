@@ -30,9 +30,9 @@
         添加友链
       </div>
       <blockquote>
-        <div>名称：{{ blogInfo.websiteConfig.website_name }}</div>
-        <div>简介：{{ blogInfo.websiteConfig.website_intro }}</div>
-        <div>头像：{{ blogInfo.websiteConfig.website_avatar }}</div>
+        <div>名称：{{ webStore.blogInfo.website_config.website_name }}</div>
+        <div>简介：{{ webStore.blogInfo.website_config.website_intro }}</div>
+        <div>头像：{{ webStore.blogInfo.website_config.website_avatar }}</div>
       </blockquote>
       <div class="mt-5 mb-5">需要交换友链的可在下方留言💖</div>
       <blockquote class="mb-10">友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像</blockquote>
@@ -47,12 +47,12 @@ import Comment from "@/components/comment/Comment.vue"
 import { ref, onMounted, computed } from "vue"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { findFriendLinkListApi } from "@/api/friend_link"
+import { FriendLink } from "@/api/types.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
-const blogInfo = webStore.blogInfo
 
-const friendLinkList = ref([])
+const friendLinkList = ref<FriendLink[]>([])
 const commentType = ref(2)
 
 function listFriendLink() {

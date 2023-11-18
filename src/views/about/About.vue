@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
   }
 })
 
-const avatar = webStore.blogInfo.websiteConfig.website_avatar
+const avatar = webStore.blogInfo.website_config.website_avatar
 </script>
 
 <style scoped>

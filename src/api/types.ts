@@ -438,22 +438,50 @@ export interface ArticlePreviewDTO {
   created_at?: string // 创建时间
 }
 
-export interface WebsiteHomeInfoDTO {
+export interface BlogHomeInfo {
   article_count?: number // 文章数量
   category_count?: number // 分类数量
   tag_count?: number // 标签数量
   views_count?: string // 访问量
-  website_config?: WebsiteConfigVO // 网站配置
-  page_list?: PageVO[] // 页面列表
+  website_config?: WebsiteConfigDTO // 网站配置
+  page_list?: PageDTO[] // 页面列表
 }
 
-export interface WebsiteConfigVO {
+export interface WebsiteConfigDTO {
+  admin_url?: string // 后台地址
+  alipay_qr_code?: string // 支付宝二维码
+  gitee?: string // Gitee
+  github?: string // Github
+  is_chat_room?: number // 是否开启聊天室
+  is_comment_review?: number // 是否开启评论审核
+  is_email_notice?: number // 是否开启邮件通知
+  is_message_review?: number // 是否开启留言审核
+  is_music_player?: number // 是否开启音乐播放器
+  is_reward?: number // 是否开启打赏
+  qq?: string // QQ
+  social_login_list?: string[] // 社交登录列表
+  social_url_list?: string[] // 社交地址列表
+  tourist_avatar?: string // 游客头像
+  user_avatar?: string // 用户头像
+  website_author?: string // 网站作者
+  website_avatar?: any // 网站头像
+  website_create_time?: string // 网站创建时间
+  website_intro?: string // 网站介绍
+  website_name?: string // 网站名称
+  website_notice?: string // 网站公告
+  website_record_no?: string // 网站备案号
+  websocket_url?: string // websocket地址
+  weixin_qr_code?: string // 微信二维码
 }
 
-export interface PageVO {
+export interface PageDTO {
+  id?: number // 页面ID
+  page_name?: string // 页面名称
+  page_label?: string // 页面标签
+  page_cover?: string // 页面封面
 }
 
-export interface WebsiteAdminHomeInfo {
+export interface AdminHomeInfo {
   views_count?: number // 访问量
   message_count?: number // 留言量
   user_count?: number // 用户量
@@ -544,6 +572,8 @@ export interface CommentBackDTO {
 }
 
 export interface Login extends Token {
+  ip_address?: string
+  ip_source?: string
   user_info?: UserInfo
   login_info?: LoginHistory
 }
@@ -560,13 +590,15 @@ export interface Token {
 export interface UserInfo {
   id?: number
   username?: string
-  status?: number
   nickname?: string
   avatar?: string
   intro?: string
+  website?: string
   email?: string
-  created_at?: string
-  roles?: Role[]
+  article_like_set?: string[] // 文章点赞集合
+  comment_like_set?: string[] // 评论点赞集合
+  talk_like_set?: string[] // 说说点赞集合
+  roles?: RoleDTO[]
 }
 
 export interface LoginHistory {
@@ -614,6 +646,11 @@ export interface MenuDetails extends Menu {
 export interface RoleInfo extends Role {
   menu_id_list?: number[]
   resource_id_list?: number[]
+}
+
+export interface RoleDTO {
+  role_name?: string
+  role_comment?: string
 }
 
 export interface TalkDetails {

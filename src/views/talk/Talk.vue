@@ -16,7 +16,7 @@
             <div class="user-detail-wrapper">
               <div class="user-nickname">
                 {{ item.nickname }}
-                <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram</v-icon>
+                <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram </v-icon>
               </div>
               <!-- 发表时间 -->
               <div class="time">
@@ -70,7 +70,7 @@ import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/stores/modules/website"
 import axios from "axios"
-import { findTalkDetailsListApi } from "@/api/talk"
+import { findTalkDetailsListApi, likeTalkApi } from "@/api/talk"
 import { TalkDetails } from "@/api/types"
 
 // 获取存储的博客信息
@@ -109,29 +109,26 @@ const previewImg = (img) => {
   // })
 }
 
-const like = (talk) => {
+const like = (talk: TalkDetails) => {
   // 判断登录
-  if (!webStore.userId) {
+  if (!webStore.userInfo.id) {
     webStore.loginFlag = true
     return false
   }
   // 发送请求
-  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
-    if (data.flag) {
-      // 判断是否点赞
-      if (webStore.talkLikeSet.indexOf(talk.id) != -1) {
-        talk.likeCount -= 1
-      } else {
-        talk.likeCount += 1
-      }
-      webStore.talkLike(talk.id)
+  likeTalkApi(talk.id).then((res) => {
+    // 判断是否点赞
+    if (webStore.isTalkLike(talk.id)) {
+      talk.like_count -= 1
+    } else {
+      talk.like_count += 1
     }
+    webStore.talkLike(talk.id)
   })
 }
 
 const isLike = (talkId: number) => {
-  const talkLikeSet = webStore.talkLikeSet
-  return talkLikeSet.includes(talkId) ? "#eb5055" : "#999"
+  return webStore.isTalkLike(talkId) ? "#eb5055" : "#999"
 }
 
 onMounted(() => {

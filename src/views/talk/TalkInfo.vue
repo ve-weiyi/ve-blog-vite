@@ -58,7 +58,7 @@ import { ref, onMounted, computed } from "vue"
 import Comment from "../../components/comment/TalkComment.vue"
 import axios from "axios"
 import { useWebStoreHook } from "@/stores/modules/website"
-import { findTalkDetailApi } from "@/api/talk"
+import { findTalkDetailApi, likeTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"
 import { TalkDetails } from "@/api/types"
 
@@ -106,29 +106,26 @@ function previewImg(img) {
   // })
 }
 
-function like(talk: TalkDetails) {
+const like = (talk: TalkDetails) => {
   // 判断登录
-  if (!webStore.userId) {
+  if (!webStore.userInfo.id) {
     webStore.loginFlag = true
     return false
   }
   // 发送请求
-  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
-    if (data.flag) {
-      // 判断是否点赞
-      if (webStore.talkLikeSet.indexOf(talk.id) !== -1) {
-        talk.like_count -= 1
-      } else {
-        talk.like_count += 1
-      }
-      webStore.talkLike(talk.id)
+  likeTalkApi(talk.id).then((res) => {
+    // 判断是否点赞
+    if (webStore.isTalkLike(talk.id)) {
+      talk.like_count -= 1
+    } else {
+      talk.like_count += 1
     }
+    webStore.talkLike(talk.id)
   })
 }
 
 function isLike(talkId: number) {
-  const talkLikeSet = webStore.talkLikeSet
-  return talkLikeSet.indexOf(talkId) !== -1 ? "#eb5055" : "#999"
+  return webStore.isTalkLike(talkId) ? "#eb5055" : "#999"
 }
 getTalkById()
 onMounted(() => {

@@ -69,3 +69,11 @@ export function findTalkDetailApi(id: number): Promise<IApiResponseData<TalkDeta
     method: "get",
   })
 }
+
+/** 点赞说说 */
+export function likeTalkApi(id: number): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
+    url: `/api/v1/talk/${id}/like`,
+    method: "put",
+  })
+}

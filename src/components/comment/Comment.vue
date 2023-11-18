@@ -5,8 +5,8 @@
     <div class="comment-input-wrapper">
       <div style="display: flex">
         <v-avatar size="40">
-          <img height="40" v-if="webStore.avatar" :src="webStore.avatar" />
-          <img height="40" v-else :src="webStore.blogInfo.websiteConfig.tourist_avatar" />
+          <img height="40" v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+          <img height="40" v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -265,7 +265,7 @@ const insertComment = () => {
       // 查询最新评论
       paginationData.currentPage = 1
       listComments()
-      const isReview = webStore.blogInfo.websiteConfig.is_comment_review
+      const isReview = webStore.blogInfo.website_config.is_comment_review
       if (isReview) {
         ElMessage.success("评论成功，正在审核中")
       } else {
@@ -377,8 +377,7 @@ const like = (comment) => {
 
   likeCommentApi(comment.id).then((res) => {
     ElMessage.success("点赞成功")
-    const commentLikeSet = webStore.commentLikeSet
-    if (commentLikeSet.indexOf(comment.id) !== -1) {
+    if (webStore.isCommentLike(comment.id)) {
       comment.likeCount--
     } else {
       comment.likeCount++
@@ -388,8 +387,7 @@ const like = (comment) => {
 }
 
 const isLike = (commentId) => {
-  var commentLikeSet = webStore.commentLikeSet
-  return commentLikeSet.indexOf(commentId) != -1 ? "like-active" : "like"
+  return webStore.isCommentLike(commentId) ? "like-active" : "like"
 }
 
 const reFresh = ref(true)

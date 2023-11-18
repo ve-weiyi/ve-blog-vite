@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { ChatRecord, WebsiteConfigRequest, WebsiteAdminHomeInfo } from "./types"
+import { ChatRecord, WebsiteConfigRequest, BlogHomeInfo, AdminHomeInfo } from "./types"
 
 /** 查询聊天记录 */
 export function webSocketApi(): Promise<any> {
@@ -61,17 +61,25 @@ export function updateConfigApi(data: WebsiteConfigRequest): Promise<IApiRespons
   })
 }
 
+/** 获取博客前台首页信息 */
+export function getBlogHomeInfoApi(): Promise<IApiResponseData<BlogHomeInfo>> {
+  return http.request<IApiResponseData<BlogHomeInfo>>({
+    url: `/api/v1/`,
+    method: "get",
+  })
+}
+
 /** 获取后台首页信息 */
-export function getAdminHomeInfoApi(): Promise<IApiResponseData<WebsiteAdminHomeInfo>> {
-  return http.request<IApiResponseData<WebsiteAdminHomeInfo>>({
-    url: `/api/v1/admin/home`,
+export function getAdminHomeInfoApi(): Promise<IApiResponseData<AdminHomeInfo>> {
+  return http.request<IApiResponseData<AdminHomeInfo>>({
+    url: `/api/v1/admin`,
     method: "get",
   })
 }
 
 /** 获取服务器信息 */
-export function getSystemStateApi(): Promise<IApiResponseData<WebsiteAdminHomeInfo>> {
-  return http.request<IApiResponseData<WebsiteAdminHomeInfo>>({
+export function getSystemStateApi(): Promise<IApiResponseData<any>> {
+  return http.request<IApiResponseData<any>>({
     url: `/api/v1/admin/system/state`,
     method: "get",
   })

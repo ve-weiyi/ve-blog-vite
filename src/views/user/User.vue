@@ -24,7 +24,7 @@
         <v-col md="7" cols="12">
           <v-text-field v-model="userInfo.nickname" variant="underlined" label="昵称" placeholder="请输入您的昵称" />
           <v-text-field
-            v-model="userInfo.webSite"
+            v-model="userInfo.website"
             variant="underlined"
             class="mt-7"
             label="个人网站"
@@ -37,10 +37,10 @@
             label="简介"
             placeholder="介绍下自己吧"
           />
-          <div v-if="loginType !== 0" class="mt-7 binding">
+          <div v-if="loginType" class="mt-7 binding">
             <v-text-field disabled v-model="email" label="邮箱号" placeholder="请绑定邮箱" />
-            <v-btn v-if="email" variant="text" small @click="openEmailModel"> 修改绑定 </v-btn>
-            <v-btn v-else variant="text" small @click="openEmailModel"> 绑定邮箱 </v-btn>
+            <v-btn v-if="email" variant="text" small @click="openEmailModel"> 修改绑定</v-btn>
+            <v-btn v-else variant="text" small @click="openEmailModel"> 绑定邮箱</v-btn>
           </div>
           <v-btn @click="updateUserInfo" outlined class="mt-5">修改</v-btn>
         </v-col>
@@ -55,9 +55,9 @@ import { useWebStoreHook } from "@/stores/modules/website"
 import AvatarCropper from "@/components/AvatarCropper.vue"
 
 // 获取存储的博客信息
-const store = useWebStoreHook()
+const webStore = useWebStoreHook()
 
-const userInfo = store
+const userInfo = webStore.userInfo
 
 const showCropper = ref(false)
 
@@ -92,21 +92,13 @@ const uploadAvatar = (data: any) => {
 // 打开邮箱模态框
 const openEmailModel = () => {
   console.log("打开邮箱模态框")
-  store.emailFlag = true
+  webStore.emailFlag = true
 }
 
-const email = computed(() => store.email)
-const loginType = computed(() => store.loginType)
+const email = computed(() => userInfo.email)
+const loginType = computed(() => webStore.loginHistory.login_type)
 
-const cover = computed(() => {
-  let cover = ""
-  store.blogInfo.pageList.forEach((item: any) => {
-    if (item.pageLabel === "user") {
-      cover = item.pageCover
-    }
-  })
-  return `background-image: url(${cover})`
-})
+const cover = webStore.getCover("user")
 </script>
 
 <style scoped>
@@ -114,15 +106,18 @@ const cover = computed(() => {
   font-size: 1.25rem;
   font-weight: bold;
 }
+
 .info-wrapper {
   margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 #pick-avatar {
   outline: none;
 }
+
 .binding {
   display: flex;
   align-items: center;

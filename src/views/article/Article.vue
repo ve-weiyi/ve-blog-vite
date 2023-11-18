@@ -72,7 +72,7 @@
             <div>
               <span>文章作者：</span>
               <router-link to="/">
-                {{ webStore.blogInfo.websiteConfig.website_author }}
+                {{ webStore.blogInfo.website_config.website_author }}
               </router-link>
             </div>
             <div>
@@ -101,18 +101,18 @@
               <i class="iconfont icondianzan" /> 点赞
               <span v-show="articleDetail.like_count > 0">{{ articleDetail.like_count }}</span>
             </a>
-            <a class="reward-btn" v-if="webStore.blogInfo.websiteConfig.is_reward == 1">
+            <a class="reward-btn" v-if="webStore.blogInfo.website_config.is_reward == 1">
               <!-- 打赏按钮 -->
               <i class="iconfont iconerweima" /> 打赏
               <!-- 二维码 -->
               <div class="animated fadeInDown reward-main">
                 <ul class="reward-all">
                   <li class="reward-item">
-                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.weixin_qr_code" />
+                    <img class="reward-img" :src="webStore.blogInfo.website_config.weixin_qr_code" />
                     <div class="reward-desc">微信</div>
                   </li>
                   <li class="reward-item">
-                    <img class="reward-img" :src="webStore.blogInfo.websiteConfig.alipay_qr_code" />
+                    <img class="reward-img" :src="webStore.blogInfo.website_config.alipay_qr_code" />
                     <div class="reward-desc">支付宝</div>
                   </li>
                 </ul>
@@ -220,7 +220,7 @@ import tocbot from "tocbot"
 import { useRoute } from "vue-router"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { markdownToHtml } from "@/utils/markdown"
-import { findArticleDetailsApi } from "@/api/article"
+import { findArticleDetailsApi, likeArticleApi } from "@/api/article"
 import { ArticlePageDetails } from "@/api/types"
 
 const config = {
@@ -299,15 +299,6 @@ const getArticle = () => {
   })
 }
 
-const like = () => {
-  // 判断登录
-  if (!webStore.userId) {
-    webStore.loginFlag = true
-    return false
-  }
-  // 发送请求
-}
-
 const previewImg = (img: string) => {
   // this.$imagePreview({
   //   images: imgList.value,
@@ -322,9 +313,26 @@ const deleteHTMLTag = (content: string) => {
     .replace(/&npsp;/gi, "")
 }
 
+const like = () => {
+  // 判断登录
+  if (!webStore.userInfo.id) {
+    webStore.loginFlag = true
+    return false
+  }
+  // 发送请求
+  likeArticleApi(articleDetail.value.id).then((res) => {
+    // 判断是否点赞
+    if (webStore.isArticleLike(articleDetail.value.id)) {
+      articleDetail.value.like_count--
+    } else {
+      articleDetail.value.like_count++
+    }
+    webStore.articleLike(articleDetail.value.id)
+  })
+}
+
 function isLike() {
-  const articleLikeSet = webStore.articleLikeSet
-  return articleLikeSet.indexOf(articleDetail.value.id) != -1 ? "like-btn-active" : "like-btn"
+  return webStore.isArticleLike(articleDetail.value.id) ? "like-btn-active" : "like-btn"
 }
 
 function isFull(id) {

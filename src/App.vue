@@ -24,9 +24,9 @@
       <!-- 绑定邮箱模态框 -->
       <EmailModel></EmailModel>
       <!-- 音乐播放器 -->
-      <Player v-if="webStore.blogInfo.websiteConfig.is_music_player === 1 && !isMobile" />
+      <Player v-if="webStore.blogInfo.website_config.is_music_player === 1 && !isMobile" />
       <!-- 聊天室 -->
-      <ChatRoom v-if="webStore.blogInfo.websiteConfig.is_chat_room === 1"></ChatRoom>
+      <ChatRoom v-if="webStore.blogInfo.website_config.is_chat_room === 1"></ChatRoom>
     </el-config-provider>
   </v-app>
 </template>
@@ -51,7 +51,7 @@ import { getUserInfoApi } from "@/api/user"
 import cookies from "@/utils/cookies"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { useAppStore } from "@/stores/modules/app.ts"
-import { getAdminHomeInfoApi, getWebsiteConfigApi } from "@/api/website.ts"
+import { getAdminHomeInfoApi, getBlogHomeInfoApi, getWebsiteConfigApi } from "@/api/website.ts"
 
 const appStore = useAppStore()
 // 获取存储的博客信息
@@ -78,15 +78,15 @@ const getUserinfo = () => {
     })
 }
 
+const getBlogInfo = () => {
+  getBlogHomeInfoApi().then((res) => {
+    webStore.setBlogInfo(res.data)
+  })
+}
+
 // 在组件挂载时启动定时器
 onMounted(() => {
-  getWebsiteConfigApi()
-    .then((res) => {
-      webStore.blogInfo.websiteConfig = JSON.parse(res.data)
-    })
-    .catch((err) => {
-      ElMessage.error(err.message)
-    })
+  getBlogInfo()
   // 页面刷新后自动获取用户信息
   const token = webStore.getToken()
   console.log("token", token)

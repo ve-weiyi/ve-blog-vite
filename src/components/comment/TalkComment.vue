@@ -5,8 +5,8 @@
     <div class="comment-wrapper">
       <div style="display: flex; width: 100%">
         <v-avatar size="36">
-          <img v-if="webStore.avatar" :src="webStore.avatar" />
-          <img v-else :src="webStore.blogInfo.websiteConfig.tourist_avatar" />
+          <img v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+          <img v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -85,8 +85,8 @@
           <div v-if="replyCommentIndex === index && replyToCommentId === item.id" class="comment-wrapper">
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
-                <img v-if="webStore.avatar" :src="webStore.avatar" />
-                <img v-else :src="webStore.blogInfo.websiteConfig.tourist_avatar" />
+                <img v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+                <img v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
               </v-avatar>
               <div style="width: 100%" class="ml-3">
                 <div class="comment-input">
@@ -156,16 +156,11 @@ function addEmoji(emoji) {
 
 function isLike(id) {
   // 判断是否点赞
-  const likeList = webStore.commentLikeSet
-  if (likeList.includes(id)) {
-    return "like-active"
-  }
-  return "like"
+  return webStore.isCommentLike(id) ? "like-active" : "like"
 }
 function like(item) {
   // 点赞
-  const likeList = webStore.commentLikeSet
-  webStore.commentLikeSet = likeList
+  webStore.commentLike(item.id)
 }
 
 const listComments = () => {

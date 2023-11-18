@@ -18,18 +18,18 @@
             v-if="isShowSocial('qq')"
             class="mr-5 iconfont iconqq"
             target="_blank"
-            :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.websiteConfig.qq + '&site=qq&menu=yes'"
+            :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.website_config.qq + '&site=qq&menu=yes'"
           ></a>
           <a
             v-if="isShowSocial('github')"
             target="_blank"
-            :href="webStore.blogInfo.websiteConfig.github"
+            :href="webStore.blogInfo.website_config.github"
             class="mr-5 iconfont icongithub"
           ></a>
           <a
             v-if="isShowSocial('gitee')"
             target="_blank"
-            :href="webStore.blogInfo.websiteConfig.gitee"
+            :href="webStore.blogInfo.website_config.gitee"
             class="iconfont icongitee-fill-round"
           ></a>
         </div>
@@ -116,13 +116,13 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="webStore.blogInfo.websiteConfig.website_avatar" />
+                <img class="author-avatar" :src="webStore.blogInfo.website_config.website_avatar" />
               </v-avatar>
               <div style="font-size: 1.375rem; margin-top: 0.625rem">
-                {{ webStore.blogInfo.websiteConfig.website_author }}
+                {{ webStore.blogInfo.website_config.website_author }}
               </div>
               <div style="font-size: 0.875rem">
-                {{ webStore.blogInfo.websiteConfig.website_intro }}
+                {{ webStore.blogInfo.website_config.website_intro }}
               </div>
             </div>
             <!-- 博客信息 -->
@@ -131,7 +131,7 @@
                 <router-link to="/archives">
                   <div style="font-size: 0.875rem">文章</div>
                   <div style="font-size: 1.25rem">
-                    {{ webStore.blogInfo.articleCount }}
+                    {{ webStore.blogInfo.article_count }}
                   </div>
                 </router-link>
               </div>
@@ -139,14 +139,14 @@
                 <router-link to="/categories">
                   <div style="font-size: 0.875rem">分类</div>
                   <div style="font-size: 1.25rem">
-                    {{ webStore.blogInfo.categoryCount }}
+                    {{ webStore.blogInfo.category_count }}
                   </div>
                 </router-link>
               </div>
               <div class="blog-info-data">
                 <router-link to="/tags">
                   <div style="font-size: 0.875rem">标签</div>
-                  <div style="font-size: 1.25rem">{{ webStore.blogInfo.tagCount }}</div>
+                  <div style="font-size: 1.25rem">{{ webStore.blogInfo.tag_count }}</div>
                 </router-link>
               </div>
             </div>
@@ -161,18 +161,18 @@
                 v-if="isShowSocial('qq')"
                 class="mr-5 iconfont iconqq"
                 target="_blank"
-                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.websiteConfig.qq + '&site=qq&menu=yes'"
+                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.website_config.qq + '&site=qq&menu=yes'"
               ></a>
               <a
                 v-if="isShowSocial('github')"
                 target="_blank"
-                :href="webStore.blogInfo.websiteConfig.github"
+                :href="webStore.blogInfo.website_config.github"
                 class="mr-5 iconfont icongithub"
               ></a>
               <a
                 v-if="isShowSocial('gitee')"
                 target="_blank"
-                :href="webStore.blogInfo.websiteConfig.gitee"
+                :href="webStore.blogInfo.website_config.gitee"
                 class="iconfont icongitee-fill-round"
               ></a>
             </div>
@@ -184,7 +184,7 @@
               公告
             </div>
             <div style="font-size: 0.875rem">
-              {{ webStore.blogInfo.websiteConfig.website_notice }}
+              {{ webStore.blogInfo.website_config.website_notice }}
             </div>
           </v-card>
           <!-- 网站信息 -->
@@ -198,7 +198,7 @@
                 运行时间:<span class="float-right">{{ time }}</span>
               </div>
               <div style="padding: 4px 0 0">
-                总访问量:<span class="float-right">{{ webStore.blogInfo.viewsCount }}</span>
+                总访问量:<span class="float-right">{{ webStore.blogInfo.views_count }}</span>
               </div>
             </div>
           </v-card>
@@ -256,7 +256,7 @@ const articleList = ref<ArticleHome[]>([])
 
 // 初始化
 const init = () => {
-  document.title = webStore.blogInfo.websiteConfig.website_name
+  document.title = webStore.blogInfo.website_config.website_name
   // 一言Api进行打字机循环输出效果
   getHitokoto()
 
@@ -338,7 +338,7 @@ const scrollDown = () => {
 }
 
 const runTime = () => {
-  const timeold = new Date().getTime() - new Date(webStore.blogInfo.websiteConfig.website_create_time).getTime()
+  const timeold = new Date().getTime() - new Date(webStore.blogInfo.website_config.website_create_time).getTime()
   const msPerDay = 24 * 60 * 60 * 1000
   const daysold = Math.floor(timeold / msPerDay)
   let str = ""
@@ -362,7 +362,7 @@ const isRight = computed(() => {
 
 const isShowSocial = computed(() => {
   return function (social) {
-    return webStore.blogInfo.websiteConfig.social_url_list.indexOf(social) != -1
+    return webStore.blogInfo.website_config.social_url_list.indexOf(social) != -1
   }
 })
 

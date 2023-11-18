@@ -216,7 +216,7 @@ const openEmoji = () => {
 
 // 连接 WebSocket
 const connect = () => {
-  websocket.value = new WebSocket(blogInfo.websiteConfig.websocket_url)
+  websocket.value = new WebSocket(blogInfo.website_config.websocket_url)
 
   // 连接发生错误的回调方法
   websocket.value.onerror = (event) => {
@@ -302,10 +302,10 @@ const saveMessage = (e: Event) => {
   // WebSocket 消息对象
   const WebsocketMessage = {
     type: 3,
-    nickname: webStore.nickname,
-    avatar: webStore.avatar,
+    nickname: webStore.userInfo.nickname,
+    avatar: webStore.userInfo.avatar,
     content: content.value,
-    userId: webStore.userId,
+    userId: webStore.userInfo.id,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   }
@@ -327,7 +327,7 @@ const showBack = (item: any, index: number, e: MouseEvent) => {
     item.style.display = "none"
   })
 
-  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webStore.userId)) {
+  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webStore.userInfo.id)) {
     backBtn.value[index].style.left = e.offsetX + "px"
     backBtn.value[index].style.bottom = e.offsetY + "px"
     backBtn.value[index].style.display = "block"
@@ -391,10 +391,10 @@ const translationEnd = (event: Event) => {
   const formData = new FormData()
   formData.append("file", file)
   formData.append("type", "5")
-  formData.append("nickname", webStore.nickname)
-  formData.append("avatar", webStore.avatar)
-  if (webStore.userId !== null) {
-    formData.append("userId", webStore.userId)
+  formData.append("nickname", webStore.userInfo.nickname)
+  formData.append("avatar", webStore.userInfo.avatar)
+  if (webStore.userInfo.id !== null) {
+    formData.append("userId", webStore.userInfo.id)
   }
   formData.append("ipAddress", ipAddress.value)
   formData.append("ipSource", ipSource.value)
@@ -451,7 +451,7 @@ const getVoiceTime = (item: any) => {
 
 // 计算属性
 const isSelf = (item: any) => {
-  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webStore.userId)
+  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webStore.userInfo.id)
 }
 
 const isleft = (item: any) => {
