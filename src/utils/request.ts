@@ -111,9 +111,11 @@ class HttpRequest {
   }
 
   private setHeader(config: AxiosRequestConfig) {
-    const token = cookies.get("token")
+    const token = cookies.getItem("token")
+    const uid = cookies.getItem("uid")
     if (token) {
-      config.headers!.Authorization = token
+      config.headers!.token = token
+      config.headers!.uid = uid
     }
   }
 
@@ -159,8 +161,8 @@ class HttpRequest {
             return result
           // token 错误
           case 403:
-            console.log("403")
-            cookies.clearAll()
+            console.log("403 clear all cookies")
+            cookies.clear()
             return Promise.reject(new Error(message || "Error"))
           default:
             ElMessage({

@@ -166,11 +166,7 @@ const emailLogin = () => {
   loginApi({ username: username.value, password: password.value, code: code.value })
     .then((res) => {
       ElMessage.success("登录成功")
-      console.log(res)
-
-      webStore.setToken(res.data.access_token)
-      webStore.setUser(res.data.user_info)
-      webStore.setLoginHistory(res.data.login_info)
+      webStore.login(res.data)
       webStore.closeModel()
     })
     .catch((err) => {

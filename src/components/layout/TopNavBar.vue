@@ -80,7 +80,7 @@
           <router-link class="menu-btn" to="/remark"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
         </div>
         <div class="menus-item">
-          <a class="menu-btn" v-if="!webStore.userInfo.avatar" @click="openLogin">
+          <a class="menu-btn" v-if="!webStore.userInfo.id" @click="openLogin">
             <i class="iconfont icondenglu" /> 登录
           </a>
           <template v-else>

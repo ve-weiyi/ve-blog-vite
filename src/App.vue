@@ -50,15 +50,13 @@ import en from "element-plus/es/locale/lang/en"
 import { getUserInfoApi } from "@/api/user"
 import cookies from "@/utils/cookies"
 import { useWebStoreHook } from "@/stores/modules/website"
-import { useAppStore } from "@/stores/modules/app.ts"
 import { getAdminHomeInfoApi, getBlogHomeInfoApi, getWebsiteConfigApi } from "@/api/website.ts"
 
-const appStore = useAppStore()
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
 
-const locale = computed(() => (appStore.lang === "zh" ? zh : en))
-const size = computed(() => appStore.size)
+const locale = computed(() => zh)
+const size = computed(() => "default")
 
 const isMobile = computed(() => {
   const flag = navigator.userAgent.match(
@@ -74,7 +72,7 @@ const getUserinfo = () => {
       webStore.setUser(res.data)
     })
     .catch((err) => {
-      cookies.clearAll()
+      console.log("getUserInfoApi err", err)
     })
 }
 
@@ -88,9 +86,8 @@ const getBlogInfo = () => {
 onMounted(() => {
   getBlogInfo()
   // 页面刷新后自动获取用户信息
-  const token = webStore.getToken()
-  console.log("token", token)
-  if (token != undefined) {
+  if (webStore.isLogin()) {
+    console.log("getUserinfo --")
     getUserinfo()
   }
 })

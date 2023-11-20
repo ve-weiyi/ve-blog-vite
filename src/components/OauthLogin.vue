@@ -32,9 +32,7 @@ function OauthLogin() {
     state: route.query.state as string,
   }).then((res) => {
     console.log(res)
-    webStore.setToken(res.data.access_token)
-    webStore.setUser(res.data.user_info)
-    webStore.setLoginHistory(res.data.login_info)
+    webStore.login(res.data)
     if (webStore.loginUrl) {
       router.push({ path: webStore.loginUrl })
     } else {
