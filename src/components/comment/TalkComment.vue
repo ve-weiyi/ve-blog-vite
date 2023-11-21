@@ -5,8 +5,8 @@
     <div class="comment-wrapper">
       <div style="display: flex; width: 100%">
         <v-avatar size="36">
-          <img v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
-          <img v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
+          <img height="36" v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+          <img height="36" v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -30,7 +30,7 @@
       <div class="comment-wrapper" v-for="(item, index) of commentList" :key="item.id">
         <!-- 头像 -->
         <v-avatar size="40" class="comment-avatar">
-          <img :src="item.avatar" />
+          <img height="40" :src="item.avatar" />
         </v-avatar>
         <div class="comment-meta">
           <!-- 用户名 -->
@@ -57,7 +57,7 @@
           <div style="display: flex" v-for="reply of item.reply_dto_list" :key="reply.id">
             <!-- 头像 -->
             <v-avatar size="36" class="comment-avatar">
-              <img :src="reply.avatar" />
+              <img height="36" :src="reply.avatar" />
             </v-avatar>
             <div class="reply-meta">
               <!-- 用户名 -->
@@ -85,8 +85,8 @@
           <div v-if="replyCommentIndex === index && replyToCommentId === item.id" class="comment-wrapper">
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
-                <img v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
-                <img v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
+                <img height="36" v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+                <img height="36" v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
               </v-avatar>
               <div style="width: 100%" class="ml-3">
                 <div class="comment-input">

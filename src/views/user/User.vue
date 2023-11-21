@@ -11,7 +11,7 @@
         <v-col md="3" cols="12">
           <button id="pick-avatar" @click="showCropperDialog">
             <v-avatar size="140">
-              <img :src="userInfo.avatar" />
+              <img height="140" :src="userInfo.avatar" />
             </v-avatar>
           </button>
           <avatar-cropper

@@ -32,6 +32,7 @@ import axios from "axios"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { createCommentApi } from "@/api/comment"
+import { Comment } from "@/api/types"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -48,7 +49,7 @@ const props = defineProps({
 // 父组件向子组件传输的事件
 const emit = defineEmits([
   // 定义事件
-  // 'eventName',
+  "reloadReply",
 ])
 
 // 获取存储的缓存信息
@@ -58,7 +59,7 @@ const webStore = useWebStoreHook()
 const route = useRoute()
 
 // console.log('reply', props.data)
-const type = ref(props.type)
+const type = ref<number>(props.type)
 const reply = ref()
 const chooseEmoji = ref(false)
 
@@ -89,17 +90,17 @@ const insertReply = () => {
   commentContent.value = replaceEmoji(commentContent.value)
   const path = route.path
   const arr = path.split("/")
-  var comment = {
+  const comment: Comment = {
     type: type.value,
-    replyUserId: replyUserId.value,
-    parentId: parentId.value,
-    commentContent: commentContent.value,
-    topicId: parseInt(arr[2]),
+    reply_user_id: replyUserId.value,
+    parent_id: parentId.value,
+    comment_content: commentContent.value,
+    topic_id: parseInt(arr[2]),
   }
   switch (type.value) {
     case 1:
     case 3:
-      comment.topicId = parseInt(arr[2])
+      comment.topic_id = parseInt(arr[2])
       break
     default:
       break

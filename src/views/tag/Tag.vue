@@ -6,7 +6,8 @@
     </div>
     <!-- 标签列表 -->
     <v-card class="blog-container">
-      <div class="tag-cloud-title">标签 - {{ count }}</div>
+      <div class="tag-cloud-title">标签</div>
+      <div class="tag-cloud-sub-title">数量:{{ count }}</div>
       <div class="tag-cloud">
         <router-link
           :style="{ 'font-size': getRandomFontSize(), color: getRandomFontColor() }"
@@ -59,6 +60,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.tag-cloud-sub-title {
+  font-size: 14px;
+  text-align: center;
+}
 .tag-cloud-title {
   line-height: 2;
   font-size: 36px;

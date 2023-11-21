@@ -84,7 +84,7 @@
             <i class="iconfont icondenglu" /> 登录
           </a>
           <template v-else>
-            <img class="user-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
+            <img class="top-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
             <ul class="menus-submenu">
               <li>
                 <router-link to="/user"
@@ -251,7 +251,7 @@ ul {
   transition: all 0.3s ease-in-out;
 }
 
-.user-avatar {
+.top-avatar {
   cursor: pointer;
   border-radius: 50%;
 }

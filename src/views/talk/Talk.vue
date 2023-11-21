@@ -10,8 +10,8 @@
         <router-link :to="'/talks/' + item.id">
           <!-- 用户信息 -->
           <div class="user-info-wrapper">
-            <v-avatar size="36" class="user-avatar">
-              <img :src="item.avatar" />
+            <v-avatar class="user-avatar" size="36">
+              <img height="36" :src="item.avatar" />
             </v-avatar>
             <div class="user-detail-wrapper">
               <div class="user-nickname">

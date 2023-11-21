@@ -282,7 +282,7 @@ const insertComment = () => {
 const replyRef = ref()
 const showReplyBlock = ref(-1)
 
-const replyComment = (index, item) => {
+const replyComment = (index: number, item: CommentDTO) => {
   console.log(index, item)
   if (showReplyBlock.value == index) {
     showReplyBlock.value = -1
@@ -293,19 +293,19 @@ const replyComment = (index, item) => {
   webStore.replyInfo = item
 
   const childComponent = replyRef.value[index]
-  console.log("replyRef", replyRef.value[0])
-  console.log("childComponent", childComponent.commentContent)
+  console.log("item", item)
+  console.log("childComponent", childComponent)
 
   childComponent.commentContent = ""
   childComponent.nickname = item.nickname
-  childComponent.replyUserId = item.userId
-  childComponent.parentId = commentList.value[index].id
+  childComponent.replyUserId = item.user_id
+  childComponent.parentId = item.id
   childComponent.chooseEmoji = false
   childComponent.index = index
   // reply.value[index].$el.style.display = 'block'
 }
 
-const reloadReply = (index) => {
+const reloadReply = (index: number) => {
   findCommentReplyListApi(commentList.value[index].id, {
     sorts: [
       {
@@ -321,8 +321,12 @@ const reloadReply = (index) => {
         rule: "=",
       },
     ],
+  }).then((res) => {
+    commentList.value[index].reply_dto_list = res.data.list
   })
-  // findCommentReplyListApi(commentList.value[index].id)
+
+  // 隐藏回复框
+  showReplyBlock.value = -1
 }
 
 const viewReply = (index, item) => {
@@ -419,6 +423,7 @@ watch(commentContent, (val) => {
   padding: 0 5px;
   margin-left: 6px;
 }
+
 .comment-title {
   display: flex;
   align-items: center;
@@ -427,55 +432,66 @@ watch(commentContent, (val) => {
   line-height: 40px;
   margin-bottom: 10px;
 }
+
 .comment-title i {
   font-size: 1.5rem;
   margin-right: 5px;
 }
+
 .comment-input-wrapper {
   border: 1px solid #90939950;
   border-radius: 4px;
   padding: 10px;
   margin: 0 0 10px;
 }
+
 .count {
   padding: 5px;
   line-height: 1.75;
   font-size: 1.25rem;
   font-weight: bold;
 }
+
 .comment-meta {
   margin-left: 0.8rem;
   width: 100%;
   border-bottom: 1px dashed #f5f5f5;
 }
+
 .reply-meta {
   margin-left: 0.8rem;
   width: 100%;
 }
+
 .comment-user {
   font-size: 14px;
   line-height: 1.75;
 }
+
 .comment-user a {
   color: #1abc9c !important;
   font-weight: 500;
   transition: 0.3s all;
 }
+
 .comment-nickname {
   text-decoration: none;
   color: #1abc9c !important;
   font-weight: 500;
 }
+
 .comment-info {
   line-height: 1.75;
   font-size: 0.75rem;
   color: #b3b3b3;
 }
+
 .reply-btn {
   cursor: pointer;
   float: right;
   color: #ef2f11;
 }
+
 .comment-content {
   font-size: 0.875rem;
   line-height: 1.75;
@@ -484,30 +500,37 @@ watch(commentContent, (val) => {
   word-wrap: break-word;
   word-break: break-all;
 }
+
 .comment-avatar {
   transition: all 0.5s;
 }
+
 .comment-avatar:hover {
   transform: rotate(360deg);
 }
+
 .like {
   cursor: pointer;
   font-size: 0.875rem;
 }
+
 .like:hover {
   color: #eb5055;
 }
+
 .like-active {
   cursor: pointer;
   font-size: 0.875rem;
   color: #eb5055;
 }
+
 .load-wrapper {
   margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .load-wrapper button {
   background-color: #49b1f5;
   color: #fff;
