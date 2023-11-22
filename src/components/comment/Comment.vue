@@ -43,8 +43,8 @@
         <div class="comment-meta">
           <!-- 用户名 -->
           <div class="comment-user">
-            <span v-if="!item.web_site">{{ item.nickname }}</span>
-            <a v-else :href="item.web_site" target="_blank">
+            <span v-if="!item.website">{{ item.nickname }}</span>
+            <a v-else :href="item.website" target="_blank">
               {{ item.nickname }}
             </a>
             <span class="blogger-tag" v-if="item.user_id == 1">博主</span>
@@ -72,8 +72,8 @@
             <div class="reply-meta">
               <!-- 用户名 -->
               <div class="comment-user">
-                <span v-if="!reply.web_site">{{ reply.nickname }}</span>
-                <a v-else :href="reply.web_site" target="_blank">
+                <span v-if="!reply.website">{{ reply.nickname }}</span>
+                <a v-else :href="reply.website" target="_blank">
                   {{ reply.nickname }}
                 </a>
                 <span class="blogger-tag" v-if="reply.user_id === 1">博主</span>
@@ -94,8 +94,8 @@
               <p class="comment-content">
                 <!-- 回复用户名 -->
                 <template v-if="reply.reply_user_id !== item.user_id">
-                  <span v-if="!reply.reply_web_site" class="ml-1"> @{{ reply.reply_nickname }} </span>
-                  <a v-else :href="reply.reply_web_site" target="_blank" class="comment-nickname ml-1">
+                  <span v-if="!reply.reply_website" class="ml-1"> @{{ reply.reply_nickname }} </span>
+                  <a v-else :href="reply.reply_website" target="_blank" class="comment-nickname ml-1">
                     @{{ reply.reply_nickname }}
                   </a>
                   ，

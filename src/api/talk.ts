@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Talk, BatchResult, TalkDetails } from "./types"
+import { Talk, BatchResult, TalkDetailsDTO } from "./types"
 
 /** 创建说说 */
 export function createTalkApi(data: Talk): Promise<IApiResponseData<Talk>> {
@@ -54,8 +54,8 @@ export function findTalkListApi(page: PageQuery): Promise<IApiResponseData<PageR
 }
 
 /** 分页获取说说详情列表 */
-export function findTalkDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TalkDetails>>> {
-  return http.request<IApiResponseData<PageResult<TalkDetails>>>({
+export function findTalkDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TalkDetailsDTO>>> {
+  return http.request<IApiResponseData<PageResult<TalkDetailsDTO>>>({
     url: `/api/v1/talk/details_list`,
     method: "post",
     data: page,
@@ -63,8 +63,8 @@ export function findTalkDetailsListApi(page: PageQuery): Promise<IApiResponseDat
 }
 
 /** 分页获取说说详情列表 */
-export function findTalkDetailApi(id: number): Promise<IApiResponseData<TalkDetails>> {
-  return http.request<IApiResponseData<TalkDetails>>({
+export function findTalkDetailApi(id: number): Promise<IApiResponseData<TalkDetailsDTO>> {
+  return http.request<IApiResponseData<TalkDetailsDTO>>({
     url: `/api/v1/talk/${id}/details`,
     method: "get",
   })

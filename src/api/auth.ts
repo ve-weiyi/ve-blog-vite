@@ -1,8 +1,8 @@
 import http from "@/utils/request"
-import { User, Login, UserEmail, ResetPasswordReq, OauthLoginReq, OauthLoginUrl } from "./types"
+import { UserReq, Login, UserEmail, ResetPasswordReq, OauthLoginReq, OauthLoginUrl } from "./types"
 
 /** 登录 */
-export function loginApi(data: User): Promise<IApiResponseData<Login>> {
+export function loginApi(data: UserReq): Promise<IApiResponseData<Login>> {
   return http.request<IApiResponseData<Login>>({
     url: `/api/v1/login`,
     method: "post",
@@ -27,7 +27,7 @@ export function logoffApi(): Promise<IApiResponseData<any>> {
 }
 
 /** 注册 */
-export function registerApi(data: User): Promise<IApiResponseData<any>> {
+export function registerApi(data: UserReq): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/register`,
     method: "post",

@@ -11,27 +11,32 @@
         <v-col md="3" cols="12">
           <button id="pick-avatar" @click="showCropperDialog">
             <v-avatar size="140">
-              <img height="140" :src="userInfo.avatar" />
+              <img height="140" :src="webStore.userInfo.avatar" />
             </v-avatar>
           </button>
           <avatar-cropper
             v-if="showCropper"
-            :src="userInfo.avatar"
+            :src="webStore.userInfo.avatar"
             @onCancel="showCropper = false"
             @onConfirm="showCropper = false"
           />
         </v-col>
         <v-col md="7" cols="12">
-          <v-text-field v-model="userInfo.nickname" variant="underlined" label="昵称" placeholder="请输入您的昵称" />
           <v-text-field
-            v-model="userInfo.website"
+            v-model="webStore.userInfo.nickname"
+            variant="underlined"
+            label="昵称"
+            placeholder="请输入您的昵称"
+          />
+          <v-text-field
+            v-model="webStore.userInfo.website"
             variant="underlined"
             class="mt-7"
             label="个人网站"
             placeholder="http://你的网址"
           />
           <v-text-field
-            v-model="userInfo.intro"
+            v-model="webStore.userInfo.intro"
             variant="underlined"
             class="mt-7"
             label="简介"
@@ -53,11 +58,11 @@
 import { ref, computed } from "vue"
 import { useWebStoreHook } from "@/stores/modules/website"
 import AvatarCropper from "@/components/AvatarCropper.vue"
+import { updateUserInfoApi } from "@/api/user.ts"
+import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
-
-const userInfo = webStore.userInfo
 
 const showCropper = ref(false)
 
@@ -67,16 +72,15 @@ const showCropperDialog = () => {
 }
 // 更新用户信息
 const updateUserInfo = () => {
-  // axios.put('/api/users/info', userInfo.value).then(({ data }) => {
-  //   if (data.flag) {
-  //     store.commit('nickname', userInfo.value.nickname)
-  //     store.commit('intro', userInfo.value.intro)
-  //     store.commit('webSite', userInfo.value.webSite)
-  //     $toast({ type: 'success', message: '修改成功' })
-  //   } else {
-  //     $toast({ type: 'error', message: data.message })
-  //   }
-  // })
+  updateUserInfoApi({
+    nickname: webStore.userInfo.nickname,
+    intro: webStore.userInfo.intro,
+    website: webStore.userInfo.website,
+    avatar: webStore.userInfo.avatar,
+  }).then((res) => {
+    console.log("updateUserInfo", res)
+    ElMessage.success("修改成功")
+  })
 }
 
 // 上传头像
@@ -95,7 +99,7 @@ const openEmailModel = () => {
   webStore.emailFlag = true
 }
 
-const email = computed(() => userInfo.email)
+const email = computed(() => webStore.userInfo.email)
 const loginType = computed(() => webStore.loginHistory.login_type)
 
 const cover = webStore.getCover("user")

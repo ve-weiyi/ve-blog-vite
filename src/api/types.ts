@@ -246,7 +246,7 @@ export interface UserInformation {
   avatar?: string // 用户头像
   phone?: string // 用户手机号
   intro?: string // 个人简介
-  web_site?: string // 个人网站
+  website?: string // 个人网站
   created_at?: string // 创建时间
   updated_at?: string // 更新时间
 }
@@ -285,7 +285,7 @@ export interface WebsiteConfig {
   updated_at?: string // 更新时间
 }
 
-export interface ArticleCondition {
+export interface ArticleConditionReq {
   tag_id?: number // 文章标签ID
   category_id?: number // 文章分类ID
 }
@@ -300,7 +300,7 @@ export interface ArticleDeleteReq {
   is_delete?: number // 是否删除
 }
 
-export interface ArticleDetailsReq {
+export interface ArticleDetailsDTOReq {
   id?: number // 文章ID
   article_cover?: string // 文章缩略图
   article_title?: string // 标题
@@ -317,25 +317,25 @@ export interface ArticleDetailsReq {
   tag_name_list?: string[] // 文章标签列表
 }
 
-export interface Captcha {
+export interface CaptchaReq {
   captcha_type?: string
   height?: number // Height png height in pixel.
-  width?: number // Width Captcha png width in pixel.
+  width?: number // Width CaptchaReq png width in pixel.
   length?: number // DefaultLen Default number of digits in captcha solution.
 }
 
-export interface CaptchaVerify {
+export interface CaptchaVerifyReq {
   id?: string
   code?: string
 }
 
-export interface CaptchaEmail {
+export interface CaptchaEmailReq {
   email?: string // 目标邮箱
   service?: string // 服务
   check?: boolean // 是否检查邮箱是否存在
 }
 
-export interface User {
+export interface UserReq {
   username?: string
   password?: string
   code?: string
@@ -363,22 +363,29 @@ export interface OauthLoginReq {
   state?: string // 状态
 }
 
-export interface UpdateUserRoles {
+export interface UpdateUserRolesReq {
   user_id?: number
   role_ids?: number[]
 }
 
-export interface UpdateRoleMenus {
+export interface UpdateRoleMenusReq {
   role_id?: number
   menu_ids?: number[]
 }
 
-export interface UpdateRoleResources {
+export interface UpdateRoleApisReq {
   role_id?: number
   resource_ids?: number[]
 }
 
-export interface WebsiteConfigRequest {
+export interface UserInfoReq {
+  nickname?: string // 昵称
+  website?: string // 网站
+  intro?: string // 简介
+  avatar?: string // 头像
+}
+
+export interface WebsiteConfigReq {
   key?: string
   value?: string
 }
@@ -414,21 +421,11 @@ export interface ArticleConditionDTO {
   condition_name?: string // 条件名
 }
 
-export interface ArticlePageDetails extends ArticleHome {
+export interface ArticlePageDetailsDTO extends ArticleHome {
   last_article?: ArticlePreviewDTO // 上一篇文章
   next_article?: ArticlePreviewDTO // 下一篇文章
   recommend_article_list?: ArticlePreviewDTO[] // 推荐文章列表
   newest_article_list?: ArticlePreviewDTO[] // 最新文章列表
-}
-
-export interface TagDTO {
-  id?: number // 标签ID
-  tag_name?: string // 标签名
-}
-
-export interface CategoryDTO {
-  id?: number
-  category_name?: string // 分类名
 }
 
 export interface ArticlePreviewDTO {
@@ -509,7 +506,7 @@ export interface ArticleRankDTO {
   count?: number // 数量
 }
 
-export interface CaptchaResp {
+export interface CaptchaDTO {
   id?: string
   encode_data?: string // 验证码内容，base64编码
   length?: number
@@ -531,12 +528,22 @@ export interface TagDetailsDTO {
   updated_at?: string // 更新时间
 }
 
+export interface CategoryDTO {
+  id?: number
+  category_name?: string // 分类名
+}
+
+export interface TagDTO {
+  id?: number // 标签ID
+  tag_name?: string // 标签名
+}
+
 export interface CommentDTO {
   id?: number // 评论id
   user_id?: number // 用户id
   nickname?: string // 用户昵称
   avatar?: string // 用户头像
-  web_site?: string // 个人网站
+  website?: string // 个人网站
   comment_content?: string // 评论内容
   like_count?: number // 点赞数
   created_at?: string // 评论时间
@@ -550,10 +557,10 @@ export interface ReplyDTO {
   user_id?: number // 用户id
   nickname?: string // 用户昵称
   avatar?: string // 用户头像
-  web_site?: string // 个人网站
+  website?: string // 个人网站
   reply_user_id?: number // 被回复用户id
   reply_nickname?: string // 被回复用户昵称
-  reply_web_site?: string // 被回复个人网站
+  reply_website?: string // 被回复个人网站
   comment_content?: string // 评论内容
   like_count?: number // 点赞数
   created_at?: string // 评论时间
@@ -614,18 +621,7 @@ export interface OauthLoginUrl {
   url?: string // 授权地址
 }
 
-export interface UserMenu {
-  id?: number
-  name?: string
-  path?: string
-  component?: string
-  icon?: string
-  rank?: number
-  is_hidden?: boolean
-  children?: UserMenu[]
-}
-
-export interface PhotoAlbumDetails extends PhotoAlbum {
+export interface PhotoAlbumDetailsDTO extends PhotoAlbum {
   photo_count?: number
 }
 
@@ -635,15 +631,15 @@ export interface BatchResult {
   fail_count?: number // 失败数量
 }
 
-export interface ApiDetails extends Api {
-  children?: ApiDetails[]
+export interface ApiDetailsDTO extends Api {
+  children?: ApiDetailsDTO[]
 }
 
-export interface MenuDetails extends Menu {
-  children?: MenuDetails[]
+export interface MenuDetailsDTO extends Menu {
+  children?: MenuDetailsDTO[]
 }
 
-export interface RoleInfo extends Role {
+export interface RoleDetailsDTO extends Role {
   menu_id_list?: number[]
   resource_id_list?: number[]
 }
@@ -653,7 +649,7 @@ export interface RoleDTO {
   role_comment?: string
 }
 
-export interface TalkDetails {
+export interface TalkDetailsDTO {
   id?: number
   user_id?: number // 用户ID
   nickname?: string // 用户昵称
@@ -668,9 +664,37 @@ export interface TalkDetails {
   updated_at?: string // 更新时间
 }
 
-export interface UserArea {
+export interface UserDTO {
+  id?: number
+  username?: string
+  nickname?: string
+  avatar?: string
+  intro?: string
+  website?: string
+  email?: string
+  status?: number
+  register_type?: string
+  ip_address?: string // ip host
+  ip_source?: string // ip 源
+  created_at?: string
+  updated_at?: string
+  roles?: RoleDTO[]
+}
+
+export interface UserAreaDTO {
   name?: string
   value?: number
+}
+
+export interface UserMenuDTO {
+  id?: number
+  name?: string
+  path?: string
+  component?: string
+  icon?: string
+  rank?: number
+  is_hidden?: number
+  children?: UserMenuDTO[]
 }
 
 export interface ChatRequest {

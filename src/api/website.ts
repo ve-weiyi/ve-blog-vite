@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { ChatRecord, WebsiteConfigRequest, BlogHomeInfo, AdminHomeInfo } from "./types"
+import { ChatRecord, WebsiteConfigReq, BlogHomeInfo, AdminHomeInfo } from "./types"
 
 /** 查询聊天记录 */
 export function webSocketApi(): Promise<any> {
@@ -44,7 +44,7 @@ export function getWebsiteConfigApi(): Promise<IApiResponseData<any>> {
 }
 
 /** 获取配置 */
-export function getConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseData<any>> {
+export function getConfigApi(data: WebsiteConfigReq): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/admin/config`,
     method: "post",
@@ -53,7 +53,7 @@ export function getConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseDa
 }
 
 /** 更新配置 */
-export function updateConfigApi(data: WebsiteConfigRequest): Promise<IApiResponseData<any>> {
+export function updateConfigApi(data: WebsiteConfigReq): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/admin/config`,
     method: "put",

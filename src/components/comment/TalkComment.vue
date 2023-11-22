@@ -35,8 +35,8 @@
         <div class="comment-meta">
           <!-- 用户名 -->
           <div class="comment-user">
-            <span v-if="!item.web_site">{{ item.nickname }}</span>
-            <a v-else :href="item.web_site" target="_blank">{{ item.nickname }}</a>
+            <span v-if="!item.website">{{ item.nickname }}</span>
+            <a v-else :href="item.website" target="_blank">{{ item.nickname }}</a>
             <v-icon size="20" color="#ffa51e" v-if="item.user_id == 1"> mdi-check-decagram </v-icon>
           </div>
           <!-- 信息 -->
@@ -62,8 +62,8 @@
             <div class="reply-meta">
               <!-- 用户名 -->
               <div class="reply-user">
-                <span v-if="!reply.web_site">{{ reply.nickname }}</span>
-                <a v-else :href="reply.web_site" target="_blank">{{ reply.nickname }}</a>
+                <span v-if="!reply.website">{{ reply.nickname }}</span>
+                <a v-else :href="reply.website" target="_blank">{{ reply.nickname }}</a>
                 <v-icon size="18" color="#ffa51e" v-if="reply.user_id === 1"> mdi-check-decagram </v-icon>
                 <span style="margin-left: 5px; color: #999">回复</span>
                 <a :href="`#${reply.reply_user_id}`" class="reply-link"> @{{ reply.reply_nickname }} </a>

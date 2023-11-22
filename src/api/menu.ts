@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Menu, BatchResult, MenuDetails } from "./types"
+import { Menu, BatchResult, MenuDetailsDTO } from "./types"
 
 /** 创建菜单 */
 export function createMenuApi(data: Menu): Promise<IApiResponseData<Menu>> {
@@ -54,8 +54,8 @@ export function findMenuListApi(page: PageQuery): Promise<IApiResponseData<PageR
 }
 
 /** 获取菜单列表 */
-export function findMenuDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<MenuDetails>>> {
-  return http.request<IApiResponseData<PageResult<MenuDetails>>>({
+export function findMenuDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<MenuDetailsDTO>>> {
+  return http.request<IApiResponseData<PageResult<MenuDetailsDTO>>>({
     url: `/api/v1/menu/details_list`,
     method: "post",
     data: page,

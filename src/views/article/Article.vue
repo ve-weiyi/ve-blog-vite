@@ -221,7 +221,7 @@ import { useRoute } from "vue-router"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { markdownToHtml } from "@/utils/markdown"
 import { findArticleDetailsApi, likeArticleApi } from "@/api/article"
-import { ArticlePageDetails } from "@/api/types"
+import { ArticlePageDetailsDTO } from "@/api/types"
 
 const config = {
   sites: ["qzone", "wechat", "weibo", "qq"],
@@ -236,7 +236,7 @@ const webStore = useWebStoreHook()
 
 const imgList = ref<string[]>([])
 const articleRef = ref()
-const articleDetail = ref<ArticlePageDetails>(null)
+const articleDetail = ref<ArticlePageDetailsDTO>(null)
 
 const wordNum = ref<number>()
 const readTime = ref<string>()

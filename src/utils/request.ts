@@ -161,7 +161,11 @@ class HttpRequest {
             return result
           // token 错误
           case 403:
-            console.log("403 clear all cookies")
+            ElMessage({
+              message: message || "Error",
+              type: "error",
+              duration: 3 * 1000,
+            })
             cookies.clear()
             return Promise.reject(new Error(message || "Error"))
           default:

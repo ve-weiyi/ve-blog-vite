@@ -56,7 +56,7 @@ import { getAdminHomeInfoApi, getBlogHomeInfoApi, getWebsiteConfigApi } from "@/
 const webStore = useWebStoreHook()
 
 const locale = computed(() => zh)
-const size = computed(() => "default")
+const size = ref<"" | "default" | "small" | "large">("default")
 
 const isMobile = computed(() => {
   const flag = navigator.userAgent.match(

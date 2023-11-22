@@ -60,7 +60,7 @@ import axios from "axios"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { findTalkDetailApi, likeTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"
-import { TalkDetails } from "@/api/types"
+import { TalkDetailsDTO } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -72,7 +72,7 @@ const talkId = route.params.talkId ? parseInt(route.params.talkId as string) : 0
 
 const commentType = 3
 const commentCount = ref(0)
-const talkInfo = ref<TalkDetails>({
+const talkInfo = ref<TalkDetailsDTO>({
   id: 49,
   user_id: 2,
   nickname: "ve77",
@@ -106,7 +106,7 @@ function previewImg(img) {
   // })
 }
 
-const like = (talk: TalkDetails) => {
+const like = (talk: TalkDetailsDTO) => {
   // 判断登录
   if (!webStore.userInfo.id) {
     webStore.loginFlag = true

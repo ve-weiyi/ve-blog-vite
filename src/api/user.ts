@@ -1,19 +1,28 @@
 import http from "@/utils/request"
-import { LoginHistory, MenuDetails, ApiDetails, UserInfo, UserInformation, UserAccount, UpdateUserRoles, Role } from "./types"
+import { UserDTO, UserAreaDTO, LoginHistory, MenuDetailsDTO, ApiDetailsDTO, UserInfo, UserInfoReq, UserInformation, UserAccount, UpdateUserRolesReq, Role } from "./types"
 
 /** 获取用户列表 */
-export function findUserListApi(page: PageQuery): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+export function findUserListApi(page: PageQuery): Promise<IApiResponseData<PageResult<UserDTO>>> {
+  return http.request<IApiResponseData<PageResult<UserDTO>>>({
     url: `/api/v1/user/list`,
     method: "post",
     data: page,
   })
 }
 
-/** 获取用户地区 */
-export function findUserListAreasApi(page: PageQuery): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/user/list/areas`,
+/** 获取在线用户列表 */
+export function findOnlineUserListApi(page: PageQuery): Promise<IApiResponseData<PageResult<UserDTO>>> {
+  return http.request<IApiResponseData<PageResult<UserDTO>>>({
+    url: `/api/v1/user/online_list`,
+    method: "post",
+    data: page,
+  })
+}
+
+/** 获取用户地区列表 */
+export function findUserAreaListApi(page: PageQuery): Promise<IApiResponseData<PageResult<UserAreaDTO>>> {
+  return http.request<IApiResponseData<PageResult<UserAreaDTO>>>({
+    url: `/api/v1/user/area_list`,
     method: "post",
     data: page,
   })
@@ -38,16 +47,16 @@ export function deleteUserLoginHistoryByIdsApi(data: number[]): Promise<IApiResp
 }
 
 /** 获取用户菜单权限 */
-export function getUserMenusApi(): Promise<IApiResponseData<MenuDetails>> {
-  return http.request<IApiResponseData<MenuDetails>>({
+export function getUserMenusApi(): Promise<IApiResponseData<MenuDetailsDTO>> {
+  return http.request<IApiResponseData<MenuDetailsDTO>>({
     url: `/api/v1/user/menus`,
     method: "get",
   })
 }
 
 /** 获取用户接口权限 */
-export function getUserApisApi(): Promise<IApiResponseData<ApiDetails>> {
-  return http.request<IApiResponseData<ApiDetails>>({
+export function getUserApisApi(): Promise<IApiResponseData<ApiDetailsDTO>> {
+  return http.request<IApiResponseData<ApiDetailsDTO>>({
     url: `/api/v1/user/apis`,
     method: "get",
   })
@@ -62,7 +71,7 @@ export function getUserInfoApi(): Promise<IApiResponseData<UserInfo>> {
 }
 
 /** 修改用户信息 */
-export function updateUserInfoApi(data: UserInformation): Promise<IApiResponseData<UserInformation>> {
+export function updateUserInfoApi(data: UserInfoReq): Promise<IApiResponseData<UserInformation>> {
   return http.request<IApiResponseData<UserInformation>>({
     url: `/api/v1/user/info`,
     method: "post",
@@ -88,7 +97,7 @@ export function updateUserStatusApi(data: UserAccount): Promise<IApiResponseData
 }
 
 /** 修改用户角色 */
-export function updateUserRolesApi(data: UpdateUserRoles): Promise<IApiResponseData<Role>> {
+export function updateUserRolesApi(data: UpdateUserRolesReq): Promise<IApiResponseData<Role>> {
   return http.request<IApiResponseData<Role>>({
     url: `/api/v1/user/update_roles`,
     method: "post",

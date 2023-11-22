@@ -1,8 +1,8 @@
 import http from "@/utils/request"
-import { ArticleDetailsReq, ArticleBack, ArticleDeleteReq, ArticleTopReq, ArticlePreviewDTO, ArticleCondition, ArticleConditionDTO, ArticlePageDetails, ArticleHome, Article } from "./types"
+import { ArticleDetailsDTOReq, ArticleBack, ArticleDeleteReq, ArticleTopReq, ArticlePreviewDTO, ArticleConditionReq, ArticleConditionDTO, ArticlePageDetailsDTO, ArticleHome, Article } from "./types"
 
 /** 保存文章 */
-export function saveArticleApi(data: ArticleDetailsReq): Promise<IApiResponseData<any>> {
+export function saveArticleApi(data: ArticleDetailsDTOReq): Promise<IApiResponseData<any>> {
   return http.request<IApiResponseData<any>>({
     url: `/api/v1/admin/article`,
     method: "post",
@@ -63,7 +63,7 @@ export function findArticleArchivesApi(page: PageQuery): Promise<IApiResponseDat
 }
 
 /** 通过标签或者id获取文章列表 */
-export function findArticleSeriesApi(page: ArticleCondition): Promise<IApiResponseData<ArticleConditionDTO>> {
+export function findArticleSeriesApi(page: ArticleConditionReq): Promise<IApiResponseData<ArticleConditionDTO>> {
   return http.request<IApiResponseData<ArticleConditionDTO>>({
     url: `/api/v1/article/series`,
     method: "post",
@@ -72,8 +72,8 @@ export function findArticleSeriesApi(page: ArticleCondition): Promise<IApiRespon
 }
 
 /** 文章相关推荐 */
-export function findArticleDetailsApi(id: number): Promise<IApiResponseData<ArticlePageDetails>> {
-  return http.request<IApiResponseData<ArticlePageDetails>>({
+export function findArticleDetailsApi(id: number): Promise<IApiResponseData<ArticlePageDetailsDTO>> {
+  return http.request<IApiResponseData<ArticlePageDetailsDTO>>({
     url: `/api/v1/article/${id}/details`,
     method: "get",
   })

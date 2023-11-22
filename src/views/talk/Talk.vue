@@ -69,9 +69,8 @@
 import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/stores/modules/website"
-import axios from "axios"
 import { findTalkDetailsListApi, likeTalkApi } from "@/api/talk"
-import { TalkDetails } from "@/api/types"
+import { TalkDetailsDTO } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -79,7 +78,7 @@ const cover = ref(webStore.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
-const talkList = ref<TalkDetails[]>([])
+const talkList = ref<TalkDetailsDTO[]>([])
 const count = ref(0)
 const previewList = ref([])
 
@@ -109,7 +108,7 @@ const previewImg = (img) => {
   // })
 }
 
-const like = (talk: TalkDetails) => {
+const like = (talk: TalkDetailsDTO) => {
   // 判断登录
   if (!webStore.userInfo.id) {
     webStore.loginFlag = true
