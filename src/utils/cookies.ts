@@ -25,7 +25,6 @@ class CookieProxy implements ProxyStorage {
       return JSON.parse(value)
     }
 
-    console.log("value", k, value)
     return null
   }
 

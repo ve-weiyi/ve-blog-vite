@@ -5,12 +5,15 @@
         {{ link }}
       </v-btn>
       <div>
-        ©{{ websiteConfig.website_create_time }} - {{ new Date().getFullYear() }}
-        By
-        {{ websiteConfig.website_author }}
+        ©{{ webStore.blogInfo.website_config.website_create_time }} -
+        {{ new Date().getFullYear() }}
+        <a class="copyright" href="https://veweiyi.cn/" target="_blank">
+          {{ webStore.blogInfo.website_config.website_author }}
+        </a>
+        版权所有
       </div>
       <a href="https://beian.miit.gov.cn/" target="_blank">
-        {{ websiteConfig.website_record_no }}
+        {{ webStore.blogInfo.website_config.website_record_no }}
       </a>
     </div>
   </v-footer>
@@ -21,10 +24,6 @@ import { useWebStoreHook } from "@/stores/modules/website"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
-const blogInfo = webStore.blogInfo
-
-// 网站信息
-const websiteConfig = blogInfo.website_config
 
 function getCurrentYear() {
   return new Date().getFullYear()
@@ -34,6 +33,11 @@ const links = ["关于", "联系", "博客", "项目", "友链"]
 </script>
 
 <style scoped>
+.copyright {
+  color: white;
+  font-weight: 700;
+}
+
 .footer {
   position: absolute;
   top: calc(100%);

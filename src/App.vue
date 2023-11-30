@@ -66,14 +66,9 @@ const isMobile = computed(() => {
 })
 
 const getUserinfo = () => {
-  getUserInfoApi()
-    .then((res) => {
-      console.log("getUserInfoApi", res)
-      webStore.setUser(res.data)
-    })
-    .catch((err) => {
-      console.log("getUserInfoApi err", err)
-    })
+  getUserInfoApi().then((res) => {
+    webStore.setUser(res.data)
+  })
 }
 
 const getBlogInfo = () => {

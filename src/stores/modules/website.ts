@@ -96,6 +96,7 @@ export const useWebStore = defineStore({
     },
     setBlogInfo(blogInfo: BlogHomeInfo) {
       this.blogInfo = blogInfo
+      console.log("website_record_no", this.blogInfo.website_config.website_record_no)
     },
     setUser(user: UserInfo) {
       this.userInfo = user

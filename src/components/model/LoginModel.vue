@@ -86,6 +86,7 @@ import { getAuthorizeUrlApi, loginApi } from "@/api/auth"
 import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from "@/api/captcha"
 import cookies from "@/utils/cookies"
 import router from "@/router"
+import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -132,7 +133,11 @@ const getCaptchaImage = () => {
     captcha.value = res.data
   })
 }
-
+const getUserinfo = () => {
+  getUserInfoApi().then((res) => {
+    webStore.setUser(res.data)
+  })
+}
 const login = () => {
   const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(username.value)) {
@@ -167,6 +172,7 @@ const emailLogin = () => {
     .then((res) => {
       ElMessage.success("登录成功")
       webStore.login(res.data)
+      getUserinfo()
       webStore.closeModel()
     })
     .catch((err) => {

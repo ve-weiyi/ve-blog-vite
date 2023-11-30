@@ -14,6 +14,7 @@ import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { oauthLoginApi } from "@/api/auth"
 import { useWebStoreHook } from "@/stores/modules/website"
+import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -33,6 +34,7 @@ function OauthLogin() {
   }).then((res) => {
     console.log(res)
     webStore.login(res.data)
+    getUserinfo()
     if (webStore.loginUrl) {
       router.push({ path: webStore.loginUrl })
     } else {
@@ -41,9 +43,14 @@ function OauthLogin() {
   })
 }
 
+const getUserinfo = () => {
+  getUserInfoApi().then((res) => {
+    webStore.setUser(res.data)
+  })
+}
 // 生命周期钩子
 onMounted(() => {
-  console.log(platform)
+  console.log("OauthLogin", platform, route.query.code, route.query.state)
   OauthLogin()
 })
 </script>
