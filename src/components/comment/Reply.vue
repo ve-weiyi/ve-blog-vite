@@ -23,12 +23,9 @@
 
 <script setup lang="ts">
 import Emoji from "../Emoji.vue"
-import EmojiList from "@/assets/emojis/qq_emoji.json"
-
 import { ref, watch } from "vue"
 import { useWebStoreHook } from "@/stores/modules/website"
 import { useRoute } from "vue-router"
-import axios from "axios"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { createCommentApi } from "@/api/comment"

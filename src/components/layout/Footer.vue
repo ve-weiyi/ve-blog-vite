@@ -29,7 +29,7 @@ function getCurrentYear() {
   return new Date().getFullYear()
 }
 
-const links = ["关于", "联系", "博客", "项目", "友链"]
+const links = ["博客", "项目", "友链", "关于", "联系"]
 </script>
 
 <style scoped>

@@ -75,8 +75,8 @@
         </div>
         <div class="emoji-border" v-show="isEmoji" />
         <!-- 切换输入方式 -->
-        <v-icon v-show="!isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-microphone</v-icon>
-        <v-icon v-show="isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-keyboard</v-icon>
+        <v-icon v-show="!isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-microphone </v-icon>
+        <v-icon v-show="isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-keyboard </v-icon>
         <!-- 文字输入 -->
         <textarea
           v-show="!isVoice"
@@ -121,17 +121,15 @@
 import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from "vue"
 import Recorderx, { ENCODE_TYPE } from "recorderx"
 import Emoji from "./Emoji.vue"
-import EmojiList from "@/assets/emojis/qq_emoji.json"
 import { useWebStoreHook } from "@/stores/modules/website"
-import axios from "axios"
 import image from "@/assets/images/avatar.jpg"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { findChatRecordsApi } from "@/api/website"
 import { ChatRecord } from "@/api/types.ts"
+import { uploadVoiceApi } from "@/api/file.ts"
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
-const blogInfo = webStore.blogInfo
 
 const isInput = computed(() => {
   if (typeof content.value === "string") {
@@ -216,7 +214,7 @@ const openEmoji = () => {
 
 // 连接 WebSocket
 const connect = () => {
-  websocket.value = new WebSocket(blogInfo.website_config.websocket_url)
+  websocket.value = new WebSocket(webStore.blogInfo.website_config.websocket_url)
 
   // 连接发生错误的回调方法
   websocket.value.onerror = (event) => {
@@ -239,6 +237,7 @@ const connect = () => {
 
   // 接收到消息的回调方法
   websocket.value.onmessage = (event) => {
+    console.log("websocket", event)
     const data = JSON.parse(event.data)
     switch (data.type) {
       case 1:
@@ -247,9 +246,9 @@ const connect = () => {
         break
       case 2:
         // 聊天历史记录
-        chatRecordList.value = data.chatRecordList
-        ipAddress.value = data.ipAddress
-        ipSource.value = data.ipSource
+        chatRecordList.value = data.chat_record_list
+        ipAddress.value = data.ip_address
+        ipSource.value = data.ip_source
         break
       case 3:
         // 文字消息
@@ -396,17 +395,12 @@ const translationEnd = (event: Event) => {
   if (webStore.userInfo.id !== null) {
     formData.append("userId", webStore.userInfo.id)
   }
-  formData.append("ipAddress", ipAddress.value)
-  formData.append("ipSource", ipSource.value)
-  const options = {
-    url: "/api/voice",
-    data: formData,
-    method: "post",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  }
-  axios(options)
+  formData.append("ip_address", ipAddress.value)
+  formData.append("ip_source", ipSource.value)
+
+  uploadVoiceApi("chat", formData).then((res) => {
+    console.log("chat", res)
+  })
 }
 
 const voices = ref([])

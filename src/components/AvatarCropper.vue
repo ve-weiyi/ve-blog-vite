@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent justify="center" width="auto" height="auto">
     <v-card>
-      <v-card-title class="text-h5"> 修改头像 </v-card-title>
+      <v-card-title class="text-h5"> 修改头像</v-card-title>
       <vue-cropper
         class="cropper-avatar"
         ref="vueCropperRef"
@@ -12,8 +12,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green-darken-1" variant="text" @click="cancel"> 取消 </v-btn>
-        <v-btn color="green-darken-1" variant="text" @click="confirm"> 确定 </v-btn>
+        <v-btn color="green-darken-1" variant="text" @click="cancel"> 取消</v-btn>
+        <v-btn color="green-darken-1" variant="text" @click="confirm"> 确定</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -57,6 +57,7 @@ function openFilePicker() {
   fileInput.addEventListener("change", handleFileChange)
   fileInput.click()
 }
+
 function handleFileChange(event) {
   const file = event.target.files[0]
   console.log("file", file)
@@ -81,7 +82,9 @@ function confirm() {
   console.log("croppedData", croppedData)
   // 创建一个新的 File 对象
   const file = new File(croppedData, "cropped-image.jpg", { type: "image/jpeg" })
-  uploadFileApi("avatar", file).then((res) => {
+  const formData = new FormData()
+  formData.append("file", file)
+  uploadFileApi("avatar", formData).then((res) => {
     console.log("res", res)
   })
 
