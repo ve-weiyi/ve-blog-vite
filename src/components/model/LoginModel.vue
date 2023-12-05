@@ -80,11 +80,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { ElMessage } from "element-plus"
 import { getAuthorizeUrlApi, loginApi } from "@/api/auth"
 import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from "@/api/captcha"
-import cookies from "@/utils/cookies"
 import router from "@/router"
 import { getUserInfoApi } from "@/api/user.ts"
 

@@ -57,7 +57,7 @@
 import { ref, onMounted, computed } from "vue"
 import Comment from "../../components/comment/TalkComment.vue"
 import axios from "axios"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findTalkDetailApi, likeTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"
 import { TalkDetailsDTO } from "@/api/types"

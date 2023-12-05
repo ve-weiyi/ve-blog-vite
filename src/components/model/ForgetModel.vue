@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { forgetPasswordEmailApi, resetPasswordApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 

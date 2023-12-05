@@ -13,7 +13,7 @@
 import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { oauthLoginApi } from "@/api/auth"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息

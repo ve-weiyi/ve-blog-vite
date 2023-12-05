@@ -9,7 +9,7 @@ export const useMessageStore = defineStore("message", {
   },
   actions: {
     // 异步更新 message
-    async updateMessage (newMessage: string): Promise<string> {
+    async updateMessage(newMessage: string): Promise<string> {
       return new Promise((resolve) => {
         setTimeout(() => {
           // 这里的 this 是当前的 Store 实例
@@ -19,7 +19,7 @@ export const useMessageStore = defineStore("message", {
       })
     },
     // 同步更新 message
-    updateMessageSync (newMessage: string): string {
+    updateMessageSync(newMessage: string): string {
       // 这里的 this 是当前的 Store 实例
       this.message = newMessage
       return "Sync done."

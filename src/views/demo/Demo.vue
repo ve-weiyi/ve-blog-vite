@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 
 // 父组件向子组件传输的数据
 const props = defineProps({

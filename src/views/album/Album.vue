@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findPhotoAlbumListApi } from "@/api/photo_album"
 import { PhotoAlbum } from "@/api/types"
 

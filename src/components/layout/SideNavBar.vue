@@ -87,7 +87,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import { useRouter } from "vue-router"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import axios from "axios"
 import { logoutApi } from "@/api/auth.ts"
 import { ElMessage } from "element-plus"

@@ -4,7 +4,7 @@ import Qinglong from "@/assets/images/qinglong.jpg"
 // @ts-ignore
 import Avatar from "@/assets/images/avatar.jpg"
 import cookies from "@/utils/cookies"
-import store from "@/stores"
+import store from "src/store"
 import { BlogHomeInfo, Login, LoginHistory, Token, UserInfo } from "@/api/types.ts"
 
 export const useWebStore = defineStore({
@@ -105,10 +105,10 @@ export const useWebStore = defineStore({
       this.loginHistory = loginHistory
     },
     login(login: Login) {
-      cookies.setItem("token", login.access_token)
-      cookies.setItem("uid", login.uid)
-      console.log("login", login)
-      console.log("token", cookies.getItem("token"))
+      cookies.setItem("token", login.token)
+      cookies.setItem("user_info", login.user_info)
+      console.log("token", cookies.getItem<Token>("token"))
+      console.log("user_info", cookies.getItem<UserInfo>("user_info"))
     },
     logout() {
       cookies.clear()
@@ -118,7 +118,7 @@ export const useWebStore = defineStore({
     isLogin() {
       return this.getToken() != undefined
     },
-    getToken() {
+    getToken(): Token {
       return cookies.getItem("token")
     },
     saveLoginUrl(url: string) {

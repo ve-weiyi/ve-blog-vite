@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findTalkDetailsListApi, likeTalkApi } from "@/api/talk"
 import { TalkDetailsDTO } from "@/api/types"
 

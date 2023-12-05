@@ -9,7 +9,7 @@
 "use strict"
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios"
 import { ElMessage } from "element-plus"
-import cookies from "@/utils/cookies"
+import { useWebStoreHook } from "@/store/modules/website"
 
 class HttpRequest {
   private baseUrl: string
@@ -111,11 +111,10 @@ class HttpRequest {
   }
 
   private setHeader(config: AxiosRequestConfig) {
-    const token = cookies.getItem("token")
-    const uid = cookies.getItem("uid")
-    if (token) {
-      config.headers!.token = token
-      config.headers!.uid = uid
+    const tk = useWebStoreHook().getToken()
+    if (tk) {
+      config.headers!.token = tk?.access_token
+      config.headers!.uid = tk?.uid
     }
   }
 
@@ -161,12 +160,8 @@ class HttpRequest {
             return result
           // token 错误
           case 403:
-            ElMessage({
-              message: message || "Error",
-              type: "error",
-              duration: 3 * 1000,
-            })
-            cookies.clear()
+            console.log("403")
+            useWebStoreHook().logout()
             return Promise.reject(new Error(message || "Error"))
           default:
             ElMessage({

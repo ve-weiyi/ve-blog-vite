@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import VueDanmaku from "vue3-danmaku"
 import { ElMessage } from "element-plus"
 import { createRemarkApi, findRemarkListApi } from "@/api/remark"

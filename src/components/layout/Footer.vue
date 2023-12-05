@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()

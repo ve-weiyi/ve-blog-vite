@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
 import Clipboard from "clipboard"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { getAboutMeApi } from "@/api/website"
 import { ElMessage } from "element-plus"
 import { markdownToHtml } from "@/utils/markdown"

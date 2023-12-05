@@ -121,7 +121,7 @@
 import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from "vue"
 import Recorderx, { ENCODE_TYPE } from "recorderx"
 import Emoji from "./Emoji.vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import image from "@/assets/images/avatar.jpg"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"

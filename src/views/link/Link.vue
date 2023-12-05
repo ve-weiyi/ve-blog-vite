@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import Comment from "@/components/comment/Comment.vue"
 import { ref, onMounted, computed } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findFriendLinkListApi } from "@/api/friend_link"
 import { FriendLink } from "@/api/types.ts"
 

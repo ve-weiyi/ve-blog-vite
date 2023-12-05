@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
 const router = useRouter()

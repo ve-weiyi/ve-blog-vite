@@ -48,8 +48,7 @@ import { ElConfigProvider, ElMessage } from "element-plus"
 import zh from "element-plus/es/locale/lang/zh-cn"
 import en from "element-plus/es/locale/lang/en"
 import { getUserInfoApi } from "@/api/user"
-import cookies from "@/utils/cookies"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { getAdminHomeInfoApi, getBlogHomeInfoApi, getWebsiteConfigApi } from "@/api/website.ts"
 
 // 获取存储的博客信息

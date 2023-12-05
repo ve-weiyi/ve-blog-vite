@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findCommentListApi, findCommentApi, createCommentApi } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
 import { useRoute } from "vue-router"

@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleSeriesApi } from "@/api/article"
 import { useRoute } from "vue-router"
 import { formatDate } from "@/utils/format"

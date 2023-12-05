@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import AvatarCropper from "@/components/AvatarCropper.vue"
 import { updateUserInfoApi } from "@/api/user.ts"
 import { ElMessage } from "element-plus"

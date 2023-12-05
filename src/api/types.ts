@@ -390,6 +390,7 @@ export interface WebsiteConfigReq {
   value?: string
 }
 
+
 export interface ArticleHome extends ArticleDTO {
   article_category?: CategoryDTO // 文章分类
   article_tag_list?: TagDTO[] // 文章标签列表
@@ -578,11 +579,10 @@ export interface CommentBackDTO {
   created_at?: string
 }
 
-export interface Login extends Token {
-  ip_address?: string
-  ip_source?: string
+export interface Login {
+  token?: Token
   user_info?: UserInfo
-  login_info?: LoginHistory
+  login_history?: LoginHistory
 }
 
 export interface Token {

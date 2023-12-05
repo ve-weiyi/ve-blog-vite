@@ -10,7 +10,7 @@ export function uploadFileApi(label: string, file: File): Promise<IApiResponseDa
 }
 
 /** 上传语言 */
-export function uploadVoiceApi(type: number, file: File): Promise<IApiResponseData<UploadRecord>> {
+export function uploadVoiceApi(type: number, file: File, user_id: number, nickname: string, avatar: string, content: string, created_at: string, ip_address: string, ip_source: string): Promise<IApiResponseData<UploadRecord>> {
   return http.request<IApiResponseData<UploadRecord>>({
     url: `/api/v1/voice`,
     method: "post",

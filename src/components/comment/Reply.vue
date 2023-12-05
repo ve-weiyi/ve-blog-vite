@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import Emoji from "../Emoji.vue"
 import { ref, watch } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { useRoute } from "vue-router"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"

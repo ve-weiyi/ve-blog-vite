@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleArchivesApi } from "@/api/article"
 import { ArticlePreviewDTO } from "@/api/types"
 

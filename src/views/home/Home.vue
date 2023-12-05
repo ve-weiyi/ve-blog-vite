@@ -219,7 +219,7 @@ import { usePagination } from "@/hooks/usePagination"
 import { findArticleHomeListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
 import { ArticleHome, Talk } from "@/api/types"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { storeToRefs } from "pinia"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()

@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import { ref, defineProps, onMounted } from "vue"
-import { useWebStoreHook } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 import { useRoute } from "vue-router"
 
 // 父组件向子组件传输的数据
