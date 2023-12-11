@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "baseUrl": ".",
     "allowJs": false,
     "resolveJsonModule": true,

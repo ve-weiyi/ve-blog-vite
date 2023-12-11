@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Category, BatchResult, CategoryDetailsDTO } from "./types"
+import { BatchResult, Category, CategoryDetailsDTO } from "./types"
 
 /** 创建文章分类 */
 export function createCategoryApi(data: Category): Promise<IApiResponseData<Category>> {
@@ -45,8 +45,8 @@ export function deleteCategoryByIdsApi(data: number[]): Promise<IApiResponseData
 }
 
 /** 分页获取文章分类列表 */
-export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Category>>> {
-  return http.request<IApiResponseData<PageResult<Category>>>({
+export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Category[]>>> {
+  return http.request<IApiResponseData<PageResult<Category[]>>>({
     url: `/api/v1/category/list`,
     method: "post",
     data: page,
@@ -54,8 +54,8 @@ export function findCategoryListApi(page: PageQuery): Promise<IApiResponseData<P
 }
 
 /** 分页获取文章分类详情列表 */
-export function findCategoryDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDetailsDTO>>> {
-  return http.request<IApiResponseData<PageResult<CategoryDetailsDTO>>>({
+export function findCategoryDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<CategoryDetailsDTO[]>>> {
+  return http.request<IApiResponseData<PageResult<CategoryDetailsDTO[]>>>({
     url: `/api/v1/category/details_list`,
     method: "post",
     data: page,

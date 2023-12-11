@@ -1,5 +1,16 @@
 import http from "@/utils/request"
-import { ArticleDetailsDTOReq, ArticleBack, ArticleDeleteReq, ArticleTopReq, ArticlePreviewDTO, ArticleConditionReq, ArticleConditionDTO, ArticlePageDetailsDTO, ArticleHome, Article } from "./types"
+import {
+  Article,
+  ArticleBack,
+  ArticleConditionDTO,
+  ArticleConditionReq,
+  ArticleDeleteReq,
+  ArticleDetailsDTOReq,
+  ArticleHome,
+  ArticlePageDetailsDTO,
+  ArticlePreviewDTO,
+  ArticleTopReq,
+} from "./types"
 
 /** 保存文章 */
 export function saveArticleApi(data: ArticleDetailsDTOReq): Promise<IApiResponseData<any>> {
@@ -27,8 +38,8 @@ export function findArticleApi(id: number): Promise<IApiResponseData<ArticleBack
 }
 
 /** 分页获取文章列表 */
-export function findArticleListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ArticleBack>>> {
-  return http.request<IApiResponseData<PageResult<ArticleBack>>>({
+export function findArticleListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ArticleBack[]>>> {
+  return http.request<IApiResponseData<PageResult<ArticleBack[]>>>({
     url: `/api/v1/admin/article/list`,
     method: "post",
     data: page,
@@ -54,8 +65,8 @@ export function updateArticleTopApi(data: ArticleTopReq): Promise<IApiResponseDa
 }
 
 /** 文章归档(时间轴) */
-export function findArticleArchivesApi(page: PageQuery): Promise<IApiResponseData<PageResult<ArticlePreviewDTO>>> {
-  return http.request<IApiResponseData<PageResult<ArticlePreviewDTO>>>({
+export function findArticleArchivesApi(page: PageQuery): Promise<IApiResponseData<PageResult<ArticlePreviewDTO[]>>> {
+  return http.request<IApiResponseData<PageResult<ArticlePreviewDTO[]>>>({
     url: `/api/v1/article/archives`,
     method: "post",
     data: page,
@@ -80,8 +91,8 @@ export function findArticleDetailsApi(id: number): Promise<IApiResponseData<Arti
 }
 
 /** 分页获取文章列表 */
-export function findArticleHomeListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ArticleHome>>> {
-  return http.request<IApiResponseData<PageResult<ArticleHome>>>({
+export function findArticleHomeListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ArticleHome[]>>> {
+  return http.request<IApiResponseData<PageResult<ArticleHome[]>>>({
     url: `/api/v1/article/list`,
     method: "post",
     data: page,

@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { PhotoAlbum, BatchResult, PhotoAlbumDetailsDTO } from "./types"
+import { BatchResult, PhotoAlbum, PhotoAlbumDetailsDTO } from "./types"
 
 /** 创建相册 */
 export function createPhotoAlbumApi(data: PhotoAlbum): Promise<IApiResponseData<PhotoAlbum>> {
@@ -45,8 +45,8 @@ export function deletePhotoAlbumByIdsApi(data: number[]): Promise<IApiResponseDa
 }
 
 /** 分页获取相册列表 */
-export function findPhotoAlbumListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PhotoAlbum>>> {
-  return http.request<IApiResponseData<PageResult<PhotoAlbum>>>({
+export function findPhotoAlbumListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PhotoAlbum[]>>> {
+  return http.request<IApiResponseData<PageResult<PhotoAlbum[]>>>({
     url: `/api/v1/photo_album/list`,
     method: "post",
     data: page,
@@ -54,8 +54,8 @@ export function findPhotoAlbumListApi(page: PageQuery): Promise<IApiResponseData
 }
 
 /** 获取相册详情列表 */
-export function findPhotoAlbumDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PhotoAlbumDetailsDTO>>> {
-  return http.request<IApiResponseData<PageResult<PhotoAlbumDetailsDTO>>>({
+export function findPhotoAlbumDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<PhotoAlbumDetailsDTO[]>>> {
+  return http.request<IApiResponseData<PageResult<PhotoAlbumDetailsDTO[]>>>({
     url: `/api/v1/photo_album/details_list`,
     method: "post",
     data: page,

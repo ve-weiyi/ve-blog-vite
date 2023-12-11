@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Page, BatchResult } from "./types"
+import { BatchResult, Page } from "./types"
 
 /** 创建页面 */
 export function createPageApi(data: Page): Promise<IApiResponseData<Page>> {
@@ -45,8 +45,8 @@ export function deletePageByIdsApi(data: number[]): Promise<IApiResponseData<Bat
 }
 
 /** 分页获取页面列表 */
-export function findPageListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Page>>> {
-  return http.request<IApiResponseData<PageResult<Page>>>({
+export function findPageListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Page[]>>> {
+  return http.request<IApiResponseData<PageResult<Page[]>>>({
     url: `/api/v1/page/list`,
     method: "post",
     data: page,

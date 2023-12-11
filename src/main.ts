@@ -1,6 +1,6 @@
 import { createApp } from "vue"
 import App from "@/App.vue"
-import store from "src/store"
+import store from "@/store"
 import router from "@/router"
 
 // 导入公共样式

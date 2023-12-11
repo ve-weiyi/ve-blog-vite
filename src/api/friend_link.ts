@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { FriendLink, BatchResult } from "./types"
+import { BatchResult, FriendLink } from "./types"
 
 /** 创建友链 */
 export function createFriendLinkApi(data: FriendLink): Promise<IApiResponseData<FriendLink>> {
@@ -45,8 +45,8 @@ export function deleteFriendLinkByIdsApi(data: number[]): Promise<IApiResponseDa
 }
 
 /** 分页获取友链列表 */
-export function findFriendLinkListApi(page: PageQuery): Promise<IApiResponseData<PageResult<FriendLink>>> {
-  return http.request<IApiResponseData<PageResult<FriendLink>>>({
+export function findFriendLinkListApi(page: PageQuery): Promise<IApiResponseData<PageResult<FriendLink[]>>> {
+  return http.request<IApiResponseData<PageResult<FriendLink[]>>>({
     url: `/api/v1/friend_link/list`,
     method: "post",
     data: page,

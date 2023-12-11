@@ -1,9 +1,14 @@
 import http from "@/utils/request"
-import { ChatRecord, WebsiteConfigReq, BlogHomeInfo, AdminHomeInfo } from "./types"
+import {
+  AdminHomeInfo,
+  BlogHomeInfo,
+  ChatRecord,
+  WebsiteConfigReq,
+} from "./types"
 
 /** 查询聊天记录 */
-export function findChatRecordsApi(page: PageQuery): Promise<IApiResponseData<PageResult<ChatRecord>>> {
-  return http.request<IApiResponseData<PageResult<ChatRecord>>>({
+export function findChatRecordsApi(page: PageQuery): Promise<IApiResponseData<PageResult<ChatRecord[]>>> {
+  return http.request<IApiResponseData<PageResult<ChatRecord[]>>>({
     url: `/api/v1/chat/records`,
     method: "post",
     data: page,

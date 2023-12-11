@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Photo, BatchResult } from "./types"
+import { BatchResult, Photo } from "./types"
 
 /** 创建相片 */
 export function createPhotoApi(data: Photo): Promise<IApiResponseData<Photo>> {
@@ -45,8 +45,8 @@ export function deletePhotoByIdsApi(data: number[]): Promise<IApiResponseData<Ba
 }
 
 /** 分页获取相片列表 */
-export function findPhotoListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Photo>>> {
-  return http.request<IApiResponseData<PageResult<Photo>>>({
+export function findPhotoListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Photo[]>>> {
+  return http.request<IApiResponseData<PageResult<Photo[]>>>({
     url: `/api/v1/photo/list`,
     method: "post",
     data: page,

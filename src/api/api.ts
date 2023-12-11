@@ -1,5 +1,5 @@
 import http from "@/utils/request"
-import { Api, BatchResult, ApiDetailsDTO } from "./types"
+import { Api, ApiDetailsDTO, BatchResult } from "./types"
 
 /** 创建接口 */
 export function createApiApi(data: Api): Promise<IApiResponseData<Api>> {
@@ -45,8 +45,8 @@ export function deleteApiByIdsApi(data: number[]): Promise<IApiResponseData<Batc
 }
 
 /** 分页获取接口列表 */
-export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Api>>> {
-  return http.request<IApiResponseData<PageResult<Api>>>({
+export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Api[]>>> {
+  return http.request<IApiResponseData<PageResult<Api[]>>>({
     url: `/api/v1/api/list`,
     method: "post",
     data: page,
@@ -54,10 +54,18 @@ export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageRe
 }
 
 /** 获取api列表 */
-export function findApiDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ApiDetailsDTO>>> {
-  return http.request<IApiResponseData<PageResult<ApiDetailsDTO>>>({
+export function findApiDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ApiDetailsDTO[]>>> {
+  return http.request<IApiResponseData<PageResult<ApiDetailsDTO[]>>>({
     url: `/api/v1/api/details_list`,
     method: "post",
     data: page,
+  })
+}
+
+/** 同步api列表 */
+export function syncApiListApi(): Promise<IApiResponseData<BatchResult>> {
+  return http.request<IApiResponseData<BatchResult>>({
+    url: `/api/v1/api/sync`,
+    method: "post",
   })
 }

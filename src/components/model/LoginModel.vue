@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="loginFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close</v-icon>
+      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close </v-icon>
       <div class="login-title">登录账号</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -39,7 +39,7 @@
           </div>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录</v-btn>
+        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录 </v-btn>
         <!-- 注册和找回密码 -->
         <div class="mt-10 login-tip">
           <span @click="openRegister">立即注册</span>
@@ -166,8 +166,11 @@ const login = () => {
   }
 }
 const emailLogin = () => {
-  webStore.saveLoginUrl(router.currentRoute.value.path)
-  loginApi({ username: username.value, password: password.value, code: code.value })
+  loginApi({
+    username: username.value,
+    password: password.value,
+    code: code.value,
+  })
     .then((res) => {
       ElMessage.success("登录成功")
       webStore.login(res.data)
@@ -180,7 +183,6 @@ const emailLogin = () => {
 }
 
 const qqLogin = () => {
-  webStore.saveLoginUrl(router.currentRoute.value.path)
   if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i)) {
     // eslint-disable-next-line no-undef
     // QC.Login.showPopup({
@@ -188,23 +190,34 @@ const qqLogin = () => {
     //   redirectURI: this.config.QQ_REDIRECT_URI,
     // })
   } else {
-    getAuthorizeUrlApi({ platform: "qq" }).then((res) => {
-      window.open(res.data.url)
+    getAuthorizeUrlApi({
+      platform: "qq",
+      state: router.currentRoute.value.path,
+    }).then((res) => {
+      // 新启页面跳转
+      // window.open(res.data.url)
+
+      // 当前页面跳转
+      window.location.href = res.data.url
     })
   }
 }
 
 const weiboLogin = () => {
-  webStore.saveLoginUrl(router.currentRoute.value.path)
-  getAuthorizeUrlApi({ platform: "weibo" }).then((res) => {
-    window.open(res.data.url)
+  getAuthorizeUrlApi({
+    platform: "weibo",
+    state: router.currentRoute.value.path,
+  }).then((res) => {
+    window.location.href = res.data.url
   })
 }
 
 const feishuLogin = () => {
-  webStore.saveLoginUrl(router.currentRoute.value.path)
-  getAuthorizeUrlApi({ platform: "feishu" }).then((res) => {
-    window.open(res.data.url)
+  getAuthorizeUrlApi({
+    platform: "feishu",
+    state: router.currentRoute.value.path,
+  }).then((res) => {
+    window.location.href = res.data.url
   })
 }
 

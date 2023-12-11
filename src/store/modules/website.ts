@@ -4,7 +4,7 @@ import Qinglong from "@/assets/images/qinglong.jpg"
 // @ts-ignore
 import Avatar from "@/assets/images/avatar.jpg"
 import cookies from "@/utils/cookies"
-import store from "src/store"
+import store from "@/store"
 import { BlogHomeInfo, Login, LoginHistory, Token, UserInfo } from "@/api/types.ts"
 
 export const useWebStore = defineStore({
@@ -16,29 +16,19 @@ export const useWebStore = defineStore({
     forgetFlag: false,
     emailFlag: false,
     drawer: false,
-    loginUrl: "", // 登录之前的页面
     defaultCover: "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg",
     userInfo: {
       id: null,
-      username: "admin@qq.com",
-      nickname: "admin@qq.com",
-      avatar: "http://rxb1y0x1n.hn-bkt.clouddn.com/blog/avatar/43b90920409618f188bfc6923f16b9fa_20230713143425.jpg",
-      intro: "测试",
+      username: "",
+      nickname: "",
+      avatar: "",
+      intro: "",
       website: "",
       email: "",
       article_like_set: [],
       comment_like_set: [],
       talk_like_set: [],
-      roles: [
-        {
-          role_name: "admin",
-          role_comment: "管理员",
-        },
-        {
-          role_name: "user",
-          role_comment: "用户",
-        },
-      ],
+      roles: [],
     },
     loginHistory: {
       login_type: "email",
@@ -96,7 +86,7 @@ export const useWebStore = defineStore({
     },
     setBlogInfo(blogInfo: BlogHomeInfo) {
       this.blogInfo = blogInfo
-      console.log("website_record_no", this.blogInfo.website_config.website_record_no)
+      // console.log("website_record_no", this.blogInfo.website_config.website_record_no)
     },
     setUser(user: UserInfo) {
       this.userInfo = user
@@ -112,7 +102,19 @@ export const useWebStore = defineStore({
     },
     logout() {
       cookies.clear()
-      this.userInfo = {}
+      this.userInfo = {
+        id: null,
+        username: "",
+        nickname: "",
+        avatar: "",
+        intro: "",
+        website: "",
+        email: "",
+        article_like_set: [],
+        comment_like_set: [],
+        talk_like_set: [],
+        roles: [],
+      }
       this.loginHistory = {}
     },
     isLogin() {
@@ -120,9 +122,6 @@ export const useWebStore = defineStore({
     },
     getToken(): Token {
       return cookies.getItem("token")
-    },
-    saveLoginUrl(url: string) {
-      this.loginUrl = url
     },
     closeModel() {
       this.registerFlag = false

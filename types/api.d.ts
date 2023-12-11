@@ -6,7 +6,7 @@ interface IApiResponseData<T> {
 }
 
 interface PageResult<T> {
-  list: T[]
+  list: T
   page: number
   page_size: number
   total: number

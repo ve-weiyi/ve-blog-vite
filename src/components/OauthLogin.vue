@@ -35,11 +35,7 @@ function OauthLogin() {
     console.log(res)
     webStore.login(res.data)
     getUserinfo()
-    if (webStore.loginUrl) {
-      router.push({ path: webStore.loginUrl })
-    } else {
-      router.push({ path: "/" })
-    }
+    router.push({ path: route.query.state as string })
   })
 }
 
