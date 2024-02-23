@@ -21,13 +21,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
 import Clipboard from "clipboard"
-import { useWebStore } from "@/stores"
-import { getAboutApi } from "@/api/website"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getAboutMeApi } from "@/api/website"
 import { ElMessage } from "element-plus"
 import { markdownToHtml } from "@/utils/markdown"
 
 // 获取存储的博客信息
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
+const cover = webStore.getCover("about")
 
 const aboutRef = ref(null)
 const aboutContent = ref("")
@@ -35,7 +36,7 @@ const clipboard = ref<Clipboard | null>(null)
 const imgList = ref<string[]>([])
 
 const getAboutContent = () => {
-  getAboutApi().then((res) => {
+  getAboutMeApi().then((res) => {
     // 将markdown替换为html标签
     aboutContent.value = markdownToHtml(res.data)
     nextTick(() => {
@@ -73,9 +74,7 @@ onBeforeUnmount(() => {
   }
 })
 
-const avatar = blogInfo.websiteConfig.websiteAvatar
-const url = "https://veport.oss-cn-beijing.aliyuncs.com/background/zhuqu.jpg"
-const cover = "background: url(" + url + ") center center / cover no-repeat"
+const avatar = webStore.blogInfo.website_config.website_avatar
 </script>
 
 <style scoped>
@@ -90,6 +89,8 @@ const cover = "background: url(" + url + ") center center / cover no-repeat"
 }
 
 .author-avatar {
+  height: 100%;
+  width: 100%;
   transition: all 0.5s;
 }
 

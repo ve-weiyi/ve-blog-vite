@@ -14,6 +14,8 @@ export const replaceEmoji = (str: string) => {
   return str
 }
 
-const getImage = (localUrl) => {
-  return new URL(`/src/assets/${localUrl}`, import.meta.url).href
+// 使用本地的图片
+export const getImage = (localUrl) => {
+  return localUrl
+  // return new URL(`/src/assets/${localUrl}`, import.meta.url).href
 }

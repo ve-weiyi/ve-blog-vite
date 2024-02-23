@@ -8,8 +8,13 @@
     <v-card class="blog-container">
       <div class="photo-wrap">
         <photo-provider>
-          <photo-consumer v-for="(item, index) of photoList" :intro="item.photoDesc" :key="index" :src="item.photoSrc">
-            <img class="photo" :src="item.photoSrc" />
+          <photo-consumer
+            v-for="(item, index) of photoList"
+            :intro="item.photo_desc"
+            :key="index"
+            :src="item.photo_src"
+          >
+            <img class="photo" :src="item.photo_src" />
           </photo-consumer>
         </photo-provider>
       </div>
@@ -19,16 +24,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findPhotoListApi } from "@/api/photo"
+import { Photo } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("album"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("album"))
 
 const photoAlbumName = ref("相册详情")
 const photoAlbumCover = ref("")
-const photoList = ref([])
+const photoList = ref<Photo[]>([])
 const current = ref(1)
 const size = ref(10)
 

@@ -1,6 +1,6 @@
 import { createApp } from "vue"
-import { createPinia } from "pinia"
 import App from "@/App.vue"
+import store from "@/store"
 import router from "@/router"
 
 // 导入公共样式
@@ -28,25 +28,15 @@ import { usePhotoPreview } from "@/plugins/imagePreview"
 
 const app = createApp(App)
 
-app.use(router)
-app.use(createPinia())
-app.use(vuetify)
+const initApp = async () => {
+  app.use(router)
+  app.use(store)
+  app.use(vuetify)
 
-app.use(ElementPlus)
+  app.use(ElementPlus)
 
-usePhotoPreview(app)
-await router.isReady()
-app.mount("#app")
-
-// const initApp = async () => {
-//   app.use(router)
-//   app.use(createPinia())
-//   app.use(vuetify)
-//
-//   app.use(ElementPlus)
-//
-//   usePhotoPreview(app)
-//   await router.isReady()
-//   app.mount('#app')
-// }
-// initApp()
+  usePhotoPreview(app)
+  await router.isReady()
+  app.mount("#app")
+}
+initApp()

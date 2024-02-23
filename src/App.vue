@@ -24,9 +24,9 @@
       <!-- 绑定邮箱模态框 -->
       <EmailModel></EmailModel>
       <!-- 音乐播放器 -->
-      <Player v-if="webState.blogInfo.websiteConfig.isMusicPlayer === 1 && !isMobile" />
+      <Player v-if="webStore.blogInfo.website_config.is_music_player === 1 && !isMobile" />
       <!-- 聊天室 -->
-      <ChatRoom v-if="webState.blogInfo.websiteConfig.isChatRoom === 1"></ChatRoom>
+      <ChatRoom v-if="webStore.blogInfo.website_config.is_chat_room === 1"></ChatRoom>
     </el-config-provider>
   </v-app>
 </template>
@@ -47,16 +47,16 @@ import EmailModel from "./components/model/EmailModel.vue"
 import { ElConfigProvider, ElMessage } from "element-plus"
 import zh from "element-plus/es/locale/lang/zh-cn"
 import en from "element-plus/es/locale/lang/en"
-import { useAppStore, useWebStore } from "@/stores"
 import { getUserInfoApi } from "@/api/user"
-import cookies from "@/utils/cookies"
-
-const appStore = useAppStore()
-const locale = computed(() => (appStore.lang === "zh" ? zh : en))
-const size = computed(() => appStore.size)
+import { useWebStoreHook } from "@/store/modules/website"
+import { getAdminHomeInfoApi, getBlogHomeInfoApi, getWebsiteConfigApi } from "@/api/website.ts"
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
+
+const locale = computed(() => zh)
+const size = ref<"" | "default" | "small" | "large">("default")
+
 const isMobile = computed(() => {
   const flag = navigator.userAgent.match(
     /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
@@ -65,22 +65,23 @@ const isMobile = computed(() => {
 })
 
 const getUserinfo = () => {
-  getUserInfoApi()
-    .then((res) => {
-      console.log("getUserInfoApi", res)
-      useWebStore().setUser(res.data)
-    })
-    .catch((err) => {
-      cookies.clearAll()
-    })
+  getUserInfoApi().then((res) => {
+    webStore.setUser(res.data)
+  })
+}
+
+const getBlogInfo = () => {
+  getBlogHomeInfoApi().then((res) => {
+    webStore.setBlogInfo(res.data)
+  })
 }
 
 // 在组件挂载时启动定时器
 onMounted(() => {
+  getBlogInfo()
   // 页面刷新后自动获取用户信息
-  const token = useWebStore().getToken()
-  console.log("token", token)
-  if (token != undefined) {
+  if (webStore.isLogin()) {
+    console.log("getUserinfo --")
     getUserinfo()
   }
 })

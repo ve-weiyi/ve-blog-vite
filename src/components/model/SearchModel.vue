@@ -16,15 +16,17 @@
       <div class="search-result-wrapper">
         <hr class="divider" />
         <ul>
-          <li class="search-reslut" v-for="item of articleList" :key="item.id">
+          <li class="search-result" v-for="item of articleList" :key="item.id">
             <!-- 文章标题 -->
-            <a @click="goTo(item.id)" v-html="item.articleTitle" />
+            <a @click="goTo(item.id)" v-html="item.article_title" />
             <!-- 文章内容 -->
-            <p class="search-reslut-content text-justify" v-html="item.articleContent" />
+            <p class="search-result-content text-justify" v-html="item.article_content" />
           </li>
         </ul>
         <!-- 搜索结果不存在提示 -->
-        <div v-show="flag && articleList === []" style="font-size: 0.875rem">找不到您查询的内容：{{ keywords }}</div>
+        <div v-show="flag && articleList.length === 0" style="font-size: 0.875rem">
+          找不到您查询的内容：{{ keywords }}
+        </div>
       </div>
     </v-card>
   </v-dialog>
@@ -32,14 +34,13 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
 const router = useRouter()
 
 // 获取存储的博客信息
-const webStore = useWebStore()
-// const webState = ref(webStore)
+const webStore = useWebStoreHook()
 
 const isMobile = computed(() => {
   const clientWidth = document.documentElement.clientWidth
@@ -94,8 +95,7 @@ watch(
       findArticleListApi({
         page: 1,
         page_size: 10,
-        order: "created_at",
-        order_key: "desc",
+        sorts: [{ field: "created_at", order: "desc" }],
         conditions: conditions,
       }).then((res) => {
         console.log(res)
@@ -144,13 +144,13 @@ watch(
     overflow: auto;
   }
 }
-.search-reslut a {
+.search-result a {
   color: #555;
   font-weight: bold;
   border-bottom: 1px solid #999;
   text-decoration: none;
 }
-.search-reslut-content {
+.search-result-content {
   color: #555;
   cursor: pointer;
   border-bottom: 1px dashed #ccc;

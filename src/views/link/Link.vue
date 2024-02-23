@@ -12,13 +12,13 @@
       </div>
       <v-row class="link-container">
         <v-col class="link-wrapper" md="4" cols="12" v-for="item of friendLinkList" :key="item.id">
-          <a :href="item.linkAddress" target="_blank">
+          <a :href="item.link_address" target="_blank">
             <v-avatar size="65" class="link-avatar">
-              <img :src="item.linkAvatar" />
+              <img :src="item.link_avatar" />
             </v-avatar>
             <div style="width: 100%; z-index: 10">
-              <div class="link-name">{{ item.linkName }}</div>
-              <div class="link-intro">{{ item.linkIntro }}</div>
+              <div class="link-name">{{ item.link_name }}</div>
+              <div class="link-intro">{{ item.link_intro }}</div>
             </div>
           </a>
         </v-col>
@@ -30,9 +30,9 @@
         添加友链
       </div>
       <blockquote>
-        <div>名称：{{ blogInfo.websiteConfig.websiteName }}</div>
-        <div>简介：{{ blogInfo.websiteConfig.websiteIntro }}</div>
-        <div>头像：{{ blogInfo.websiteConfig.websiteAvatar }}</div>
+        <div>名称：{{ webStore.blogInfo.website_config.website_name }}</div>
+        <div>简介：{{ webStore.blogInfo.website_config.website_intro }}</div>
+        <div>头像：{{ webStore.blogInfo.website_config.website_avatar }}</div>
       </blockquote>
       <div class="mt-5 mb-5">需要交换友链的可在下方留言💖</div>
       <blockquote class="mb-10">友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像</blockquote>
@@ -45,23 +45,23 @@
 <script setup lang="ts">
 import Comment from "@/components/comment/Comment.vue"
 import { ref, onMounted, computed } from "vue"
-import { useWebStore } from "@/stores"
-import { findLinkListApi } from "@/api/link"
+import { useWebStoreHook } from "@/store/modules/website"
+import { findFriendLinkListApi } from "@/api/friend_link"
+import { FriendLink } from "@/api/types.ts"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
 
-const friendLinkList = ref([])
+const friendLinkList = ref<FriendLink[]>([])
 const commentType = ref(2)
 
 function listFriendLink() {
-  findLinkListApi({}).then((res) => {
+  findFriendLinkListApi({}).then((res) => {
     friendLinkList.value = res.data.list
   })
 }
 
-const cover = ref(webState.getCover("link"))
+const cover = ref(webStore.getCover("link"))
 
 onMounted(() => {
   listFriendLink()

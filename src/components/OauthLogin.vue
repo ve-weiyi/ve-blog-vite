@@ -12,34 +12,41 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { oauthLoginApi } from "@/api/login"
-import { useWebStore } from "@/stores"
+import { oauthLoginApi } from "@/api/auth"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息
-const store = useWebStore()
+const webStore = useWebStoreHook()
 // 获取路由参数
 const route = useRoute()
 const platform = route.params.platform // 假设路由参数名为 "id"
 
 // 路由
 const router = useRouter()
+
 function OauthLogin() {
   // 获取token
   oauthLoginApi({
-    platform: platform,
+    platform: platform as string,
     code: route.query.code as string,
     state: route.query.state as string,
   }).then((res) => {
     console.log(res)
-    store.setUser(res.data.userInfo)
-    store.setToken(res.data.token)
-    router.push({ path: "/" })
+    webStore.login(res.data)
+    getUserinfo()
+    router.push({ path: route.query.state as string })
   })
 }
 
+const getUserinfo = () => {
+  getUserInfoApi().then((res) => {
+    webStore.setUser(res.data)
+  })
+}
 // 生命周期钩子
 onMounted(() => {
-  console.log(platform)
+  console.log("OauthLogin", platform, route.query.code, route.query.state)
   OauthLogin()
 })
 </script>

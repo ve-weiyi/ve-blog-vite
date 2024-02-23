@@ -12,25 +12,25 @@
             <div class="article-item-cover">
               <router-link :to="'/articles/' + item.id">
                 <!-- 缩略图 -->
-                <v-img cover class="on-hover" width="100%" height="100%" :src="item.articleCover" />
+                <v-img cover class="on-hover" width="100%" height="100%" :src="item.article_cover" />
               </router-link>
             </div>
             <div class="article-item-info">
               <!-- 文章标题 -->
               <div>
                 <router-link :to="'/articles/' + item.id">
-                  {{ item.articleTitle }}
+                  {{ item.article_title }}
                 </router-link>
               </div>
               <div style="margin-top: 0.375rem">
                 <!-- 发表时间 -->
                 <v-icon size="20">mdi-clock-outline</v-icon>
-                {{ formatDate(item.createdAt) }}
+                {{ formatDate(item.created_at) }}
 
                 <!-- 文章分类 -->
-                <router-link :to="'/categories/' + item.categoryId" class="float-right">
+                <router-link :to="'/categories/' + item.article_category.id" class="float-right">
                   <v-icon>mdi-bookmark</v-icon>
-                  {{ item.categoryName }}
+                  {{ item.article_category.category_name }}
                 </router-link>
               </div>
             </div>
@@ -38,8 +38,8 @@
             <v-divider></v-divider>
             <!-- 文章标签 -->
             <div class="tag-wrapper">
-              <router-link :to="'/tags/' + tag.id" class="tag-btn" v-for="tag of item.articleTagList" :key="tag.id">
-                {{ tag.tagName }}
+              <router-link :to="'/tags/' + tag.id" class="tag-btn" v-for="tag of item.article_tag_list" :key="tag.id">
+                {{ tag.tag_name }}
               </router-link>
             </div>
           </v-card>
@@ -56,22 +56,22 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findArticleListApi, getArticleListByConditionApi } from "@/api/article"
+import { useWebStoreHook } from "@/store/modules/website"
+import { findArticleSeriesApi } from "@/api/article"
 import { useRoute } from "vue-router"
-import { usePagination } from "@/hooks/usePagination"
 import { formatDate } from "@/utils/format"
+import { ArticleHome } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
-const tagId = route.params.tagId ? parseInt(route.params.tagId) : 0 // 假设路由参数名为 "id"
-const categoryId = route.params.categoryId ? parseInt(route.params.categoryId) : 0 // 假设路由参数名为 "id"
+const tagId = route.params.tagId ? parseInt(route.params.tagId as string) : 0 // 假设路由参数名为 "id"
+const categoryId = route.params.categoryId ? parseInt(route.params.categoryId as string) : 0 // 假设路由参数名为 "id"
 
-const articleList = ref([])
+const articleList = ref<ArticleHome[]>([])
 const name = ref("")
 const title = ref("")
 
@@ -87,16 +87,16 @@ onMounted(() => {
 })
 
 const getArticleList = (categoryId, tagId) => {
-  getArticleListByConditionApi({
-    categoryId: categoryId,
-    tagId: tagId,
+  findArticleSeriesApi({
+    category_id: categoryId,
+    tag_id: tagId,
   }).then((res) => {
-    if (res.data.conditionName) {
-      name.value = res.data.conditionName
+    if (res.data.condition_name) {
+      name.value = res.data.condition_name
       document.title = `${title.value} - ${name.value}`
     }
 
-    articleList.value = res.data.articleDtoList
+    articleList.value = res.data.article_dto_list
   })
 }
 </script>

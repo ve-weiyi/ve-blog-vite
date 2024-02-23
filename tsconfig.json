@@ -1,78 +1,41 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    /** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
-    "useDefineForClassFields": true,
     "module": "esnext",
-    "moduleResolution": "node",
-    /** TS 严格模式 */
+    "moduleResolution": "Node",
     "strict": false,
     "allowImportingTsExtensions": true,
     "jsx": "preserve",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment",
     "importHelpers": true,
     "experimentalDecorators": true,
     "strictFunctionTypes": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    /** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    /** baseUrl 用来告诉编译器到哪里去查找模块，使用非相对模块时必须配置此项 */
+    "sourceMap": false,
     "baseUrl": ".",
-    /**  允许导入js文件 */
     "allowJs": false,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    /** 非相对模块导入的路径映射配置，根据 baseUrl 配置进行路径计算 */
+    "resolveJsonModule": true,
+    "lib": ["dom", "esnext"],
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@build/*": [
-        "build/*"
-      ],
-      "@types/*": [
-        "types/*"
-      ],
-      "@/assets/*": [
-        "src/assets/*"
-      ]
+      "@/*": ["src/*"],
+      "@build/*": ["build/*"]
     },
     "types": [
       "node",
       "vite/client",
-      /** Element Plus 的 Volar 插件支持 */
       "element-plus/global",
-      "vitest"
-    ],
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types/"
     ]
   },
   "include": [
     "mock/*.ts",
     "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.d.tsx",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "tests/**/*.ts",
     "types/*.d.ts",
-    "types/**/*.d.ts",
-    "vite.config.ts",
-    "vitest.config.ts"
+    "vite.config.ts"
   ],
-  /** 编译器默认排除的编译文件 */
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "exclude": ["dist", "**/*.js", "node_modules"]
 }

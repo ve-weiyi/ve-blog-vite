@@ -12,7 +12,7 @@
     <div class="d-md-none nav-mobile-container">
       <div style="font-size: 18px; font-weight: bold">
         <router-link to="/">
-          {{ blogInfo.websiteConfig.websiteAuthor }}
+          {{ blogInfo.website_config.website_author }}
         </router-link>
       </div>
       <div style="margin-left: auto">
@@ -26,7 +26,7 @@
     <div class="d-md-block d-none nav-container">
       <div class="float-left blog-title">
         <router-link to="/">
-          {{ blogInfo.websiteConfig.websiteAuthor }}
+          {{ blogInfo.website_config.website_author }}
         </router-link>
       </div>
       <div class="float-right nav-title">
@@ -34,9 +34,8 @@
           <a class="menu-btn" @click="openSearch"> <i class="iconfont iconsousuo" /> 搜索 </a>
         </div>
         <div class="menus-item">
-          <router-link class="menu-btn"
-to="/"
-            ><i class="iconfont iconzhuye" />
+          <router-link class="menu-btn" to="/">
+            <i class="iconfont iconzhuye" />
             首页
           </router-link>
         </div>
@@ -85,20 +84,26 @@ to="/ai/chatbot"
           <router-link class="menu-btn" to="/about"><i class="iconfont iconzhifeiji" /> 关于 </router-link>
         </div>
         <div class="menus-item">
-          <router-link class="menu-btn" to="/message"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
+          <router-link class="menu-btn" to="/remark"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
         </div>
         <div class="menus-item">
-          <a class="menu-btn" v-if="!webStore.userInfo.avatar" @click="openLogin">
+          <a class="menu-btn" v-if="!webStore.userInfo.id" @click="openLogin">
             <i class="iconfont icondenglu" /> 登录
           </a>
           <template v-else>
-            <img class="user-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
+            <img class="top-avatar" :src="webStore.userInfo.avatar" height="30" width="30" />
             <ul class="menus-submenu">
               <li>
                 <router-link to="/user"
                   ><i class="iconfont icongerenzhongxin" />
                   个人中心
                 </router-link>
+              </li>
+              <li>
+                <a :href="webStore.blogInfo.website_config.admin_url" arget="_blank">
+                  <i class="iconfont icon-sketch" />
+                  管理平台
+                </a>
               </li>
               <li>
                 <a @click="logout"><i class="iconfont icontuichu" /> 退出</a>
@@ -113,9 +118,13 @@ to="/ai/chatbot"
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
-import { useWebStore } from "@/stores/modules/website"
-import { logoutApi } from "@/api/login"
+import { useWebStoreHook } from "@/store/modules/website"
+import { logoutApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
+
+// 获取存储的博客信息
+const webStore = useWebStoreHook()
+const blogInfo = webStore.blogInfo
 
 const navClass = ref("")
 
@@ -127,10 +136,6 @@ const scroll = () => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
   navClass.value = scrollTop > 60 ? "nav-fixed" : "nav"
 }
-
-// 获取存储的博客信息
-const webStore = useWebStore()
-const blogInfo = useWebStore().blogInfo
 
 const openSearch = () => {
   webStore.searchFlag = true
@@ -253,7 +258,7 @@ ul {
   transition: all 0.3s ease-in-out;
 }
 
-.user-avatar {
+.top-avatar {
   cursor: pointer;
   border-radius: 50%;
 }

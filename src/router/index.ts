@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHashHistory, createWebHistory } from "vue-router"
 import progress from "@bassist/progress"
 import routes from "./routes"
 import { APP_NAME } from "@/constants"
@@ -10,7 +10,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior: (to, from, savedPosition) => {
-    return savedPosition | { top: 0, left: 0 }
+    return savedPosition || { top: 0, left: 0 }
   },
 })
 

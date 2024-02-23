@@ -50,12 +50,12 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from "vue"
-import { useWebStore } from "@/stores"
-import { forgetPasswordApi, resetPasswordApi } from "@/api/login"
+import { useWebStoreHook } from "@/store/modules/website"
+import { forgetPasswordEmailApi, resetPasswordApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 const username = ref("")
 const code = ref("")
@@ -71,7 +71,7 @@ const openLogin = () => {
 }
 
 const sendCode = () => {
-  forgetPasswordApi({ username: username.value }).then((res) => {
+  forgetPasswordEmailApi({ username: username.value }).then((res) => {
     ElMessage.success("发送成功")
     countDown()
   })
