@@ -39,7 +39,7 @@ const cover = ref(webStore.getCover("message"))
 const config = ref({
   channels: 7, // 轨道数量，为0则弹幕轨道数会撑满容器
   useSlot: true, // 是否开启slot
-  loop: true, // 是否开启弹幕循环
+  loop: false, // 是否开启弹幕循环
   speeds: 100, // 弹幕速度
   fontSize: 20, // 文本模式下的字号
   top: 5, // 弹幕轨道间的垂直间距
@@ -65,7 +65,7 @@ const addToList = () => {
   const message = {
     avatar: userAvatar,
     nickname: userNickname,
-    messageContent: addMessageContent.value,
+    message_content: addMessageContent.value,
     time: Math.floor(Math.random() * (10 - 7)) + 7,
   }
   addMessageContent.value = ""
