@@ -193,6 +193,9 @@ p {
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
 }
+.v-toolbar__content {
+  overflow: visible!important;
+}
 @media (min-width: 760px) {
   .v-toolbar__content,
   .v-toolbar__extension {

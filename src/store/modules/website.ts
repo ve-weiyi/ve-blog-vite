@@ -118,7 +118,9 @@ export const useWebStore = defineStore({
       this.loginHistory = {}
     },
     isLogin() {
-      return this.getToken() != undefined
+      const tk = this.getToken()
+      console.log("tk", tk)
+      return tk != undefined
     },
     getToken(): Token {
       return cookies.getItem("token")

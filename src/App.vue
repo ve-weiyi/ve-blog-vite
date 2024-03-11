@@ -26,7 +26,9 @@
       <!-- 音乐播放器 -->
       <Player v-if="webStore.blogInfo.website_config.is_music_player === 1 && !isMobile" />
       <!-- 聊天室 -->
-      <ChatRoom v-if="webStore.blogInfo.website_config.is_chat_room === 1"></ChatRoom>
+      <!--      <ChatRoom v-if="webStore.blogInfo.website_config.is_chat_room === 1"></ChatRoom>-->
+      <!-- ai助手 -->
+      <AiAssistant></AiAssistant>
     </el-config-provider>
   </v-app>
 </template>
@@ -42,14 +44,14 @@ import LoginModel from "./components/model/LoginModel.vue"
 import RegisterModel from "./components/model/RegisterModel.vue"
 import ForgetModel from "./components/model/ForgetModel.vue"
 import Player from "./components/zw-player/player.vue"
-import ChatRoom from "./components/ChatRoom.vue"
 import EmailModel from "./components/model/EmailModel.vue"
-import { ElConfigProvider, ElMessage } from "element-plus"
+import AiAssistant from "@/components/AiAssistant.vue"
+
+import { ElConfigProvider } from "element-plus"
 import zh from "element-plus/es/locale/lang/zh-cn"
-import en from "element-plus/es/locale/lang/en"
 import { getUserInfoApi } from "@/api/user"
 import { useWebStoreHook } from "@/store/modules/website"
-import { getAdminHomeInfoApi, getBlogHomeInfoApi, getWebsiteConfigApi } from "@/api/website.ts"
+import { getBlogHomeInfoApi } from "@/api/website.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
