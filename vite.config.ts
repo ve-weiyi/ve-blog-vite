@@ -149,6 +149,21 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
           },
         },
       },
+      /** 客户端构建默认为 esbuild，SSR构建默认为 false */
+      minify: "esbuild",
+      /** Vite 2.6.x 以上需要配置 minify: "terser", terserOptions 才能生效 */
+      /** 在打包代码时移除 console.log、debugger 和 注释 */
+      terserOptions: {
+        compress: {
+          drop_console: false,
+          drop_debugger: true,
+          pure_funcs: ["console.log"],
+        },
+        format: {
+          /** 删除注释 */
+          comments: false,
+        },
+      },
     },
 
     /** 混淆器 */
