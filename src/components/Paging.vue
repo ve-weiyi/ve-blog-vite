@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from "vue"
+import { ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { useRoute } from "vue-router"
 
