@@ -1,32 +1,32 @@
 /** 所有 api 接口的响应数据都应该准守该格式 */
 interface IApiResponseData<T> {
   code: number
-  data: T | object | any
+  data: T
   message: string
 }
 
 interface PageResult<T> {
-  list: T[]
+  list: T
   page: number
   page_size: number
   total: number
 }
 
-interface Page {
+interface PageQuery {
   page?: number
   page_size?: number
-  orders?: Order[]
+  sorts?: Sort[]
   conditions?: Condition[]
 }
 
-interface Order {
+interface Sort {
   field: string
-  rule: string
+  order: string
 }
 
 interface Condition {
   flag?: string
   field: string
-  value: any
-  rule: string
+  value?: any
+  rule?: "like" | "=" | ">" | "<" | string
 }

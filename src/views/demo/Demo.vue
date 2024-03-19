@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { useWebStore } from "@/stores"
+import { useWebStoreHook } from "@/store/modules/website"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -25,7 +25,7 @@ const emit = defineEmits([
 ])
 
 // 获取缓存信息
-const store = useWebStore()
+const store = useWebStoreHook()
 
 // 获取路由参数
 const route = useRoute()
@@ -61,7 +61,7 @@ watch(
   (newValue, oldValue) => {
     console.log(newValue, oldValue)
   },
-  { immediate: true }, // 立即监听属性
+  { immediate: true } // 立即监听属性
 )
 // watchEffect 会自动追踪依赖并在其变化时执行回调函数。
 watchEffect(() => {

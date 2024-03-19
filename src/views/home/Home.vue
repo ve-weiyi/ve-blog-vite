@@ -5,8 +5,11 @@
       <div class="banner-container">
         <!-- 联系方式 -->
         <h1 class="blog-title animated zoomIn">
-          {{ blogInfo.websiteConfig.websiteName }}
+          {{ title }}
         </h1>
+        <h4 class="animated zoomIn">
+          {{ author }}
+        </h4>
         <!-- 一言 -->
         <div class="blog-intro">{{ obj.output }} <span class="typed-cursor">|</span></div>
         <!-- 联系方式 -->
@@ -15,18 +18,18 @@
             v-if="isShowSocial('qq')"
             class="mr-5 iconfont iconqq"
             target="_blank"
-            :href="'http://wpa.qq.com/msgrd?v=3&uin=' + blogInfo.websiteConfig.qq + '&site=qq&menu=yes'"
+            :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.website_config.qq + '&site=qq&menu=yes'"
           ></a>
           <a
             v-if="isShowSocial('github')"
             target="_blank"
-            :href="blogInfo.websiteConfig.github"
+            :href="webStore.blogInfo.website_config.github"
             class="mr-5 iconfont icongithub"
           ></a>
           <a
             v-if="isShowSocial('gitee')"
             target="_blank"
-            :href="blogInfo.websiteConfig.gitee"
+            :href="webStore.blogInfo.website_config.gitee"
             class="iconfont icongitee-fill-round"
           ></a>
         </div>
@@ -52,30 +55,30 @@
           <!-- 文章封面图 -->
           <div :class="isRight(index)">
             <router-link :to="'/articles/' + item.id">
-              <v-img cover class="on-hover" width="100%" height="100%" :src="item.articleCover" />
+              <v-img cover class="on-hover" width="100%" height="100%" :src="item.article_cover" />
             </router-link>
           </div>
           <!-- 文章信息 -->
           <div class="article-wrapper">
             <div style="line-height: 1.4">
               <router-link :to="'/articles/' + item.id">
-                {{ item.articleTitle }}
+                {{ item.article_title }}
               </router-link>
             </div>
             <div class="article-info">
               <!-- 是否置顶 -->
-              <span v-if="item.isTop === 1">
+              <span v-if="item.is_top === 1">
                 <span style="color: #ff7242"> <i class="iconfont iconzhiding"></i> 置顶 </span>
                 <span class="separator">|</span>
               </span>
               <!-- 发表时间 -->
               <v-icon size="14">mdi-calendar-month-outline</v-icon>
-              {{ item.createdAt }}
+              {{ item.created_at }}
               <span class="separator">|</span>
               <!-- 文章分类 -->
-              <router-link :to="'/categories/' + item.categoryId">
+              <router-link :to="'/categories/' + item.article_category.id">
                 <v-icon size="14">mdi-inbox-full</v-icon>
-                {{ item.categoryName }}
+                {{ item.article_category.category_name }}
               </router-link>
               <span class="separator">|</span>
               <!-- 文章标签 -->
@@ -83,20 +86,25 @@
                 style="display: inline-block"
                 :to="'/tags/' + tag.id"
                 class="mr-1"
-                v-for="tag of item.tagDTOList"
+                v-for="tag of item.article_tag_list"
                 :key="tag.id"
               >
                 <v-icon size="14">mdi-tag-multiple</v-icon>
-                {{ tag.tagName }}
+                {{ tag.tag_name }}
               </router-link>
             </div>
             <!-- 文章内容 -->
             <div class="article-content">
-              {{ item.articleContent }}
+              {{ item.article_content }}
             </div>
           </div>
         </v-card>
         <!-- 无限加载 -->
+        <!--        <v-infinite-scroll done="ok">-->
+        <!--          <template v-slot:empty>-->
+        <!--            <v-alert type="warning">No more items!</v-alert>-->
+        <!--          </template>-->
+        <!--        </v-infinite-scroll>-->
         <!--        <infinite-loading @infinite="infiniteHandler">-->
         <!--          <template #no-more></template>-->
         <!--        </infinite-loading>-->
@@ -108,13 +116,13 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="blogInfo.websiteConfig.websiteAvatar" />
+                <img class="author-avatar" :src="webStore.blogInfo.website_config.website_avatar" />
               </v-avatar>
               <div style="font-size: 1.375rem; margin-top: 0.625rem">
-                {{ blogInfo.websiteConfig.websiteAuthor }}
+                {{ webStore.blogInfo.website_config.website_author }}
               </div>
               <div style="font-size: 0.875rem">
-                {{ blogInfo.websiteConfig.websiteIntro }}
+                {{ webStore.blogInfo.website_config.website_intro }}
               </div>
             </div>
             <!-- 博客信息 -->
@@ -123,7 +131,7 @@
                 <router-link to="/archives">
                   <div style="font-size: 0.875rem">文章</div>
                   <div style="font-size: 1.25rem">
-                    {{ blogInfo.articleCount }}
+                    {{ webStore.blogInfo.article_count }}
                   </div>
                 </router-link>
               </div>
@@ -131,19 +139,19 @@
                 <router-link to="/categories">
                   <div style="font-size: 0.875rem">分类</div>
                   <div style="font-size: 1.25rem">
-                    {{ blogInfo.categoryCount }}
+                    {{ webStore.blogInfo.category_count }}
                   </div>
                 </router-link>
               </div>
               <div class="blog-info-data">
                 <router-link to="/tags">
                   <div style="font-size: 0.875rem">标签</div>
-                  <div style="font-size: 1.25rem">{{ blogInfo.tagCount }}</div>
+                  <div style="font-size: 1.25rem">{{ webStore.blogInfo.tag_count }}</div>
                 </router-link>
               </div>
             </div>
             <!-- 收藏按钮 -->
-            <a class="collection-btn" @click="tip = true">
+            <a class="collection-btn" @click="showTips = true">
               <v-icon color="#fff" size="18" class="mr-1">mdi-bookmark</v-icon>
               加入书签
             </a>
@@ -153,18 +161,18 @@
                 v-if="isShowSocial('qq')"
                 class="mr-5 iconfont iconqq"
                 target="_blank"
-                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + blogInfo.websiteConfig.qq + '&site=qq&menu=yes'"
+                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.website_config.qq + '&site=qq&menu=yes'"
               ></a>
               <a
                 v-if="isShowSocial('github')"
                 target="_blank"
-                :href="blogInfo.websiteConfig.github"
+                :href="webStore.blogInfo.website_config.github"
                 class="mr-5 iconfont icongithub"
               ></a>
               <a
                 v-if="isShowSocial('gitee')"
                 target="_blank"
-                :href="blogInfo.websiteConfig.gitee"
+                :href="webStore.blogInfo.website_config.gitee"
                 class="iconfont icongitee-fill-round"
               ></a>
             </div>
@@ -176,7 +184,7 @@
               公告
             </div>
             <div style="font-size: 0.875rem">
-              {{ blogInfo.websiteConfig.websiteNotice }}
+              {{ webStore.blogInfo.website_config.website_notice }}
             </div>
           </v-card>
           <!-- 网站信息 -->
@@ -190,7 +198,7 @@
                 运行时间:<span class="float-right">{{ time }}</span>
               </div>
               <div style="padding: 4px 0 0">
-                总访问量:<span class="float-right">{{ blogInfo.viewsCount }}</span>
+                总访问量:<span class="float-right">{{ webStore.blogInfo.views_count }}</span>
               </div>
             </div>
           </v-card>
@@ -198,7 +206,7 @@
       </v-col>
     </v-row>
     <!-- 提示消息 -->
-    <v-snackbar v-model="tip" top color="#49b1f5" :timeout="2000"> 按CTRL+D 键将本页加入书签 </v-snackbar>
+    <v-snackbar v-model="showTips" top color="#49b1f5" :timeout="2000"> 按CTRL+D 键将本页加入书签 </v-snackbar>
   </div>
 </template>
 
@@ -207,22 +215,23 @@ import { defineComponent, ref, onMounted, computed, onUnmounted } from "vue"
 import Swiper from "../../components/Swiper.vue"
 import EasyTyper from "easy-typer-js"
 import MarkdownIt from "markdown-it"
-import { useWebStore } from "@/stores"
 import { usePagination } from "@/hooks/usePagination"
-import { findArticleListApi } from "@/api/article"
+import { findArticleHomeListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
-import { getUserInfoApi } from "@/api/user"
-import cookies from "@/utils/cookies"
+import { ArticleHome, Talk } from "@/api/types"
+import { useWebStoreHook } from "@/store/modules/website"
+import { storeToRefs } from "pinia"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
 // 获取存储的博客信息
-const webStore = useWebStore()
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
 
 // 数据响应式
-const tip = ref(false)
+const showTips = ref(false)
+// 网站运行时间
 const time = ref("")
+// 一言
 const obj = ref({
   output: "",
   isEnd: false,
@@ -234,81 +243,22 @@ const obj = ref({
   sentencePause: true,
 })
 
+// 诗篇名称
+const title = ref("")
+
+// 作者
+const author = ref("")
+
+// 说说列表
+const talkList = ref<Talk[]>([])
 // 文章列表
-const articleList = ref([
-  // {
-  //   articleContent: '恭喜你成功运行博客！\n',
-  //   articleCover: 'http://static.ve77.cn/articles/3a4b4e40fb8aa5fcc016f0228938d321.jpg',
-  //   articleTitle: '测试文章',
-  //   categoryId: 187,
-  //   createdAt: '2022-01-18T00:29:02+08:00',
-  //   id: 54,
-  //   isDelete: false,
-  //   isTop: false,
-  //   originalUrl: '',
-  //   status: 1,
-  //   type: 1,
-  //   updatedAt: '2022-01-19T23:10:07+08:00',
-  //   userId: 2,
-  // },
-])
-
-const isLoading = ref(false)
-const infiniteLoading = ref(null)
-const infiniteHandler = () => {
-  console.log("infiniteHandler")
-  if (isLoading.value) {
-    return // 避免重复加载
-  }
-  isLoading.value = true
-  // 模拟异步加载数据
-  const md = require("markdown-it")()
-  findArticleListApi({
-    page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
-  }).then((res) => {
-    console.log("-->", res)
-
-    paginationData.total = res.data.total
-    paginationData.pageSize = res.data.pageSize
-    if (res.data.length) {
-      // 去除markdown标签
-      res.data.forEach((item) => {
-        item.articleContent = md
-          .render(item.articleContent)
-          .replace(/<\/?[^>]*>/g, "")
-          .replace(/[|]*\n/, "")
-          .replace(/&npsp;/gi, "")
-      })
-      articleList.value.push(...res.data)
-      const hasMoreData = paginationData.total == 0 // 判断是否还有更多数据需要加载
-      if (hasMoreData) {
-        // 还有更多数据，告知组件加载完成
-        infiniteLoading.value.complete()
-      } else {
-        // 没有更多数据了，重置组件状态
-        infiniteLoading.value.reset()
-      }
-
-      isLoading.value = false // 重置加载状态
-    }
-  })
-}
-
-const talkList = ref([])
-const current = ref(1)
+const articleList = ref<ArticleHome[]>([])
 
 // 初始化
 const init = () => {
-  document.title = blogInfo.websiteConfig.websiteName
+  document.title = webStore.blogInfo.website_config.website_name
   // 一言Api进行打字机循环输出效果
-  fetch("https://v1.hitokoto.cn?c=i")
-    .then((res) => {
-      return res.json()
-    })
-    .then(({ hitokoto }) => {
-      initTyped(hitokoto, null, null)
-    })
+  getHitokoto()
 
   // 获取首页说说
   listHomeTalks()
@@ -317,28 +267,55 @@ const init = () => {
   listHomeArticles()
 }
 
+interface Hitokoto {
+  id: number
+  uuid: string
+  hitokoto: string
+  type: string
+  from: string
+  from_who: string
+  creator: string
+  creator_uid: number
+  reviewer: number
+  commit_from: string
+  created_at: string
+  length: number
+}
+
+const getHitokoto = () => {
+  fetch("https://v1.hitokoto.cn?c=i")
+    .then((res) => {
+      return res.json()
+    })
+    .then((res: Hitokoto) => {
+      author.value = res.from_who
+      title.value = res.from
+      initTyped(res.hitokoto, null, null)
+    })
+}
+
 const listHomeTalks = () => {
   findTalkListApi({
     page: 0,
-    pageSize: 10,
+    page_size: 10,
   }).then((res) => {
     talkList.value = res.data.list
   })
 }
 
 const listHomeArticles = () => {
-  findArticleListApi({
+  findArticleHomeListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
+    page_size: paginationData.pageSize,
   }).then((res) => {
     paginationData.total = res.data.total
-    paginationData.pageSize = res.data.pageSize
+    paginationData.pageSize = res.data.page_size
     const list = res.data.list
     if (list.length) {
       // 去除markdown标签
       list.forEach((item) => {
-        item.articleContent = new MarkdownIt()
-          .render(item.articleContent)
+        item.article_content = new MarkdownIt()
+          .render(item.article_content)
           .replace(/<\/?[^>]*>/g, "")
           .replace(/[|]*\n/, "")
           .replace(/&npsp;/gi, "")
@@ -350,7 +327,7 @@ const listHomeArticles = () => {
 
 const initTyped = (input, fn, hooks) => {
   // obj.value.output = input
-  const typed = new EasyTyper(obj.value, input, fn, function() {})
+  const typed = new EasyTyper(obj.value, input, fn, function () {})
 }
 
 const scrollDown = () => {
@@ -361,7 +338,7 @@ const scrollDown = () => {
 }
 
 const runTime = () => {
-  const timeold = new Date().getTime() - new Date(blogInfo.websiteConfig.websiteCreateTime).getTime()
+  const timeold = new Date().getTime() - new Date(webStore.blogInfo.website_config.website_create_time).getTime()
   const msPerDay = 24 * 60 * 60 * 1000
   const daysold = Math.floor(timeold / msPerDay)
   let str = ""
@@ -373,11 +350,9 @@ const runTime = () => {
   time.value = str
 }
 
-runTime()
-
 // 计算属性
 const isRight = computed(() => {
-  return function(index) {
+  return function (index) {
     if (index % 2 == 0) {
       return "article-cover left-radius"
     }
@@ -386,19 +361,13 @@ const isRight = computed(() => {
 })
 
 const isShowSocial = computed(() => {
-  return function(social) {
-    return blogInfo.websiteConfig.socialUrlList.indexOf(social) != -1
+  return function (social) {
+    return webStore.blogInfo.website_config.social_url_list.indexOf(social) != -1
   }
 })
 
 const cover = computed(() => {
-  let cover = ""
-  blogInfo.pageList.forEach((item) => {
-    if (item.pageLabel == "home") {
-      cover = item.pageCover
-    }
-  })
-  return "background: url(" + cover + ") center center / cover no-repeat"
+  return webStore.getCover("home")
 })
 
 let timer
@@ -406,6 +375,7 @@ const swiper = ref()
 // 在组件挂载时启动定时器
 onMounted(() => {
   init()
+  runTime()
   timer = setInterval(runTime, 1000)
   // 可以在这里访问子组件的属性
   const swiperComponent = swiper.value
@@ -661,6 +631,8 @@ onUnmounted(() => {
 }
 
 .author-avatar {
+  height: 100%;
+  width: 100%;
   transition: all 0.5s;
 }
 

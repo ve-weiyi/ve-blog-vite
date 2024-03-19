@@ -5,8 +5,8 @@
     <div class="comment-wrapper">
       <div style="display: flex; width: 100%">
         <v-avatar size="36">
-          <img v-if="webState.avatar" :src="webState.avatar" />
-          <img v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
+          <img height="36" v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+          <img height="36" v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
@@ -30,52 +30,52 @@
       <div class="comment-wrapper" v-for="(item, index) of commentList" :key="item.id">
         <!-- 头像 -->
         <v-avatar size="40" class="comment-avatar">
-          <img :src="item.avatar" />
+          <img height="40" :src="item.avatar" />
         </v-avatar>
         <div class="comment-meta">
           <!-- 用户名 -->
           <div class="comment-user">
-            <span v-if="!item.webSite">{{ item.nickname }}</span>
-            <a v-else :href="item.webSite" target="_blank">{{ item.nickname }}</a>
-            <v-icon size="20" color="#ffa51e" v-if="item.userId == 1"> mdi-check-decagram </v-icon>
+            <span v-if="!item.website">{{ item.nickname }}</span>
+            <a v-else :href="item.website" target="_blank">{{ item.nickname }}</a>
+            <v-icon size="20" color="#ffa51e" v-if="item.user_id == 1"> mdi-check-decagram </v-icon>
           </div>
           <!-- 信息 -->
           <div class="comment-info">
             <!-- 楼层 -->
             <span style="margin-right: 10px">{{ count - index }}楼</span>
             <!-- 发表时间 -->
-            <span style="margin-right: 10px">{{ item.createdAt }}</span>
+            <span style="margin-right: 10px">{{ item.created_at }}</span>
             <!-- 点赞 -->
             <span :class="isLike(item.id) + ' iconfont icondianzan'" @click="like(item)" />
-            <span v-show="item.likeCount > 0">{{ item.likeCount }}</span>
+            <span v-show="item.like_count > 0">{{ item.like_count }}</span>
             <!-- 回复 -->
-            <span class="reply-btn" @click="replyComment(index, item)">回复</span>
+            <span class="reply-btn" @click="replyComment(index, item, null)">回复</span>
           </div>
           <!-- 评论内容 -->
-          <p v-html="item.commentContent" class="comment-content"></p>
+          <p v-html="item.comment_content" class="comment-content"></p>
           <!-- 回复人 -->
-          <div style="display: flex" v-for="reply of item.replyDTOList" :key="reply.id">
+          <div style="display: flex" v-for="reply of item.reply_dto_list" :key="reply.id">
             <!-- 头像 -->
             <v-avatar size="36" class="comment-avatar">
-              <img :src="reply.avatar" />
+              <img height="36" :src="reply.avatar" />
             </v-avatar>
             <div class="reply-meta">
               <!-- 用户名 -->
               <div class="reply-user">
-                <span v-if="!reply.webSite">{{ reply.nickname }}</span>
-                <a v-else :href="reply.webSite" target="_blank">{{ reply.nickname }}</a>
-                <v-icon size="18" color="#ffa51e" v-if="reply.userId === 1"> mdi-check-decagram </v-icon>
+                <span v-if="!reply.website">{{ reply.nickname }}</span>
+                <a v-else :href="reply.website" target="_blank">{{ reply.nickname }}</a>
+                <v-icon size="18" color="#ffa51e" v-if="reply.user_id === 1"> mdi-check-decagram </v-icon>
                 <span style="margin-left: 5px; color: #999">回复</span>
-                <a :href="`#${reply.replyId}`" class="reply-link"> @{{ reply.replyNickname }} </a>
+                <a :href="`#${reply.reply_user_id}`" class="reply-link"> @{{ reply.reply_nickname }} </a>
               </div>
               <!-- 评论内容 -->
-              <p v-html="reply.commentContent" class="reply-content"></p>
+              <p v-html="reply.comment_content" class="reply-content"></p>
               <!-- 发表时间 -->
               <div class="comment-info">
-                <span style="margin-right: 10px">{{ reply.createdAt }}</span>
+                <span style="margin-right: 10px">{{ reply.created_at }}</span>
                 <!-- 点赞 -->
                 <span :class="isLike(reply.id) + ' iconfont icondianzan'" @click="like(reply)" />
-                <span v-show="reply.likeCount > 0">{{ reply.likeCount }}</span>
+                <span v-show="reply.like_count > 0">{{ reply.like_count }}</span>
                 <!-- 回复 -->
                 <span class="reply-btn" @click="replyComment(index, item, reply)">回复</span>
               </div>
@@ -85,8 +85,8 @@
           <div v-if="replyCommentIndex === index && replyToCommentId === item.id" class="comment-wrapper">
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
-                <img v-if="webState.avatar" :src="webState.avatar" />
-                <img v-else :src="webState.blogInfo.websiteConfig.touristAvatar" />
+                <img height="36" v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
+                <img height="36" v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
               </v-avatar>
               <div style="width: 100%" class="ml-3">
                 <div class="comment-input">
@@ -118,10 +118,11 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findCommentListApi, queryCommentApi } from "@/api/comment"
+import { useWebStoreHook } from "@/store/modules/website"
+import { findCommentListApi, findCommentApi, createCommentApi } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
 import { useRoute } from "vue-router"
+import { CommentDTO } from "@/api/types.ts"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -134,19 +135,33 @@ const props = defineProps({
 })
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 // 获取路由参数
 const route = useRoute()
 
 // 定义响应式变量
 const commentContent = ref("") // 评论内容
 const replyContent = ref("") // 回复内容
-const commentList = ref([]) // 评论列表
+const commentList = ref<CommentDTO[]>([]) // 评论列表
 const chooseEmoji = ref(false) // 是否选择表情
 const replyCommentIndex = ref(-1) // 回复评论的索引
 const replyToCommentId = ref(null) // 回复的评论 ID
 const count = ref(0) // 评论总数
 const reFresh = ref(true) // 是否刷新评论
+const reply = ref(null) // 回复的评论
+
+function addEmoji(emoji) {
+  commentContent.value += emoji
+}
+
+function isLike(id) {
+  // 判断是否点赞
+  return webStore.isCommentLike(id) ? "like-active" : "like"
+}
+function like(item) {
+  // 点赞
+  webStore.commentLike(item.id)
+}
 
 const listComments = () => {
   // 查看评论
@@ -169,11 +184,11 @@ const listComments = () => {
   }
   findCommentListApi({
     page: paginationData.currentPage,
-    pageSize: paginationData.pageSize,
-    orders: [
+    page_size: paginationData.pageSize,
+    sorts: [
       {
         field: "created_at",
-        rule: "desc",
+        order: "desc",
       },
     ],
     conditions: [
@@ -196,7 +211,7 @@ const listComments = () => {
       commentList.value.push(...res.data.list)
     }
     paginationData.currentPage = res.data.page + 1
-    paginationData.pageSize = res.data.pageSize
+    paginationData.pageSize = res.data.page_size
     paginationData.total = res.data.total
   })
 }
@@ -216,28 +231,17 @@ async function submitComment() {
   }
 
   // 调用 API 提交新评论
-  const response = await fetch("/api/comments", {
-    method: "POST",
-    body: JSON.stringify(newComment),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-
-  if (response.ok) {
-    // 评论提交成功
-    // 清空评论输入框
-    commentContent.value = ""
-    // 获取更新后的评论列表
-    listComments()
-  } else {
-    // 处理错误响应
-    // 显示错误信息或执行其他必要操作
-  }
+  // createCommentApi(newComment).then((res) => {
+  //   // 评论提交成功
+  //   // 清空评论输入框
+  //   commentContent.value = ""
+  //   // 获取更新后的评论列表
+  //   listComments()
+  // })
 }
 
 // 回复评论
-function replyComment(index, item, reply) {
+function replyComment(index, item, replay) {
   // 设置索引和评论 ID，以便跟踪回复输入框
   replyCommentIndex.value = index
   replyToCommentId.value = item.id
@@ -259,27 +263,16 @@ async function insertComment(parentId) {
   }
 
   // 调用 API 插入回复评论
-  const response = await fetch("/api/comments", {
-    method: "POST",
-    body: JSON.stringify(newReply),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-
-  if (response.ok) {
-    // 回复评论插入成功
-    // 清空回复输入框
-    replyContent.value = ""
-    // 重置回复评论的索引和 ID
-    replyCommentIndex.value = -1
-    replyToCommentId.value = null
-    // 获取更新后的评论列表
-    listComments()
-  } else {
-    // 处理错误响应
-    // 显示错误信息或执行其他必要操作
-  }
+  //   createCommentApi(newReply).then((res) => {
+  //   // 回复评论插入成功
+  //   // 清空回复输入框
+  //   replyContent.value = ""
+  //   // 重置回复评论的索引和 ID
+  //   replyCommentIndex.value = -1
+  //   replyToCommentId.value = null
+  //   // 获取更新后的评论列表
+  //   listComments()
+  // })
 }
 
 // 生命周期钩子

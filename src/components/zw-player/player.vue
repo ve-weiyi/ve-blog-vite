@@ -27,7 +27,8 @@
                   <ul class="search_list" v-if="musicSearchVal != ''">
                     <li v-for="(item, index) in musicSearchList" :key="index" @click="ListAdd(item)">
                       <span class="music_search_name">{{ item.name }}</span>
-                      <span class="music_search_ar">{{ item.artists[0].name }}</span>
+                      <!--                      <span class="music_search_ar">{{ item.artists[0].name }}</span>-->
+                      <span class="music_search_ar">{{ item.name }}</span>
                     </li>
                   </ul>
                 </transition>
@@ -121,13 +122,14 @@
           <div class="dis_list" @click="DisList">···</div>
           <p class="music_title">{{ musicTitle }}</p>
           <p class="music_intro">歌手: {{ musicName }}</p>
-          <ul class="music_words">
+          <ul class="music_words" ref="music_words">
             <div class="music_words_box" :style="{ top: wordsTop + 'px' }">
               <li
                 v-for="(item, index) in musicWords"
                 :key="index"
                 class="music_word"
                 :class="{ word_highlight: wordIndex == index }"
+                ref="music_word"
               >
                 {{ item }}
               </li>
@@ -147,7 +149,7 @@
           </div>
         </div>
       </div>
-      <video id="music" autoplay="autoplay" :src="musicUrl" name="media"></video>
+      <video id="music" :autoplay="true" :src="musicUrl" name="media"></video>
     </div>
   </div>
 </template>
@@ -166,12 +168,13 @@ import pause from "./img/pause.png"
 import play from "./img/play.png"
 import state0 from "./img/state_0.png"
 import state1 from "./img/state_1.png"
+import shlter from "./img/list_pan.png"
 
 let player: HTMLAudioElement
 let controlIcon: HTMLElement
 let progress: HTMLElement
-let music_word: HTMLElement
-let music_words: HTMLElement
+const music_word = ref([])
+const music_words = ref(null)
 // 音乐播放器界面的响应式变量
 const listIsDis = ref(false) // 列表显示状态
 const musicAlertState = ref(false) // 音乐提示状态
@@ -196,7 +199,7 @@ const musicWords = ref([]) // 音乐歌词
 const musicTypeList = ref([])
 
 // 音乐搜索结果列表
-const musicSearchList = ref([])
+const musicSearchList = ref<any[]>([])
 
 // 当前音乐列表
 const thisMusicList = computed(() => {
@@ -222,7 +225,7 @@ const musicStateButton = ref("")
 function DisAuthorInfo() {
   console.log(
     "%c音乐播放器作者----仲威，博客地址：https://blogme.top",
-    "background-color:rgb(30,30,30);border-radius:4px;font-size:12px;padding:4px;color:rgb(220,208,129);",
+    "background-color:rgb(30,30,30);border-radius:4px;font-size:12px;padding:4px;color:rgb(220,208,129);"
   )
 }
 
@@ -277,6 +280,7 @@ function ListChange(isLast) {
   }
 }
 
+const listPlay = ref(list_play_hover)
 // 播放列表
 const ListPlay = (id: number) => {
   if (thisMusicIndex.value !== id) {
@@ -439,15 +443,15 @@ function Player() {
   })
 
   function timer() {
-    music_words = document.querySelector(".music_words") as HTMLElement
-    music_word = document.querySelector(".music_word") as HTMLElement
+    // music_words = document.querySelector(".music_words") as HTMLElement
+    // music_word = document.querySelector(".music_word") as HTMLElement
 
     currentProgress.value = `${(player.currentTime / player.duration) * 100}%`
     // 这里写歌词滚动
     if (player.currentTime >= wordsTime.value[o.value + 1]) {
-      top.value += parseInt(music_word.eq(o.value).height()) + parseInt(music_word.eq(o.value).css("marginTop"))
-      if (top.value >= music_words.height() / 2 - 11) {
-        wordsTop.value += -parseInt(music_word.eq(o.value).height()) + parseInt(music_word.eq(o.value).css("marginTop"))
+      top.value += music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
+      if (top.value >= music_words.value.height / 2 - 11) {
+        wordsTop.value += -music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
       }
       wordIndex.value = o.value + 1
       o.value++
@@ -472,12 +476,12 @@ function Player() {
 
   // 进度条控制
   progress.addEventListener("mousedown", (ev) => {
-    const e = ev || event
+    const e = ev
     let pro = (e.clientX - progress.offsetLeft) / progress.offsetWidth
     clearInterval(playerTimer)
     currentProgress.value = `${pro * 100}%`
     document.addEventListener("mousemove", (ev) => {
-      const e = ev || event
+      const e = ev
       pro = (e.clientX - progress.offsetLeft) / progress.offsetWidth
       currentProgress.value = `${pro * 100}%`
     })
@@ -493,11 +497,11 @@ function Player() {
       let diff_h = 0
       if (o.value < now_o) {
         for (let i = o.value; i < now_o; i++) {
-          diff_h += -parseInt(music_word.eq(i).offsetHeight) + parseInt(music_word.eq(i).style.marginTop)
+          diff_h += -music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
         }
       } else {
         for (let i = now_o; i < o.value; i++) {
-          diff_h += parseInt(music_word.eq(i).offsetHeight) + parseInt(music_word.eq(i).style.marginTop)
+          diff_h += music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
         }
       }
       wordsTop.value += diff_h
@@ -574,7 +578,7 @@ watch(
         }
       })
     }
-  },
+  }
 )
 </script>
 

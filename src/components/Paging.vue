@@ -87,8 +87,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from "vue"
-import { useWebStore } from "@/stores"
+import { ref } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
 import { useRoute } from "vue-router"
 
 // 父组件向子组件传输的数据
@@ -114,7 +114,7 @@ const emit = defineEmits([
 ])
 
 // 获取存储的缓存信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 
 // 获取路由参数
 const route = useRoute()

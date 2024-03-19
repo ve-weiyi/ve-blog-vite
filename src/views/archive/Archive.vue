@@ -10,10 +10,10 @@
         <v-timeline-item dot-color="pink" size="large"> 目前共计{{ count }}篇文章，继续加油 </v-timeline-item>
         <v-timeline-item dot-color="pink" size="small" v-for="item of archiveList" :key="item.id">
           <!-- 日期 -->
-          <span class="time">{{ item.createdAt }}</span>
+          <span class="time">{{ item.created_at }}</span>
           <!-- 文章标题 -->
           <router-link :to="'/articles/' + item.id" style="color: #666; text-decoration: none">
-            {{ item.articleTitle }}
+            {{ item.article_title }}
           </router-link>
         </v-timeline-item>
       </v-timeline>
@@ -25,17 +25,18 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue"
-import { useWebStore } from "@/stores"
-import { getArticleArchivesApi } from "@/api/article"
+import { useWebStoreHook } from "@/store/modules/website"
+import { findArticleArchivesApi } from "@/api/article"
+import { ArticlePreviewDTO } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 // 获取背景图片
-const cover = ref(webState.getCover("talk"))
+const cover = ref(webStore.getCover("archive"))
 
 const current = ref(1)
 const count = ref(0)
-const archiveList = ref([])
+const archiveList = ref<ArticlePreviewDTO[]>([])
 
 onMounted(() => {
   listArchives()
@@ -46,7 +47,9 @@ watch(current, (value) => {
 })
 
 function listArchives(page = current.value) {
-  getArticleArchivesApi().then((res) => {
+  findArticleArchivesApi({
+    page: page,
+  }).then((res) => {
     archiveList.value = res.data.list
     count.value = res.data.total
   })

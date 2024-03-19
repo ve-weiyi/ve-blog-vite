@@ -50,12 +50,12 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from "vue"
-import { useWebStore } from "@/stores"
-import { registerApi, registerEmailApi } from "@/api/login"
+import { useWebStoreHook } from "@/store/modules/website"
+import { registerApi, registerEmailApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 const username = ref("")
 const code = ref("")
