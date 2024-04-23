@@ -1,7 +1,8 @@
 /** 配置项文档：https://prettier.io/docs/en/configuration.html */
 /** 代码美化利器 - Prettier https://www.jianshu.com/p/6a99ae530d43*/
 /** VS code部分prettier配置及注释 https://www.jianshu.com/p/65fb2b018612*/
-module.exports = {
+/** @type {import("prettier").Config} */
+export default {
   /** 指定代码换行的字符长度，默认为 80，超过该长度会换行*/
   printWidth: 120,
   /** 指定缩进长度，默认为 2*/

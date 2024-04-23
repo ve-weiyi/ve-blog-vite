@@ -1,16 +1,12 @@
-/* eslint-disable spaced-comment */
-/// <reference types="vite/client" />
-
-import { ConfigEnv, defineConfig, loadEnv } from "vite"
+import { type ConfigEnv, loadEnv, type UserConfigExport } from "vite"
 import { resolve } from "path"
-import pkg from "./package.json"
-import dayjs from "dayjs"
 import vue from "@vitejs/plugin-vue"
 import vueJsx from "@vitejs/plugin-vue-jsx"
 import banner from "vite-plugin-banner"
 import { createHtmlPlugin } from "vite-plugin-html"
+// import autoImport from "unplugin-auto-import/vite"
 import components from "unplugin-vue-components/vite"
-import eslintPlugin from "vite-plugin-eslint"
+import pkg from "./package.json"
 import { viteBuildInfo } from "./build/info"
 
 /** 当前执行node命令时文件夹的地址（工作目录） */
@@ -27,14 +23,8 @@ const alias: Record<string, string> = {
   "@build": pathResolve("build"),
 }
 
-const { dependencies, devDependencies, name, version } = pkg
-const __APP_INFO__ = {
-  pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-}
-
 /** 配置项文档：https://cn.vitejs.dev/config */
-export default defineConfig(({ command, mode }: ConfigEnv) => {
+export default ({ mode }: ConfigEnv): UserConfigExport => {
   // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
   const env = loadEnv(mode, root)
@@ -70,7 +60,7 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
      */
     server: {
       /** 是否开启 HTTPS */
-      https: false,
+      // https: {},
       /** 设置 host: true 才可以使用 Network 的形式，以 IP 访问项目 */
       host: true, // host: "0.0.0.0"
       /** 端口号 */
@@ -108,7 +98,6 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       __VUE_I18N_FULL_INSTALL__: true,
       __VUE_I18N_LEGACY_API__: false,
       __INTLIFY_PROD_DEVTOOLS__: false,
-      __APP_ENV__: JSON.stringify(__APP_INFO__),
     },
 
     /** 构建选项 */
@@ -153,28 +142,22 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       minify: "esbuild",
       /** Vite 2.6.x 以上需要配置 minify: "terser", terserOptions 才能生效 */
       /** 在打包代码时移除 console.log、debugger 和 注释 */
-      terserOptions: {
-        compress: {
-          drop_console: false,
-          drop_debugger: true,
-          pure_funcs: ["console.log"],
-        },
-        format: {
-          /** 删除注释 */
-          comments: false,
-        },
-      },
+      // minify: "terser",
+      // terserOptions: {
+      //   compress: {
+      //     drop_console: false,
+      //     drop_debugger: true,
+      //     pure_funcs: ["console.log"],
+      //   },
+      //   format: {
+      //     /** 删除注释 */
+      //     comments: false,
+      //   },
+      // },
     },
 
     /** 混淆器 */
-    esbuild: {
-      /** 打包时移除 console.log */
-      pure: ["console.log"],
-      /** 打包时移除 debugger */
-      drop: ["debugger"],
-      /** 打包时移除所有注释 */
-      legalComments: "none",
-    },
+    esbuild: false,
 
     plugins: [
       /**
@@ -188,10 +171,28 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
        */
       vueJsx(),
 
-      eslintPlugin({
-        include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
-        emitWarning: false,
-      }),
+      // eslintPlugin({
+      //   include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
+      //   emitWarning: false,
+      // }),
+
+      /**
+       * 自动导入 API ，不用每次都 import
+       *
+       * @tips 如果直接使用没导入的 API 依然提示报错，请重启 VS Code
+       *
+       * @see https://github.com/antfu/unplugin-auto-import#configuration
+       */
+      // autoImport({
+      //   imports: ["vue", "vue-router", "pinia"],
+      //   dts: "types/auto-import.d.ts",
+      //   eslintrc: {
+      //     enabled: true,
+      //     filepath: "./.eslintrc-auto-import.json",
+      //     globalsPropValue: true,
+      //   },
+      // }),
+
       /**
        * 自动导入组件，不用每次都 import
        * @see https://github.com/antfu/unplugin-vue-components#configuration
@@ -238,9 +239,9 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       viteBuildInfo(),
     ],
     /** Vitest 单元测试配置：https://cn.vitest.dev/config */
-    test: {
-      include: ["tests/**/*.test.ts"],
-      environment: "jsdom",
-    },
+    // test: {
+    //   include: ["tests/**/*.test.ts"],
+    //   environment: "jsdom",
+    // },
   }
-})
+}

@@ -1,10 +1,18 @@
 import type { Plugin } from "vite"
-import dayjs, { Dayjs } from "dayjs"
+import dayjs, { type Dayjs } from "dayjs"
 import duration from "dayjs/plugin/duration"
-import * as fs from "fs"
-import * as path from "path"
-import { green, blue, bold } from "picocolors"
+import * as path from "node:path"
+import * as fs from "node:fs"
+import gradientString from "gradient-string"
+import boxen, { type Options as BoxenOptions } from "boxen"
+
 dayjs.extend(duration)
+
+const boxenOptions: BoxenOptions = {
+  padding: 0.5,
+  borderColor: "cyan",
+  borderStyle: "round",
+}
 
 export function viteBuildInfo(): Plugin {
   let config: { command: string }
@@ -19,11 +27,9 @@ export function viteBuildInfo(): Plugin {
     },
     buildStart() {
       console.log(
-        bold(
-          green(
-            `👏欢迎使用${blue(
-              "[ve-blog-vite]"
-            )}，如果您感觉不错，记得点击后面链接给个star哦💖 https://github.com/ve-weiyi/ve-blog-vite`
+        boxen(
+          gradientString("cyan", "magenta").multiline(
+            `👏欢迎使用 [ve-blog-vite]\n💖如果您感觉不错，记得点击后面链接给个star哦\nhttps://github.com/ve-weiyi/ve-blog-vite`
           )
         )
       )
@@ -34,15 +40,16 @@ export function viteBuildInfo(): Plugin {
     closeBundle() {
       if (config.command === "build") {
         endTime = dayjs(new Date())
-        getDirectorySize(outDir).then((size) => {
+        getPackageSize(outDir).then((size) => {
           console.log(
-            bold(
-              green(
+            boxen(
+              gradientString("cyan", "magenta").multiline(
                 `🎉恭喜打包完成（总用时${dayjs
                   .duration(endTime.diff(startTime))
                   .format("mm分ss秒SSS毫秒")}，打包后的大小为${size}）`
               )
-            )
+            ),
+            boxenOptions
           )
         })
       }
@@ -50,7 +57,7 @@ export function viteBuildInfo(): Plugin {
   }
 }
 
-async function getDirectorySize(directoryPath: string): Promise<string> {
+async function getPackageSize(directoryPath: string): Promise<string> {
   let totalSize = 0
 
   async function calculateSize(filePath: string): Promise<void> {

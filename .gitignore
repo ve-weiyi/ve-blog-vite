@@ -30,3 +30,4 @@ lerna-debug.log*
 components.d.ts
 /.idea/
 /blog/
+/.eslintrc-auto-import.json
