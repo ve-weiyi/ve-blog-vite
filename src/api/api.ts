@@ -1,71 +1,74 @@
 import http from "@/utils/request"
-import { Api, ApiDetailsDTO, BatchResult } from "./types"
+import type { Api, BatchResp, EmptyReq, IdReq, IdsReq, PageQuery, PageResp } from "./types"
 
-/** 创建接口 */
-export function createApiApi(data: Api): Promise<IApiResponseData<Api>> {
+/** "创建api路由" */
+export function createApiApi(data?: Api): Promise<IApiResponseData<Api>> {
   return http.request<IApiResponseData<Api>>({
-    url: `/api/v1/api`,
+    url: `/api/v1/api/create_api`,
     method: "post",
     data: data,
   })
 }
 
-/** 更新接口 */
-export function updateApiApi(data: Api): Promise<IApiResponseData<Api>> {
+/** "更新api路由" */
+export function updateApiApi(data?: Api): Promise<IApiResponseData<Api>> {
   return http.request<IApiResponseData<Api>>({
-    url: `/api/v1/api`,
+    url: `/api/v1/api/update_api`,
     method: "put",
     data: data,
   })
 }
 
-/** 删除接口 */
-export function deleteApiApi(id: number): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/api/${id}`,
-    method: "delete",
-  })
-}
-
-/** 查询接口 */
-export function findApiApi(id: number): Promise<IApiResponseData<Api>> {
-  return http.request<IApiResponseData<Api>>({
-    url: `/api/v1/api/${id}`,
-    method: "get",
-  })
-}
-
-/** 批量删除接口 */
-export function deleteApiByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
-  return http.request<IApiResponseData<BatchResult>>({
-    url: `/api/v1/api/batch_delete`,
+/** "删除api路由" */
+export function deleteApiApi(data?: IdReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/api/delete_api`,
     method: "delete",
     data: data,
   })
 }
 
-/** 分页获取接口列表 */
-export function findApiListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Api[]>>> {
-  return http.request<IApiResponseData<PageResult<Api[]>>>({
-    url: `/api/v1/api/list`,
+/** "查询api路由" */
+export function findApiApi(data?: IdReq): Promise<IApiResponseData<Api>> {
+  return http.request<IApiResponseData<Api>>({
+    url: `/api/v1/api/find_api`,
     method: "post",
-    data: page,
+    data: data,
   })
 }
 
-/** 获取api列表 */
-export function findApiDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<ApiDetailsDTO[]>>> {
-  return http.request<IApiResponseData<PageResult<ApiDetailsDTO[]>>>({
-    url: `/api/v1/api/details_list`,
-    method: "post",
-    data: page,
+/** "批量删除api路由" */
+export function deleteApiListApi(data?: IdsReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/api/delete_api_list`,
+    method: "delete",
+    data: data,
   })
 }
 
-/** 同步api列表 */
-export function syncApiListApi(): Promise<IApiResponseData<BatchResult>> {
-  return http.request<IApiResponseData<BatchResult>>({
-    url: `/api/v1/api/sync`,
+/** "分页获取api路由列表" */
+export function findApiListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+  return http.request<IApiResponseData<PageResp>>({
+    url: `/api/v1/api/find_api_list`,
     method: "post",
+    data: data,
+  })
+}
+
+/** "同步api列表" */
+export function syncApiListApi(data?: EmptyReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/api/sync_api_list`,
+    method: "post",
+    data: data,
+  })
+}
+
+/** "清空接口列表" */
+export function cleanApiListApi(data?: EmptyReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/api/clean_api_list`,
+    method: "post",
+    data: data,
   })
 }

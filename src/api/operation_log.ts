@@ -1,54 +1,56 @@
 import http from "@/utils/request"
-import { BatchResult, OperationLog } from "./types"
+import type { BatchResp, IdReq, IdsReq, OperationLog, PageQuery, PageResp } from "./types"
 
-/** 创建操作记录 */
-export function createOperationLogApi(data: OperationLog): Promise<IApiResponseData<OperationLog>> {
+/** "创建操作记录" */
+export function createOperationLogApi(data?: OperationLog): Promise<IApiResponseData<OperationLog>> {
   return http.request<IApiResponseData<OperationLog>>({
-    url: `/api/v1/operation_log`,
+    url: `/api/v1/operation_log/create_operation_log`,
     method: "post",
     data: data,
   })
 }
 
-/** 更新操作记录 */
-export function updateOperationLogApi(data: OperationLog): Promise<IApiResponseData<OperationLog>> {
+/** "更新操作记录" */
+export function updateOperationLogApi(data?: OperationLog): Promise<IApiResponseData<OperationLog>> {
   return http.request<IApiResponseData<OperationLog>>({
-    url: `/api/v1/operation_log`,
+    url: `/api/v1/operation_log/update_operation_log`,
     method: "put",
     data: data,
   })
 }
 
-/** 删除操作记录 */
-export function deleteOperationLogApi(id: number): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/operation_log/${id}`,
-    method: "delete",
-  })
-}
-
-/** 查询操作记录 */
-export function findOperationLogApi(id: number): Promise<IApiResponseData<OperationLog>> {
-  return http.request<IApiResponseData<OperationLog>>({
-    url: `/api/v1/operation_log/${id}`,
-    method: "get",
-  })
-}
-
-/** 批量删除操作记录 */
-export function deleteOperationLogByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
-  return http.request<IApiResponseData<BatchResult>>({
-    url: `/api/v1/operation_log/batch_delete`,
+/** "删除操作记录" */
+export function deleteOperationLogApi(data?: IdReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/operation_log/delete_operation_log`,
     method: "delete",
     data: data,
   })
 }
 
-/** 分页获取操作记录列表 */
-export function findOperationLogListApi(page: PageQuery): Promise<IApiResponseData<PageResult<OperationLog[]>>> {
-  return http.request<IApiResponseData<PageResult<OperationLog[]>>>({
-    url: `/api/v1/operation_log/list`,
+/** "批量删除操作记录" */
+export function deleteOperationLogListApi(data?: IdsReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/operation_log/delete_operation_log_list`,
+    method: "delete",
+    data: data,
+  })
+}
+
+/** "查询操作记录" */
+export function findOperationLogApi(data?: IdReq): Promise<IApiResponseData<OperationLog>> {
+  return http.request<IApiResponseData<OperationLog>>({
+    url: `/api/v1/operation_log/find_operation_log`,
     method: "post",
-    data: page,
+    data: data,
+  })
+}
+
+/** "分页获取操作记录列表" */
+export function findOperationLogListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+  return http.request<IApiResponseData<PageResp>>({
+    url: `/api/v1/operation_log/find_operation_log_list`,
+    method: "post",
+    data: data,
   })
 }

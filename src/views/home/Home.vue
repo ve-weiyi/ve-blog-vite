@@ -18,7 +18,11 @@
             v-if="isShowSocial('qq')"
             class="mr-5 iconfont iconqq"
             target="_blank"
-            :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.website_config.qq + '&site=qq&menu=yes'"
+            :href="
+              'http://wpa.qq.com/msgrd?v=3&uin=' +
+              webStore.blogInfo.website_config.qq +
+              '&site=qq&menu=yes'
+            "
           ></a>
           <a
             v-if="isShowSocial('github')"
@@ -47,10 +51,10 @@
           <Swiper ref="swiper" :list="talkList" />
         </v-card>
         <v-card
-          class="animated zoomIn article-card"
-          style="border-radius: 12px 8px 8px 12px"
           v-for="(item, index) of articleList"
           :key="item.id"
+          class="animated zoomIn article-card"
+          style="border-radius: 12px 8px 8px 12px"
         >
           <!-- 文章封面图 -->
           <div :class="isRight(index)">
@@ -76,21 +80,21 @@
               {{ item.created_at }}
               <span class="separator">|</span>
               <!-- 文章分类 -->
-              <router-link :to="'/categories/' + item.article_category.id">
+              <router-link :to="'/categories/' + item.category_name">
                 <v-icon size="14">mdi-inbox-full</v-icon>
-                {{ item.article_category.category_name }}
+                {{ item.category_name }}
               </router-link>
               <span class="separator">|</span>
               <!-- 文章标签 -->
               <router-link
+                v-for="tag of item.tag_name_list"
+                :key="tag"
                 style="display: inline-block"
-                :to="'/tags/' + tag.id"
+                :to="'/tags/' + tag"
                 class="mr-1"
-                v-for="tag of item.article_tag_list"
-                :key="tag.id"
               >
                 <v-icon size="14">mdi-tag-multiple</v-icon>
-                {{ tag.tag_name }}
+                {{ tag }}
               </router-link>
             </div>
             <!-- 文章内容 -->
@@ -161,7 +165,11 @@
                 v-if="isShowSocial('qq')"
                 class="mr-5 iconfont iconqq"
                 target="_blank"
-                :href="'http://wpa.qq.com/msgrd?v=3&uin=' + webStore.blogInfo.website_config.qq + '&site=qq&menu=yes'"
+                :href="
+                  'http://wpa.qq.com/msgrd?v=3&uin=' +
+                  webStore.blogInfo.website_config.qq +
+                  '&site=qq&menu=yes'
+                "
               ></a>
               <a
                 v-if="isShowSocial('github')"
@@ -206,21 +214,22 @@
       </v-col>
     </v-row>
     <!-- 提示消息 -->
-    <v-snackbar v-model="showTips" top color="#49b1f5" :timeout="2000"> 按CTRL+D 键将本页加入书签 </v-snackbar>
+    <v-snackbar v-model="showTips" top color="#49b1f5" :timeout="2000">
+      按CTRL+D 键将本页加入书签
+    </v-snackbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref, onMounted, computed, onUnmounted } from "vue"
+import { computed, onMounted, onUnmounted, ref } from "vue"
 import Swiper from "../../components/Swiper.vue"
 import EasyTyper from "easy-typer-js"
 import MarkdownIt from "markdown-it"
 import { usePagination } from "@/hooks/usePagination"
 import { findArticleHomeListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
-import { ArticleHome, Talk } from "@/api/types"
+import { ArticleHome, TalkDetails } from "@/api/types"
 import { useWebStoreHook } from "@/store/modules/website"
-import { storeToRefs } from "pinia"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -250,7 +259,7 @@ const title = ref("")
 const author = ref("")
 
 // 说说列表
-const talkList = ref<Talk[]>([])
+const talkList = ref<TalkDetails[]>([])
 // 文章列表
 const articleList = ref<ArticleHome[]>([])
 
@@ -338,7 +347,8 @@ const scrollDown = () => {
 }
 
 const runTime = () => {
-  const timeold = new Date().getTime() - new Date(webStore.blogInfo.website_config.website_create_time).getTime()
+  const timeold =
+    new Date().getTime() - new Date(webStore.blogInfo.website_config.website_create_time).getTime()
   const msPerDay = 24 * 60 * 60 * 1000
   const daysold = Math.floor(timeold / msPerDay)
   let str = ""

@@ -1,63 +1,56 @@
 import http from "@/utils/request"
-import { BatchResult, Tag, TagDetailsDTO } from "./types"
+import type { BatchResp, IdReq, IdsReq, PageQuery, PageResp, Tag } from "./types"
 
-/** 创建文章标签 */
-export function createTagApi(data: Tag): Promise<IApiResponseData<Tag>> {
+/** "创建标签" */
+export function createTagApi(data?: Tag): Promise<IApiResponseData<Tag>> {
   return http.request<IApiResponseData<Tag>>({
-    url: `/api/v1/tag`,
+    url: `/api/v1/tag/create_tag`,
     method: "post",
     data: data,
   })
 }
 
-/** 更新文章标签 */
-export function updateTagApi(data: Tag): Promise<IApiResponseData<Tag>> {
+/** "更新标签" */
+export function updateTagApi(data?: Tag): Promise<IApiResponseData<Tag>> {
   return http.request<IApiResponseData<Tag>>({
-    url: `/api/v1/tag`,
+    url: `/api/v1/tag/update_tag`,
     method: "put",
     data: data,
   })
 }
 
-/** 删除文章标签 */
-export function deleteTagApi(id: number): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/tag/${id}`,
-    method: "delete",
-  })
-}
-
-/** 查询文章标签 */
-export function findTagApi(id: number): Promise<IApiResponseData<Tag>> {
-  return http.request<IApiResponseData<Tag>>({
-    url: `/api/v1/tag/${id}`,
-    method: "get",
-  })
-}
-
-/** 批量删除文章标签 */
-export function deleteTagByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
-  return http.request<IApiResponseData<BatchResult>>({
-    url: `/api/v1/tag/batch_delete`,
+/** "删除标签" */
+export function deleteTagApi(data?: IdReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/tag/delete_tag`,
     method: "delete",
     data: data,
   })
 }
 
-/** 分页获取文章标签列表 */
-export function findTagListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Tag[]>>> {
-  return http.request<IApiResponseData<PageResult<Tag[]>>>({
-    url: `/api/v1/tag/list`,
-    method: "post",
-    data: page,
+/** "批量删除标签" */
+export function deleteTagListApi(data?: IdsReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/tag/delete_tag_list`,
+    method: "delete",
+    data: data,
   })
 }
 
-/** 分页获取文章分类详情列表 */
-export function findTagDetailsListApi(page: PageQuery): Promise<IApiResponseData<PageResult<TagDetailsDTO[]>>> {
-  return http.request<IApiResponseData<PageResult<TagDetailsDTO[]>>>({
-    url: `/api/v1/tag/details_list`,
+/** "查询标签" */
+export function findTagApi(data?: IdReq): Promise<IApiResponseData<Tag>> {
+  return http.request<IApiResponseData<Tag>>({
+    url: `/api/v1/tag/find_tag`,
     method: "post",
-    data: page,
+    data: data,
+  })
+}
+
+/** "分页获取标签列表" */
+export function findTagListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+  return http.request<IApiResponseData<PageResp>>({
+    url: `/api/v1/tag/find_tag_list`,
+    method: "post",
+    data: data,
   })
 }

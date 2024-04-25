@@ -1,54 +1,56 @@
 import http from "@/utils/request"
-import { BatchResult, Page } from "./types"
+import type { BatchResp, IdReq, IdsReq, Page, PageQuery, PageResp } from "./types"
 
-/** 创建页面 */
-export function createPageApi(data: Page): Promise<IApiResponseData<Page>> {
+/** "创建页面" */
+export function createPageApi(data?: Page): Promise<IApiResponseData<Page>> {
   return http.request<IApiResponseData<Page>>({
-    url: `/api/v1/page`,
+    url: `/api/v1/page/create_page`,
     method: "post",
     data: data,
   })
 }
 
-/** 更新页面 */
-export function updatePageApi(data: Page): Promise<IApiResponseData<Page>> {
+/** "更新页面" */
+export function updatePageApi(data?: Page): Promise<IApiResponseData<Page>> {
   return http.request<IApiResponseData<Page>>({
-    url: `/api/v1/page`,
+    url: `/api/v1/page/update_page`,
     method: "put",
     data: data,
   })
 }
 
-/** 删除页面 */
-export function deletePageApi(id: number): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/page/${id}`,
-    method: "delete",
-  })
-}
-
-/** 查询页面 */
-export function findPageApi(id: number): Promise<IApiResponseData<Page>> {
-  return http.request<IApiResponseData<Page>>({
-    url: `/api/v1/page/${id}`,
-    method: "get",
-  })
-}
-
-/** 批量删除页面 */
-export function deletePageByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
-  return http.request<IApiResponseData<BatchResult>>({
-    url: `/api/v1/page/batch_delete`,
+/** "删除页面" */
+export function deletePageApi(data?: IdReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/page/delete_page`,
     method: "delete",
     data: data,
   })
 }
 
-/** 分页获取页面列表 */
-export function findPageListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Page[]>>> {
-  return http.request<IApiResponseData<PageResult<Page[]>>>({
-    url: `/api/v1/page/list`,
+/** "批量删除页面" */
+export function deletePageListApi(data?: IdsReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/page/delete_page_list`,
+    method: "delete",
+    data: data,
+  })
+}
+
+/** "查询页面" */
+export function findPageApi(data?: IdReq): Promise<IApiResponseData<Page>> {
+  return http.request<IApiResponseData<Page>>({
+    url: `/api/v1/page/find_page`,
     method: "post",
-    data: page,
+    data: data,
+  })
+}
+
+/** "分页获取页面列表" */
+export function findPageListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+  return http.request<IApiResponseData<PageResp>>({
+    url: `/api/v1/page/find_page_list`,
+    method: "post",
+    data: data,
   })
 }

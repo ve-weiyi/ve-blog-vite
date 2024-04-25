@@ -1,54 +1,56 @@
 import http from "@/utils/request"
-import { BatchResult, Remark } from "./types"
+import type { BatchResp, IdReq, IdsReq, PageQuery, PageResp, Remark } from "./types"
 
-/** 创建留言 */
-export function createRemarkApi(data: Remark): Promise<IApiResponseData<Remark>> {
+/** "创建留言" */
+export function createRemarkApi(data?: Remark): Promise<IApiResponseData<Remark>> {
   return http.request<IApiResponseData<Remark>>({
-    url: `/api/v1/remark`,
+    url: `/api/v1/remark/create_remark`,
     method: "post",
     data: data,
   })
 }
 
-/** 更新留言 */
-export function updateRemarkApi(data: Remark): Promise<IApiResponseData<Remark>> {
+/** "更新留言" */
+export function updateRemarkApi(data?: Remark): Promise<IApiResponseData<Remark>> {
   return http.request<IApiResponseData<Remark>>({
-    url: `/api/v1/remark`,
+    url: `/api/v1/remark/update_remark`,
     method: "put",
     data: data,
   })
 }
 
-/** 删除留言 */
-export function deleteRemarkApi(id: number): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/remark/${id}`,
-    method: "delete",
-  })
-}
-
-/** 查询留言 */
-export function findRemarkApi(id: number): Promise<IApiResponseData<Remark>> {
-  return http.request<IApiResponseData<Remark>>({
-    url: `/api/v1/remark/${id}`,
-    method: "get",
-  })
-}
-
-/** 批量删除留言 */
-export function deleteRemarkByIdsApi(data: number[]): Promise<IApiResponseData<BatchResult>> {
-  return http.request<IApiResponseData<BatchResult>>({
-    url: `/api/v1/remark/batch_delete`,
+/** "删除留言" */
+export function deleteRemarkApi(data?: IdReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/remark/delete_remark`,
     method: "delete",
     data: data,
   })
 }
 
-/** 分页获取留言列表 */
-export function findRemarkListApi(page: PageQuery): Promise<IApiResponseData<PageResult<Remark[]>>> {
-  return http.request<IApiResponseData<PageResult<Remark[]>>>({
-    url: `/api/v1/remark/list`,
+/** "批量删除留言" */
+export function deleteRemarkListApi(data?: IdsReq): Promise<IApiResponseData<BatchResp>> {
+  return http.request<IApiResponseData<BatchResp>>({
+    url: `/api/v1/remark/delete_remark_list`,
+    method: "delete",
+    data: data,
+  })
+}
+
+/** "查询留言" */
+export function findRemarkApi(data?: IdReq): Promise<IApiResponseData<Remark>> {
+  return http.request<IApiResponseData<Remark>>({
+    url: `/api/v1/remark/find_remark`,
     method: "post",
-    data: page,
+    data: data,
+  })
+}
+
+/** "分页获取留言列表" */
+export function findRemarkListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+  return http.request<IApiResponseData<PageResp>>({
+    url: `/api/v1/remark/find_remark_list`,
+    method: "post",
+    data: data,
   })
 }

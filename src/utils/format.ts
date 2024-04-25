@@ -1,4 +1,4 @@
-export function formatDate (dateTimeString: string) {
+export function formatDate(dateTimeString: string | number) {
   // const dateTimeString = '2022-01-21T12:21:31+08:00'
   const dateTime = new Date(dateTimeString)
 

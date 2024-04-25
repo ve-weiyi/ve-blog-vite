@@ -1,83 +1,65 @@
 import http from "@/utils/request"
-import {
-  AdminHomeInfo,
-  BlogHomeInfo,
-  ChatRecord,
-  WebsiteConfigReq,
-} from "./types"
+import type { AboutMe, AdminHomeInfo, BlogHomeInfo, EmptyReq, EmptyResp, WebsiteConfig } from "./types"
 
-/** 查询聊天记录 */
-export function findChatRecordsApi(page: PageQuery): Promise<IApiResponseData<PageResult<ChatRecord[]>>> {
-  return http.request<IApiResponseData<PageResult<ChatRecord[]>>>({
-    url: `/api/v1/chat/records`,
-    method: "post",
-    data: page,
-  })
-}
-
-/** 关于我 */
-export function getAboutMeApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/about/me`,
+/** "获取博客前台首页信息" */
+export function getBlogHomeInfoApi(data?: EmptyReq): Promise<IApiResponseData<BlogHomeInfo>> {
+  return http.request<IApiResponseData<BlogHomeInfo>>({
+    url: `/api/v1/blog`,
     method: "get",
-  })
-}
-
-/** 更新我的信息 */
-export function updateAboutMeApi(data: string): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/admin/about/me`,
-    method: "post",
     data: data,
   })
 }
 
-/** 获取网站配置 */
-export function getWebsiteConfigApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/website/config`,
+/** "获取后台首页信息" */
+export function getAdminHomeInfoApi(data?: EmptyReq): Promise<IApiResponseData<AdminHomeInfo>> {
+  return http.request<IApiResponseData<AdminHomeInfo>>({
+    url: `/api/v1/admin`,
     method: "get",
-  })
-}
-
-/** 获取配置 */
-export function getConfigApi(data: WebsiteConfigReq): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/admin/config`,
-    method: "post",
     data: data,
   })
 }
 
-/** 更新配置 */
-export function updateConfigApi(data: WebsiteConfigReq): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/admin/config`,
+/** "获取关于我的信息" */
+export function getAboutMeApi(data?: EmptyReq): Promise<IApiResponseData<AboutMe>> {
+  return http.request<IApiResponseData<AboutMe>>({
+    url: `/api/v1/blog/about_me`,
+    method: "get",
+    data: data,
+  })
+}
+
+/** "更新关于我的信息" */
+export function updateAboutMeApi(data?: AboutMe): Promise<IApiResponseData<EmptyResp>> {
+  return http.request<IApiResponseData<EmptyResp>>({
+    url: `/api/v1/admin/about_me`,
     method: "put",
     data: data,
   })
 }
 
-/** 获取博客前台首页信息 */
-export function getBlogHomeInfoApi(): Promise<IApiResponseData<BlogHomeInfo>> {
-  return http.request<IApiResponseData<BlogHomeInfo>>({
-    url: `/api/v1/`,
+/** "获取网站前台配置" */
+export function getWebsiteConfigApi(data?: EmptyReq): Promise<IApiResponseData<WebsiteConfig>> {
+  return http.request<IApiResponseData<WebsiteConfig>>({
+    url: `/api/v1/blog/websit_config`,
     method: "get",
+    data: data,
   })
 }
 
-/** 获取后台首页信息 */
-export function getAdminHomeInfoApi(): Promise<IApiResponseData<AdminHomeInfo>> {
-  return http.request<IApiResponseData<AdminHomeInfo>>({
-    url: `/api/v1/admin`,
-    method: "get",
+/** "更新配置" */
+export function updateWebsiteConfigApi(data?: WebsiteConfig): Promise<IApiResponseData<EmptyResp>> {
+  return http.request<IApiResponseData<EmptyResp>>({
+    url: `/api/v1/admin/websit_config`,
+    method: "put",
+    data: data,
   })
 }
 
-/** 获取服务器信息 */
-export function getSystemStateApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/admin/system/state`,
+/** "获取服务器信息" */
+export function getSystemStateApi(data?: EmptyReq): Promise<IApiResponseData<EmptyResp>> {
+  return http.request<IApiResponseData<EmptyResp>>({
+    url: `/api/v1/admin/system_state`,
     method: "get",
+    data: data,
   })
 }
