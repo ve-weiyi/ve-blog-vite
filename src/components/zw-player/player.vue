@@ -1,9 +1,9 @@
 <template>
   <div>
     <transition name="dis_list">
-      <div class="list_box" v-if="listIsDis">
+      <div v-if="listIsDis" class="list_box">
         <transition name="music_alert">
-          <span class="music_alert" v-if="musicAlertState">{{ musicAlertVal }}</span>
+          <span v-if="musicAlertState" class="music_alert">{{ musicAlertVal }}</span>
         </transition>
         <div class="list_close" @click="DisList">x</div>
         <div class="music_list">
@@ -12,8 +12,8 @@
               <li
                 v-for="(item, index) in musicTypeList"
                 :key="index"
-                @click="_getMusicType(item.id)"
                 :class="{ type_active: item.id == thisMusicType }"
+                @click="_getMusicType(item.id)"
               >
                 {{ item.name }}
               </li>
@@ -22,10 +22,19 @@
               <span style="font-size: 14px">歌曲列表</span>
               <img :src="musicStateButton" alt="" class="music_state" @click="MusicStateChange" />
               <div class="music_search_box">
-                <input type="text" class="music_search" v-model="musicSearchVal" placeholder="搜索歌曲" />
+                <input
+                  v-model="musicSearchVal"
+                  type="text"
+                  class="music_search"
+                  placeholder="搜索歌曲"
+                />
                 <transition name="music_search">
-                  <ul class="search_list" v-if="musicSearchVal != ''">
-                    <li v-for="(item, index) in musicSearchList" :key="index" @click="ListAdd(item)">
+                  <ul v-if="musicSearchVal != ''" class="search_list">
+                    <li
+                      v-for="(item, index) in musicSearchList"
+                      :key="index"
+                      @click="ListAdd(item)"
+                    >
                       <span class="music_search_name">{{ item.name }}</span>
                       <!--                      <span class="music_search_ar">{{ item.artists[0].name }}</span>-->
                       <span class="music_search_ar">{{ item.name }}</span>
@@ -42,12 +51,15 @@
                 @mouseover="ButtonActive(index)"
                 @dblclick="ListPlay((thisListPage - 1) * 10 + index)"
               >
-                <div class="this_music_shlter" v-if="(thisListPage - 1) * 10 + index == thisMusicIndex"></div>
+                <div
+                  v-if="(thisListPage - 1) * 10 + index == thisMusicIndex"
+                  class="this_music_shlter"
+                ></div>
                 <span>{{ item.name }}</span
                 ><span>{{ item.ar[0].name }}</span
                 ><span>{{ item.al.name }}</span>
                 <transition name="list_button">
-                  <div class="music_button" v-if="listButtonActiveIndex == index">
+                  <div v-if="listButtonActiveIndex == index" class="music_button">
                     <div
                       class="list_play"
                       title="播放这首歌"
@@ -55,26 +67,33 @@
                       @click="ListPlay((thisListPage - 1) * 10 + index)"
                     ></div>
                     <div
+                      v-if="thisMusicType != -1"
                       class="list_play"
                       title="添加到 My Songs"
                       :style="{ backgroundImage: 'url(' + add + ')' }"
                       @click="ListAdd(item)"
-                      v-if="thisMusicType != -1"
                     ></div>
                   </div>
                 </transition>
               </li>
             </ul>
             <div class="list_page">
-              <div class="page_last" v-if="thisListPage != 1" @click="ListChange(true)">&lt;</div>
-              <div class="page_next" v-if="thisListPage != Math.ceil(musicList.length / 10)" @click="ListChange(false)">
+              <div v-if="thisListPage != 1" class="page_last" @click="ListChange(true)">&lt;</div>
+              <div
+                v-if="thisListPage != Math.ceil(musicList.length / 10)"
+                class="page_next"
+                @click="ListChange(false)"
+              >
                 >
               </div>
             </div>
           </div>
           <div class="list_r">
             <img class="music_list_bg" :src="musicImg" />
-            <div class="music_list_shlter" :style="{ backgroundImage: 'url(' + shlter + ')' }"></div>
+            <div
+              class="music_list_shlter"
+              :style="{ backgroundImage: 'url(' + shlter + ')' }"
+            ></div>
             <ul class="music_talk_list">
               <li v-for="(item, index) in hotTalkList" :key="index">
                 <div class="talk_head">
@@ -122,14 +141,14 @@
           <div class="dis_list" @click="DisList">···</div>
           <p class="music_title">{{ musicTitle }}</p>
           <p class="music_intro">歌手: {{ musicName }}</p>
-          <ul class="music_words" ref="music_words">
+          <ul ref="music_words" class="music_words">
             <div class="music_words_box" :style="{ top: wordsTop + 'px' }">
               <li
                 v-for="(item, index) in musicWords"
                 :key="index"
+                ref="music_word"
                 class="music_word"
                 :class="{ word_highlight: wordIndex == index }"
-                ref="music_word"
               >
                 {{ item }}
               </li>
@@ -155,20 +174,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, computed, watch } from "vue"
-import { getWords, getMusicInfo, getMusicUrl, getHotMusic, getSearchSuggest, getHotTalk } from "./api/music"
+import { computed, onMounted, onUnmounted, ref, watch } from "vue"
+import {
+  getHotMusic,
+  getHotTalk,
+  getMusicInfo,
+  getMusicUrl,
+  getSearchSuggest,
+  getWords,
+} from "./api/music"
 import talkicon1 from "./img/talkicon1.png"
 import talkicon2 from "./img/talkicon2.png"
 import add from "./img/add.png"
-import list_bg from "./img/list_bg.jpg"
-import list_pan from "./img/list_pan.png"
+import shlter from "./img/list_pan.png"
 import list_play_hover from "./img/list_play_hover.png"
 import pan from "./img/pan.png"
 import pause from "./img/pause.png"
 import play from "./img/play.png"
 import state0 from "./img/state_0.png"
 import state1 from "./img/state_1.png"
-import shlter from "./img/list_pan.png"
 
 let player: HTMLAudioElement
 let controlIcon: HTMLElement
@@ -356,7 +380,11 @@ function _getMusicType(id) {
 // 获取音乐信息
 function _getInfo() {
   getMusicUrl(musicList.value[thisMusicIndex.value].id).then((res) => {
-    if (!res.data.data[0].url || res.data.data[0].url === "" || res.data.data[0].url === undefined) {
+    if (
+      !res.data.data[0].url ||
+      res.data.data[0].url === "" ||
+      res.data.data[0].url === undefined
+    ) {
       if (notPlay.value.length !== musicList.value.length) {
         const nextIndex = thisMusicIndex.value + 1
         if (notPlay.value.indexOf(thisMusicIndex.value) === -1) {
@@ -371,7 +399,9 @@ function _getInfo() {
       }
     } else {
       musicUrl.value = res.data.data[0].url.replace("http://", "https://")
-      musicImg.value = musicList.value[thisMusicIndex.value].al.picUrl.replace("http://", "https://") + "?param=300y300"
+      musicImg.value =
+        musicList.value[thisMusicIndex.value].al.picUrl.replace("http://", "https://") +
+        "?param=300y300"
       musicTitle.value = musicList.value[thisMusicIndex.value].name
       const name_arr = []
       musicList.value[thisMusicIndex.value].ar.forEach((i) => {
@@ -451,7 +481,8 @@ function Player() {
     if (player.currentTime >= wordsTime.value[o.value + 1]) {
       top.value += music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
       if (top.value >= music_words.value.height / 2 - 11) {
-        wordsTop.value += -music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
+        wordsTop.value +=
+          -music_word.value[o.value].offsetHeight + music_word.value[o.value].marginTop
       }
       wordIndex.value = o.value + 1
       o.value++
@@ -461,7 +492,8 @@ function Player() {
       if (musicList.value.length != 1) {
         // 只有一首歌，重复播放
         if (musicState.value == 0) {
-          thisMusicIndex.value = thisMusicIndex.value >= musicList.value.length - 1 ? 0 : thisMusicIndex.value + 1
+          thisMusicIndex.value =
+            thisMusicIndex.value >= musicList.value.length - 1 ? 0 : thisMusicIndex.value + 1
           _getInfo()
         }
       }

@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, watchEffect } from "vue"
+import { onMounted, reactive, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
 

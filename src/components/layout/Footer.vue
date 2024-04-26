@@ -1,7 +1,14 @@
 <template>
   <v-footer fixed class="footer absolute">
     <div class="footer-wrap">
-      <v-btn v-for="link in links" :key="link" color="white" variant="text" class="mx-2" rounded="xl">
+      <v-btn
+        v-for="link in links"
+        :key="link"
+        color="white"
+        variant="text"
+        class="mx-2"
+        rounded="xl"
+      >
         {{ link }}
       </v-btn>
       <div>

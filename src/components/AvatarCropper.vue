@@ -3,8 +3,8 @@
     <v-card>
       <v-card-title class="text-h5"> 修改头像</v-card-title>
       <vue-cropper
-        class="cropper-avatar"
         ref="vueCropperRef"
+        class="cropper-avatar"
         :img="imageSrc"
         :config="cropperConfig"
         alt="Source Image"

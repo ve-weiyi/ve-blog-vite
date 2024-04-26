@@ -17,7 +17,7 @@
       </div>
       <div style="margin-left: auto">
         <a @click="openSearch"><i class="iconfont iconsousuo" /></a>
-        <a @click="openDrawer" style="margin-left: 10px; font-size: 20px">
+        <a style="margin-left: 10px; font-size: 20px" @click="openDrawer">
           <i class="iconfont iconhanbao" />
         </a>
       </div>
@@ -46,13 +46,13 @@
           </a>
           <ul class="menus-submenu">
             <li>
-              <router-link to="/archives"><i class="iconfont iconguidang" /> 归档 </router-link>
+              <router-link to="/archives"><i class="iconfont iconguidang" /> 归档</router-link>
             </li>
             <li>
-              <router-link to="/categories"><i class="iconfont iconfenlei" /> 分类 </router-link>
+              <router-link to="/categories"><i class="iconfont iconfenlei" /> 分类</router-link>
             </li>
             <li>
-              <router-link to="/tags"><i class="iconfont iconbiaoqian" /> 标签 </router-link>
+              <router-link to="/tags"><i class="iconfont iconbiaoqian" /> 标签</router-link>
             </li>
           </ul>
         </div>
@@ -63,24 +63,30 @@
           </a>
           <ul class="menus-submenu">
             <li>
-              <router-link to="/albums"><i class="iconfont iconxiangce1" /> 相册 </router-link>
+              <router-link to="/albums"><i class="iconfont iconxiangce1" /> 相册</router-link>
             </li>
             <li>
-              <router-link to="/talks"><i class="iconfont iconpinglun" /> 说说 </router-link>
+              <router-link to="/talks"><i class="iconfont iconpinglun" /> 说说</router-link>
             </li>
           </ul>
         </div>
         <div class="menus-item">
-          <router-link class="menu-btn" to="/links"><i class="iconfont iconlianjie" /> 友链 </router-link>
+          <router-link class="menu-btn" to="/links"
+            ><i class="iconfont iconlianjie" /> 友链</router-link
+          >
         </div>
         <div class="menus-item">
-          <router-link class="menu-btn" to="/about"><i class="iconfont iconzhifeiji" /> 关于 </router-link>
+          <router-link class="menu-btn" to="/about"
+            ><i class="iconfont iconzhifeiji" /> 关于</router-link
+          >
         </div>
         <div class="menus-item">
-          <router-link class="menu-btn" to="/remark"><i class="iconfont iconpinglunzu" /> 留言 </router-link>
+          <router-link class="menu-btn" to="/remark"
+            ><i class="iconfont iconpinglunzu" /> 留言</router-link
+          >
         </div>
         <div class="menus-item">
-          <a class="menu-btn" v-if="!webStore.userInfo.id" @click="openLogin">
+          <a v-if="!webStore.userInfo.id" class="menu-btn" @click="openLogin">
             <i class="iconfont icondenglu" /> 登录
           </a>
           <template v-else>
@@ -110,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { logoutApi } from "@/api/auth"
 import { ElMessage } from "element-plus"

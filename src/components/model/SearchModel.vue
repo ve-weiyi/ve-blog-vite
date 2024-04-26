@@ -5,7 +5,7 @@
       <div class="mb-3">
         <span class="search-title">本地搜索</span>
         <!-- 关闭按钮 -->
-        <v-icon class="float-right" @click="webStore.searchFlag = false"> mdi-close </v-icon>
+        <v-icon class="float-right" @click="webStore.searchFlag = false"> mdi-close</v-icon>
       </div>
       <!-- 输入框 -->
       <div class="search-input-wrapper">

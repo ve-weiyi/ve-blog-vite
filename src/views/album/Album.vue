@@ -7,7 +7,7 @@
     <!-- 相册内容 -->
     <v-card class="blog-container">
       <v-row>
-        <v-col :md="6" v-for="item of photoAlbumList" :key="item.id">
+        <v-col v-for="item of photoAlbumList" :key="item.id" :md="6">
           <div class="album-item">
             <v-img class="album-cover" :src="item.album_cover" />
             <router-link :to="'/albums/' + item.id" class="album-wrapper">
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findPhotoAlbumListApi } from "@/api/photo_album"
 import { PhotoAlbum } from "@/api/types"
@@ -58,7 +58,9 @@ function listPhotoAlbums() {
   width: calc(100% + 1.25rem);
   height: 250px;
   opacity: 0.8;
-  transition: opacity 0.35s, transform 0.35s;
+  transition:
+    opacity 0.35s,
+    transform 0.35s;
   transform: translate3d(-10px, 0, 0);
   object-fit: cover;
 }
@@ -106,7 +108,9 @@ function listPhotoAlbums() {
   padding: 0.4rem 0 0;
   line-height: 1.5;
   opacity: 0;
-  transition: opacity 0.35s, transform 0.35s;
+  transition:
+    opacity 0.35s,
+    transform 0.35s;
   transform: translate3d(100%, 0, 0);
 }
 </style>

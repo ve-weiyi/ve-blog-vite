@@ -11,7 +11,7 @@
         大佬链接
       </div>
       <v-row class="link-container">
-        <v-col class="link-wrapper" md="4" cols="12" v-for="item of friendLinkList" :key="item.id">
+        <v-col v-for="item of friendLinkList" :key="item.id" class="link-wrapper" md="4" cols="12">
           <a :href="item.link_address" target="_blank">
             <v-avatar size="65" class="link-avatar">
               <img :src="item.link_avatar" />
@@ -35,7 +35,9 @@
         <div>头像：{{ webStore.blogInfo.website_config.website_avatar }}</div>
       </blockquote>
       <div class="mt-5 mb-5">需要交换友链的可在下方留言💖</div>
-      <blockquote class="mb-10">友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像</blockquote>
+      <blockquote class="mb-10">
+        友链信息展示需要，你的信息格式要包含：名称、介绍、链接、头像
+      </blockquote>
       <!-- 评论 -->
       <Comment :type="commentType" />
     </v-card>
@@ -44,7 +46,7 @@
 
 <script setup lang="ts">
 import Comment from "@/components/comment/Comment.vue"
-import { ref, onMounted, computed } from "vue"
+import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findFriendLinkListApi } from "@/api/friend_link"
 import { FriendLink } from "@/api/types.ts"

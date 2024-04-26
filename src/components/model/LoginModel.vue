@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="loginFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close </v-icon>
+      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close</v-icon>
       <div class="login-title">登录账号</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -44,7 +44,7 @@
           </div>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录 </v-btn>
+        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录</v-btn>
         <!-- 注册和找回密码 -->
         <div class="mt-10 login-tip">
           <span @click="openRegister">立即注册</span>

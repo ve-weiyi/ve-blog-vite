@@ -1,23 +1,26 @@
 <template>
-  <div class="reply-input-wrapper" style="display: block" ref="reply">
+  <div ref="reply" class="reply-input-wrapper" style="display: block">
     <textarea
+      v-model="commentContent"
       class="comment-textarea"
       :placeholder="'回复 @' + nickname + '：'"
       auto-grow
       dense
-      v-model="commentContent"
     />
     <div class="emoji-container">
-      <span :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'" @click="chooseEmoji = !chooseEmoji">
+      <span
+        :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'"
+        @click="chooseEmoji = !chooseEmoji"
+      >
         <i class="iconfont iconbiaoqing" />
       </span>
       <div style="margin-left: auto">
-        <button @click="cancelReply" class="cancel-btn v-comment-btn">取消</button>
-        <button @click="insertReply" class="upload-btn v-comment-btn">提交</button>
+        <button class="cancel-btn v-comment-btn" @click="cancelReply">取消</button>
+        <button class="upload-btn v-comment-btn" @click="insertReply">提交</button>
       </div>
     </div>
     <!-- 表情框 -->
-    <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji" />
+    <emoji :chooseEmoji="chooseEmoji" @addEmoji="addEmoji" />
   </div>
 </template>
 

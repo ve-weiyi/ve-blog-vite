@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="webStore.registerFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon class="float-end" style="margin-left: auto" @click="webStore.registerFlag = false"> mdi-close </v-icon>
+      <v-icon class="float-end" style="margin-left: auto" @click="webStore.registerFlag = false">
+        mdi-close</v-icon
+      >
       <div class="login-title">注册</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -20,16 +22,16 @@
           label="密码"
           placeholder="请输入您的密码"
           variant="underlined"
-          @keyup.enter="register"
           :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show ? 'text' : 'password'"
+          @keyup.enter="register"
           @click:append="show = !show"
         />
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
           <v-text-field
-            maxlength="6"
             v-model="code"
+            maxlength="6"
             label="验证码"
             placeholder="请输入6位验证码"
             variant="underlined"
@@ -40,7 +42,7 @@
           </v-btn>
         </div>
         <!-- 注册按钮 -->
-        <v-btn class="mt-7" block color="red" style="color: #fff" @click="register"> 注册 </v-btn>
+        <v-btn class="mt-7" block color="red" style="color: #fff" @click="register"> 注册</v-btn>
         <!-- 登录 -->
         <div class="mt-10 login-tip">已有账号？<span @click="openLogin">登录</span></div>
       </div>
@@ -49,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue"
+import { computed, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { registerApi, registerEmailApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
@@ -81,10 +83,12 @@ const sendCode = () => {
 
 const register = () => {
   // ...
-  registerApi({ username: username.value, password: password.value, code: code.value }).then((res) => {
-    ElMessage.success("注册成功")
-    openLogin()
-  })
+  registerApi({ username: username.value, password: password.value, code: code.value }).then(
+    (res) => {
+      ElMessage.success("注册成功")
+      openLogin()
+    }
+  )
 }
 
 const isMobile = computed(() => {

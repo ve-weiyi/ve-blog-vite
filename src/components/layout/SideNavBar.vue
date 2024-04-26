@@ -1,5 +1,12 @@
 <template>
-  <v-navigation-drawer app v-model="drawer" width="250" disable-resize-watcher right overlay-opacity="0.8">
+  <v-navigation-drawer
+    v-model="drawer"
+    app
+    width="250"
+    disable-resize-watcher
+    right
+    overlay-opacity="0.8"
+  >
     <!-- 博主介绍 -->
     <div class="blogger-info">
       <v-avatar size="110" style="margin-bottom: 0.5rem">
@@ -37,38 +44,38 @@
     <!-- 页面导航 -->
     <div class="menu-container">
       <div class="menus-item">
-        <router-link to="/"> <i class="iconfont iconzhuye" /> 首页 </router-link>
+        <router-link to="/"><i class="iconfont iconzhuye" /> 首页</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/archives"> <i class="iconfont iconguidang" /> 归档 </router-link>
+        <router-link to="/archives"><i class="iconfont iconguidang" /> 归档</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/albums"> <i class="iconfont iconxiangce1" /> 相册 </router-link>
+        <router-link to="/albums"><i class="iconfont iconxiangce1" /> 相册</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/talks"> <i class="iconfont iconpinglun" /> 说说 </router-link>
+        <router-link to="/talks"><i class="iconfont iconpinglun" /> 说说</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/categories"> <i class="iconfont iconfenlei" /> 分类 </router-link>
+        <router-link to="/categories"><i class="iconfont iconfenlei" /> 分类</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/tags"> <i class="iconfont iconbiaoqian" /> 标签 </router-link>
+        <router-link to="/tags"><i class="iconfont iconbiaoqian" /> 标签</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/links"> <i class="iconfont iconlianjie" /> 友链 </router-link>
+        <router-link to="/links"><i class="iconfont iconlianjie" /> 友链</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/about"> <i class="iconfont iconzhifeiji" /> 关于 </router-link>
+        <router-link to="/about"><i class="iconfont iconzhifeiji" /> 关于</router-link>
       </div>
       <div class="menus-item">
-        <router-link to="/remark"> <i class="iconfont iconpinglunzu" /> 留言 </router-link>
+        <router-link to="/remark"><i class="iconfont iconpinglunzu" /> 留言</router-link>
       </div>
-      <div class="menus-item" v-if="!avatar">
+      <div v-if="!avatar" class="menus-item">
         <a @click="openLogin"><i class="iconfont icondenglu" /> 登录 </a>
       </div>
       <div v-else>
         <div class="menus-item">
-          <router-link to="/user"> <i class="iconfont icongerenzhongxin" /> 个人中心 </router-link>
+          <router-link to="/user"><i class="iconfont icongerenzhongxin" /> 个人中心</router-link>
         </div>
         <div class="menus-item">
           <a :href="webStore.blogInfo.website_config.admin_url" target="_blank">
@@ -85,10 +92,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { computed } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
-import axios from "axios"
 import { logoutApi } from "@/api/auth.ts"
 import { ElMessage } from "element-plus"
 

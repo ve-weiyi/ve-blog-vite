@@ -43,11 +43,11 @@
             placeholder="介绍下自己吧"
           />
           <div v-if="loginType" class="mt-7 binding">
-            <v-text-field disabled v-model="email" label="邮箱号" placeholder="请绑定邮箱" />
+            <v-text-field v-model="email" disabled label="邮箱号" placeholder="请绑定邮箱" />
             <v-btn v-if="email" variant="text" small @click="openEmailModel"> 修改绑定</v-btn>
             <v-btn v-else variant="text" small @click="openEmailModel"> 绑定邮箱</v-btn>
           </div>
-          <v-btn @click="updateUserInfo" outlined class="mt-5">修改</v-btn>
+          <v-btn outlined class="mt-5" @click="updateUserInfo">修改</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { computed, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import AvatarCropper from "@/components/AvatarCropper.vue"
 import { updateUserInfoApi } from "@/api/user.ts"

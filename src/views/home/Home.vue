@@ -40,7 +40,7 @@
       </div>
       <!-- 向下滚动 -->
       <div class="scroll-down" @click="scrollDown">
-        <v-icon color="#fff" class="scroll-down-effects"> mdi-chevron-down </v-icon>
+        <v-icon color="#fff" class="scroll-down-effects"> mdi-chevron-down</v-icon>
       </div>
     </div>
     <!-- 主页文章 -->

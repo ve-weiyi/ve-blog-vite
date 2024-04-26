@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="webStore.emailFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon class="float-right" @click="webStore.emailFlag = false"> mdi-close </v-icon>
+      <v-icon class="float-right" @click="webStore.emailFlag = false"> mdi-close</v-icon>
       <div class="login-title">绑定邮箱</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -16,8 +16,8 @@
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
           <v-text-field
-            maxlength="6"
             v-model="code"
+            maxlength="6"
             label="验证码"
             variant="underlined"
             placeholder="请输入6位验证码"
@@ -28,14 +28,16 @@
           </v-btn>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="saveUserEmail"> 绑定 </v-btn>
+        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="saveUserEmail">
+          绑定</v-btn
+        >
       </div>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue"
+import { computed, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { ElMessage } from "element-plus"
 

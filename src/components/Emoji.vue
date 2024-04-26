@@ -1,6 +1,11 @@
 <template>
   <div v-show="chooseEmoji" class="emoji-wrapper">
-    <span class="emoji-item" v-for="(item, key, index) of emojiList" :key="index" @click="addEmoji(key)">
+    <span
+      v-for="(item, key, index) of emojiList"
+      :key="index"
+      class="emoji-item"
+      @click="addEmoji(key)"
+    >
       <v-img
         :lazy-src="getImage(item.normal)"
         :src="getImage(item.active)"

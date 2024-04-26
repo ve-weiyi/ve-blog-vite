@@ -6,12 +6,23 @@
       <div class="message-container">
         <h1 class="message-title">留言板</h1>
         <div class="animated fadeInUp message-input-wrapper">
-          <input v-model="addMessageContent" @click="show = true" @keyup.enter="addToList" placeholder="说点什么吧" />
-          <button class="ml-3 animated bounceInLeft" @click="addToList" v-show="show">发送</button>
+          <input
+            v-model="addMessageContent"
+            placeholder="说点什么吧"
+            @click="show = true"
+            @keyup.enter="addToList"
+          />
+          <button v-show="show" class="ml-3 animated bounceInLeft" @click="addToList">发送</button>
         </div>
       </div>
       <!-- 弹幕列表 -->
-      <vue-danmaku ref="danmakuRef" class="barrage-container" v-model:danmus="barrageList" isSuspend v-bind="config">
+      <vue-danmaku
+        ref="danmakuRef"
+        v-model:danmus="barrageList"
+        class="barrage-container"
+        isSuspend
+        v-bind="config"
+      >
         <template v-slot:dm="{ index, danmu }">
           <span class="barrage-items">
             <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" alt="img" />
