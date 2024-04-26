@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue"
 import Clipboard from "clipboard"
 import { useWebStoreHook } from "@/store/modules/website"
 import { getAboutMeApi } from "@/api/website"
@@ -38,7 +38,7 @@ const imgList = ref<string[]>([])
 const getAboutContent = () => {
   getAboutMeApi().then((res) => {
     // 将markdown替换为html标签
-    aboutContent.value = markdownToHtml(res.data)
+    aboutContent.value = markdownToHtml(res.data.content)
     nextTick(() => {
       // 添加代码复制功能
       clipboard.value = new Clipboard(".copy-btn")

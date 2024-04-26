@@ -16,7 +16,7 @@
       <div class="search-result-wrapper">
         <hr class="divider" />
         <ul>
-          <li class="search-result" v-for="item of articleList" :key="item.id">
+          <li v-for="item of articleList" :key="item.id" class="search-result">
             <!-- 文章标题 -->
             <a @click="goTo(item.id)" v-html="item.article_title" />
             <!-- 文章内容 -->
@@ -33,10 +33,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
+import { computed, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
+
 const router = useRouter()
 
 // 获取存储的博客信息
@@ -82,13 +83,13 @@ watch(
         {
           field: "article_title",
           value: newValue,
-          rule: "like",
+          operator: "like",
           flag: "",
         },
         {
           field: "article_content",
           value: newValue,
-          rule: "like",
+          operator: "like",
           flag: "or",
         },
       ]

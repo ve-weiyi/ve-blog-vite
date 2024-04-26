@@ -10,10 +10,10 @@
       <div class="tag-cloud-sub-title">数量:{{ count }}</div>
       <div class="tag-cloud">
         <router-link
-          :style="{ 'font-size': getRandomFontSize(), color: getRandomFontColor() }"
           v-for="item of tagList"
           :key="item.id"
-          :to="'/tags/' + item.id"
+          :style="{ 'font-size': getRandomFontSize(), color: getRandomFontColor() }"
+          :to="'/tags/' + item.tag_name"
         >
           {{ item.tag_name }}
         </router-link>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findTagListApi } from "@/api/tag"
 import { Tag } from "@/api/types"

@@ -5,14 +5,14 @@
     <div class="comment-input-wrapper">
       <div style="display: flex">
         <v-avatar size="40">
-          <img height="40" v-if="webStore.userInfo.avatar" :src="webStore.userInfo.avatar" />
-          <img height="40" v-else :src="webStore.blogInfo.website_config.tourist_avatar" />
+          <img v-if="webStore.userInfo.avatar" height="40" :src="webStore.userInfo.avatar" />
+          <img v-else height="40" :src="webStore.blogInfo.website_config.tourist_avatar" />
         </v-avatar>
         <div style="width: 100%" class="ml-3">
           <div class="comment-input">
             <textarea
-              class="comment-textarea"
               v-model="commentContent"
+              class="comment-textarea"
               placeholder="留下点什么吧..."
               auto-grow
               dense
@@ -20,13 +20,22 @@
           </div>
           <!-- 操作按钮 -->
           <div class="emoji-container">
-            <span :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'" @click="chooseEmoji = !chooseEmoji">
+            <span
+              :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'"
+              @click="chooseEmoji = !chooseEmoji"
+            >
               <i class="iconfont iconbiaoqing" />
             </span>
-            <button @click="insertComment" class="upload-btn v-comment-btn" style="margin-left: auto">提交</button>
+            <button
+              class="upload-btn v-comment-btn"
+              style="margin-left: auto"
+              @click="insertComment"
+            >
+              提交
+            </button>
           </div>
           <!-- 表情框 -->
-          <emoji @addEmoji="addEmoji" :chooseEmoji="chooseEmoji" />
+          <emoji :chooseEmoji="chooseEmoji" @addEmoji="addEmoji" />
         </div>
       </div>
     </div>
@@ -35,7 +44,7 @@
       <!-- 评论数量 -->
       <div class="count">{{ paginationData.total }} 评论</div>
       <!-- 评论列表 -->
-      <div style="display: flex" class="pt-5" v-for="(item, index) of commentList" :key="item.id">
+      <div v-for="(item, index) of commentList" :key="item.id" style="display: flex" class="pt-5">
         <!-- 头像 -->
         <v-avatar size="40" class="comment-avatar">
           <img height="40" :src="item.avatar" />
@@ -43,18 +52,18 @@
         <div class="comment-meta">
           <!-- 用户名 -->
           <div class="comment-user">
-            <span v-if="!item.website">{{ item.nickname }}</span>
-            <a v-else :href="item.website" target="_blank">
+            <span v-if="!item.nickname">{{ item.nickname }}</span>
+            <a v-else :href="item.nickname" target="_blank">
               {{ item.nickname }}
             </a>
-            <span class="blogger-tag" v-if="item.user_id == 1">博主</span>
+            <span v-if="item.user_id == 1" class="blogger-tag">博主</span>
           </div>
           <!-- 信息 -->
           <div class="comment-info">
             <!-- 楼层 -->
             <span style="margin-right: 10px">{{ paginationData.total - index }}楼</span>
             <!-- 发表时间 -->
-            <span style="margin-right: 10px">{{ item.created_at }}</span>
+            <span style="margin-right: 10px">{{ formatDate(item.created_at) }}</span>
             <!-- 点赞 -->
             <span :class="isLike(item.id) + ' iconfont icondianzan'" @click="like(item)"></span>
             <span v-show="item.like_count > 0"> {{ item.like_count }}</span>
@@ -62,9 +71,9 @@
             <span class="reply-btn" @click="replyComment(index, item)"> 回复 </span>
           </div>
           <!-- 评论内容 -->
-          <p v-html="item.comment_content" class="comment-content"></p>
+          <p class="comment-content" v-html="item.comment_content"></p>
           <!-- 回复人 -->
-          <div style="display: flex" v-for="reply of item.reply_dto_list" :key="reply.id">
+          <div v-for="reply of item.comment_reply_list" :key="reply.id" style="display: flex">
             <!--     头像-->
             <v-avatar size="36" class="comment-avatar">
               <img height="36" :src="reply.avatar" />
@@ -76,16 +85,19 @@
                 <a v-else :href="reply.website" target="_blank">
                   {{ reply.nickname }}
                 </a>
-                <span class="blogger-tag" v-if="reply.user_id === 1">博主</span>
+                <span v-if="reply.user_id === 1" class="blogger-tag">博主</span>
               </div>
               <!-- 信息 -->
               <div class="comment-info">
                 <!-- 发表时间 -->
                 <span style="margin-right: 10px">
-                  {{ reply.created_at }}
+                  {{ formatDate(reply.created_at) }}
                 </span>
                 <!-- 点赞 -->
-                <span :class="isLike(reply.id) + ' iconfont icondianzan'" @click="like(reply)"></span>
+                <span
+                  :class="isLike(reply.id) + ' iconfont icondianzan'"
+                  @click="like(reply)"
+                ></span>
                 <span v-show="reply.like_count > 0"> {{ reply.like_count }}</span>
                 <!-- 回复 -->
                 <span class="reply-btn" @click="replyComment(index, reply)"> 回复 </span>
@@ -94,8 +106,15 @@
               <p class="comment-content">
                 <!-- 回复用户名 -->
                 <template v-if="reply.reply_user_id !== item.user_id">
-                  <span v-if="!reply.reply_website" class="ml-1"> @{{ reply.reply_nickname }} </span>
-                  <a v-else :href="reply.reply_website" target="_blank" class="comment-nickname ml-1">
+                  <span v-if="!reply.reply_website" class="ml-1">
+                    @{{ reply.reply_nickname }}
+                  </span>
+                  <a
+                    v-else
+                    :href="reply.reply_website"
+                    target="_blank"
+                    class="comment-nickname ml-1"
+                  >
                     @{{ reply.reply_nickname }}
                   </a>
                   ，
@@ -105,14 +124,21 @@
             </div>
           </div>
           <!-- 回复数量 -->
-          <div class="mb-3" style="font-size: 0.75rem; color: #6d757a" v-show="item.reply_count > 3" ref="check">
+          <div
+            v-show="item.reply_count > 3"
+            ref="check"
+            class="mb-3"
+            style="font-size: 0.75rem; color: #6d757a"
+          >
             共
             <b>{{ item.reply_count }}</b>
             条回复，
-            <span style="color: #00a1d6; cursor: pointer" @click="viewReply(index, item)"> 点击查看 </span>
+            <span style="color: #00a1d6; cursor: pointer" @click="viewReply(index, item)">
+              点击查看
+            </span>
           </div>
           <!-- 回复分页 -->
-          <div class="mb-3" style="font-size: 0.75rem; color: #222; display: none" ref="paging">
+          <div ref="paging" class="mb-3" style="font-size: 0.75rem; color: #222; display: none">
             <span style="padding-right: 10px"> 共{{ Math.ceil(item.reply_count / 5) }}页 </span>
             <paging
               ref="page"
@@ -124,16 +150,18 @@
           </div>
           <!-- 回复框 -->
           <Reply
+            ref="replyRef"
             :style="showReplyBlock === index ? 'display: block' : 'display: none'"
             :type="type"
-            ref="replyRef"
             @reloadReply="reloadReply"
           />
         </div>
       </div>
       <!-- 加载按钮 -->
       <div class="load-wrapper">
-        <v-btn outlined v-if="paginationData.total > commentList.length" @click="listComments"> 加载更多... </v-btn>
+        <v-btn v-if="paginationData.total > commentList.length" outlined @click="listComments">
+          加载更多...
+        </v-btn>
       </div>
     </div>
     <!-- 没有评论提示 -->
@@ -141,17 +169,23 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick, onMounted, computed } from "vue"
+import { nextTick, onMounted, ref, watch } from "vue"
 import Reply from "./Reply.vue"
 import Paging from "../Paging.vue"
 import Emoji from "../Emoji.vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
+import { formatDate } from "@/utils/format.ts"
 import { useRoute } from "vue-router"
-import { createCommentApi, findCommentDetailsListApi, findCommentReplyListApi, likeCommentApi } from "@/api/comment"
+import {
+  createCommentApi,
+  findCommentListApi,
+  findCommentReplyListApi,
+  likeCommentApi,
+} from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
-import { Comment, CommentDTO } from "@/api/types"
+import { CommentDTO, CommentNewReq } from "@/api/types"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -187,14 +221,8 @@ const listComments = () => {
   const conditions: Condition[] = [
     {
       field: "type",
-      value: props.type,
-      rule: "=",
-    },
-    {
-      flag: "and",
-      field: "parent_id",
-      value: 0,
-      rule: "=",
+      value: props.type.toString(),
+      operator: "=",
     },
   ]
   const path = route.path
@@ -205,13 +233,13 @@ const listComments = () => {
       conditions.push({
         field: "topic_id",
         value: arr[2],
-        rule: "=",
+        operator: "=",
       })
       break
     default:
       break
   }
-  findCommentDetailsListApi({
+  findCommentListApi({
     page: paginationData.currentPage,
     page_size: paginationData.pageSize,
     sorts: order,
@@ -246,10 +274,12 @@ const insertComment = () => {
   // 发送请求
   const path = route.path
   const arr = path.split("/")
-  const comment: Comment = {
+  const comment: CommentNewReq = {
+    parent_id: 0,
+    topic_id: 0,
+    reply_user_id: 0,
     comment_content: commentContent.value,
     type: props.type,
-    topic_id: null,
   }
   switch (props.type) {
     case 1:
@@ -279,8 +309,9 @@ const insertComment = () => {
   commentContent.value = ""
 }
 
-const replyRef = ref()
 const showReplyBlock = ref(-1)
+const replyRef = ref()
+const reFresh = ref(true)
 
 const replyComment = (index: number, item: CommentDTO) => {
   console.log(index, item)
@@ -306,7 +337,7 @@ const replyComment = (index: number, item: CommentDTO) => {
 }
 
 const reloadReply = (index: number) => {
-  findCommentReplyListApi(commentList.value[index].id, {
+  findCommentReplyListApi({
     sorts: [
       {
         field: "created_at",
@@ -315,14 +346,18 @@ const reloadReply = (index: number) => {
     ],
     conditions: [
       {
-        flag: "and",
+        field: "topic_id",
+        value: commentList.value[index].id.toString(),
+        operator: "=",
+      },
+      {
         field: "type",
-        value: props.type,
-        rule: "=",
+        value: props.type.toString(),
+        operator: "=",
       },
     ],
   }).then((res) => {
-    commentList.value[index].reply_dto_list = res.data.list
+    commentList.value[index].comment_reply_list = res.data.list
   })
 
   // 隐藏回复框
@@ -338,13 +373,18 @@ const viewReply = (index, item) => {
   ]
   const conditions: Condition[] = [
     {
+      field: "parent_id",
+      value: commentList.value[index].id.toString(),
+      operator: "=",
+    },
+    {
       field: "type",
-      value: props.type,
-      rule: "=",
+      value: props.type.toString(),
+      operator: "=",
     },
   ]
 
-  findCommentReplyListApi(commentList.value[index].id, {
+  findCommentReplyListApi({
     sorts: sorts,
     conditions: conditions,
   }).then((res) => {
@@ -393,8 +433,6 @@ const like = (comment) => {
 const isLike = (commentId) => {
   return webStore.isCommentLike(commentId) ? "like-active" : "like"
 }
-
-const reFresh = ref(true)
 
 onMounted(() => {
   listComments()

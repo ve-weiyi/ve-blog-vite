@@ -77,7 +77,7 @@
               </span>
               <!-- 发表时间 -->
               <v-icon size="14">mdi-calendar-month-outline</v-icon>
-              {{ item.created_at }}
+              {{ formatDate(item.created_at) }}
               <span class="separator">|</span>
               <!-- 文章分类 -->
               <router-link :to="'/categories/' + item.category_name">
@@ -228,8 +228,9 @@ import MarkdownIt from "markdown-it"
 import { usePagination } from "@/hooks/usePagination"
 import { findArticleHomeListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
-import { ArticleHome, TalkDetails } from "@/api/types"
+import { ArticleHomeDTO, TalkDetails } from "@/api/types"
 import { useWebStoreHook } from "@/store/modules/website"
+import { formatDate } from "@/utils/format.ts"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -261,7 +262,7 @@ const author = ref("")
 // 说说列表
 const talkList = ref<TalkDetails[]>([])
 // 文章列表
-const articleList = ref<ArticleHome[]>([])
+const articleList = ref<ArticleHomeDTO[]>([])
 
 // 初始化
 const init = () => {

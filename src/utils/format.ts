@@ -1,6 +1,6 @@
-export function formatDate(dateTimeString: string | number) {
+export function formatDate(dateTimeString: number) {
   // const dateTimeString = '2022-01-21T12:21:31+08:00'
-  const dateTime = new Date(dateTimeString)
+  const dateTime = new Date(dateTimeString * 1000)
 
   const year = dateTime.getFullYear()
   const month = String(dateTime.getMonth() + 1).padStart(2, "0")

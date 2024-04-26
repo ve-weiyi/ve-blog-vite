@@ -7,10 +7,12 @@
     <!-- 归档列表 -->
     <v-card class="blog-container">
       <v-timeline side="end" align="start">
-        <v-timeline-item dot-color="pink" size="large"> 目前共计{{ count }}篇文章，继续加油 </v-timeline-item>
-        <v-timeline-item dot-color="pink" size="small" v-for="item of archiveList" :key="item.id">
+        <v-timeline-item dot-color="pink" size="large">
+          目前共计{{ count }}篇文章，继续加油
+        </v-timeline-item>
+        <v-timeline-item v-for="item of archiveList" :key="item.id" dot-color="pink" size="small">
           <!-- 日期 -->
-          <span class="time">{{ item.created_at }}</span>
+          <span class="time">{{ formatDate(item.created_at) }}</span>
           <!-- 文章标题 -->
           <router-link :to="'/articles/' + item.id" style="color: #666; text-decoration: none">
             {{ item.article_title }}
@@ -18,16 +20,23 @@
         </v-timeline-item>
       </v-timeline>
       <!-- 分页按钮 -->
-      <v-pagination color="#00C4B6" v-model="current" :length="Math.ceil(count / 10)" total-visible="7" rounded="0" />
+      <v-pagination
+        v-model="current"
+        color="#00C4B6"
+        :length="Math.ceil(count / 10)"
+        total-visible="7"
+        rounded="0"
+      />
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleArchivesApi } from "@/api/article"
 import { ArticlePreviewDTO } from "@/api/types"
+import { formatDate } from "@/utils/format.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -53,10 +62,6 @@ function listArchives(page = current.value) {
     archiveList.value = res.data.list
     count.value = res.data.total
   })
-}
-
-const formatDate = (date) => {
-  // 格式化日期的逻辑
 }
 </script>
 

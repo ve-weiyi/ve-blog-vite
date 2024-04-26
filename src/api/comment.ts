@@ -1,9 +1,9 @@
 import http from "@/utils/request"
-import type { BatchResp, Comment, EmptyResp, IdReq, IdsReq, PageQuery, PageResp } from "./types"
+import type { BatchResp, CommentBackDTO, CommentNewReq, EmptyResp, IdReq, IdsReq, PageQuery, PageResp } from "./types"
 
 /** "创建评论" */
-export function createCommentApi(data?: Comment): Promise<IApiResponseData<Comment>> {
-  return http.request<IApiResponseData<Comment>>({
+export function createCommentApi(data?: CommentNewReq): Promise<IApiResponseData<CommentNewReq>> {
+  return http.request<IApiResponseData<CommentNewReq>>({
     url: `/api/v1/comment/create_comment`,
     method: "post",
     data: data,
@@ -11,8 +11,8 @@ export function createCommentApi(data?: Comment): Promise<IApiResponseData<Comme
 }
 
 /** "更新评论" */
-export function updateCommentApi(data?: Comment): Promise<IApiResponseData<Comment>> {
-  return http.request<IApiResponseData<Comment>>({
+export function updateCommentApi(data?: CommentNewReq): Promise<IApiResponseData<CommentNewReq>> {
+  return http.request<IApiResponseData<CommentNewReq>>({
     url: `/api/v1/comment/update_comment`,
     method: "put",
     data: data,
@@ -38,36 +38,18 @@ export function deleteCommentListApi(data?: IdsReq): Promise<IApiResponseData<Ba
 }
 
 /** "查询评论" */
-export function findCommentApi(data?: IdReq): Promise<IApiResponseData<Comment>> {
-  return http.request<IApiResponseData<Comment>>({
+export function findCommentApi(data?: IdReq): Promise<IApiResponseData<CommentBackDTO>> {
+  return http.request<IApiResponseData<CommentBackDTO>>({
     url: `/api/v1/comment/find_comment`,
-    method: "get",
+    method: "post",
     data: data,
   })
 }
 
-/** "分页获取评论列表" */
+/** "查询评论列表" */
 export function findCommentListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
   return http.request<IApiResponseData<PageResp>>({
     url: `/api/v1/comment/find_comment_list`,
-    method: "post",
-    data: data,
-  })
-}
-
-/** "分页获取评论列表" */
-export function findCommentDetailsListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
-  return http.request<IApiResponseData<PageResp>>({
-    url: `/api/v1/comment/find_comment_details_list`,
-    method: "post",
-    data: data,
-  })
-}
-
-/** "获取用户评论列表" */
-export function findCommentBackListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
-  return http.request<IApiResponseData<PageResp>>({
-    url: `/api/v1/comment/find_comment_back_list`,
     method: "post",
     data: data,
   })
@@ -77,6 +59,15 @@ export function findCommentBackListApi(data?: PageQuery): Promise<IApiResponseDa
 export function findCommentReplyListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
   return http.request<IApiResponseData<PageResp>>({
     url: `/api/v1/comment/find_comment_reply_list`,
+    method: "post",
+    data: data,
+  })
+}
+
+/** "查询评论列表(后台)" */
+export function findCommentBackListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+  return http.request<IApiResponseData<PageResp>>({
+    url: `/api/v1/comment/find_comment_back_list`,
     method: "post",
     data: data,
   })

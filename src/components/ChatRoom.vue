@@ -33,7 +33,7 @@
           <div>
             <div v-if="!isSelf(item)" class="nickname">
               {{ item.nickname }}
-              <span style="margin-left: 12px">{{ item.created_at }}</span>
+              <span style="margin-left: 12px">{{ formatDate(item.created_at) }}</span>
             </div>
             <!-- 内容 -->
             <div
@@ -145,6 +145,7 @@ import { useWebStoreHook } from "@/store/modules/website"
 import image from "@/assets/images/avatar.jpg"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
+import { formatDate } from "@/utils/format.ts"
 import { findChatRecordsApi } from "@/api/chat"
 import { ChatRecord } from "@/api/types.ts"
 import { uploadVoiceApi } from "@/api/file.ts"

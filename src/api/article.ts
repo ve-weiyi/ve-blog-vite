@@ -2,9 +2,9 @@ import http from "@/utils/request"
 import type {
   ArticleClassifyReq,
   ArticleClassifyResp,
-  ArticleDeleteReq,
-  ArticleDetailsReq,
-  ArticleDetailsResp,
+  ArticleHomeDTO,
+  ArticleNewReq,
+  ArticlePreDeleteReq,
   ArticleRecommendResp,
   ArticleTopReq,
   EmptyResp,
@@ -14,7 +14,7 @@ import type {
 } from "./types"
 
 /** "保存文章" */
-export function saveArticleApi(data?: ArticleDetailsReq): Promise<IApiResponseData<EmptyResp>> {
+export function saveArticleApi(data?: ArticleNewReq): Promise<IApiResponseData<EmptyResp>> {
   return http.request<IApiResponseData<EmptyResp>>({
     url: `/api/v1/admin/article/save_article`,
     method: "post",
@@ -41,7 +41,7 @@ export function deleteArticleApi(data?: IdReq): Promise<IApiResponseData<EmptyRe
 }
 
 /** "删除文章-逻辑删除" */
-export function preDeleteArticleApi(data?: ArticleDeleteReq): Promise<IApiResponseData<EmptyResp>> {
+export function preDeleteArticleApi(data?: ArticlePreDeleteReq): Promise<IApiResponseData<EmptyResp>> {
   return http.request<IApiResponseData<EmptyResp>>({
     url: `/api/v1/admin/article/pre_delete_article`,
     method: "post",
@@ -50,8 +50,8 @@ export function preDeleteArticleApi(data?: ArticleDeleteReq): Promise<IApiRespon
 }
 
 /** "查询文章" */
-export function findArticleApi(data?: IdReq): Promise<IApiResponseData<ArticleDetailsResp>> {
-  return http.request<IApiResponseData<ArticleDetailsResp>>({
+export function findArticleApi(data?: IdReq): Promise<IApiResponseData<ArticleHomeDTO>> {
+  return http.request<IApiResponseData<ArticleHomeDTO>>({
     url: `/api/v1/admin/article/find_article`,
     method: "post",
     data: data,

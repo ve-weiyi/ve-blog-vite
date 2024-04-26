@@ -6,7 +6,7 @@
     </div>
     <!-- 说说内容 -->
     <v-card class="blog-container">
-      <div class="talk-item" v-for="item of talkList" :key="item.id">
+      <div v-for="item of talkList" :key="item.id" class="talk-item">
         <router-link :to="'/talks/' + item.id">
           <!-- 用户信息 -->
           <div class="user-info-wrapper">
@@ -16,18 +16,20 @@
             <div class="user-detail-wrapper">
               <div class="user-nickname">
                 {{ item.nickname }}
-                <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram </v-icon>
+                <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram</v-icon>
               </div>
               <!-- 发表时间 -->
               <div class="time">
-                {{ item.created_at }}
-                <span class="top" v-if="item.is_top == 1"> <i class="iconfont iconzhiding" /> 置顶 </span>
+                {{ formatDate(item.created_at) }}
+                <span v-if="item.is_top == 1" class="top">
+                  <i class="iconfont iconzhiding" /> 置顶
+                </span>
               </div>
               <!-- 说说信息 -->
               <div class="talk-content" v-html="item.content" />
               <!-- 图片列表 -->
-              <v-row class="talk-images" v-if="item.img_list">
-                <v-col :md="4" :cols="6" v-for="(img, index) of item.img_list" :key="index">
+              <v-row v-if="item.img_list" class="talk-images">
+                <v-col v-for="(img, index) of item.img_list" :key="index" :md="4" :cols="6">
                   <v-img
                     class="images-items"
                     :src="img"
@@ -40,7 +42,12 @@
               <!-- 说说操作 -->
               <div class="talk-operation">
                 <div class="talk-operation-item">
-                  <v-icon size="16" :color="isLike(item.id)" class="like-btn" @click.prevent="like(item)">
+                  <v-icon
+                    size="16"
+                    :color="isLike(item.id)"
+                    class="like-btn"
+                    @click.prevent="like(item)"
+                  >
                     mdi-thumb-up
                   </v-icon>
                   <div class="operation-count">
@@ -58,7 +65,7 @@
           </div>
         </router-link>
       </div>
-      <div class="load-wrapper" v-if="talkList && count > talkList.length" @click="listTalks">
+      <div v-if="talkList && count > talkList.length" class="load-wrapper" @click="listTalks">
         <v-btn outlined> 加载更多...</v-btn>
       </div>
     </v-card>
@@ -66,11 +73,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findTalkDetailsListApi, likeTalkApi } from "@/api/talk"
-import { TalkDetailsDTO } from "@/api/types"
+import { formatDate } from "@/utils/format.ts"
+import { findTalkListApi, likeTalkApi } from "@/api/talk"
+import { TalkDetails } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -78,14 +86,14 @@ const cover = ref(webStore.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
-const talkList = ref<TalkDetailsDTO[]>([])
+const talkList = ref<TalkDetails[]>([])
 const count = ref(0)
 const previewList = ref([])
 
 const router = useRouter()
 
 const listTalks = () => {
-  findTalkDetailsListApi({}).then((res) => {
+  findTalkListApi({}).then((res) => {
     if (current.value === 1) {
       talkList.value = res.data.list
     } else {
@@ -108,7 +116,7 @@ const previewImg = (img) => {
   // })
 }
 
-const like = (talk: TalkDetailsDTO) => {
+const like = (talk) => {
   // 判断登录
   if (!webStore.userInfo.id) {
     webStore.loginFlag = true

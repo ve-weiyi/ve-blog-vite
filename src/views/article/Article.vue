@@ -10,7 +10,7 @@
             <!-- 发表时间 -->
             <span>
               <i class="iconfont iconrili" />
-              发表于 {{ articleDetail.created_at }}
+              发表于 {{ formatDate(articleDetail.created_at) }}
             </span>
             <span class="separator">|</span>
             <!-- 发表时间 -->
@@ -18,10 +18,10 @@
               <i class="iconfont icongengxinshijian" />
               更新于
               <template v-if="articleDetail.updated_at">
-                {{ articleDetail.updated_at }}
+                {{ formatDate(articleDetail.updated_at) }}
               </template>
               <template v-else>
-                {{ articleDetail.created_at }}
+                {{ formatDate(articleDetail.created_at) }}
               </template>
             </span>
             <span class="separator">|</span>
@@ -174,7 +174,7 @@
                   <div class="recommend-info">
                     <div class="recommend-date">
                       <i class="iconfont iconrili" />
-                      {{ item.created_at }}
+                      {{ formatDate(item.created_at) }}
                     </div>
                     <div>{{ item.article_title }}</div>
                   </div>
@@ -220,7 +220,7 @@
                       {{ item.article_title }}
                     </router-link>
                   </div>
-                  <div class="content-time">{{ item.created_at }}</div>
+                  <div class="content-time">{{ formatDate(item.created_at) }}</div>
                 </div>
               </div>
             </div>
@@ -239,6 +239,7 @@ import { ElMessage } from "element-plus"
 import * as tocbot from "tocbot"
 import { useRoute } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
+import { formatDate } from "@/utils/format.ts"
 import { markdownToHtml } from "@/utils/markdown"
 import { findArticleRecommendApi, likeArticleApi } from "@/api/article"
 import { ArticleRecommendResp } from "@/api/types"
