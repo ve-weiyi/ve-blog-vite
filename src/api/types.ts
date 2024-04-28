@@ -52,7 +52,7 @@ export interface RestHeader {
   header_language?: string;
   header_timezone?: string;
   header_app_name?: string;
-  header_x_user_id?: number;
+  header_x_user_id?: string;
   header_x_auth_token?: string;
   header_terminal_id?: string;
 }
@@ -696,8 +696,9 @@ export interface TalkDetails {
 
 // 创建评论
 export interface CommentNewReq {
+  topic_id?: number;// 主题id
   parent_id?: number;// 父评论id
-  topic_id?: number;// 评论主题id
+  session_id?: number;// 会话id
   reply_user_id?: number;// 回复用户id
   comment_content?: string;// 评论内容
   type?: number;// 评论类型 1.文章 2.友链 3.说说
@@ -715,11 +716,39 @@ export interface CommentBackDTO {
   created_at?: number;
 }
 
+export interface CommentUserInfo {
+  id?: number;
+  nickname?: string;
+  avatar?: string;
+  website?: string;
+}
+
+// 评论回复
+export interface CommentReply {
+  id?: number;// 评论id
+  topic_id?: number;// 主题id
+  parent_id?: number;// 父评论id
+  session_id?: number;// 会话id
+  user_id?: number;// 用户id
+  nickname?: string;// 用户昵称
+  avatar?: string;// 用户头像
+  website?: string;// 用户网站
+  reply_user_id?: number;// 被回复用户id
+  reply_nickname?: string;// 被回复用户昵称
+  reply_avatar?: string;// 被回复用户头像
+  reply_website?: string;// 被回复用户网站
+  comment_content?: string;// 评论内容
+  type?: number;// 评论类型 1.文章 2.友链 3.说说
+  created_at?: number;// 评论时间
+  like_count?: number;// 点赞数
+}
+
 // 评论
 export interface CommentDTO {
   id?: number;// 评论id
+  topic_id?: number;// 主题id
   parent_id?: number;// 父评论id
-  topic_id?: number;// 评论主题id
+  session_id?: number;// 会话id
   user_id?: number;// 用户id
   nickname?: string;// 用户昵称
   avatar?: string;// 用户头像
@@ -736,23 +765,13 @@ export interface CommentDTO {
   comment_reply_list?: CommentReply[];// 评论回复列表
 }
 
-// 评论回复
-export interface CommentReply {
-  id?: number;// 评论id
+export interface CommentQueryReq {
+  page?: number;// 页码
+  page_size?: number;// 每页数量
+  topic_id?: number;// 主题id
   parent_id?: number;// 父评论id
-  topic_id?: number;// 评论主题id
-  user_id?: number;// 用户id
-  nickname?: string;// 用户昵称
-  avatar?: string;// 用户头像
-  website?: string;// 用户网站
-  reply_user_id?: number;// 被回复用户id
-  reply_nickname?: string;// 被回复用户昵称
-  reply_avatar?: string;// 被回复用户头像
-  reply_website?: string;// 被回复用户网站
-  comment_content?: string;// 评论内容
   type?: number;// 评论类型 1.文章 2.友链 3.说说
-  created_at?: number;// 评论时间
-  like_count?: number;// 点赞数
+  order_by?: string;// 排序字段 create_at|like_count
 }
 
 export interface ChatRecord {

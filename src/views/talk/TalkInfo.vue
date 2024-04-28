@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import Comment from "../../components/comment/TalkComment.vue"
+import Comment from "../../components/comment/Comment.vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findTalkApi, likeTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"

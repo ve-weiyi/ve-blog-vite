@@ -1,5 +1,15 @@
 import http from "@/utils/request"
-import type { BatchResp, CommentBackDTO, CommentNewReq, EmptyResp, IdReq, IdsReq, PageQuery, PageResp } from "./types"
+import type {
+  BatchResp,
+  CommentBackDTO,
+  CommentNewReq,
+  CommentQueryReq,
+  EmptyResp,
+  IdReq,
+  IdsReq,
+  PageQuery,
+  PageResp,
+} from "./types"
 
 /** "创建评论" */
 export function createCommentApi(data?: CommentNewReq): Promise<IApiResponseData<CommentNewReq>> {
@@ -47,7 +57,7 @@ export function findCommentApi(data?: IdReq): Promise<IApiResponseData<CommentBa
 }
 
 /** "查询评论列表" */
-export function findCommentListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+export function findCommentListApi(data?: CommentQueryReq): Promise<IApiResponseData<PageResp>> {
   return http.request<IApiResponseData<PageResp>>({
     url: `/api/v1/comment/find_comment_list`,
     method: "post",
@@ -56,7 +66,7 @@ export function findCommentListApi(data?: PageQuery): Promise<IApiResponseData<P
 }
 
 /** "查询评论回复列表" */
-export function findCommentReplyListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+export function findCommentReplyListApi(data?: CommentQueryReq): Promise<IApiResponseData<PageResp>> {
   return http.request<IApiResponseData<PageResp>>({
     url: `/api/v1/comment/find_comment_reply_list`,
     method: "post",

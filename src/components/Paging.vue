@@ -107,20 +107,12 @@ const props = defineProps({
     type: Number,
     required: false,
   },
-  index: {
-    type: Number,
-    required: false,
-  },
-  commentId: {
-    type: Number,
-    required: false,
-  },
 })
 
 // 父组件向子组件传输的事件
 const emit = defineEmits([
   // 定义事件
-  // 'eventName',
+  "changeReplyCurrent",
 ])
 
 // 获取存储的缓存信息
@@ -133,17 +125,17 @@ const current = ref(1)
 
 const changeReplyCurrent = (i) => {
   current.value = i
-  emit("changeReplyCurrent", current.value, props.index, props.commentId)
+  emit("changeReplyCurrent", current.value)
 }
 
 const prePage = () => {
   current.value -= 1
-  emit("changeReplyCurrent", current.value, props.index, props.commentId)
+  emit("changeReplyCurrent", current.value)
 }
 
 const nextPage = () => {
   current.value += 1
-  emit("changeReplyCurrent", current.value, props.index, props.commentId)
+  emit("changeReplyCurrent", current.value)
 }
 
 const isActive = (i) => {

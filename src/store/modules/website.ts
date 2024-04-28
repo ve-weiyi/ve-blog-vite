@@ -125,7 +125,6 @@ export const useWebStore = defineStore({
     },
     isLogin() {
       const tk = this.getToken()
-      console.log("tk", tk)
       return tk != undefined
     },
     getToken(): Token {

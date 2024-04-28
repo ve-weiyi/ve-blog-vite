@@ -29,7 +29,7 @@
             <button
               class="upload-btn v-comment-btn"
               style="margin-left: auto"
-              @click="insertComment"
+              @click="insertComment()"
             >
               提交
             </button>
@@ -40,7 +40,7 @@
       </div>
     </div>
     <!-- 评论详情 -->
-    <div v-if="count > 0 && reFresh">
+    <div v-if="paginationData.total > 0">
       <!-- 评论列表 -->
       <div v-for="(item, index) of commentList" :key="item.id" class="comment-wrapper">
         <!-- 头像 -->
@@ -57,7 +57,7 @@
           <!-- 信息 -->
           <div class="comment-info">
             <!-- 楼层 -->
-            <span style="margin-right: 10px">{{ count - index }}楼</span>
+            <span style="margin-right: 10px">{{ paginationData.total - index }}楼</span>
             <!-- 发表时间 -->
             <span style="margin-right: 10px">{{ formatDate(item.created_at) }}</span>
             <!-- 点赞 -->
@@ -69,7 +69,7 @@
           <!-- 评论内容 -->
           <p class="comment-content" v-html="item.comment_content"></p>
           <!-- 回复人 -->
-          <div v-for="reply of item.reply_dto_list" :key="reply.id" style="display: flex">
+          <div v-for="reply of item.comment_reply_list" :key="reply.id" style="display: flex">
             <!-- 头像 -->
             <v-avatar size="36" class="comment-avatar">
               <img height="36" :src="reply.avatar" />
@@ -101,10 +101,7 @@
             </div>
           </div>
           <!-- 回复输入框 -->
-          <div
-            v-if="replyCommentIndex === index && replyToCommentId === item.id"
-            class="comment-wrapper"
-          >
+          <div v-if="replyCommentIndex === index" class="comment-wrapper">
             <div style="display: flex; width: 100%">
               <v-avatar size="36">
                 <img v-if="webStore.userInfo.avatar" height="36" :src="webStore.userInfo.avatar" />
@@ -130,7 +127,7 @@
                   <button
                     class="upload-btn v-comment-btn"
                     style="margin-left: auto"
-                    @click="insertComment(reply.id)"
+                    @click="confirmReply(index, item, reply)"
                   >
                     提交
                   </button>
@@ -157,10 +154,17 @@
 import { onMounted, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { formatDate } from "@/utils/format.ts"
-import { findCommentReplyListApi } from "@/api/comment"
+import {
+  createCommentApi,
+  findCommentListApi,
+  findCommentReplyListApi,
+  likeCommentApi,
+} from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
 import { useRoute } from "vue-router"
-import { CommentDTO } from "@/api/types.ts"
+import { CommentDTO, CommentNewReq, CommentQueryReq } from "@/api/types.ts"
+import { ElMessage } from "element-plus"
+import { replaceEmoji } from "@/utils/emoji.ts"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 
@@ -174,75 +178,34 @@ const props = defineProps({
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
+
 // 获取路由参数
 const route = useRoute()
 
-// 定义响应式变量
-const commentContent = ref("") // 评论内容
-const replyContent = ref("") // 回复内容
-const commentList = ref<CommentDTO[]>([]) // 评论列表
-const chooseEmoji = ref(false) // 是否选择表情
-const replyCommentIndex = ref(-1) // 回复评论的索引
-const replyToCommentId = ref(null) // 回复的评论 ID
-const count = ref(0) // 评论总数
-const reFresh = ref(true) // 是否刷新评论
-const reply = ref(null) // 回复的评论
-
-function addEmoji(emoji) {
-  commentContent.value += emoji
-}
-
-function isLike(id) {
-  // 判断是否点赞
-  return webStore.isCommentLike(id) ? "like-active" : "like"
-}
-
-function like(item) {
-  // 点赞
-  webStore.commentLike(item.id)
-}
-
+const commentContent = ref("")
+const commentList = ref<CommentDTO[]>([])
+const chooseEmoji = ref(false)
+const check = ref([])
+const paging = ref([])
+const replyCommentIndex = ref(-1)
+const replyRef = ref()
+const replyCommentRef = ref()
+const replyContent = ref("")
+const reply = ref()
+// 查看评论
 const listComments = () => {
-  // 查看评论
   const path = route.path
   const arr = path.split("/")
-  let conditions
-  switch (props.type) {
-    case 1:
-    case 3:
-      let value = arr[2]
-      conditions = [
-        {
-          field: "topic_id",
-          value: value,
-          operator: "=",
-        },
-      ]
-      break
-    default:
-      break
-  }
-
-  conditions = [
-    ...conditions,
-    {
-      field: "type",
-      value: props.type.toString(),
-      operator: "=",
-    },
-  ]
-
-  findCommentReplyListApi({
+  const data: CommentQueryReq = {
     page: paginationData.currentPage,
     page_size: paginationData.pageSize,
-    sorts: [
-      {
-        field: "created_at",
-        order: "desc",
-      },
-    ],
-    conditions: conditions,
-  }).then((res) => {
+    topic_id: parseInt(arr[2]) | 0,
+    parent_id: 0,
+    type: props.type,
+    order_by: "created_at",
+  }
+
+  findCommentListApi(data).then((res) => {
     console.log(res)
     if (paginationData.currentPage === 1) {
       commentList.value = res.data.list
@@ -255,74 +218,212 @@ const listComments = () => {
   })
 }
 
-// 提交新评论
-async function submitComment() {
-  // 验证评论内容
+// 新增评论
+const insertComment = () => {
+  // 判断登录
+  if (!webStore.isLogin()) {
+    webStore.loginFlag = true
+    return false
+  }
+  // 判空
   if (commentContent.value.trim() === "") {
-    // 显示错误信息或处理验证错误
-    return
+    ElMessage.error("评论不能为空")
+    return false
+  }
+  // 解析表情
+  commentContent.value = replaceEmoji(commentContent.value)
+
+  // 发送请求
+  const path = route.path
+  const arr = path.split("/")
+  const comment: CommentNewReq = {
+    topic_id: parseInt(arr[2]) | 0,
+    reply_user_id: 0,
+    parent_id: 0,
+    session_id: 0,
+    comment_content: commentContent.value,
+    type: props.type,
   }
 
-  // 创建新的评论对象
-  const newComment = {
-    content: commentContent.value,
-    // 如果需要，可以添加其他属性到评论对象中
-  }
+  createCommentApi(comment)
+    .then((res) => {
+      const isReview = webStore.blogInfo.website_config.is_comment_review
+      if (isReview) {
+        ElMessage.success("评论成功，正在审核中")
+      } else {
+        ElMessage.success("评论成功")
+      }
+      // 查询最新评论
+      paginationData.currentPage = 1
+      listComments()
+    })
+    .catch((err) => {
+      ElMessage.error(err.message)
+    })
 
-  // 调用 API 提交新评论
-  // createCommentApi(newComment).then((res) => {
-  //   // 评论提交成功
-  //   // 清空评论输入框
-  //   commentContent.value = ""
-  //   // 获取更新后的评论列表
-  //   listComments()
-  // })
+  commentContent.value = ""
 }
 
 // 回复评论
-function replyComment(index, item, replay) {
-  // 设置索引和评论 ID，以便跟踪回复输入框
-  replyCommentIndex.value = index
-  replyToCommentId.value = item.id
-}
-
-// 插入回复评论
-async function insertComment(parentId) {
-  // 验证回复内容
-  if (replyContent.value.trim() === "") {
-    // 显示错误信息或处理验证错误
+function replyComment(index: number, item: CommentDTO, replay: CommentDTO) {
+  console.log(index, item)
+  if (replyCommentIndex.value == index) {
+    replyCommentIndex.value = -1
     return
   }
+  replyCommentIndex.value = index
 
-  // 创建新的回复评论对象
-  const newReply = {
-    parentId: parentId,
-    content: replyContent.value,
-    // 如果需要，可以添加其他属性到回复评论对象中
-  }
-
-  // 调用 API 插入回复评论
-  //   createCommentApi(newReply).then((res) => {
-  //   // 回复评论插入成功
-  //   // 清空回复输入框
-  //   replyContent.value = ""
-  //   // 重置回复评论的索引和 ID
-  //   replyCommentIndex.value = -1
-  //   replyToCommentId.value = null
-  //   // 获取更新后的评论列表
-  //   listComments()
-  // })
+  const replyComponent = replyCommentRef.value[index]
+  replyComponent.placeholder = "回复@" + item.nickname + ":"
 }
 
-// 生命周期钩子
+// 确认回复
+function confirmReply(index: number, item: CommentDTO, replay: CommentDTO) {
+  // 判断登录
+  if (!webStore.isLogin()) {
+    webStore.loginFlag = true
+    return false
+  }
+
+  const replyComponent = replyCommentRef.value[replyCommentIndex.value]
+  const parent = item
+  console.log("parent", parent)
+
+  if (replyComponent.content.trim() == "") {
+    ElMessage.error("回复不能为空")
+    return false
+  }
+
+  const path = route.path
+  const arr = path.split("/")
+  const comment: CommentNewReq = {
+    topic_id: 0,
+    parent_id: parent.parent_id != 0 ? parent.parent_id : parent.id,
+    reply_user_id: parent.user_id != webStore.userInfo.id ? parent.user_id : 0,
+    session_id: parent.session_id | parent.id,
+    comment_content: replaceEmoji(replyComponent.content),
+    type: props.type,
+  }
+  switch (props.type) {
+    case 1:
+    case 3:
+      comment.topic_id = parseInt(arr[2])
+      break
+    default:
+      break
+  }
+
+  createCommentApi(comment)
+    .then((res) => {
+      replyCommentIndex.value = -1
+      const isReview = webStore.blogInfo.website_config.is_comment_review
+      if (isReview) {
+        ElMessage.success("评论成功，正在审核中")
+      } else {
+        ElMessage.success("评论成功")
+      }
+      // 查询最新评论
+      paginationData.currentPage = 1
+      listComments()
+    })
+    .catch((err) => {
+      ElMessage.error(err.message)
+    })
+
+  replyComponent.content = ""
+}
+
+// 取消回复
+function cancelReply(index: number, item: CommentDTO) {
+  console.log("cancelReply")
+  replyCommentIndex.value = -1
+}
+
+// 查看更多回复
+function viewMoreReply(index: number, item: CommentDTO) {
+  const path = route.path
+  const arr = path.split("/")
+  const data: CommentQueryReq = {
+    page: 1,
+    page_size: 5,
+    topic_id: parseInt(arr[2]) | 0,
+    parent_id: item.id,
+    // session_id: -1,
+    type: props.type,
+    order_by: "created_at",
+  }
+
+  findCommentReplyListApi(data).then((res) => {
+    check.value[index].style.display = "none"
+    item.comment_reply_list = res.data.list
+    // 超过1页才显示分页
+    if (Math.ceil(item.reply_count / 5) > 1) {
+      paging.value[index].style.display = "flex"
+    }
+  })
+}
+
+function changeReplyCurrent(index: number, item: CommentDTO, page: number) {
+  // console.log("changeReplyCurrent", current, index, commentId)
+  const path = route.path
+  const arr = path.split("/")
+  const data: CommentQueryReq = {
+    page: page,
+    page_size: 5,
+    topic_id: parseInt(arr[2]) | 0,
+    parent_id: item.id,
+    // session_id: -1,
+    type: props.type,
+    order_by: "created_at",
+  }
+
+  findCommentReplyListApi(data).then((res) => {
+    check.value[index].style.display = "none"
+    item.comment_reply_list = res.data.list
+    // 超过1页才显示分页
+    if (Math.ceil(item.reply_count / 5) > 1) {
+      paging.value[index].style.display = "flex"
+    }
+  })
+}
+
+const addEmoji = (emoji) => {
+  commentContent.value += emoji
+}
+
+const like = (comment) => {
+  // 判断登录
+  if (!webStore.isLogin()) {
+    webStore.loginFlag = true
+    return false
+  }
+
+  const data = {
+    id: comment.id,
+  }
+  likeCommentApi(data).then((res) => {
+    ElMessage.success("点赞成功")
+    if (webStore.isCommentLike(comment.id)) {
+      comment.likeCount--
+    } else {
+      comment.likeCount++
+    }
+    webStore.commentLike(comment.id)
+  })
+}
+
+const isLike = (commentId) => {
+  return webStore.isCommentLike(commentId) ? "like-active" : "like"
+}
+
 onMounted(() => {
-  // 在组件挂载时获取初始评论
   listComments()
+  console.log("replyRef", replyRef.value)
 })
 
-// 监听响应式变量的变化
-watch([commentContent, replyContent], () => {
-  // 当评论内容或回复内容发生变化时执行必要的操作
+watch(commentContent, (val) => {
+  if (val.indexOf("[") != -1) {
+  }
 })
 </script>
 
