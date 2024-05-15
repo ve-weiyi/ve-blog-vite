@@ -50,7 +50,7 @@ const onUpdate = async (formEl: FormInstance | undefined) => {
       }
     } else {
       loading.value = false
-      return fields
+      return
     }
   })
 }

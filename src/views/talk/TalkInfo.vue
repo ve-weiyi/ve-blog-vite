@@ -93,8 +93,6 @@ const talkInfo = ref<TalkDetails>({
   is_top: 1,
   status: 1,
   like_count: 0,
-  created_at: "2022-01-24T23:34:59+08:00",
-  updated_at: "2022-02-11T23:19:59+08:00",
 })
 const previewList = ref([])
 

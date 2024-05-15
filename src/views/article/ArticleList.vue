@@ -71,7 +71,7 @@ import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleClassifyCategoryApi, findArticleClassifyTagApi } from "@/api/article"
 import { useRoute } from "vue-router"
 import { formatDate } from "@/utils/formatDate.ts"
-import { ArticleHome } from "@/api/types"
+import { ArticleHomeDTO } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -82,7 +82,7 @@ const route = useRoute()
 const tagId = route.params.tagId as string
 const categoryId = route.params.categoryId as string
 
-const articleList = ref<ArticleHome[]>([])
+const articleList = ref<ArticleHomeDTO[]>([])
 const name = ref("")
 const title = ref("")
 

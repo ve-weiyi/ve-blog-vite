@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watchEffect } from "vue"
 // 使用cropper头像裁剪
-import "vue-cropper/dist/index.js"
+import "vue-cropper/dist/index.css"
 import { VueCropper } from "vue-cropper"
 import { uploadFileApi } from "@/api/file"
 
@@ -82,9 +82,13 @@ function confirm() {
   console.log("croppedData", croppedData)
   // 创建一个新的 File 对象
   const file = new File(croppedData, "cropped-image.jpg", { type: "image/jpeg" })
-  const formData = new FormData()
-  formData.append("file", file)
-  uploadFileApi("avatar", formData).then((res) => {
+  const data = {
+    label: "avatar",
+    file: file,
+    file_size: file.size,
+    file_md5: "",
+  }
+  uploadFileApi(data).then((res) => {
     console.log("res", res)
   })
 

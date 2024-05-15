@@ -40,27 +40,17 @@ const ruleForm = reactive({
 })
 
 const onLogin = async (formEl: FormInstance | undefined) => {
+  loading.value = true
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      loading.value = true
-      loginApi(ruleForm)
-        .then((res) => {
-          loading.value = false
-          console.log("res", res)
-          ElMessage.success("登录成功")
-          webStore.login(res.data)
-          getUserInfoApi().then((res) => {
-            webStore.setUser(res.data)
-          })
-          loginFlag.value = false
-        })
-        .catch((err) => {
-          ElMessage.success(err.message)
-        })
-        .finally(() => (loading.value = false))
+      // 模拟登录请求，需根据实际开发进行修改
+      setTimeout(() => {
+        loading.value = false
+      }, 2000)
     } else {
-      return fields
+      loading.value = false
+      return
     }
   })
 }

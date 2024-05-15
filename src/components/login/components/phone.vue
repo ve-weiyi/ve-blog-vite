@@ -5,7 +5,6 @@ import Motion from "../utils/motion.ts"
 import { phoneRules } from "../utils/rule.ts"
 import { ElMessage, FormInstance } from "element-plus"
 import { useVerifyCode } from "../utils/verifyCode.ts"
-import { Iphone } from "@element-plus/icons-vue"
 
 const { t } = useI18n()
 const loading = ref(false)
@@ -28,7 +27,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
       }, 2000)
     } else {
       loading.value = false
-      return fields
+      return
     }
   })
 }
