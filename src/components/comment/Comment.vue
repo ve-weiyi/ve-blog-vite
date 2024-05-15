@@ -178,7 +178,7 @@ import Emoji from "../Emoji.vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
-import { formatDate } from "@/utils/format.ts"
+import { formatDate } from "@/utils/formatDate.ts"
 import { useRoute } from "vue-router"
 import {
   createCommentApi,

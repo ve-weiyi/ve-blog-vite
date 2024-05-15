@@ -230,7 +230,7 @@ import { findArticleHomeListApi } from "@/api/article"
 import { findTalkListApi } from "@/api/talk"
 import { ArticleHomeDTO, TalkDetails } from "@/api/types"
 import { useWebStoreHook } from "@/store/modules/website"
-import { formatDate } from "@/utils/format.ts"
+import { formatDate } from "@/utils/formatDate.ts"
 
 const { paginationData, handleCurrentChange, handleSizeChange } = usePagination()
 

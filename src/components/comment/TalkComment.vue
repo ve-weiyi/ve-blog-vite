@@ -153,7 +153,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { formatDate } from "@/utils/format.ts"
+import { formatDate } from "@/utils/formatDate.ts"
 import {
   createCommentApi,
   findCommentListApi,

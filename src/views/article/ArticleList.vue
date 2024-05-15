@@ -70,7 +70,7 @@ import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleClassifyCategoryApi, findArticleClassifyTagApi } from "@/api/article"
 import { useRoute } from "vue-router"
-import { formatDate } from "@/utils/format"
+import { formatDate } from "@/utils/formatDate.ts"
 import { ArticleHome } from "@/api/types"
 
 // 获取存储的博客信息

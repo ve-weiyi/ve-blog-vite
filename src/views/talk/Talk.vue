@@ -76,7 +76,7 @@
 import { onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
-import { formatDate } from "@/utils/format.ts"
+import { formatDate } from "@/utils/formatDate.ts"
 import { findTalkListApi, likeTalkApi } from "@/api/talk"
 import { TalkDetails } from "@/api/types"
 

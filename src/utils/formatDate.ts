@@ -1,4 +1,13 @@
-export function formatDate(dateTimeString: number) {
+export function formatDate(dateTimeString: number | string) {
+  // 检查是否为字符串
+  if (typeof dateTimeString === "string") {
+    return dateTimeString
+  }
+
+  // 将数字转换为日期字符串
+  // const date = new Date(dateTimeString);
+  // return date.toLocaleDateString();
+
   // const dateTimeString = '2022-01-21T12:21:31+08:00'
   const dateTime = new Date(dateTimeString * 1000)
 

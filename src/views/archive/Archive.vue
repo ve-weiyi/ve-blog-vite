@@ -36,7 +36,7 @@ import { onMounted, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { findArticleArchivesApi } from "@/api/article"
 import { ArticlePreviewDTO } from "@/api/types"
-import { formatDate } from "@/utils/format.ts"
+import { formatDate } from "@/utils/formatDate.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
