@@ -92,10 +92,10 @@
 import { computed, onMounted, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import { ElMessage } from "element-plus"
-import { getOauthAuthorizeUrlApi, loginApi } from "@/api/auth"
+import { oauthAuthorizeUrlApi, loginApi } from "@/api/auth"
 import { getCaptchaImageApi, verifyCaptchaApi } from "@/api/captcha"
 import router from "@/router"
-import { getUserInfoApi } from "@/api/user.ts"
+import { getUserInfoApi } from "@/api/mine.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -204,7 +204,7 @@ const qqLogin = () => {
     //   redirectURI: this.config.QQ_REDIRECT_URI,
     // })
   } else {
-    getOauthAuthorizeUrlApi({
+    oauthAuthorizeUrlApi({
       platform: "qq",
       state: router.currentRoute.value.path,
     }).then((res) => {
@@ -218,7 +218,7 @@ const qqLogin = () => {
 }
 
 const weiboLogin = () => {
-  getOauthAuthorizeUrlApi({
+  oauthAuthorizeUrlApi({
     platform: "weibo",
     state: router.currentRoute.value.path,
   }).then((res) => {
@@ -227,7 +227,7 @@ const weiboLogin = () => {
 }
 
 const feishuLogin = () => {
-  getOauthAuthorizeUrlApi({
+  oauthAuthorizeUrlApi({
     platform: "feishu",
     state: router.currentRoute.value.path,
   }).then((res) => {

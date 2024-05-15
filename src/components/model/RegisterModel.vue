@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { registerApi, registerEmailApi } from "@/api/auth"
+import { registerApi, sendRegisterEmailApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
@@ -75,7 +75,7 @@ const openLogin = () => {
 }
 
 const sendCode = () => {
-  registerEmailApi({ username: username.value }).then((res) => {
+  sendRegisterEmailApi({ username: username.value }).then((res) => {
     ElMessage.success("验证码发送成功")
     countDown()
   })

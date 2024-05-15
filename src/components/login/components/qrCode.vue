@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Motion from "../utils/motion"
+import Motion from "../utils/motion.ts"
 import avatar from "@/assets/images/avatar.jpg"
 
 const emit = defineEmits(["onBack"])

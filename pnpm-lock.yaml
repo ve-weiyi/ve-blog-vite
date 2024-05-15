@@ -85,6 +85,15 @@ devDependencies:
   '@eslint/js':
     specifier: ^9.1.1
     version: 9.1.1
+  '@iconify-icons/ep':
+    specifier: ^1.2.12
+    version: 1.2.12
+  '@iconify-icons/ri':
+    specifier: ^1.2.10
+    version: 1.2.10
+  '@iconify/vue':
+    specifier: ^4.1.2
+    version: 4.1.2(vue@3.4.24)
   '@mdi/font':
     specifier: ^7.4.47
     version: 7.4.47
@@ -811,6 +820,31 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.3:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    dev: true
+
+  /@iconify-icons/ep@1.2.12:
+    resolution: {integrity: sha512-8EJULn048sQq3fvytpQ5j40omnVOdBKpo+sXdYM35NRrqCe1BihxBesMcCOLWaocqkWia6uTQ3cnRHff4ZA11w==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-icons/ri@1.2.10:
+    resolution: {integrity: sha512-wNaXsQYK55WDUWCbcjvnwnODV4Jtsp+VC0duPanibEVu876TUYf6kdgTGtH7/GErBCNdJuJJbncG7vbOaeQi7w==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify/types@2.0.0:
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: true
+
+  /@iconify/vue@4.1.2(vue@3.4.24):
+    resolution: {integrity: sha512-CQnYqLiQD5LOAaXhBrmj1mdL2/NCJvwcC4jtW2Z8ukhThiFkLDkutarTOV2trfc9EXqUqRs0KqXOL9pZ/IyysA==}
+    peerDependencies:
+      vue: '>=3'
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.4.24(typescript@5.4.5)
     dev: true
 
   /@intlify/core-base@9.13.1:

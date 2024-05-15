@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { forgetPasswordEmailApi, resetPasswordApi } from "@/api/auth"
+import { sendForgetEmailApi, resetPasswordApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
@@ -73,7 +73,7 @@ const openLogin = () => {
 }
 
 const sendCode = () => {
-  forgetPasswordEmailApi({ username: username.value }).then((res) => {
+  sendForgetEmailApi({ username: username.value }).then((res) => {
     ElMessage.success("发送成功")
     countDown()
   })

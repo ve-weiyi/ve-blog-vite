@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n"
 import { reactive, ref } from "vue"
-import Motion from "../utils/motion"
-import { updateRules } from "../utils/rule"
+import Motion from "../utils/motion.ts"
+import { updateRules } from "../utils/rule.ts"
 import { ElMessage, FormInstance } from "element-plus"
-import { useVerifyCode } from "../utils/verifyCode"
+import { useVerifyCode } from "../utils/verifyCode.ts"
 
 const { t } = useI18n()
 const checked = ref(false)

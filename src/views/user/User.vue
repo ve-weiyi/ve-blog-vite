@@ -58,7 +58,7 @@
 import { computed, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import AvatarCropper from "@/components/AvatarCropper.vue"
-import { updateUserInfoApi } from "@/api/user.ts"
+import { updateUserInfoApi } from "@/api/mine.ts"
 import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息

@@ -1,51 +1,31 @@
 <script setup lang="ts">
-import Motion from "./utils/motion"
+import Motion from "./utils/motion.ts"
 import { useRouter } from "vue-router"
-import { loginRules } from "./utils/rule"
-import type { FormInstance } from "element-plus"
+import { loginRules } from "./utils/rule.ts"
+import { ElMessage, FormInstance } from "element-plus"
 import { onBeforeUnmount, onMounted, reactive, ref } from "vue"
-import { operates, thirdParty } from "./utils/enums"
+import { operates, thirdParty } from "./utils/enums.ts"
 import { useI18n } from "vue-i18n"
 import phone from "./components/phone.vue"
 import qrCode from "./components/qrCode.vue"
 import regist from "./components/regist.vue"
 import update from "./components/update.vue"
 import ReImageVerify from "@/components/ReImageVerify/index.vue"
+import { loginApi } from "@/api/auth.ts"
+import { getUserInfoApi } from "@/api/mine.ts"
+import { useWebStoreHook } from "@/store/modules/website.ts"
+
+import Lock from "@iconify-icons/ri/lock-fill"
+import Key from "@iconify-icons/ri/key-fill"
+import User from "@iconify-icons/ri/user-3-fill"
+import Info from "@iconify-icons/ri/information-line"
 
 defineOptions({
   name: "Login",
 })
 const router = useRouter()
-
-const onLogin = async (formEl: FormInstance | undefined) => {
-  loading.value = true
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-    } else {
-      loading.value = false
-      return fields
-    }
-  })
-}
-
-/** 使用公共函数，避免`removeEventListener`失效 */
-function onkeypress({ code }: KeyboardEvent) {
-  if (code === "Enter") {
-    onLogin(ruleFormRef.value)
-  }
-}
-
-const loginFlag = ref(true)
-onMounted(() => {
-  window.document.addEventListener("keypress", onkeypress)
-})
-
-onBeforeUnmount(() => {
-  window.document.removeEventListener("keypress", onkeypress)
-})
-
 const { t } = useI18n()
+const loginFlag = ref(true)
 const imgCode = ref("")
 const loginDay = ref(7)
 const loading = ref(false)
@@ -58,13 +38,57 @@ const ruleForm = reactive({
   password: "admin@qq.com",
   verifyCode: "",
 })
+
+const onLogin = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      loading.value = true
+      loginApi(ruleForm)
+        .then((res) => {
+          loading.value = false
+          console.log("res", res)
+          ElMessage.success("登录成功")
+          webStore.login(res.data)
+          getUserInfoApi().then((res) => {
+            webStore.setUser(res.data)
+          })
+          loginFlag.value = false
+        })
+        .catch((err) => {
+          ElMessage.success(err.message)
+        })
+        .finally(() => (loading.value = false))
+    } else {
+      return fields
+    }
+  })
+}
+
+// 获取存储的博客信息
+const webStore = useWebStoreHook()
+
+/** 使用公共函数，避免`removeEventListener`失效 */
+function onkeypress({ code }: KeyboardEvent) {
+  if (code === "Enter") {
+    onLogin(ruleFormRef.value)
+  }
+}
+
+onMounted(() => {
+  window.document.addEventListener("keypress", onkeypress)
+})
+
+onBeforeUnmount(() => {
+  window.document.removeEventListener("keypress", onkeypress)
+})
 </script>
 
 <template>
   <v-dialog v-model="loginFlag" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
       <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close</v-icon>
-      <div class="login-title">用户登录</div>
+      <div class="login-title">ve-blog-vite</div>
       <div class="login-wrapper">
         <el-form
           v-if="currentPage === 0"
@@ -88,7 +112,7 @@ const ruleForm = reactive({
                 v-model="ruleForm.username"
                 clearable
                 placeholder="账号"
-                prefix-icon="User"
+                :prefix-icon="User"
               />
             </el-form-item>
           </Motion>
@@ -100,7 +124,7 @@ const ruleForm = reactive({
                 clearable
                 show-password
                 placeholder="密码"
-                prefix-icon="Lock"
+                :prefix-icon="Lock"
               />
             </el-form-item>
           </Motion>
@@ -111,7 +135,7 @@ const ruleForm = reactive({
                 v-model="ruleForm.verifyCode"
                 clearable
                 placeholder="验证码"
-                prefix-icon="Key"
+                :prefix-icon="Key"
               >
                 <template v-slot:append>
                   <ReImageVerify v-model:code="imgCode" />
@@ -125,6 +149,7 @@ const ruleForm = reactive({
               <div class="w-full h-[20px] flex-bc">
                 <el-checkbox v-model="checked">
                   <span class="flex"> 7 天内免登录 </span>
+                  <iconify-icon icon="ri:folder-keyhole-fill"></iconify-icon>
                 </el-checkbox>
                 <el-button link type="primary" @click="currentPage = 4"> 忘记密码</el-button>
               </div>
@@ -159,7 +184,6 @@ const ruleForm = reactive({
             </el-form-item>
           </Motion>
         </el-form>
-
         <Motion v-if="currentPage === 0" :delay="350">
           <el-form-item>
             <el-divider>
@@ -188,7 +212,7 @@ const ruleForm = reactive({
 </template>
 
 <style scoped>
-@import url("@/style/login.css");
+@import url("@/styles/login.css");
 </style>
 
 <style lang="scss" scoped>

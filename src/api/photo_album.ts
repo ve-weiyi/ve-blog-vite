@@ -1,74 +1,75 @@
-import http from "@/utils/request"
-import type { BatchResp, IdReq, IdsReq, PageQuery, PageResp, PhotoAlbum, PhotoAlbumDetailsDTO } from "./types"
+import http from "@/utils/request";
+import type {
+  BatchResp,
+  IdReq,
+  IdsReq,
+  PageQuery,
+  PageResp,
+  PhotoAlbum
+} from "./types";
 
 /** "创建相册" */
-export function createPhotoAlbumApi(data?: PhotoAlbum): Promise<IApiResponseData<PhotoAlbum>> {
+export function createPhotoAlbumApi(
+  data?: PhotoAlbum
+): Promise<IApiResponseData<PhotoAlbum>> {
   return http.request<IApiResponseData<PhotoAlbum>>({
     url: `/api/v1/photo_album/create_photo_album`,
     method: "post",
-    data: data,
-  })
+    data: data
+  });
 }
 
 /** "更新相册" */
-export function updatePhotoAlbumApi(data?: PhotoAlbum): Promise<IApiResponseData<PhotoAlbum>> {
+export function updatePhotoAlbumApi(
+  data?: PhotoAlbum
+): Promise<IApiResponseData<PhotoAlbum>> {
   return http.request<IApiResponseData<PhotoAlbum>>({
     url: `/api/v1/photo_album/update_photo_album`,
     method: "put",
-    data: data,
-  })
+    data: data
+  });
 }
 
 /** "删除相册" */
-export function deletePhotoAlbumApi(data?: IdReq): Promise<IApiResponseData<BatchResp>> {
+export function deletePhotoAlbumApi(
+  data?: IdReq
+): Promise<IApiResponseData<BatchResp>> {
   return http.request<IApiResponseData<BatchResp>>({
     url: `/api/v1/photo_album/delete_photo_album`,
     method: "delete",
-    data: data,
-  })
+    data: data
+  });
 }
 
 /** "批量删除相册" */
-export function deletePhotoAlbumListApi(data?: IdsReq): Promise<IApiResponseData<BatchResp>> {
+export function deletePhotoAlbumListApi(
+  data?: IdsReq
+): Promise<IApiResponseData<BatchResp>> {
   return http.request<IApiResponseData<BatchResp>>({
     url: `/api/v1/photo_album/delete_photo_album_list`,
     method: "delete",
-    data: data,
-  })
+    data: data
+  });
 }
 
 /** "查询相册" */
-export function findPhotoAlbumApi(data?: IdReq): Promise<IApiResponseData<PhotoAlbum>> {
+export function findPhotoAlbumApi(
+  data?: IdReq
+): Promise<IApiResponseData<PhotoAlbum>> {
   return http.request<IApiResponseData<PhotoAlbum>>({
     url: `/api/v1/photo_album/find_photo_album`,
     method: "post",
-    data: data,
-  })
+    data: data
+  });
 }
 
 /** "分页获取相册列表" */
-export function findPhotoAlbumListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+export function findPhotoAlbumListApi(
+  data?: PageQuery
+): Promise<IApiResponseData<PageResp>> {
   return http.request<IApiResponseData<PageResp>>({
     url: `/api/v1/photo_album/find_photo_album_list`,
     method: "post",
-    data: data,
-  })
-}
-
-/** "获取相册详情列表" */
-export function findPhotoAlbumDetailsListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
-  return http.request<IApiResponseData<PageResp>>({
-    url: `/api/v1/photo_album/details_list`,
-    method: "post",
-    data: data,
-  })
-}
-
-/** "获取相册详情" */
-export function findPhotoAlbumDetailsApi(data?: IdReq): Promise<IApiResponseData<PhotoAlbumDetailsDTO>> {
-  return http.request<IApiResponseData<PhotoAlbumDetailsDTO>>({
-    url: `/api/v1/photo_album/:id/details`,
-    method: "get",
-    data: data,
-  })
+    data: data
+  });
 }

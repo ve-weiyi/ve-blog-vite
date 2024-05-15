@@ -1,6 +1,6 @@
 import { reactive } from "vue"
 import type { FormRules } from "element-plus"
-import { $t, transformI18n } from "@/plugins/i18n"
+import { $t, transformI18n } from "@/plugins/i18n.ts"
 
 /** 6位数字验证码正则 */
 export const REGEXP_SIX = /^\d{6}$/

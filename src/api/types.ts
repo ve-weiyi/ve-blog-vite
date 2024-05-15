@@ -257,7 +257,7 @@ export interface OauthLoginReq {
   state?: string;// 状态
 }
 
-export interface OauthLoginUrl {
+export interface OauthLoginUrlResp {
   url?: string;// 授权地址
 }
 
@@ -408,7 +408,7 @@ export interface WebsiteConfig {
   tourist_avatar?: string;// 游客头像
   user_avatar?: string;// 用户头像
   website_author?: string;// 网站作者
-  website_avatar?: any;// 网站头像
+  website_avatar?: string;// 网站头像
   website_create_time?: string;// 网站创建时间
   website_intro?: string;// 网站介绍
   website_name?: string;// 网站名称
@@ -627,7 +627,7 @@ export interface Remark {
 
 export interface OperationLog {
   id?: number;// 主键id
-  user_i_d?: number;// 用户id
+  user_id?: number;// 用户id
   nickname?: string;// 用户昵称
   ip_address?: string;// 操作ip
   ip_source?: string;// 操作地址
@@ -655,7 +655,7 @@ export interface Page {
 
 export interface Photo {
   id?: number;// 主键
-  album_i_d?: number;// 相册id
+  album_id?: number;// 相册id
   photo_name?: string;// 照片名
   photo_desc?: string;// 照片描述
   photo_src?: string;// 照片地址
@@ -673,15 +673,12 @@ export interface PhotoAlbum {
   status?: number;// 状态值 1公开 2私密
   created_at?: number;// 创建时间
   updated_at?: number;// 更新时间
-}
-
-export interface PhotoAlbumDetailsDTO {
-  photo_count?: number;
+  photo_count?: number;// 照片数量
 }
 
 export interface TalkDetails {
   id?: number;// 说说ID
-  user_i_d?: number;// 用户ID
+  user_id?: number;// 用户ID
   nickname?: string;// 用户昵称
   avatar?: string;// 用户头像
   content?: string;// 评论内容
@@ -776,13 +773,32 @@ export interface CommentQueryReq {
 
 export interface ChatRecord {
   id?: number;// 主键
-  user_i_d?: number;// 用户id
+  user_id?: number;// 用户id
   nickname?: string;// 昵称
   avatar?: string;// 头像
   content?: string;// 聊天内容
   ip_address?: string;// ip地址
   ip_source?: string;// ip来源
   type?: number;// 类型
+  created_at?: number;// 创建时间
+  updated_at?: number;// 更新时间
+}
+
+export interface UploadFileReq {
+  label?: string;
+  file?: any;// 文件
+  file_size?: number;// 文件大小
+  file_md5?: string;// 文件md5值
+}
+
+export interface UploadFileResp {
+  id?: number;// id
+  user_id?: number;// 用户id
+  label?: string;// 标签
+  file_name?: string;// 文件名称
+  file_size?: number;// 文件大小
+  file_md5?: string;// 文件md5值
+  file_url?: string;// 上传路径
   created_at?: number;// 创建时间
   updated_at?: number;// 更新时间
 }
