@@ -38,7 +38,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
      * 项目部署目录路径
      * @description 见项目根目录下的 `config` 文件夹说明
      */
-    base: "/blog",
+    base: env.VITE_DEPLOY_BASE_URL,
     resolve: {
       /**
        * 配置目录别名
@@ -82,7 +82,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         },
         // 前缀
         "/api": {
-          target: env.VITE_API_BASE_URL, // 代理后的地址 =target/path
+          target: env.VITE_API_PROXY_URL, // 代理后的地址 =target/path
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true,
@@ -107,7 +107,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       /** 禁用 gzip 压缩大小报告.启用/禁用 gzip 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。*/
       reportCompressedSize: false,
       /** 打包文件的输出目录,默认值为 dist */
-      outDir: "blog",
+      outDir: "dist",
       /** 打包后静态资源目录 */
       assetsDir: "assets",
       sourcemap: false,

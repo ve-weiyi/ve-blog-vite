@@ -2,7 +2,7 @@
 export const ENV_MODE = import.meta.env.MODE
 
 // 接口的网关域名
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+export const API_BASE_URL = import.meta.env.VITE_API_PROXY_URL
 
 // 主题管理
 export const APP_DEFAULT_THEME = import.meta.env.VITE_APP_DEFAULT_THEME

@@ -10,6 +10,23 @@ import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse 
 import { ElMessage } from "element-plus"
 import { useWebStoreHook } from "@/store/modules/website"
 
+import MD5 from "crypto-js/md5"
+
+function signWithSalt(message: string, salt: string): string {
+  const saltedMessage = salt + message
+  return MD5(saltedMessage).toString()
+}
+
+function getTimestampInSeconds(): number {
+  return Math.floor(Date.now() / 1000)
+}
+
+const HeaderAuthorization = "Authorization"
+const HeaderToken = "Token"
+const HeaderUid = "Uid"
+const HeaderTerminal = "Terminal"
+const HeaderTimestamp = "Timestamp"
+
 class HttpRequest {
   private baseUrl: string
   private withCredentials: boolean
@@ -43,34 +60,24 @@ class HttpRequest {
     return config
   }
 
-  private getParams(payload: any) {
-    const { method, data } = payload
-    // if (["post", "put", "patch", "delete"].indexOf(method) >= 0) {
-    //   payload.data = data
-    // } else {
-    //   payload.params = data
-    //   delete payload.data
-    // }
-
-    // //post、put 参数拼接是body
-    // if (method === "post" || method === "put") {
-    //   payload.data = data
-    //   delete payload.params
-    // }
-    // //get、delete 参数拼接在url上
-    // if (method === "get" || method === "delete") {
-    //   payload.params = data
-    //   delete payload.data
-    // }
-    return payload
-  }
-
   private setHeader(config: AxiosRequestConfig) {
+    let dv = "device_id"
+    let ts = getTimestampInSeconds().toString()
     const tk = useWebStoreHook().getToken()
     if (tk) {
       config.headers = Object.assign({}, config.headers, {
-        "X-Auth-Token": tk?.access_token,
-        "X-User-Id": tk?.user_id,
+        [HeaderAuthorization]: tk?.access_token,
+        [HeaderToken]: tk?.access_token,
+        [HeaderUid]: tk?.user_id,
+        [HeaderTerminal]: dv,
+        [HeaderTimestamp]: ts,
+      })
+    } else {
+      // 未登录时的加密方式
+      config.headers = Object.assign({}, config.headers, {
+        [HeaderToken]: signWithSalt(dv, ts),
+        [HeaderTerminal]: dv,
+        [HeaderTimestamp]: ts,
       })
     }
   }
@@ -159,6 +166,11 @@ class HttpRequest {
           // 未授权
           case 401:
             console.log("401")
+            ElMessage({
+              message: message || "Error",
+              type: "error",
+              duration: 3 * 1000,
+            })
             useWebStoreHook().logout()
             return Promise.reject(new Error(message || "Error"))
           default:
