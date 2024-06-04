@@ -107,7 +107,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       /** 禁用 gzip 压缩大小报告.启用/禁用 gzip 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。*/
       reportCompressedSize: false,
       /** 打包文件的输出目录,默认值为 dist */
-      outDir: "dist",
+      outDir: env.VITE_BUILD_OUTPUT_DIR,
       /** 打包后静态资源目录 */
       assetsDir: "assets",
       sourcemap: false,
