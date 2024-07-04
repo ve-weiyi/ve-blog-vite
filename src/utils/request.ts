@@ -22,8 +22,8 @@ function getTimestampInSeconds(): number {
 }
 
 const HeaderAuthorization = "Authorization"
-const HeaderToken = "Token"
 const HeaderUid = "Uid"
+const HeaderToken = "Token"
 const HeaderTerminal = "Terminal"
 const HeaderTimestamp = "Timestamp"
 
@@ -67,8 +67,8 @@ class HttpRequest {
     if (tk) {
       config.headers = Object.assign({}, config.headers, {
         [HeaderAuthorization]: tk?.access_token,
-        [HeaderToken]: tk?.access_token,
         [HeaderUid]: tk?.user_id,
+        [HeaderToken]: signWithSalt(dv, ts),
         [HeaderTerminal]: dv,
         [HeaderTimestamp]: ts,
       })
