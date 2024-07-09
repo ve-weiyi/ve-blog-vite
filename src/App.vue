@@ -48,7 +48,7 @@ import EmailModel from "./components/model/EmailModel.vue"
 import { ElConfigProvider } from "element-plus"
 import zh from "element-plus/es/locale/lang/zh-cn"
 import en from "element-plus/es/locale/lang/en"
-import { getUserInfoApi } from "@/api/mine"
+import { getUserInfoApi } from "@/api/user.ts"
 import { useWebStoreHook } from "@/store/modules/website"
 import { getBlogHomeInfoApi } from "@/api/website.ts"
 

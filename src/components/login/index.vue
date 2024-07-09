@@ -12,7 +12,7 @@ import regist from "./components/regist.vue"
 import update from "./components/update.vue"
 import ReImageVerify from "@/components/ReImageVerify/index.vue"
 import { loginApi } from "@/api/auth.ts"
-import { getUserInfoApi } from "@/api/mine.ts"
+import { getUserInfoApi } from "@/api/user.ts"
 import { useWebStoreHook } from "@/store/modules/website.ts"
 
 import Lock from "@iconify-icons/ri/lock-fill"

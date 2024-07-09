@@ -1,9 +1,11 @@
-import http from "@/utils/request";
+import request from "@/utils/request"
 
-/** 查询聊天记录 */
-export function webSocketApi(): Promise<any> {
-  return http.request<any>({
-    url: `/api/v1/ws`,
-    method: "get"
-  });
+
+/** "WebSocket消息" */
+export function webSocketApi(data?: any): Promise<IApiResponseData<any>> {
+  return request({
+    url: '/api/v1/ws',
+    method: 'get',
+    data: data,
+  })
 }

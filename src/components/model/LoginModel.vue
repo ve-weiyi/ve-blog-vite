@@ -95,7 +95,7 @@ import { ElMessage } from "element-plus"
 import { oauthAuthorizeUrlApi, loginApi } from "@/api/auth"
 import { getCaptchaImageApi, verifyCaptchaApi } from "@/api/captcha"
 import router from "@/router"
-import { getUserInfoApi } from "@/api/mine.ts"
+import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()

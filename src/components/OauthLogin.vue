@@ -14,7 +14,7 @@ import { onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { oauthLoginApi } from "@/api/auth"
 import { useWebStoreHook } from "@/store/modules/website"
-import { getUserInfoApi } from "@/api/mine.ts"
+import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
