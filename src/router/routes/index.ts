@@ -1,114 +1,131 @@
-import type { RouteRecordRaw } from "vue-router"
+import { RouteRecordRaw } from "vue-router";
 
-/**
- * 路由配置
- * @description 所有路由都在这里集中管理
- */
-const routes: RouteRecordRaw[] = [
-  /**
-   * 首页
-   */
-  {
-    path: "/",
-    name: "home",
-    component: () => import("@/views/home/Home.vue"),
-    meta: {
-      title: "Home",
-    },
-  },
-  /**
-   * 子路由示例
-   */
-  {
-    path: "/articles/:articleId",
-    component: () => import("@/views/article/Article.vue"),
-  },
-  {
-    path: "/archives",
-    component: () => import("@/views/archive/Archive.vue"),
-    meta: {
-      title: "归档",
-    },
-  },
-  {
-    path: "/albums",
-    component: () => import("@/views/album/Album.vue"),
-    meta: {
-      title: "相册",
-    },
-  },
-  {
-    path: "/talks",
-    component: () => import("@/views/talk/Talk.vue"),
-    meta: {
-      title: "说说",
-    },
-  },
-  {
-    path: "/talks/:talkId",
-    component: () => import("@/views/talk/TalkInfo.vue"),
-    meta: {
-      title: "说说",
-    },
-  },
-  {
-    path: "/albums/:albumId",
-    component: () => import("@/views/album/Photo.vue"),
-  },
-  {
-    path: "/tags",
-    component: () => import("@/views/tag/Tag.vue"),
-    meta: {
-      title: "标签",
-    },
-  },
-  {
-    path: "/categories",
-    component: () => import("@/views/category/Category.vue"),
-    meta: {
-      title: "分类",
-    },
-  },
-  {
-    path: "/categories/:categoryId",
-    component: () => import("@/views/article/ArticleList.vue"),
-  },
-  {
-    path: "/tags/:tagId",
-    component: () => import("@/views/article/ArticleList.vue"),
-  },
-  {
-    path: "/links",
-    component: () => import("@/views/link/Link.vue"),
-    meta: {
-      title: "友链列表",
-    },
-  },
-  {
-    path: "/about",
-    component: () => import("@/views/about/About.vue"),
-    meta: {
-      title: "关于我",
-    },
-  },
-  {
-    path: "/remark",
-    component: () => import("@/views/remark/Remark.vue"),
-    meta: {
-      title: "留言板",
-    },
-  },
-  {
-    path: "/user",
-    component: () => import("@/views/user/User.vue"),
-    meta: {
-      title: "个人中心",
-    },
-  },
-  {
-    path: "/oauth/login/:platform",
-    component: () => import("@/components/OauthLogin.vue"),
-  },
-]
-
-export default routes
+export const routes: RouteRecordRaw[] = [
+	{
+		path: "/",
+		component: () => import("@/views/Home/index.vue"),
+		meta: {
+			title: "首页",
+		},
+	},
+	{
+		path: "/message",
+		component: () => import("@/views/Message/index.vue"),
+		meta: {
+			title: "留言",
+		},
+	},
+	{
+		path: "/about",
+		component: () => import("@/views/About/index.vue"),
+		meta: {
+			title: "关于",
+		},
+	},
+	{
+		path: "/category/:categoryId",
+		component: () => import("@/views/Category/ArticleList.vue"),
+	},
+	{
+		path: "/tag/:tagId",
+		component: () => import("@/views/Tag/ArticleList.vue"),
+	},
+	{
+		name: "friend",
+		path: "/friend",
+		component: () => import("@/views/Friend/index.vue"),
+		meta: {
+			title: "友链",
+		},
+	},
+	{
+		path: "/archive",
+		component: () => import("@/views/Archive/index.vue"),
+		meta: {
+			title: "归档",
+		},
+	},
+	{
+		path: "/user",
+		component: () => import("@/views/User/index.vue"),
+		meta: {
+			title: "个人中心",
+		},
+	},
+	{
+		path: "/category",
+		component: () => import("@/views/Category/index.vue"),
+		meta: {
+			title: "分类",
+		},
+	},
+	{
+		path: "/tag",
+		component: () => import("@/views/Tag/index.vue"),
+		meta: {
+			title: "标签",
+		},
+	},
+	{
+		path: "/picture",
+		component: () => import("@/views/Picture/index.vue"),
+		meta: {
+			title: "图床",
+		},
+	},
+	{
+		path: "/album",
+		component: () => import("@/views/Album/Album.vue"),
+		meta: {
+			title: "相册",
+		},
+	},
+	{
+		path: "/album/:albumId",
+		component: () => import("@/views/Album/Photo.vue"),
+	},
+	{
+		name: "talk",
+		path: "/talk",
+		component: () => import("@/views/Talk/TalkList.vue"),
+		meta: {
+			title: "说说",
+		},
+	},
+	{
+		name: "talkInfo",
+		path: "/talk/:id",
+		component: () => import("@/views/Talk/Talk.vue"),
+		meta: {
+			title: "说说",
+		},
+	},
+	{
+		name: "article",
+		path: "/article/:id",
+		component: () => import("@/views/Article/Article.vue"),
+		meta: {
+			title: "文章",
+		},
+	},
+	{
+		path: "/404",
+		component: () => import("@/views/404/index.vue"),
+		meta: {
+			title: "404",
+		},
+	},
+	{
+		path: "/oauth/login/gitee",
+		component: () => import("@/components/Oauth/index.vue"),
+	},
+	{
+		path: "/oauth/login/github",
+		component: () => import("@/components/Oauth/index.vue"),
+	},
+	{
+		path: "/oauth/login/qq",
+		component: () => import("@/components/Oauth/index.vue"),
+	},
+	{ path: "/:catchAll(.*)", redirect: "/404" },
+];

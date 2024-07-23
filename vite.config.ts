@@ -1,33 +1,17 @@
-import { type ConfigEnv, loadEnv, type UserConfigExport } from "vite"
-import { resolve } from "path"
-import vue from "@vitejs/plugin-vue"
-import vueJsx from "@vitejs/plugin-vue-jsx"
+import { fileURLToPath } from "node:url"
+import { defineConfig, loadEnv } from "vite"
 import banner from "vite-plugin-banner"
-import { createHtmlPlugin } from "vite-plugin-html"
-// import autoImport from "unplugin-auto-import/vite"
-import components from "unplugin-vue-components/vite"
 import pkg from "./package.json"
-import { viteBuildInfo } from "./build/info"
+import { setupVitePlugins } from "./build"
 
 /** 当前执行node命令时文件夹的地址（工作目录） */
 const root: string = process.cwd()
 
-/** 路径查找 */
-const pathResolve = (dir: string): string => {
-  return resolve(__dirname, ".", dir)
-}
-
-/** 设置别名 */
-const alias: Record<string, string> = {
-  "@": pathResolve("src"),
-  "@build": pathResolve("build"),
-}
-
 /** 配置项文档：https://cn.vitejs.dev/config */
-export default ({ mode }: ConfigEnv): UserConfigExport => {
+export default defineConfig((configEnv) => {
   // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
-  const env = loadEnv(mode, root)
+  const env = loadEnv(configEnv.mode, root)
 
   return {
     /**
@@ -38,7 +22,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
      * 项目部署目录路径
      * @description 见项目根目录下的 `config` 文件夹说明
      */
-    base: env.VITE_DEPLOY_BASE_URL,
+    base: env.VITE_BASE_URL,
     resolve: {
       /**
        * 配置目录别名
@@ -49,7 +33,10 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
        *  配置 alias 前： `import foo from '../../../libs/foo'`
        *  配置 alias 后： `import foo from '@/libs/foo'`
        */
-      alias: alias,
+      alias: {
+        "~": fileURLToPath(new URL("./", import.meta.url)),
+        "@": fileURLToPath(new URL("./src", import.meta.url)),
+      },
       // 想要省略的扩展名列表。默认值为 ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']。注意，不 建议忽略自定义导入类型的扩展名（例如：.vue）
       // 设置后导入文件时不需要加后缀'.vue'
       extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
@@ -113,7 +100,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       sourcemap: false,
       rollupOptions: {
         input: {
-          index: pathResolve("index.html"),
+          index: fileURLToPath(new URL("index.html", import.meta.url)),
         },
         // 静态资源分类打包
         output: {
@@ -160,53 +147,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     esbuild: false,
 
     plugins: [
-      /**
-       * 支持 `.vue` 文件的解析
-       */
-      vue(),
-
-      /**
-       * 如果需要支持 `.tsx` 组件，请安装 `@vitejs/plugin-vue-jsx` 这个包
-       * 并在这里添加一个插件导入 `import vueJsx from '@vitejs/plugin-vue-jsx'`
-       */
-      vueJsx(),
-
-      // eslintPlugin({
-      //   include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
-      //   emitWarning: false,
-      // }),
-
-      /**
-       * 自动导入 API ，不用每次都 import
-       *
-       * @tips 如果直接使用没导入的 API 依然提示报错，请重启 VS Code
-       *
-       * @see https://github.com/antfu/unplugin-auto-import#configuration
-       */
-      // autoImport({
-      //   imports: ["vue", "vue-router", "pinia"],
-      //   dts: "types/auto-import.d.ts",
-      //   eslintrc: {
-      //     enabled: true,
-      //     filepath: "./.eslintrc-auto-import.json",
-      //     globalsPropValue: true,
-      //   },
-      // }),
-
-      /**
-       * 自动导入组件，不用每次都 import
-       * @see https://github.com/antfu/unplugin-vue-components#configuration
-       */
-      components({
-        dirs: ["src/components"],
-        directoryAsNamespace: true,
-        collapseSamePrefixes: true,
-        globalNamespaces: [],
-        extensions: ["vue", "ts", "tsx"],
-        deep: true,
-        dts: "./types/components.d.ts",
-      }),
-
+      ...setupVitePlugins(env),
       /**
        * 版权注释
        * @see https://github.com/chengpeiquan/vite-plugin-banner#advanced-usage
@@ -221,22 +162,6 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
           ` */`,
         ].join("\n")
       ),
-
-      /**
-       * 为入口文件增加 EJS 模版能力
-       * @see https://github.com/vbenjs/vite-plugin-html/blob/main/README.zh_CN.md
-       */
-      createHtmlPlugin({
-        minify: true,
-        inject: {
-          data: {
-            appTitle: env.VITE_APP_TITLE,
-            appDesc: env.VITE_APP_DESC,
-            appKeywords: env.VITE_APP_KEYWORDS,
-          },
-        },
-      }),
-      viteBuildInfo(),
     ],
     /** Vitest 单元测试配置：https://cn.vitest.dev/config */
     // test: {
@@ -244,4 +169,4 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     //   environment: "jsdom",
     // },
   }
-}
+})

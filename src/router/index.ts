@@ -1,30 +1,26 @@
-import { createRouter, createWebHashHistory, createWebHistory } from "vue-router"
-import progress from "@bassist/progress"
-import routes from "./routes"
-import { APP_NAME } from "@/constants"
+import { App } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
+import { routes } from "./routes";
 
-progress.configure({ showSpinner: false })
-progress.setColor("var(--c-brand)")
+export const router = createRouter({
+	history: createWebHistory(),
+	routes,
+	//滚动行为
+	scrollBehavior(to, from, savedPosition) {
+		// to：即将进入的路由对象
+		// from：当前导航正要离开的路由对象
+		// savedPosition：上次记录的滚动位置
+		// 默认行为，如果有记录的滚动位置，则恢复到该位置
+		if (savedPosition) {
+			return savedPosition;
+		}
+		// 没有记录的滚动位置，则滚动到页面顶部
+		return { top: 0 };
+	},
+});
 
-const router = createRouter({
-  history:
-    import.meta.env.VITE_ROUTER_HISTORY == "h5"
-      ? createWebHistory(import.meta.env.BASE_URL)
-      : createWebHashHistory(import.meta.env.BASE_URL),
-  routes,
-  scrollBehavior: (to, from, savedPosition) => {
-    return savedPosition || { top: 0, left: 0 }
-  },
-})
-
-router.beforeEach(() => {
-  progress.start()
-})
-
-router.afterEach((to) => {
-  const { title } = to.meta
-  document.title = title ? `${title} - ${APP_NAME}` : APP_NAME
-  progress.done()
-})
-
-export default router
+/** setup vue router. - [安装vue路由] */
+export async function setupRouter(app: App) {
+	app.use(router);
+	await router.isReady();
+}
