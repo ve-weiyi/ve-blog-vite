@@ -36,12 +36,7 @@ export default function unPlugin(viteEnv: Env.ImportMeta) {
      */
     AutoImport({
       imports: ["vue", "vue-router", "pinia"],
-      dts: "src/types/auto-imports.d.ts",
-      eslintrc: {
-        enabled: true,
-        filepath: "./.eslintrc-auto-import.json",
-        globalsPropValue: true,
-      },
+      dts: "src/types/auto-imports.d.ts"
     }),
     /**
      * 自动导入组件，不用每次都 import
