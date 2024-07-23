@@ -1,13 +1,19 @@
 <template>
-  <div class="view-more-pagination" v-show="show">
+  <div v-show="show" class="view-more-pagination">
     <span class="pagination-page-count">共{{ totalPage }}页</span>
-    <span class="pagination-btn" v-if="current !== 1" @click="prePage">上一页</span>
+    <span v-if="current !== 1" class="pagination-btn" @click="prePage">上一页</span>
     <template v-for="(number, index) in visibleNumber">
-      <span :key="index" @click="changePage(number)" v-if="typeof number == 'number'" class="pagination-page-number"
-        :class="current == number ? 'current-page' : ''">{{ number }}</span>
-      <span class="pagination-page-do" v-else :key="number">...</span>
+      <span
+        v-if="typeof number == 'number'"
+        :key="index"
+        class="pagination-page-number"
+        :class="current == number ? 'current-page' : ''"
+        @click="changePage(number)"
+        >{{ number }}</span
+      >
+      <span v-else :key="number" class="pagination-page-do">...</span>
     </template>
-    <span class="pagination-btn" v-if="current !== totalPage" @click="nextPage">下一页</span>
+    <span v-if="current !== totalPage" class="pagination-btn" @click="nextPage">下一页</span>
   </div>
 </template>
 
@@ -36,7 +42,16 @@ const visibleNumber = computed(() => {
     if (current.value <= 4) {
       return [1, 2, 3, 4, 5, "...", totalPage.value];
     } else if (current.value >= totalPage.value - 4) {
-      return [1, "...", totalPage.value - 5, totalPage.value - 4, totalPage.value - 3, totalPage.value - 2, totalPage.value - 1, totalPage.value];
+      return [
+        1,
+        "...",
+        totalPage.value - 5,
+        totalPage.value - 4,
+        totalPage.value - 3,
+        totalPage.value - 2,
+        totalPage.value - 1,
+        totalPage.value,
+      ];
     } else {
       return [
         1,
@@ -67,7 +82,7 @@ const nextPage = () => {
 const setPaging = (flag: boolean) => {
   show.value = flag;
 };
-defineExpose({ current, setPaging })
+defineExpose({ current, setPaging });
 </script>
 
 <style lang="scss" scoped>

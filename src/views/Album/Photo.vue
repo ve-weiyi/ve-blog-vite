@@ -1,14 +1,18 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">{{ photoInfo.albumName }}</h1>
-    <img class="page-cover" src="https://static.ttkwsd.top/config/0639b8855aab4dcbb827a9884e8ec57d.jpg" alt="">
+    <img
+      class="page-cover"
+      src="https://static.ttkwsd.top/config/0639b8855aab4dcbb827a9884e8ec57d.jpg"
+      alt=""
+    />
     <Waves></Waves>
   </div>
   <div class="bg">
     <div class="page-container">
       <div v-viewer v-masonry fit-width="true" transition-duration="0.3s" item-selector=".card">
-        <div v-masonry-tile class="card" v-for="photo in photoInfo.photoVOList" :key="photo.id">
-          <img class="img" :src="photo.photoUrl" alt="">
+        <div v-for="photo in photoInfo.photoVOList" :key="photo.id" v-masonry-tile class="card">
+          <img class="img" :src="photo.photoUrl" alt="" />
         </div>
       </div>
     </div>
@@ -16,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { getPhotoList } from '@/api/album';
-import { Photo, PhotoInfo } from '@/api/album/types';
+import { getPhotoList } from "@/api/album";
+import { Photo, PhotoInfo } from "@/api/album/types";
 
 const route = useRoute();
 const photoInfo = ref<PhotoInfo>({
@@ -25,10 +29,10 @@ const photoInfo = ref<PhotoInfo>({
   photoVOList: [] as Photo[],
 });
 onMounted(() => {
-  getPhotoList(Number(route.params.albumId)).then(({ data }) => {
-    photoInfo.value = data.data;
-  })
-})
+  getPhotoList(Number(route.params.albumId)).then((res) => {
+    photoInfo.value = res.data;
+  });
+});
 </script>
 
 <style lang="scss" scoped>

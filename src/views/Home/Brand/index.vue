@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import { useBlogStore } from "@/store";
 import EasyTyper from "easy-typer-js";
+
 const blog = useBlogStore();
 const obj = reactive({
   output: "",
@@ -48,8 +49,8 @@ const fetchData = () => {
       new EasyTyper(
         obj,
         hitokoto,
-        () => { },
-        () => { }
+        () => {},
+        () => {}
       );
     });
 };
@@ -78,7 +79,12 @@ onMounted(() => {
   z-index: -1;
 
   .artboard {
-    font-family: "Fredericka the Great", Mulish, -apple-system, "PingFang SC", "Microsoft YaHei",
+    font-family:
+      "Fredericka the Great",
+      Mulish,
+      -apple-system,
+      "PingFang SC",
+      "Microsoft YaHei",
       sans-serif;
     font-size: 3.5em;
     line-height: 1.2;

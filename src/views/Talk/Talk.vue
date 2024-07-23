@@ -1,33 +1,49 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">说说</h1>
-    <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt="">
+    <img
+      class="page-cover"
+      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+      alt=""
+    />
     <Waves></Waves>
   </div>
   <div class="bg">
-    <div class="page-container" v-if="talk">
+    <div v-if="talk" class="page-container">
       <div class="talk-item">
         <div class="talk-meta">
-          <img class="user-avatar" :src="talk.avatar">
+          <img class="user-avatar" :src="talk.avatar" />
         </div>
         <div class="talk-content-wrap">
           <div class="talk-info">
-            <span class="talk-user-name">{{ talk.nickname }}<svg-icon icon-class="badge"
-                style="margin-left: 0.4rem;"></svg-icon></span>
+            <span class="talk-user-name"
+              >{{ talk.nickname
+              }}<svg-icon icon-class="badge" style="margin-left: 0.4rem"></svg-icon
+            ></span>
             <span class="talk-time">{{ formatDateTime(talk.createTime) }}</span>
           </div>
           <div class="talk-content" v-html="talk.talkContent"></div>
-          <div class="talk-image" v-viewer v-if="talk.imgList">
-            <img @click.prevent class="image" v-for="(img, index) in talk.imgList" :key="index" v-lazy="img" />
+          <div v-if="talk.imgList" v-viewer class="talk-image">
+            <img
+              v-for="(img, index) in talk.imgList"
+              :key="index"
+              v-lazy="img"
+              class="image"
+              @click.prevent
+            />
           </div>
-          <div class="info" style="margin-top: 0.5rem;">
+          <div class="info" style="margin-top: 0.5rem">
             <span class="talk-like info" @click="like">
-              <svg-icon icon-class="like" size="0.8rem" :class="isLike(talk.id)" style="margin-right: 5px"></svg-icon>
+              <svg-icon
+                icon-class="like"
+                size="0.8rem"
+                :class="isLike(talk.id)"
+                style="margin-right: 5px"
+              ></svg-icon>
               {{ talk.likeCount }}
             </span>
             <span class="talk-comment info">
-              <svg-icon icon-class="comment" size="0.9rem" style="margin-right: 5px;"></svg-icon>
+              <svg-icon icon-class="comment" size="0.9rem" style="margin-right: 5px"></svg-icon>
               {{ commentCount == null ? 0 : commentCount }}
             </span>
           </div>
@@ -43,10 +59,13 @@ import { getTalk, likeTalk } from "@/api/talk";
 import { Talk } from "@/api/talk/types";
 import { useAppStore, useUserStore } from "@/store";
 import { formatDateTime } from "@/utils/date";
+
 const user = useUserStore();
 const app = useAppStore();
 const route = useRoute();
-const isLike = computed(() => (id: number) => user.talkLikeSet.indexOf(id) != -1 ? "like-flag" : "");
+const isLike = computed(
+  () => (id: number) => (user.talkLikeSet.indexOf(id) != -1 ? "like-flag" : "")
+);
 const data = reactive({
   commentCount: 0,
   commentType: 3,
@@ -72,7 +91,7 @@ const like = () => {
     return;
   }
   let id = talk.value.id;
-  likeTalk(id).then(({ data }) => {
+  likeTalk(id).then((res) => {
     if (data.flag) {
       //判断是否点赞
       if (user.talkLikeSet.indexOf(id) != -1) {
@@ -85,10 +104,10 @@ const like = () => {
   });
 };
 onMounted(() => {
-  getTalk(Number(route.params.id)).then(({ data }) => {
-    talk.value = data.data;
-  })
-})
+  getTalk(Number(route.params.id)).then((res) => {
+    talk.value = res.data;
+  });
+});
 </script>
 
 <style lang="scss" scoped>

@@ -3,13 +3,25 @@
   <div class="message-container">
     <h1 class="message-title">留言板</h1>
     <div class="message-input">
-      <input class="input" v-model="messageContent" @click="show = true" @keyup.enter="send" placeholder="说点什么吧" />
-      <button class="send" @click="send" v-show="show">发送</button>
+      <input
+        v-model="messageContent"
+        class="input"
+        placeholder="说点什么吧"
+        @click="show = true"
+        @keyup.enter="send"
+      />
+      <button v-show="show" class="send" @click="send">发送</button>
     </div>
   </div>
   <!-- 弹幕列表 -->
   <div class="danmaku-container">
-    <vue-danmaku ref="danmaku" class="danmaku" use-slot v-model:danmus="messageList" :is-suspend="true">
+    <vue-danmaku
+      ref="danmaku"
+      v-model:danmus="messageList"
+      class="danmaku"
+      use-slot
+      :is-suspend="true"
+    >
       <template v-slot:dm="{ danmu }">
         <span class="danmaku-item">
           <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" />
@@ -26,6 +38,7 @@ import { addMessage, getMessageList } from "@/api/message";
 import { Message } from "@/api/message/types";
 import { useBlogStore, useUserStore } from "@/store";
 import vueDanmaku from "vue3-danmaku";
+
 const user = useUserStore();
 const blog = useBlogStore();
 const messageContent = ref("");
@@ -33,8 +46,8 @@ const show = ref(false);
 const danmaku = ref();
 const messageList = ref<Message[]>([]);
 onMounted(async () => {
-  await getMessageList().then(({ data }) => {
-    messageList.value = data.data;
+  await getMessageList().then((res) => {
+    messageList.value = res.data;
   });
 });
 const send = () => {
@@ -49,7 +62,7 @@ const send = () => {
     nickname: userNickname,
     messageContent: messageContent.value,
   };
-  addMessage(message).then(({ data }) => {
+  addMessage(message).then((res) => {
     if (data.flag) {
       if (blog.blogInfo.siteConfig.messageCheck) {
         window.$message?.warning("留言成功，正在审核中");
@@ -119,7 +132,8 @@ const send = () => {
   bottom: 0;
   width: 100%;
   background-color: var(--color-blue);
-  background: url("https://static.ttkwsd.top/config/e3408389cb0d4ea1b5f651873dab2a19.jpg") center no-repeat;
+  background: url("https://static.ttkwsd.top/config/e3408389cb0d4ea1b5f651873dab2a19.jpg") center
+    no-repeat;
   animation: slideDownIn 1s;
 }
 

@@ -1,13 +1,13 @@
 import { PageQuery, PageResult, Result } from "@/model";
 import request from "@/utils/request";
-import { AxiosPromise } from "axios";
+import { Promise } from "axios";
 import { Comment, CommentForm, CommentQuery, RecentComment, Reply } from "./types";
 
 /**
  * 查看最新评论
  * @returns 最新评论
  */
-export function getRecentComment(): AxiosPromise<Result<RecentComment[]>> {
+export function getRecentComment(): Promise<Result<RecentComment[]>> {
   return request({
     url: "/recent/comment",
     method: "get",
@@ -17,7 +17,7 @@ export function getRecentComment(): AxiosPromise<Result<RecentComment[]>> {
 /**
  * 添加评论
  */
-export function addComment(data: CommentForm): AxiosPromise<Result<null>> {
+export function addComment(data: CommentForm): Promise<Result<null>> {
   return request({
     url: "/comment/add",
     method: "post",
@@ -29,7 +29,7 @@ export function addComment(data: CommentForm): AxiosPromise<Result<null>> {
  * 查看评论列表
  * @returns 评论列表
  */
-export function getCommentList(params: CommentQuery): AxiosPromise<Result<PageResult<Comment[]>>> {
+export function getCommentList(params: CommentQuery): Promise<Result<PageResult<Comment[]>>> {
   return request({
     url: "/comment/list",
     method: "get",
@@ -43,7 +43,7 @@ export function getCommentList(params: CommentQuery): AxiosPromise<Result<PageRe
  * @param params 分页参数
  * @returns 回复评论列表
  */
-export function getReplyList(commentId: number, params: PageQuery): AxiosPromise<Result<Reply[]>> {
+export function getReplyList(commentId: number, params: PageQuery): Promise<Result<Reply[]>> {
   return request({
     url: `/comment/${commentId}/reply`,
     method: "get",
@@ -55,7 +55,7 @@ export function getReplyList(commentId: number, params: PageQuery): AxiosPromise
  * 点赞评论
  * @param commentId 评论id
  */
-export function likeComment(commentId: number): AxiosPromise<Result<null>> {
+export function likeComment(commentId: number): Promise<Result<null>> {
   return request({
     url: `/comment/${commentId}/like`,
     method: "post",

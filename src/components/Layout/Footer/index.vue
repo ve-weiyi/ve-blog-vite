@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer-wrapper" v-if="!isMessage">
+  <footer v-if="!isMessage" class="footer-wrapper">
     <p>
       © {{ formatDate(blog.blogInfo.siteConfig.createSiteTime, "YYYY") }} -
       {{ new Date().getFullYear() }} By
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import { useBlogStore } from "@/store";
 import { formatDate } from "@/utils/date";
+
 const route = useRoute();
 const blog = useBlogStore();
 const isMessage = computed(() => route.path == "/message");

@@ -6,7 +6,7 @@
       最新评论
     </div>
     <!-- 评论 -->
-    <div class="comment-item" v-for="comment in commentList" :key="comment.id">
+    <div v-for="comment in commentList" :key="comment.id" class="comment-item">
       <!-- 头像 -->
       <img class="user-avatar" :src="comment.avatar" alt="" />
       <div class="comment-content">
@@ -27,10 +27,11 @@
 import { getRecentComment } from "@/api/comment";
 import { RecentComment } from "@/api/comment/types";
 import { formatDate } from "@/utils/date";
+
 const commentList = ref<RecentComment[]>([]);
 onMounted(() => {
-  getRecentComment().then(({ data }) => {
-    commentList.value = data.data;
+  getRecentComment().then((res) => {
+    commentList.value = res.data;
   });
 });
 </script>

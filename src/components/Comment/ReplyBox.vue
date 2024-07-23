@@ -1,13 +1,18 @@
 <template>
-  <div class="reply-box" v-if="show">
+  <div v-if="show" class="reply-box">
     <div class="box-normal">
       <div class="reply-box-avatar">
-        <img class="shoka-avatar" v-if="user.avatar" :src="user.avatar" alt="" />
-        <img class="shoka-avatar" v-else :src="blog.blogInfo.siteConfig.touristAvatar" alt="" />
+        <img v-if="user.avatar" class="shoka-avatar" :src="user.avatar" alt="" />
+        <img v-else class="shoka-avatar" :src="blog.blogInfo.siteConfig.touristAvatar" alt="" />
       </div>
       <div class="reply-box-warp">
-        <textarea class="reply-box-textarea" v-model="commentContent" :style="sendActive ? lineStyle : ''"
-          @input.prevent="inputActive" :placeholder="placeholderText"></textarea>
+        <textarea
+          v-model="commentContent"
+          class="reply-box-textarea"
+          :style="sendActive ? lineStyle : ''"
+          :placeholder="placeholderText"
+          @input.prevent="inputActive"
+        ></textarea>
       </div>
       <div class="reply-box-send" :class="sendActive ? 'send-active' : ''" @click="handleAdd">
         评论
@@ -25,6 +30,7 @@ import { CommentForm } from "@/api/comment/types";
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
 import { emojiList } from "@/utils/emoji";
 import { tvList } from "@/utils/tv";
+
 const user = useUserStore();
 const blog = useBlogStore();
 const app = useAppStore();
@@ -112,7 +118,7 @@ const handleAdd = () => {
     }
     return str;
   });
-  addComment(commentForm.value).then(({ data }) => {
+  addComment(commentForm.value).then((res) => {
     if (data.flag) {
       sendActive.value = false;
       commentContent.value = "";

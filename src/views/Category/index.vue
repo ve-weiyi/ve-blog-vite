@@ -1,8 +1,11 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">分类</h1>
-    <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt="">
+    <img
+      class="page-cover"
+      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+      alt=""
+    />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
@@ -10,7 +13,7 @@
     <div class="page-container">
       <Echarts :options="categoryOption"></Echarts>
       <ul class="category-list">
-        <li class="category-item" v-for="category in categoryList" :key="category.id">
+        <li v-for="category in categoryList" :key="category.id" class="category-item">
           <router-link :to="`/category/${category.id}`">{{ category.categoryName }}</router-link>
           <span class="category-count">({{ category.articleCount }})</span>
         </li>
@@ -23,10 +26,11 @@
 import { getCategoryList } from "@/api/category";
 import { Category } from "@/api/category/types";
 import Echarts from "@/components/Echarts/index.vue";
+
 let categoryOption = reactive({
   tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)'
+    trigger: "item",
+    formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
   title: {
     text: "文章分类统计图🎉",
@@ -37,35 +41,34 @@ let categoryOption = reactive({
   },
   series: [
     {
-      name: '分类统计',
-      type: 'pie',
+      name: "分类统计",
+      type: "pie",
       radius: [35, 130],
-      center: ['50%', '47%'],
-      roseType: 'area',
+      center: ["50%", "47%"],
+      roseType: "area",
       itemStyle: {
-        borderRadius: 6
+        borderRadius: 6,
       },
-      data: [
-      ] as {
+      data: [] as {
         value: number;
         name: string;
       }[],
-    }
-  ]
+    },
+  ],
 });
 const categoryList = ref<Category[]>([]);
 onMounted(() => {
-  getCategoryList().then(({ data }) => {
-    categoryList.value = data.data;
-    if (data.data != null) {
-      data.data.forEach((item) => {
+  getCategoryList().then((res) => {
+    categoryList.value = res.data;
+    if (res.data != null) {
+      res.data.forEach((item) => {
         categoryOption.series[0].data.push({
           value: item.articleCount,
           name: item.categoryName,
         });
       });
     }
-  })
+  });
 });
 </script>
 

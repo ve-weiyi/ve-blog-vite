@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import { useBlogStore } from "@/store";
+
 const blog = useBlogStore();
 </script>
 

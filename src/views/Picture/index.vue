@@ -1,41 +1,68 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">图床</h1>
-    <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt="">
+    <img
+      class="page-cover"
+      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+      alt=""
+    />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
   <div class="bg">
     <div class="page-container">
-      <n-form ref="formInstRef" label-placement="left" :label-width="90" :model="form" :rules="rules">
+      <n-form
+        ref="formInstRef"
+        label-placement="left"
+        :label-width="90"
+        :model="form"
+        :rules="rules"
+      >
         <n-form-item label="SESSDATA:" label-style="color: var(--text-color);" path="data">
-          <n-input placeholder="输入SESSDATA" v-model:value="form.data" style="width: 400px;" />
+          <n-input v-model:value="form.data" placeholder="输入SESSDATA" style="width: 400px" />
         </n-form-item>
         <n-form-item label="bili_jct:" label-style="color: var(--text-color);" path="csrf">
-          <n-input placeholder="请输入bili_jct" v-model:value="form.csrf" style="width: 400px;"/>
+          <n-input v-model:value="form.csrf" placeholder="请输入bili_jct" style="width: 400px" />
         </n-form-item>
       </n-form>
       <div class="btn-list">
-        <n-popover trigger="click" style="width: 250px;" placement="bottom">
+        <n-popover trigger="click" style="width: 250px" placement="bottom">
           <template #trigger>
             <n-button color="#18A058">使用方法</n-button>
           </template>
-          <span style="word-break: break-all;">使用方法: 登录哔哩哔哩→F12打开控制台→Application→Cookies→bili_jct、SESSDATA</span>
+          <span style="word-break: break-all"
+            >使用方法: 登录哔哩哔哩→F12打开控制台→Application→Cookies→bili_jct、SESSDATA</span
+          >
         </n-popover>
         <n-button class="ml" color="#3e999f" @click="handleSave">保存配置</n-button>
         <n-upload class="ml" accept="image/*" multiple :show-file-list="false" @change="changeFile">
           <n-button color="#49b1f5" :loading="loading">上传文件</n-button>
         </n-upload>
       </div>
-      <div v-if="imgList.length > 0" v-masonry fit-width="true" transition-duration="0.3s" item-selector=".card"
-        style="margin-top: 15px;">
-        <div v-masonry-tile class="card" v-for="(img, index) in imgList" :key="index">
-          <img class="img" :src="img">
+      <div
+        v-if="imgList.length > 0"
+        v-masonry
+        fit-width="true"
+        transition-duration="0.3s"
+        item-selector=".card"
+        style="margin-top: 15px"
+      >
+        <div v-for="(img, index) in imgList" :key="index" v-masonry-tile class="card">
+          <img class="img" :src="img" />
           <div class="mask">
-            <svg-icon icon-class="copy" size="1.5rem" color="#fff" style="margin-right:0.15rem;"
-              @click="handleCopy(img)"></svg-icon>
-            <svg-icon icon-class="delete" size="1.6rem" color="#fff" @click="imgList.splice(index, 1)"></svg-icon>
+            <svg-icon
+              icon-class="copy"
+              size="1.5rem"
+              color="#fff"
+              style="margin-right: 0.15rem"
+              @click="handleCopy(img)"
+            ></svg-icon>
+            <svg-icon
+              icon-class="delete"
+              size="1.6rem"
+              color="#fff"
+              @click="imgList.splice(index, 1)"
+            ></svg-icon>
           </div>
         </div>
       </div>
@@ -47,6 +74,7 @@
 import { biliUpload } from "@/api/user";
 import { useClipboard } from "@vueuse/core";
 import { FormInst, UploadFileInfo } from "naive-ui";
+
 const form = reactive({
   csrf: "",
   data: "",
@@ -76,7 +104,7 @@ const handleSave = () => {
       localStorage.setItem("csrf", form.csrf);
       window.$message?.success("保存成功");
     }
-  })
+  });
 };
 const changeFile = (options: { file: UploadFileInfo }) => {
   formInstRef.value?.validate((errors) => {
@@ -86,19 +114,19 @@ const changeFile = (options: { file: UploadFileInfo }) => {
       formData.append("csrf", form.csrf);
       formData.append("data", form.data);
       loading.value = true;
-      biliUpload(formData).then(({ data }) => {
+      biliUpload(formData).then((res) => {
         if (data.flag) {
-          imgList.push(data.data);
+          imgList.push(res.data);
           loading.value = false;
         }
-      })
+      });
     }
-  })
-}
+  });
+};
 onMounted(() => {
   form.data = localStorage.getItem("SESSDATA") as string;
   form.csrf = localStorage.getItem("csrf") as string;
-})
+});
 </script>
 
 <style lang="scss" scoped>

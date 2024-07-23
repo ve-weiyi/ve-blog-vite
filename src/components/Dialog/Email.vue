@@ -1,25 +1,39 @@
 <template>
-  <n-modal class="bg" v-model:show="dialogVisible" preset="dialog" :show-icon="false" transform-origin="center"
-    style="padding-bottom: 2rem;" :block-scroll="false">
-    <n-input class="mt-11" placeholder="邮箱号" v-model:value="emailForm.email"></n-input>
+  <n-modal
+    v-model:show="dialogVisible"
+    class="bg"
+    preset="dialog"
+    :show-icon="false"
+    transform-origin="center"
+    style="padding-bottom: 2rem"
+    :block-scroll="false"
+  >
+    <n-input v-model:value="emailForm.email" class="mt-11" placeholder="邮箱号"></n-input>
     <n-input-group class="mt-11">
-      <n-input placeholder="验证码" v-model:value="emailForm.code" />
+      <n-input v-model:value="emailForm.code" placeholder="验证码" />
       <n-button color="#49b1f5" :disabled="flag" @click="sendCode">
-        {{ timer == 0 ? '发送' : `${timer}s` }}
+        {{ timer == 0 ? "发送" : `${timer}s` }}
       </n-button>
     </n-input-group>
-    <n-button class="mt-11" color="#4caf50" style="width:100%" @click="handleUpdate" :loading="loading">
+    <n-button
+      class="mt-11"
+      color="#4caf50"
+      style="width: 100%"
+      :loading="loading"
+      @click="handleUpdate"
+    >
       绑定
     </n-button>
   </n-modal>
 </template>
 
 <script setup lang="ts">
-import { getCode } from '@/api/login';
-import { updateUserEmail } from '@/api/user';
-import { EmailForm } from '@/api/user/types';
+import { getCode } from "@/api/login";
+import { updateUserEmail } from "@/api/user";
+import { EmailForm } from "@/api/user/types";
 import { useAppStore, useUserStore } from "@/store";
-import { useIntervalFn } from '@vueuse/core';
+import { useIntervalFn } from "@vueuse/core";
+
 const user = useUserStore();
 const app = useAppStore();
 const data = reactive({
@@ -32,14 +46,18 @@ const data = reactive({
   } as EmailForm,
 });
 const { timer, flag, loading, emailForm } = toRefs(data);
-const { pause, resume } = useIntervalFn(() => {
-  timer.value--;
-  if (timer.value <= 0) {
-    // 停止定时器
-    pause();
-    flag.value = false;
-  }
-}, 1000, { immediate: false });
+const { pause, resume } = useIntervalFn(
+  () => {
+    timer.value--;
+    if (timer.value <= 0) {
+      // 停止定时器
+      pause();
+      flag.value = false;
+    }
+  },
+  1000,
+  { immediate: false }
+);
 const start = (time: number) => {
   flag.value = true;
   timer.value = time;
@@ -53,7 +71,7 @@ const sendCode = () => {
     return;
   }
   start(60);
-  getCode(emailForm.value.email).then(({ data }) => {
+  getCode(emailForm.value.email).then((res) => {
     if (data.flag) {
       window.$message?.success("发送成功");
     }
@@ -61,7 +79,7 @@ const sendCode = () => {
 };
 const dialogVisible = computed({
   get: () => app.emailFlag,
-  set: (value) => app.emailFlag = value,
+  set: (value) => (app.emailFlag = value),
 });
 const handleUpdate = () => {
   if (emailForm.value.code.trim().length != 6) {
@@ -69,14 +87,14 @@ const handleUpdate = () => {
     return;
   }
   loading.value = true;
-  updateUserEmail(emailForm.value).then(({ data }) => {
+  updateUserEmail(emailForm.value).then((res) => {
     if (data.flag) {
       window.$message?.success("修改成功");
       user.email = emailForm.value.email;
       emailForm.value = {
         email: "",
         code: "",
-      }
+      };
       app.emailFlag = false;
     }
     loading.value = false;

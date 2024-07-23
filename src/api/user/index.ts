@@ -1,13 +1,13 @@
 import { Result, UserForm } from "@/model";
 import request from "@/utils/request";
-import { AxiosPromise } from "axios";
+import { Promise } from "axios";
 import { EmailForm, UserInfo } from "./types";
 
 /**
  * 修改用户密码
  * @param data 用户密码
  */
-export function updateUserPassword(data: UserForm): AxiosPromise<Result<null>> {
+export function updateUserPassword(data: UserForm): Promise<Result<null>> {
   return request({
     url: "/user/password",
     method: "put",
@@ -19,7 +19,7 @@ export function updateUserPassword(data: UserForm): AxiosPromise<Result<null>> {
  * 修改用户头像
  * @param data 头像
  */
-export function updateUserAvatar(data: FormData): AxiosPromise<Result<string>> {
+export function updateUserAvatar(data: FormData): Promise<Result<string>> {
   return request({
     url: "/user/avatar",
     method: "post",
@@ -32,7 +32,7 @@ export function updateUserAvatar(data: FormData): AxiosPromise<Result<string>> {
  * 修改用户邮箱
  * @param data 用户邮箱
  */
-export function updateUserEmail(data: EmailForm): AxiosPromise<Result<null>> {
+export function updateUserEmail(data: EmailForm): Promise<Result<null>> {
   return request({
     url: "/user/email",
     method: "put",
@@ -44,7 +44,7 @@ export function updateUserEmail(data: EmailForm): AxiosPromise<Result<null>> {
  * 修改用户信息
  * @param data 用户信息
  */
-export function updateUserInfo(data: UserInfo): AxiosPromise<Result<null>> {
+export function updateUserInfo(data: UserInfo): Promise<Result<null>> {
   return request({
     url: "/user/info",
     method: "put",
@@ -56,7 +56,7 @@ export function updateUserInfo(data: UserInfo): AxiosPromise<Result<null>> {
  * B站图片上传
  * @param data 头像
  */
-export function biliUpload(data: FormData): AxiosPromise<Result<string>> {
+export function biliUpload(data: FormData): Promise<Result<string>> {
   return request({
     url: "/bili/upload",
     method: "post",

@@ -1,8 +1,11 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">关于</h1>
-    <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt="" />
+    <img
+      class="page-cover"
+      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+      alt=""
+    />
     <Waves></Waves>
   </div>
   <div class="bg">
@@ -17,6 +20,7 @@
 
 <script setup lang="ts">
 import { useBlogStore } from "@/store";
+
 const blog = useBlogStore();
 </script>
 

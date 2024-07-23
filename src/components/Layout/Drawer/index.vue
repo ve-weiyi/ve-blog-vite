@@ -1,5 +1,11 @@
 <template>
-  <n-drawer class="side-bg" v-model:show="drawerVisible" :width="240" :block-scroll="false" placement="right">
+  <n-drawer
+    v-model:show="drawerVisible"
+    class="side-bg"
+    :width="240"
+    :block-scroll="false"
+    placement="right"
+  >
     <n-drawer-content style="padding-top: 0.5rem">
       <div class="author-container">
         <img class="author-avatar" :src="blog.blogInfo.siteConfig.authorAvatar" />
@@ -11,30 +17,49 @@
       <ul class="side-menu">
         <template v-for="menu of menuList" :key="menu.name">
           <li v-if="!menu.children" class="item" :class="{ active: route.path === menu.path }">
-            <router-link :to="menu.path"><svg-icon :icon-class="menu.icon"></svg-icon> {{ menu.name }} </router-link>
+            <router-link :to="menu.path">
+              <svg-icon :icon-class="menu.icon"></svg-icon>
+              {{ menu.name }}
+            </router-link>
           </li>
           <li v-else class="item dropdown" :class="{ expand: expand(menu.children) }">
-            <a><svg-icon :icon-class="menu.icon"></svg-icon> {{ menu.name }} </a>
+            <a>
+              <svg-icon :icon-class="menu.icon"></svg-icon>
+              {{ menu.name }}
+            </a>
             <ul class="submenu">
-              <li class="item" v-for="submenu of menu.children" :key="submenu.name"
-                :class="{ active: route.path === submenu.path }">
-                <router-link :to="submenu.path"> <svg-icon :icon-class="submenu.icon"></svg-icon> {{ submenu.name }}
+              <li
+                v-for="submenu of menu.children"
+                :key="submenu.name"
+                class="item"
+                :class="{ active: route.path === submenu.path }"
+              >
+                <router-link :to="submenu.path">
+                  <svg-icon :icon-class="submenu.icon"></svg-icon>
+                  {{ submenu.name }}
                 </router-link>
               </li>
             </ul>
           </li>
         </template>
-        <li class="item" v-if="!user.id">
-          <a @click="app.loginFlag = true"> <svg-icon icon-class="user"></svg-icon> 登录 </a>
+        <li v-if="!user.id" class="item">
+          <a @click="app.loginFlag = true">
+            <svg-icon icon-class="user"></svg-icon>
+            登录
+          </a>
         </li>
         <template v-else>
           <li class="item" :class="{ active: route.path === '/user' }">
             <router-link to="/user">
-              <svg-icon icon-class="author"></svg-icon> 个人中心
+              <svg-icon icon-class="author"></svg-icon>
+              个人中心
             </router-link>
           </li>
           <li class="item">
-            <a @click="logout"> <svg-icon icon-class="logout"></svg-icon> 退出 </a>
+            <a @click="logout">
+              <svg-icon icon-class="logout"></svg-icon>
+              退出
+            </a>
           </li>
         </template>
       </ul>
@@ -45,6 +70,7 @@
 <script setup lang="ts">
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
 import { useWindowSize } from "@vueuse/core";
+
 const route = useRoute();
 const router = useRouter();
 const app = useAppStore();
@@ -55,7 +81,7 @@ const menuList = [
   {
     name: "首页",
     icon: "home",
-    path: "/"
+    path: "/",
   },
   {
     name: "文章",
@@ -64,19 +90,19 @@ const menuList = [
       {
         name: "归档",
         icon: "archives",
-        path: "/archive"
+        path: "/archive",
       },
       {
         name: "分类",
         icon: "category",
-        path: "/category"
+        path: "/category",
       },
       {
         name: "标签",
         icon: "tag",
-        path: "/tag"
+        path: "/tag",
       },
-    ]
+    ],
   },
   {
     name: "娱乐",
@@ -85,34 +111,34 @@ const menuList = [
       {
         name: "说说",
         icon: "talk",
-        path: "/talk"
+        path: "/talk",
       },
       {
         name: "相册",
         icon: "album",
-        path: "/album"
+        path: "/album",
       },
       {
         name: "图床",
         icon: "upload",
-        path: "/picture"
+        path: "/picture",
       },
-    ]
+    ],
   },
   {
     name: "友链",
     icon: "friend",
-    path: "/friend"
+    path: "/friend",
   },
   {
     name: "留言板",
     icon: "message",
-    path: "/message"
+    path: "/message",
   },
   {
     name: "关于",
     icon: "plane",
-    path: "/about"
+    path: "/about",
   },
 ];
 const expand = computed(() => (value: any) => {

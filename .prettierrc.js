@@ -10,7 +10,7 @@ export default {
   /** 指定缩进的方式：空格 或 Tab，默认为 false，即使用空格缩进。 */
   useTabs: false,
   /** 行尾是否加分号 默认true */
-  semi: false,
+  semi: true,
   /** 是否采用单引号代替双引号 */
   singleQuote: false,
   /** 在对象中的括号之间是否用空格来间隔 */
@@ -36,4 +36,4 @@ export default {
   eslintIntegration: false, //不让prettier使用eslint的代码格式进行校验
   stylelintIntegration: false, //不让prettier使用stylelint的代码格式进行校验
   tslintIntegration: false, // 不让prettier使用tslint的代码格式进行校验
-}
+};

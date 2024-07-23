@@ -5,7 +5,7 @@ export interface Friend {
   /**
    * 友链id
    */
-  id:number;
+  id: number;
   /**
    * 友链颜色
    */

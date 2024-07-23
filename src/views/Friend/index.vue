@@ -1,7 +1,11 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">友情链接</h1>
-    <img class="page-cover" src="https://static.ttkwsd.top/config/c8049b9b880411ebb6edd017c2d2eca2.jpg" alt="" />
+    <img
+      class="page-cover"
+      src="https://static.ttkwsd.top/config/c8049b9b880411ebb6edd017c2d2eca2.jpg"
+      alt=""
+    />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
@@ -29,9 +33,14 @@
         小伙伴们
       </h2>
       <div class="friends">
-        <div class="friend-item" v-animate="['slideUpBigIn']" v-for="friend in friendList" :key="friend.id">
+        <div
+          v-for="friend in friendList"
+          :key="friend.id"
+          v-animate="['slideUpBigIn']"
+          class="friend-item"
+        >
           <a target="_blank" :href="friend.url">
-            <img class="image" v-lazy="friend.avatar" />
+            <img v-lazy="friend.avatar" class="image" />
           </a>
           <div class="info">
             <a class="name" target="_blank" :href="friend.url" :style="{ color: friend.color }">{{
@@ -50,12 +59,13 @@
 import { getFriendList } from "@/api/friend";
 import { Friend } from "@/api/friend/types";
 import { useBlogStore } from "@/store";
+
 const blog = useBlogStore();
 const commentType = ref(2);
 const friendList = ref<Friend[]>([]);
 onMounted(() => {
-  getFriendList().then(({ data }) => {
-    friendList.value = data.data;
+  getFriendList().then((res) => {
+    friendList.value = res.data;
   });
 });
 </script>

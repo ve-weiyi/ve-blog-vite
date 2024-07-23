@@ -1,10 +1,14 @@
 <template>
   <div class="imgs">
     <ul>
-      <li class="item" v-for="carousel of carouselList" :key="carousel.id" :style="{
-        'background-image': 'url(' + carousel.imgUrl + ')'
-      }">
-      </li>
+      <li
+        v-for="carousel of carouselList"
+        :key="carousel.id"
+        class="item"
+        :style="{
+          'background-image': 'url(' + carousel.imgUrl + ')',
+        }"
+      ></li>
     </ul>
   </div>
 </template>
@@ -12,11 +16,12 @@
 <script setup lang="ts">
 import { getCarouselList } from "@/api/carousel";
 import { Carousel } from "@/api/carousel/types";
+
 const carouselList = ref<Carousel[]>([]);
 onMounted(() => {
-  getCarouselList().then(({ data }) => {
-    carouselList.value = data.data;
-  })
+  getCarouselList().then((res) => {
+    carouselList.value = res.data;
+  });
 });
 </script>
 
@@ -65,15 +70,15 @@ onMounted(() => {
   }
 
   &::before {
-    content: '';
+    content: "";
     display: block;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .2);
-    transition: all .2s ease-in-out 0s;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out 0s;
   }
 }
 

@@ -11,6 +11,7 @@ export interface PageResult<T> {
    */
   count: number;
 }
+
 /**
  * 结果返回接口
  */

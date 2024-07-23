@@ -1,13 +1,13 @@
 import { Result } from "@/model";
 import request from "@/utils/request";
-import { AxiosPromise } from "axios";
+import { Promise } from "axios";
 import { BlogInfo } from "./types";
 
 /**
  * 获取博客信息
  * @returns 博客信息
  */
-export function getBlogInfo(): AxiosPromise<Result<BlogInfo>> {
+export function getBlogInfo(): Promise<Result<BlogInfo>> {
   return request({
     url: "/",
     method: "get",
@@ -17,7 +17,7 @@ export function getBlogInfo(): AxiosPromise<Result<BlogInfo>> {
 /**
  * 上传访客信息
  */
-export function report(): AxiosPromise<Result<null>> {
+export function report(): Promise<Result<null>> {
   return request({
     url: "/report",
     method: "post",

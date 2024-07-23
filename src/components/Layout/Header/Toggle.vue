@@ -10,9 +10,10 @@
 
 <script setup lang="ts">
 import { useAppStore } from "@/store";
+
 const app = useAppStore();
 
-const drawerVisible = computed(() => (value: boolean) => value ? "toggle close" : "toggle");
+const drawerVisible = computed(() => (value: boolean) => (value ? "toggle close" : "toggle"));
 </script>
 
 <style lang="scss" scoped>

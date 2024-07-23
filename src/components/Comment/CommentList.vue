@@ -1,14 +1,14 @@
 <template>
-  <div class="reply-warp" id="reply-wrap">
+  <div id="reply-wrap" class="reply-warp">
     <div class="reply-title">
-      <svg-icon icon-class="comment" size="1.4rem" style="margin-right: 5px;"></svg-icon>
+      <svg-icon icon-class="comment" size="1.4rem" style="margin-right: 5px"></svg-icon>
       评论
     </div>
-    <ReplyBox @reload="reloadComments" :comment-type="commentType" :type-id="typeId"></ReplyBox>
+    <ReplyBox :comment-type="commentType" :type-id="typeId" @reload="reloadComments"></ReplyBox>
     <div v-if="count > 0 && reFresh">
-      <div class="reply-item" v-for="(comment, index) of commentList" :key="comment.id">
+      <div v-for="(comment, index) of commentList" :key="comment.id" class="reply-item">
         <div class="reply-box-avatar">
-          <img class="shoka-avatar" :src="comment.avatar">
+          <img class="shoka-avatar" :src="comment.avatar" />
         </div>
         <div class="content-warp">
           <div class="user-info">
@@ -19,50 +19,73 @@
           <div class="reply-info">
             <span class="reply-time">{{ formatDateTime(comment.createTime) }}</span>
             <span class="reply-like" @click="like(comment)">
-              <svg-icon class="like" icon-class="like" size="0.8rem" :class="isLike(comment.id)"
-                style="margin-right: 5px"></svg-icon>
+              <svg-icon
+                class="like"
+                icon-class="like"
+                size="0.8rem"
+                :class="isLike(comment.id)"
+                style="margin-right: 5px"
+              ></svg-icon>
               <span v-show="comment.likeCount">{{ comment.likeCount }}</span>
             </span>
             <span class="reply-btn" @click="handleReply(index, comment)">回复</span>
           </div>
-          <div class="sub-reply-item" v-for="reply of comment.replyVOList" :key="reply.id">
+          <div v-for="reply of comment.replyVOList" :key="reply.id" class="sub-reply-item">
             <div class="sub-user-info">
               <img class="sub-reply-avatar" :src="reply.avatar" />
               <div class="sub-user-name">{{ reply.fromNickname }}</div>
-              <svg-icon v-if="reply.fromUid == 1" icon-class="badge" style="margin-left: 5px;"></svg-icon>
+              <svg-icon
+                v-if="reply.fromUid == 1"
+                icon-class="badge"
+                style="margin-left: 5px"
+              ></svg-icon>
             </div>
             <span class="reply-content">
-              <template v-if="reply.fromUid !== reply.toUid">回复 <span style="color: #008ac5">@{{
-                reply.toNickname
-              }}</span> :</template>
+              <template v-if="reply.fromUid !== reply.toUid"
+                >回复 <span style="color: #008ac5">@{{ reply.toNickname }}</span> :</template
+              >
               <span v-html="reply.commentContent"></span>
             </span>
             <div class="reply-info">
               <span class="reply-time">{{ formatDateTime(reply.createTime) }}</span>
               <span class="reply-like" @click="like(reply)">
-                <svg-icon class="like" icon-class="like" size="0.8rem" :class="isLike(reply.id)"
-                  style="margin-right: 5px"></svg-icon>
+                <svg-icon
+                  class="like"
+                  icon-class="like"
+                  size="0.8rem"
+                  :class="isLike(reply.id)"
+                  style="margin-right: 5px"
+                ></svg-icon>
                 <span v-show="reply.likeCount > 0">{{ reply.likeCount }}</span>
               </span>
               <span class="reply-btn" @click="handleReply(index, reply)">回复</span>
             </div>
           </div>
-          <div ref="readMoreRef" class="view-more" v-show="comment.replyCount > 3">
+          <div v-show="comment.replyCount > 3" ref="readMoreRef" class="view-more">
             <span>共{{ comment.replyCount }}条回复, </span>
             <span class="view-more-btn" @click="readMoreComment(index, comment)">点击查看</span>
           </div>
-          <Paging ref="pageRef" :total="comment.replyCount" :index="index" :commentId="comment.id"
-            @get-current-page="getCurrentPage"></Paging>
-          <ReplyBox ref="replyRef" class="mt-4" :show="false" :comment-type="commentType" :type-id="typeId"
-            @reload="reloadReplies(index)">
+          <Paging
+            ref="pageRef"
+            :total="comment.replyCount"
+            :index="index"
+            :commentId="comment.id"
+            @get-current-page="getCurrentPage"
+          ></Paging>
+          <ReplyBox
+            ref="replyRef"
+            class="mt-4"
+            :show="false"
+            :comment-type="commentType"
+            :type-id="typeId"
+            @reload="reloadReplies(index)"
+          >
           </ReplyBox>
           <div class="bottom-line"></div>
         </div>
       </div>
-      <div class="loading-warp" v-if="count > commentList.length">
-        <n-button class="btn" color="#e9546b" @click="getList">
-          加载更多...
-        </n-button>
+      <div v-if="count > commentList.length" class="loading-warp">
+        <n-button class="btn" color="#e9546b" @click="getList"> 加载更多... </n-button>
       </div>
     </div>
     <div v-else style="padding: 1.25rem; text-align: center">来发评论吧~</div>
@@ -70,10 +93,11 @@
 </template>
 
 <script setup lang="ts">
-import { getCommentList, getReplyList, likeComment } from '@/api/comment';
-import { Comment, CommentQuery, Reply } from '@/api/comment/types';
+import { getCommentList, getReplyList, likeComment } from "@/api/comment";
+import { Comment, CommentQuery, Reply } from "@/api/comment/types";
 import { useAppStore, useUserStore } from "@/store";
-import { formatDateTime } from '@/utils/date';
+import { formatDateTime } from "@/utils/date";
+
 const user = useUserStore();
 const app = useAppStore();
 const replyRef = ref<any>([]);
@@ -82,11 +106,15 @@ const readMoreRef = ref<any>([]);
 const props = defineProps({
   commentType: {
     type: Number,
-  }
+  },
 });
 const emit = defineEmits(["getCommentCount"]);
-const typeId = computed(() => Number(useRoute().params.id) ? Number(useRoute().params.id) : undefined);
-const isLike = computed(() => (id: number) => user.commentLikeSet.indexOf(id) != -1 ? "like-flag" : "");
+const typeId = computed(() =>
+  Number(useRoute().params.id) ? Number(useRoute().params.id) : undefined
+);
+const isLike = computed(
+  () => (id: number) => (user.commentLikeSet.indexOf(id) != -1 ? "like-flag" : "")
+);
 const data = reactive({
   count: 0,
   reFresh: true,
@@ -104,7 +132,7 @@ const like = (comment: Comment | Reply) => {
     return;
   }
   let id = comment.id;
-  likeComment(id).then(({ data }) => {
+  likeComment(id).then((res) => {
     if (data.flag) {
       //判断是否点赞
       if (user.commentLikeSet.indexOf(id) != -1) {
@@ -122,15 +150,15 @@ watch(
   () => {
     reFresh.value = false;
     nextTick(() => {
-      reFresh.value = true
-    })
+      reFresh.value = true;
+    });
   },
-  { deep: false },
+  { deep: false }
 );
 // 查看更多评论
 const readMoreComment = (index: number, comment: Comment) => {
-  getReplyList(comment.id, { current: 1, size: 5 }).then(({ data }) => {
-    comment.replyVOList = data.data;
+  getReplyList(comment.id, { current: 1, size: 5 }).then((res) => {
+    comment.replyVOList = res.data;
     // 回复大于5条展示分页
     if (comment.replyCount > 5) {
       pageRef.value[index].setPaging(true);
@@ -141,8 +169,8 @@ const readMoreComment = (index: number, comment: Comment) => {
 };
 // 查看当前页的回复评论
 const getCurrentPage = (current: number, index: number, commentId: number) => {
-  getReplyList(commentId, { current: current, size: 5 }).then(({ data }) => {
-    commentList.value[index].replyVOList = data.data;
+  getReplyList(commentId, { current: current, size: 5 }).then((res) => {
+    commentList.value[index].replyVOList = res.data;
   });
 };
 const handleReply = (index: number, target: Comment | Reply) => {
@@ -157,14 +185,14 @@ const handleReply = (index: number, target: Comment | Reply) => {
   currentReply.setReply(true);
 };
 const getList = () => {
-  getCommentList(queryParams.value).then(({ data }) => {
+  getCommentList(queryParams.value).then((res) => {
     if (queryParams.value.current == 1) {
-      commentList.value = data.data.recordList;
+      commentList.value = res.data.recordList;
     } else {
-      commentList.value.push(...data.data.recordList);
+      commentList.value.push(...res.data.recordList);
     }
     queryParams.value.current++;
-    count.value = data.data.count;
+    count.value = res.data.count;
     emit("getCommentCount", count.value);
   });
 };
@@ -178,8 +206,8 @@ const reloadReplies = (index: number) => {
   getReplyList(commentList.value[index].id, {
     current: pageRef.value[index].current,
     size: 5,
-  }).then(({ data }) => {
-    commentList.value[index].replyVOList = data.data;
+  }).then((res) => {
+    commentList.value[index].replyVOList = res.data;
     commentList.value[index].replyCount++;
     // 隐藏回复框
     replyRef.value[index].setReply(false);

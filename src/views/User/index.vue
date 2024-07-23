@@ -1,8 +1,11 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">说说</h1>
-    <img class="page-cover" src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt="">
+    <img
+      class="page-cover"
+      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
+      alt=""
+    />
     <Waves></Waves>
   </div>
   <div class="bg">
@@ -11,31 +14,33 @@
       <div class="info-container">
         <user-avatar class="avatar"></user-avatar>
         <div class="info mt-4">
-          <n-form ref="formInstRef" label-align="left" :label-width="80" :model="userForm" :rules="rules">
+          <n-form
+            ref="formInstRef"
+            label-align="left"
+            :label-width="80"
+            :model="userForm"
+            :rules="rules"
+          >
             <n-form-item label="昵称" label-style="color: var(--text-color);" path="nickname">
-              <n-input placeholder="输入您的昵称" v-model:value="userForm.nickname" />
+              <n-input v-model:value="userForm.nickname" placeholder="输入您的昵称" />
             </n-form-item>
             <n-form-item label="个人网站" label-style="color: var(--text-color);" path="website">
-              <n-input placeholder="请输入个人网站" v-model:value="userForm.webSite" />
+              <n-input v-model:value="userForm.webSite" placeholder="请输入个人网站" />
             </n-form-item>
             <n-form-item label="简介" label-style="color: var(--text-color);" path="intro">
-              <n-input placeholder="介绍一下自己吧" v-model:value="userForm.intro" />
+              <n-input v-model:value="userForm.intro" placeholder="介绍一下自己吧" />
             </n-form-item>
             <n-form-item label="邮箱" label-style="color: var(--text-color);" path="email">
               <n-input-group>
-                <n-input placeholder="请输入邮箱" disabled v-model:value="user.email"></n-input>
-                <n-button color="#49b1f5" v-if="user.email" @click="app.emailFlag = true">
+                <n-input v-model:value="user.email" placeholder="请输入邮箱" disabled></n-input>
+                <n-button v-if="user.email" color="#49b1f5" @click="app.emailFlag = true">
                   修改邮箱
                 </n-button>
-                <n-button color="#49b1f5" v-else @click="app.emailFlag = true">
-                  绑定邮箱
-                </n-button>
+                <n-button v-else color="#49b1f5" @click="app.emailFlag = true"> 绑定邮箱</n-button>
               </n-input-group>
             </n-form-item>
           </n-form>
-          <n-button color="#3e999f" @click="handleUpdate">
-            修改
-          </n-button>
+          <n-button color="#3e999f" @click="handleUpdate"> 修改</n-button>
         </div>
       </div>
     </div>
@@ -46,10 +51,11 @@
 import { updateUserInfo } from "@/api/user";
 import { UserInfo } from "@/api/user/types";
 import { useAppStore, useUserStore } from "@/store";
-import { FormInst } from 'naive-ui';
+import { FormInst } from "naive-ui";
+
 const user = useUserStore();
 const app = useAppStore();
-const formInstRef = ref<FormInst | null>(null)
+const formInstRef = ref<FormInst | null>(null);
 const router = useRouter();
 const rules = {
   nickname: {
@@ -65,20 +71,20 @@ const userForm = ref<UserInfo>({
 const handleUpdate = () => {
   formInstRef.value?.validate((errors) => {
     if (!errors) {
-      updateUserInfo(userForm.value).then(({ data }) => {
+      updateUserInfo(userForm.value).then((res) => {
         if (data.flag) {
           user.updateUserInfo(userForm.value);
           window.$message?.success("修改成功");
         }
       });
     }
-  })
+  });
 };
 onMounted(() => {
   if (!user.id) {
     router.push("/");
   }
-})
+});
 </script>
 
 <style lang="scss" scoped>

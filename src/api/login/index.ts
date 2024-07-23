@@ -1,6 +1,6 @@
 import { Result, UserForm } from "@/model";
 import request from "@/utils/request";
-import { AxiosPromise } from "axios";
+import { Promise } from "axios";
 import { GitInfo, LoginForm, UserInfo } from "./types";
 
 /**
@@ -8,7 +8,7 @@ import { GitInfo, LoginForm, UserInfo } from "./types";
  * @param data 登录信息
  * @returns Token
  */
-export function login(data: LoginForm): AxiosPromise<Result<string>> {
+export function login(data: LoginForm): Promise<Result<string>> {
   return request({
     url: "/login",
     method: "post",
@@ -20,7 +20,7 @@ export function login(data: LoginForm): AxiosPromise<Result<string>> {
  * 邮箱注册
  * @param data 注册信息
  */
-export function register(data: UserForm): AxiosPromise<Result<null>> {
+export function register(data: UserForm): Promise<Result<null>> {
   return request({
     url: "/register",
     method: "post",
@@ -32,7 +32,7 @@ export function register(data: UserForm): AxiosPromise<Result<null>> {
  * 获取登录用户信息
  * @returns 登录用户信息
  */
-export function getUserInfo(): AxiosPromise<Result<UserInfo>> {
+export function getUserInfo(): Promise<Result<UserInfo>> {
   return request({
     url: "/user/getUserInfo",
     method: "get",
@@ -43,7 +43,7 @@ export function getUserInfo(): AxiosPromise<Result<UserInfo>> {
  * 发送邮箱验证码
  * @param params 邮箱
  */
-export function getCode(username: string): AxiosPromise<Result<null>> {
+export function getCode(username: string): Promise<Result<null>> {
   return request({
     url: "/code",
     method: "get",
@@ -56,7 +56,7 @@ export function getCode(username: string): AxiosPromise<Result<null>> {
 /**
  * 用户退出
  */
-export function logout(): AxiosPromise<Result<null>> {
+export function logout(): Promise<Result<null>> {
   return request({
     url: "/logout",
     method: "get",
@@ -68,7 +68,7 @@ export function logout(): AxiosPromise<Result<null>> {
  * @param data 第三方code
  * @returns Token
  */
-export function giteeLogin(data: GitInfo): AxiosPromise<Result<string>> {
+export function giteeLogin(data: GitInfo): Promise<Result<string>> {
   return request({
     url: "/oauth/gitee",
     method: "post",
@@ -81,7 +81,7 @@ export function giteeLogin(data: GitInfo): AxiosPromise<Result<string>> {
  * @param code 第三方code
  * @returns Token
  */
-export function githubLogin(data: GitInfo): AxiosPromise<Result<string>> {
+export function githubLogin(data: GitInfo): Promise<Result<string>> {
   return request({
     url: "/oauth/github",
     method: "post",
@@ -94,7 +94,7 @@ export function githubLogin(data: GitInfo): AxiosPromise<Result<string>> {
  * @param code 第三方code
  * @returns Token
  */
-export function qqLogin(data: GitInfo): AxiosPromise<Result<string>> {
+export function qqLogin(data: GitInfo): Promise<Result<string>> {
   return request({
     url: "/oauth/qq",
     method: "post",

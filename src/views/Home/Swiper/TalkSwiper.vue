@@ -1,8 +1,15 @@
 <template>
-  <router-link to="/talk" class="talk-swiper" v-if="talkList.length > 0">
+  <router-link v-if="talkList.length > 0" to="/talk" class="talk-swiper">
     <svg-icon icon-class="laba" size="1.25rem"></svg-icon>
-    <swiper class="swiper-container" :direction="'vertical'" :speed="2000" :modules="modules" :loop="true"
-      :slides-per-view="1" :autoplay="{ delay: 3000, disableOnInteraction: false, }">
+    <swiper
+      class="swiper-container"
+      :direction="'vertical'"
+      :speed="2000"
+      :modules="modules"
+      :loop="true"
+      :slides-per-view="1"
+      :autoplay="{ delay: 3000, disableOnInteraction: false }"
+    >
       <swiper-slide v-for="(talk, index) in talkList" :key="index">
         <div class="slide-content" v-html="talk"></div>
       </swiper-slide>
@@ -12,16 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { getTalkHomeList } from '@/api/talk';
-import { Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/vue';
+import { getTalkHomeList } from "@/api/talk";
+import { Autoplay } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/vue";
 // 自动播放
 const modules = [Autoplay];
 const talkList = ref<string[]>([]);
 onMounted(() => {
-  getTalkHomeList().then(({ data }) => {
-    talkList.value = data.data;
-  })
+  getTalkHomeList().then((res) => {
+    talkList.value = res.data;
+  });
 });
 </script>
 
