@@ -1,11 +1,7 @@
 <template>
   <div class="page-header">
-    <h1 class="page-title">分类</h1>
-    <img
-      class="page-cover"
-      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt=""
-    />
+    <h1 class="page-title">{{ title }}</h1>
+    <img class="page-cover" :src="cover" alt="" />
     <Waves></Waves>
   </div>
   <div class="bg">
@@ -14,32 +10,32 @@
         <n-grid-item v-for="article of articleList" :key="article.id" class="article-item">
           <div class="article-cover">
             <router-link :to="`/article/${article.id}`"
-              ><img v-lazy="article.articleCover" class="cover"
-            /></router-link>
+              ><img v-lazy="article.article_cover" class="cover" />
+            </router-link>
           </div>
           <div class="article-info">
             <div class="article-title">
-              <router-link :to="`/article/${article.id}`">{{ article.articleTitle }}</router-link>
+              <router-link :to="`/article/${article.id}`">{{ article.article_title }}</router-link>
             </div>
             <div class="article-meta">
               <span
                 ><svg-icon icon-class="calendar" size="0.95rem"></svg-icon>
-                {{ formatDate(article.createTime) }}</span
+                {{ formatDate(article.created_at) }}</span
               >
-              <router-link :to="`/category/${article.category.id}`">
+              <router-link :to="`/category/${article.category_name}`">
                 <svg-icon icon-class="qizhi" size="0.9rem"></svg-icon>
-                {{ article.category.categoryName }}
+                {{ article.category_name }}
               </router-link>
             </div>
             <div class="tag-info">
               <router-link
-                v-for="tag in article.tagVOList"
-                :key="tag.id"
-                :to="`/tag/${tag.id}`"
+                v-for="tag in article.tag_name_list"
+                :key="tag"
+                :to="`/tag/${tag}`"
                 class="article-tag"
               >
                 <svg-icon icon-class="tag" size="0.8rem"></svg-icon>
-                {{ tag.tagName }}
+                {{ tag }}
               </router-link>
             </div>
           </div>
@@ -50,26 +46,62 @@
 </template>
 
 <script setup lang="ts">
-import { ArticleCondition, ArticleQuery } from "@/api/article/types";
-import { getCategoryArticleList } from "@/api/category";
+import { ArticleHome } from "@/api/types";
+import { findArticleClassifyCategoryApi, findArticleClassifyTagApi } from "@/api/article";
 import { formatDate } from "@/utils/date";
+import { useBlogStore } from "@/store";
+const blogStore = useBlogStore();
 
-const route = useRoute();
+const cover = blogStore.getCover("tag");
 const data = reactive({
   queryParams: {
-    current: 1,
-    size: 5,
-    categoryId: Number(route.params.categoryId),
-  } as ArticleQuery,
-  name: "",
-  articleList: [] as ArticleCondition[],
+    page: 1,
+    page_size: 5,
+  },
+  articleList: [] as ArticleHome[],
 });
-const { queryParams, name, articleList } = toRefs(data);
-onMounted(() => {
-  getCategoryArticleList(queryParams.value).then((res) => {
-    articleList.value = res.data.articleConditionVOList;
-    name.value = res.data.name;
+const { queryParams, articleList } = toRefs(data);
+
+// 获取路由参数
+const route = useRoute();
+const tagId = route.params.tagId as string;
+const categoryId = route.params.categoryId as string;
+
+const title = ref("");
+
+function getTagArticleList() {
+  let data = {
+    page: queryParams.value.page,
+    page_size: queryParams.value.page_size,
+    classify_name: tagId,
+  };
+
+  findArticleClassifyTagApi(data).then((res) => {
+    articleList.value = res.data.list;
   });
+}
+
+function getCategoryArticleList() {
+  let data = {
+    page: queryParams.value.page,
+    page_size: queryParams.value.page_size,
+    classify_name: categoryId,
+  };
+
+  findArticleClassifyCategoryApi(data).then((res) => {
+    articleList.value = res.data.list;
+  });
+}
+
+onMounted(() => {
+  const path = route.path;
+  if (path.includes("/category")) {
+    title.value = categoryId;
+    getCategoryArticleList();
+  } else {
+    title.value = tagId;
+    getTagArticleList();
+  }
 });
 </script>
 
@@ -102,6 +134,7 @@ onMounted(() => {
 
 .article-item:hover .cover {
   transform: scale(1.1);
+  filter: brightness(0.9);
 }
 
 .article-info {

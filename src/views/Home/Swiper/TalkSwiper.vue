@@ -11,7 +11,7 @@
       :autoplay="{ delay: 3000, disableOnInteraction: false }"
     >
       <swiper-slide v-for="(talk, index) in talkList" :key="index">
-        <div class="slide-content" v-html="talk"></div>
+        <div class="slide-content" v-html="talk.content"></div>
       </swiper-slide>
     </swiper>
     <svg-icon icon-class="right-arrow" class="arrow"></svg-icon>
@@ -19,15 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { getTalkHomeList } from "@/api/talk";
 import { Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
+import { findTalkListApi } from "@/api/talk";
+import { Talk } from "@/api/types";
 // 自动播放
 const modules = [Autoplay];
-const talkList = ref<string[]>([]);
+const talkList = ref<Talk[]>([]);
 onMounted(() => {
-  getTalkHomeList().then((res) => {
-    talkList.value = res.data;
+  findTalkListApi().then((res) => {
+    talkList.value = res.data.list;
   });
 });
 </script>

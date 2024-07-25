@@ -15,10 +15,10 @@
 import { useBlogStore } from "@/store";
 import dayjs from "dayjs";
 
-const blog = useBlogStore();
+const blogStore = useBlogStore();
 const runTime = ref("");
 setInterval(() => {
-  const days = dayjs().diff(blog.blogInfo.siteConfig.createSiteTime, "days");
+  const days = dayjs().diff(blogStore.blogInfo.website_config.website_create_time, "days");
   const day = new Date();
   let str = "";
   str += days + "天";
@@ -28,9 +28,9 @@ setInterval(() => {
   runTime.value = str;
 }, 1000);
 const webInfo = ref([
-  { name: "文章数目", count: blog.blogInfo.articleCount },
+  { name: "文章数目", count: blogStore.blogInfo.article_count },
   { name: "运行时长", count: runTime },
-  { name: "总访问量", count: blog.blogInfo.viewCount },
+  { name: "总访问量", count: blogStore.blogInfo.views_count },
 ]);
 </script>
 

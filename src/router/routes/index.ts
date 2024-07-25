@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -24,11 +24,11 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/category/:categoryId",
-    component: () => import("@/views/Category/ArticleList.vue"),
+    component: () => import("@/views/Article/ArticleList.vue"),
   },
   {
     path: "/tag/:tagId",
-    component: () => import("@/views/Tag/ArticleList.vue"),
+    component: () => import("@/views/Article/ArticleList.vue"),
   },
   {
     name: "friend",
@@ -116,16 +116,8 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
-    path: "/oauth/login/gitee",
+    path: "/oauth/login/:platform",
     component: () => import("@/components/Oauth/index.vue"),
   },
-  {
-    path: "/oauth/login/github",
-    component: () => import("@/components/Oauth/index.vue"),
-  },
-  {
-    path: "/oauth/login/qq",
-    component: () => import("@/components/Oauth/index.vue"),
-  },
-  { path: "/:catchAll(.*)", redirect: "/404" },
+  // { path: "/:catchAll(.*)", redirect: "/404" },
 ];

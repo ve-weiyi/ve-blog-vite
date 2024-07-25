@@ -1,11 +1,7 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">归档</h1>
-    <img
-      class="page-cover"
-      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt=""
-    />
+    <img class="page-cover" :src="cover" alt="" />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
@@ -15,58 +11,57 @@
       <div class="archive-list">
         <div v-for="archive in archivesList" :key="archive.id" class="archive-item">
           <router-link class="article-cover" :to="`/article/${archive.id}`">
-            <img v-lazy="archive.articleCover" class="cover" />
+            <img v-lazy="archive.article_cover" class="cover" />
           </router-link>
           <div class="article-info">
             <div class="article-time">
               <svg-icon icon-class="calendar" style="margin-right: 0.4rem"></svg-icon>
-              <time>{{ formatDate(archive.createTime) }}</time>
+              <time>{{ formatDate(archive.created_at) }}</time>
             </div>
             <router-link class="article-title" :to="`/article/${archive.id}`">
-              {{ archive.articleTitle }}
+              {{ archive.article_title }}
             </router-link>
           </div>
         </div>
       </div>
-      <Pagination
-        v-if="count > 0"
-        v-model:current="queryParams.current"
-        :total="Math.ceil(count / 5)"
-      >
+      <Pagination v-if="count > 0" v-model:current="queryParams.page" :total="Math.ceil(count / 5)">
       </Pagination>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getArchivesList } from "@/api/archives";
-import { Archives } from "@/api/archives/types";
+import { findArticleArchivesApi } from "@/api/article";
+import { ArticlePreview } from "@/api/types";
 import Pagination from "@/components/Pagination/index.vue";
-import { PageQuery } from "@/model";
-import { formatDate } from "@/utils/date";
 
+import { formatDate } from "@/utils/date";
+import { useBlogStore } from "@/store";
+const blogStore = useBlogStore();
+
+const cover = blogStore.getCover("tag");
 const data = reactive({
   count: 0,
   queryParams: {
-    current: 1,
-    size: 5,
+    page: 1,
+    page_size: 5,
   } as PageQuery,
-  archivesList: [] as Archives[],
+  archivesList: [] as ArticlePreview[],
 });
 const { count, queryParams, archivesList } = toRefs(data);
 watch(
-  () => queryParams.value.current,
+  () => queryParams.value.page,
   () => {
-    getArchivesList(queryParams.value).then((res) => {
-      archivesList.value = res.data.recordList;
-      count.value = res.data.count;
+    findArticleArchivesApi(queryParams.value).then((res) => {
+      archivesList.value = res.data.list;
+      count.value = res.data.total;
     });
   }
 );
 onMounted(() => {
-  getArchivesList(queryParams.value).then((res) => {
-    archivesList.value = res.data.recordList;
-    count.value = res.data.count;
+  findArticleArchivesApi(queryParams.value).then((res) => {
+    archivesList.value = res.data.list;
+    count.value = res.data.total;
   });
 });
 </script>

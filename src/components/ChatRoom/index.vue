@@ -1,5 +1,5 @@
 <template>
-  <div v-if="blog.blogInfo.siteConfig.isChat">
+  <div v-if="blogStore.blogInfo.website_config.isChat">
     <div v-show="show" class="chat-container">
       <div class="chat-header">
         <img width="32" height="32" src="https://static.ttkwsd.top/config/room.png" />
@@ -23,7 +23,7 @@
                 style="color: var(--color-blue)"
                 :class="isMy(chat) ? 'right-info' : 'left-info'"
               >
-                {{ formatDateTime(chat.createTime) }}
+                {{ formatDateTime(chat.created_at) }}
               </span>
             </div>
             <div
@@ -62,8 +62,8 @@ import { formatDateTime } from "@/utils/date";
 import { emojiList } from "@/utils/emoji";
 import { tvList } from "@/utils/tv";
 
-const user = useUserStore();
-const blog = useBlogStore();
+const userStore = useUserStore();
+const blogStore = useBlogStore();
 const data = reactive({
   show: false,
   ipAddress: "",
@@ -108,15 +108,15 @@ const timeout = ref<NodeJS.Timeout>();
 const serverTimeout = ref<NodeJS.Timeout>();
 const isMy = computed(
   () => (chat: Record) =>
-    chat.ipAddress == ipAddress.value || (chat.userId !== undefined && chat.userId === user.id)
+    chat.ipAddress == ipAddress.value || (chat.userId !== undefined && chat.userId === userStore.id)
 );
-const userNickname = computed(() => (user.nickname ? user.nickname : ipAddress.value));
+const userNickname = computed(() => (userStore.nickname ? userStore.nickname : ipAddress.value));
 const userAvatar = computed(() =>
-  user.avatar ? user.avatar : blog.blogInfo.siteConfig.touristAvatar
+  userStore.avatar ? userStore.avatar : blogStore.blogInfo.website_config.touristAvatar
 );
 const handleOpen = () => {
   if (websocket.value === undefined) {
-    websocket.value = new WebSocket(blog.blogInfo.siteConfig.websocketUrl);
+    websocket.value = new WebSocket(blogStore.blogInfo.website_config.websocketUrl);
     websocket.value.onopen = () => {
       webSocketState.value = true;
       startHeart();
@@ -166,7 +166,7 @@ const showBack = (chat: Record, index: number, e: any) => {
   backBtn.value.forEach((item: any) => {
     item.style.display = "none";
   });
-  if (chat.ipAddress === ipAddress.value || (chat.userId != null && chat.userId == user.id)) {
+  if (chat.ipAddress === ipAddress.value || (chat.userId != null && chat.userId == userStore.id)) {
     backBtn.value[index].style.left = e.offsetX + "px";
     backBtn.value[index].style.bottom = e.offsetY + "px";
     backBtn.value[index].style.display = "block";
@@ -220,7 +220,7 @@ const handleSend = () => {
     nickname: userNickname.value,
     avatar: userAvatar.value,
     content: chatContent.value,
-    userId: user.id,
+    userId: userStore.id,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   };

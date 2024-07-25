@@ -27,12 +27,6 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  index: {
-    type: Number,
-  },
-  commentId: {
-    type: Number,
-  },
 });
 const totalPage = computed(() => Math.ceil(props.total / page.value));
 const visibleNumber = computed(() => {
@@ -69,15 +63,15 @@ const visibleNumber = computed(() => {
 });
 const prePage = () => {
   current.value -= 1;
-  emit("getCurrentPage", current.value, props.index, props.commentId);
+  emit("getCurrentPage", current.value);
 };
 const changePage = (number: number) => {
   current.value = number;
-  emit("getCurrentPage", number, props.index, props.commentId);
+  emit("getCurrentPage", number);
 };
 const nextPage = () => {
   current.value += 1;
-  emit("getCurrentPage", current.value, props.index, props.commentId);
+  emit("getCurrentPage", current.value);
 };
 const setPaging = (flag: boolean) => {
   show.value = flag;

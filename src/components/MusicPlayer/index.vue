@@ -1,8 +1,8 @@
 <template>
-  <!-- <meting-js v-if="blog.blogInfo.siteConfig.isMusic" server="netease" type="playlist"
-    :id="blog.blogInfo.siteConfig.musicId" fixed="true" theme="#e9546b"></meting-js> -->
+  <!-- <meting-js v-if="blogStore.blogInfo.website_config.isMusic" server="netease" type="playlist"
+    :id="blogStore.blogInfo.website_config.musicId" fixed="true" theme="#e9546b"></meting-js> -->
   <aplayer
-    :id="blog.blogInfo.siteConfig.musicId"
+    :id="blogStore.blogInfo.website_config.musicId"
     server="netease"
     type="playlist"
     :fixed="true"
@@ -15,7 +15,7 @@
 import { useBlogStore } from "@/store";
 import aplayer from "./aplayer.vue";
 
-const blog = useBlogStore();
+const blogStore = useBlogStore();
 </script>
 
 <style scoped></style>

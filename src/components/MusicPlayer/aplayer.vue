@@ -139,7 +139,7 @@ onMounted(() => {
         listFolded: props.listFolded,
         listMaxHeight: props.listMaxHeight,
         storageName: props.storageName,
-        audio: data,
+        audio: res,
       });
     });
   });

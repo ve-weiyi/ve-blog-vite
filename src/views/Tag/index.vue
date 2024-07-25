@@ -1,11 +1,7 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">标签</h1>
-    <img
-      class="page-cover"
-      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt=""
-    />
+    <img class="page-cover" :src="cover" alt="" />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
@@ -15,12 +11,12 @@
         <router-link
           v-for="tag in tagList"
           :key="tag.id"
-          :to="`/tag/${tag.id}`"
+          :to="`/tag/${tag.tag_name}`"
           class="tag-item"
-          :style="{ 'font-size': getSize(tag.articleCount), color: getRandomColor() }"
+          :style="{ 'font-size': getSize(tag.article_count), color: getRandomColor() }"
         >
-          {{ tag.tagName }}
-          <sup>{{ tag.articleCount }}</sup>
+          {{ tag.tag_name }}
+          <sup>{{ tag.article_count }}</sup>
         </router-link>
       </div>
     </div>
@@ -28,8 +24,12 @@
 </template>
 
 <script setup lang="ts">
-import { getTagList } from "@/api/tag";
-import { Tag } from "@/api/tag/types";
+import { findTagListApi } from "@/api/tag";
+import { Tag } from "@/api/types";
+import { useBlogStore } from "@/store";
+
+const blogStore = useBlogStore();
+const cover = blogStore.getCover("tag");
 
 const getSize = (freq: number) => {
   return ((1 + (6 * freq) / 10) / 3) * 2 + "rem";
@@ -47,8 +47,8 @@ const getRandomColor = () => {
 };
 const tagList = ref<Tag[]>([]);
 onMounted(() => {
-  getTagList().then((res) => {
-    tagList.value = res.data;
+  findTagListApi().then((res) => {
+    tagList.value = res.data.list;
   });
 });
 </script>

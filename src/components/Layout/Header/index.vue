@@ -17,7 +17,7 @@
         <svg-icon
           style="cursor: pointer"
           icon-class="search"
-          @click="app.searchFlag = true"
+          @click="appStore.searchFlag = true"
         ></svg-icon>
       </li>
     </ul>
@@ -28,7 +28,7 @@
 import { useAppStore } from "@/store";
 import { useDark, useScroll, useToggle } from "@vueuse/core";
 
-const app = useAppStore();
+const appStore = useAppStore();
 const { y } = useScroll(window);
 const isDark = useDark({
   selector: "html",

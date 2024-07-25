@@ -1,11 +1,7 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">图床</h1>
-    <img
-      class="page-cover"
-      src="https://ik.imagekit.io/nicexl/Wallpaper/ba41a32b219e4b40ad055bbb52935896_Y0819msuI.jpg"
-      alt=""
-    />
+    <img class="page-cover" :src="cover" alt="" />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
@@ -71,10 +67,13 @@
 </template>
 
 <script setup lang="ts">
-import { biliUpload } from "@/api/user";
 import { useClipboard } from "@vueuse/core";
 import { FormInst, UploadFileInfo } from "naive-ui";
+import { useBlogStore } from "@/store";
+// import { biliUpload } from "@/api/user";
+const blogStore = useBlogStore();
 
+const cover = blogStore.getCover("tag");
 const form = reactive({
   csrf: "",
   data: "",
@@ -114,12 +113,12 @@ const changeFile = (options: { file: UploadFileInfo }) => {
       formData.append("csrf", form.csrf);
       formData.append("data", form.data);
       loading.value = true;
-      biliUpload(formData).then((res) => {
-        if (data.flag) {
-          imgList.push(res.data);
-          loading.value = false;
-        }
-      });
+      // biliUpload(formData).then((res) => {
+      //
+      //     imgList.push(res.data);
+      //     loading.value = false;
+      //
+      // });
     }
   });
 };

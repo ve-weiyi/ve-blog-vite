@@ -1,16 +1,17 @@
 <template>
+  <img class="message-cover" :src="cover" alt="" />
   <!-- 弹幕输入框 -->
   <div class="message-container">
     <h1 class="message-title">留言板</h1>
     <div class="message-input">
       <input
-        v-model="messageContent"
+        v-model="addMessageContent"
         class="input"
         placeholder="说点什么吧"
         @click="show = true"
-        @keyup.enter="send"
+        @keyup.enter="AddMessage"
       />
-      <button v-show="show" class="send" @click="send">发送</button>
+      <button v-show="show" class="send" @click="AddMessage">发送</button>
     </div>
   </div>
   <!-- 弹幕列表 -->
@@ -21,12 +22,13 @@
       class="danmaku"
       use-slot
       :is-suspend="true"
+      v-bind="config"
     >
-      <template v-slot:dm="{ danmu }">
+      <template v-slot:dm="{ index, danmu }">
         <span class="danmaku-item">
-          <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" />
+          <img :src="danmu.avatar" width="30" height="30" style="border-radius: 50%" alt="" />
           <span class="ml">{{ danmu.nickname }} :</span>
-          <span class="ml">{{ danmu.messageContent }}</span>
+          <span class="ml">{{ danmu.message_content }}</span>
         </span>
       </template>
     </vue-danmaku>
@@ -34,44 +36,57 @@
 </template>
 
 <script setup lang="ts">
-import { addMessage, getMessageList } from "@/api/message";
-import { Message } from "@/api/message/types";
+import { addRemarkApi, findRemarkListApi } from "@/api/remark";
+import { Remark as Message } from "@/api/types";
 import { useBlogStore, useUserStore } from "@/store";
 import vueDanmaku from "vue3-danmaku";
 
-const user = useUserStore();
-const blog = useBlogStore();
-const messageContent = ref("");
+const userStore = useUserStore();
+const blogStore = useBlogStore();
+
+const cover = blogStore.getCover("about");
+const config = ref({
+  channels: 7, // 轨道数量，为0则弹幕轨道数会撑满容器
+  useSlot: true, // 是否开启slot
+  loop: false, // 是否开启弹幕循环
+  speeds: 100, // 弹幕速度
+  fontSize: 20, // 文本模式下的字号
+  top: 5, // 弹幕轨道间的垂直间距
+  right: 10, // 同一轨道弹幕的水平间距
+  debounce: 100, // 弹幕刷新频率（多少毫秒插入一条弹幕，建议不小于50）
+  randomChannel: true, // 随机弹幕轨道
+});
+
+const addMessageContent = ref("");
 const show = ref(false);
 const danmaku = ref();
 const messageList = ref<Message[]>([]);
 onMounted(async () => {
-  await getMessageList().then((res) => {
-    messageList.value = res.data;
+  findRemarkListApi().then((res) => {
+    messageList.value = res.data.list;
   });
 });
-const send = () => {
-  if (messageContent.value.trim() == "") {
+const AddMessage = () => {
+  if (addMessageContent.value.trim() == "") {
     window.$message?.warning("留言内容不能为空");
     return false;
   }
-  const userAvatar = user.avatar ? user.avatar : blog.blogInfo.siteConfig.touristAvatar;
-  const userNickname = user.nickname ? user.nickname : "游客";
-  let message = {
+  const userAvatar = userStore.avatar ? userStore.avatar : blogStore.blogInfo.website_config.tourist_avatar;
+  const userNickname = userStore.nickname ? userStore.nickname : "游客";
+  const message = {
     avatar: userAvatar,
     nickname: userNickname,
-    messageContent: messageContent.value,
+    message_content: addMessageContent.value,
+    time: Math.floor(Math.random() * (10 - 7)) + 7,
   };
-  addMessage(message).then((res) => {
-    if (data.flag) {
-      if (blog.blogInfo.siteConfig.messageCheck) {
-        window.$message?.warning("留言成功，正在审核中");
-      } else {
-        danmaku.value.push(message);
-        window.$message?.success("留言成功");
-      }
-      messageContent.value = "";
+  addRemarkApi(message).then((res) => {
+    if (blogStore.blogInfo.website_config.is_message_review) {
+      window.$message?.warning("留言成功，正在审核中");
+    } else {
+      danmaku.value.push(message);
+      window.$message?.success("留言成功");
     }
+    addMessageContent.value = "";
   });
 };
 </script>
@@ -90,7 +105,18 @@ const send = () => {
 }
 
 .message-title {
-  animation: titleScale 1s;
+  animation: title-scale 1s;
+}
+
+.message-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -10;
+  animation: header-effect 1s;
 }
 
 .message-input {
@@ -108,6 +134,7 @@ const send = () => {
   outline: none;
   color: #eee;
   border: #fff 1px solid;
+  z-index: 10;
 }
 
 .message-input .input::-webkit-input-placeholder {

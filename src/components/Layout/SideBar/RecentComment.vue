@@ -14,24 +14,24 @@
           <!-- 昵称 -->
           <span class="comment-name">{{ comment.nickname }}</span>
           <!-- 时间 -->
-          <div>{{ formatDate(comment.createTime) }}</div>
+          <div>{{ formatDate(comment.created_at) }}</div>
         </div>
         <!-- 内容 -->
-        <span class="content" v-html="comment.commentContent"></span>
+        <span class="content" v-html="comment.comment_content"></span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getRecentComment } from "@/api/comment";
-import { RecentComment } from "@/api/comment/types";
+import { findCommentRecentListApi } from "@/api/comment";
 import { formatDate } from "@/utils/date";
+import { CommentBackDTO } from "@/api/types";
 
-const commentList = ref<RecentComment[]>([]);
+const commentList = ref<CommentBackDTO[]>([]);
 onMounted(() => {
-  getRecentComment().then((res) => {
-    commentList.value = res.data;
+  findCommentRecentListApi().then((res) => {
+    commentList.value = res.data.list;
   });
 });
 </script>

@@ -17,13 +17,29 @@
       <Forget></Forget>
       <Email></Email>
       <Drawer></Drawer>
-      <MusicPlayer></MusicPlayer>
+      <!--      <MusicPlayer></MusicPlayer>-->
       <ChatRoom></ChatRoom>
     </div>
   </Provider>
 </template>
 
 <script setup lang="ts">
+import Header from "@/components/Layout/Header/index.vue";
+import Footer from "@/components/Layout/Footer/index.vue";
+import { useBlogStore, useUserStore } from "@/store";
+import { getBlogHomeInfoApi } from "@/api/website";
+import { pingApi } from "@/api/blog";
+import { getUserInfoApi } from "@/api/user";
+
+const blogStore = useBlogStore();
+const userStore = useUserStore();
+
+onBeforeMount(() => {
+  pingApi();
+  getBlogHomeInfoApi().then((res) => {
+    blogStore.setBlogInfo(res.data);
+  });
+});
 onMounted(() => {
   console.log(
     "%c Hello World %c By 阿冬 %c",

@@ -1,7 +1,7 @@
 import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from "axios";
 import MD5 from "crypto-js/md5";
 import { useUserStore } from "@/store";
-import { getToken } from "./token";
+import { getToken, getUid } from "./token";
 
 function signWithSalt(message: string, salt: string): string {
   const saltedMessage = salt + message;
@@ -37,7 +37,7 @@ requests.interceptors.request.use(
     if (tk) {
       config.headers = Object.assign({}, config.headers, {
         [HeaderAuthorization]: tk,
-        [HeaderUid]: tk,
+        [HeaderUid]: getUid(),
         [HeaderToken]: signWithSalt(dv, ts),
         [HeaderTerminal]: dv,
         [HeaderTimestamp]: ts,
@@ -62,20 +62,17 @@ requests.interceptors.request.use(
 requests.interceptors.response.use(
   (response: AxiosResponse) => {
     switch (response.data.code) {
-      case -1:
-        window.$message?.error(response.data.msg);
-        break;
-      case 400:
-        window.$message?.error(response.data.msg);
+      case 200:
         break;
       case 402:
-        const user = useUserStore();
-        user.forceLogOut();
-        window.$message?.error(response.data.msg);
+        const userStore = useUserStore();
+        userStore.forceLogOut();
+        window.$message?.error(response.data.message);
         break;
       case 500:
-        window.$message?.error(response.data.msg);
-        break;
+      default:
+        window.$message?.error(response.data.message);
+        return Promise.reject(response.data.message);
     }
     return response.data;
   },

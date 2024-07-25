@@ -2,7 +2,7 @@
   <div class="menu">
     <div class="menu-item title">
       <router-link to="/" class="menu-btn">
-        {{ blog.blogInfo.siteConfig.siteName }}
+        {{ blogStore.blogInfo.website_config.website_name }}
       </router-link>
     </div>
     <template v-for="menu of menuList" :key="menu.name">
@@ -37,12 +37,12 @@
       </div>
     </template>
     <div class="menu-item">
-      <a v-if="!user.id" class="menu-btn" @click="app.loginFlag = true">
+      <a v-if="!userStore.userInfo.user_id" class="menu-btn" @click="appStore.loginFlag = true">
         <svg-icon icon-class="user"></svg-icon>
         登录
       </a>
       <template v-else>
-        <img class="user-avatar drop" :src="user.avatar" />
+        <img class="user-avatar" :src="userStore.userInfo.avatar" />
         <ul class="submenu">
           <li class="subitem" :class="{ active: route.meta.title === '个人中心' }">
             <router-link to="/user" class="link">
@@ -65,9 +65,9 @@
 <script setup lang="ts">
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
 
-const user = useUserStore();
-const app = useAppStore();
-const blog = useBlogStore();
+const userStore = useUserStore();
+const appStore = useAppStore();
+const blogStore = useBlogStore();
 const router = useRouter();
 const route = useRoute();
 const menuList = [
@@ -138,7 +138,7 @@ const logout = () => {
   if (route.path == "/user") {
     router.go(-1);
   }
-  user.LogOut();
+  userStore.LogOut();
   window.$message?.success("退出成功");
 };
 </script>

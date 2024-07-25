@@ -8,9 +8,9 @@
   >
     <n-drawer-content style="padding-top: 0.5rem">
       <div class="author-container">
-        <img class="author-avatar" :src="blog.blogInfo.siteConfig.authorAvatar" />
-        <p class="author-name">{{ blog.blogInfo.siteConfig.siteAuthor }}</p>
-        <div class="site-desc">{{ blog.blogInfo.siteConfig.siteIntro }}</div>
+        <img class="author-avatar" :src="blogStore.blogInfo.website_config.authorAvatar" />
+        <p class="author-name">{{ blogStore.blogInfo.website_config.website_author }}</p>
+        <div class="site-desc">{{ blogStore.blogInfo.website_config.siteIntro }}</div>
       </div>
       <blog-info></blog-info>
       <social-list></social-list>
@@ -42,8 +42,8 @@
             </ul>
           </li>
         </template>
-        <li v-if="!user.id" class="item">
-          <a @click="app.loginFlag = true">
+        <li v-if="!userStore.isLogin()" class="item">
+          <a @click="appStore.loginFlag = true">
             <svg-icon icon-class="user"></svg-icon>
             登录
           </a>
@@ -73,9 +73,9 @@ import { useWindowSize } from "@vueuse/core";
 
 const route = useRoute();
 const router = useRouter();
-const app = useAppStore();
-const blog = useBlogStore();
-const user = useUserStore();
+const appStore = useAppStore();
+const blogStore = useBlogStore();
+const userStore = useUserStore();
 const { width } = useWindowSize();
 const menuList = [
   {
@@ -146,20 +146,20 @@ const expand = computed(() => (value: any) => {
   return res.includes(route.meta.title);
 });
 const drawerVisible = computed({
-  get: () => app.isCollapse,
-  set: (value) => (app.isCollapse = value),
+  get: () => appStore.isCollapse,
+  set: (value) => (appStore.isCollapse = value),
 });
 watchEffect(() => {
   // 监听屏幕宽度，侧边栏收缩
   if (width.value > 991) {
-    app.setCollapse(false);
+    appStore.setCollapse(false);
   }
 });
 const logout = () => {
   if (route.path == "/user") {
     router.go(-1);
   }
-  user.LogOut();
+  userStore.LogOut();
   window.$message?.success("退出成功");
 };
 </script>

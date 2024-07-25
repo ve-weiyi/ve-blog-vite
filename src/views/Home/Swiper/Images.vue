@@ -6,7 +6,7 @@
         :key="carousel.id"
         class="item"
         :style="{
-          'background-image': 'url(' + carousel.imgUrl + ')',
+          'background-image': 'url(' + carousel.page_cover + ')',
         }"
       ></li>
     </ul>
@@ -14,13 +14,13 @@
 </template>
 
 <script setup lang="ts">
-import { getCarouselList } from "@/api/carousel";
-import { Carousel } from "@/api/carousel/types";
+import { findPageListApi } from "@/api/page";
+import { Page } from "@/api/types";
 
-const carouselList = ref<Carousel[]>([]);
+const carouselList = ref<Page[]>([]);
 onMounted(() => {
-  getCarouselList().then((res) => {
-    carouselList.value = res.data;
+  findPageListApi().then((res) => {
+    carouselList.value = res.data.list;
   });
 });
 </script>
@@ -33,7 +33,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 70vh;
+  height: 100vh;
   z-index: -9;
   background-color: #363636;
   overflow: hidden;
@@ -42,7 +42,7 @@ onMounted(() => {
     @include absolute;
     width: 100%;
     height: 100%;
-    background: no-repeat 50% 50% / cover;
+    background: no-repeat center center / cover;
     opacity: 0;
     animation: imageAnimation 36s linear infinite 0s;
     backface-visibility: hidden;

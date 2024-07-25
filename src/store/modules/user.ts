@@ -1,95 +1,59 @@
-import { getUserInfo, logout } from "@/api/login";
-import type { UserInfo } from "@/api/user/types";
-import { removeToken } from "@/utils/token";
+import { getToken, clearCookies, setToken, setUid } from "@/utils/token";
+import { getUserInfoApi, getUserLikeApi } from "@/api/user";
+import { logoutApi } from "@/api/auth";
+import type { Token, UserInfoResp } from "@/api/types";
 
 /**
  * 用户
  */
 interface UserState {
-  /**
-   * 用户id
-   */
-  id?: number;
-  /**
-   * 头像
-   */
-  avatar: string;
-  /**
-   * 昵称
-   */
-  nickname: string;
-  /**
-   * 用户名
-   */
-  username: string;
-  /**
-   * 邮箱
-   */
-  email: string;
-  /**
-   * 个人网站
-   */
-  webSite: string;
-  /**
-   * 个人简介
-   */
-  intro: string;
-  /**
-   * 登录方式
-   */
-  loginType?: number;
-  /**
-   * 第三方登录之前的path
-   */
-  path: string;
-  /**
-   * 文章点赞集合
-   */
-  articleLikeSet: number[];
-  /**
-   * 评论点赞集合
-   */
-  commentLikeSet: number[];
-  /**
-   * 说说点赞集合
-   */
-  talkLikeSet: number[];
+  userInfo: UserInfoResp;
+  userLike: any;
 }
 
 export const useUserStore = defineStore("useUserStore", {
   state: (): UserState => ({
-    id: undefined,
-    avatar: "",
-    nickname: "",
-    email: "",
-    username: "",
-    webSite: "",
-    intro: "",
-    loginType: undefined,
-    path: "",
-    articleLikeSet: [],
-    commentLikeSet: [],
-    talkLikeSet: [],
+    userInfo: {
+      user_id: undefined,
+      username: "",
+      nickname: "",
+      avatar: "",
+      intro: "",
+      website: "",
+      email: "",
+    },
+    userLike: {
+      article_like_set: [],
+      comment_like_set: [],
+      talk_like_set: [],
+    },
   }),
   actions: {
     GetUserInfo() {
+      if (!this.isLogin()) {
+        return;
+      }
       return new Promise((resolve, reject) => {
-        getUserInfo()
+        getUserInfoApi()
           .then((res) => {
-            if (data.flag) {
-              this.id = res.data.id;
-              this.avatar = res.data.avatar;
-              this.nickname = res.data.nickname;
-              this.email = res.data.email;
-              this.username = res.data.username;
-              this.webSite = res.data.webSite;
-              this.intro = res.data.intro;
-              this.loginType = res.data.loginType;
-              this.articleLikeSet = res.data.articleLikeSet;
-              this.commentLikeSet = res.data.commentLikeSet;
-              this.talkLikeSet = res.data.talkLikeSet;
-            }
-            resolve(data);
+            this.userInfo = res.data;
+
+            resolve(res);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    GetUserLike() {
+      if (!this.isLogin()) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        getUserLikeApi()
+          .then((res) => {
+            this.userLike = res.data;
+            resolve(res);
           })
           .catch((error) => {
             reject(error);
@@ -98,10 +62,10 @@ export const useUserStore = defineStore("useUserStore", {
     },
     LogOut() {
       return new Promise((resolve, reject) => {
-        logout()
+        logoutApi()
           .then(() => {
             this.$reset();
-            removeToken();
+            clearCookies();
             resolve(null);
           })
           .catch((error) => {
@@ -111,39 +75,54 @@ export const useUserStore = defineStore("useUserStore", {
     },
     forceLogOut() {
       this.$reset();
-      removeToken();
+      clearCookies();
     },
-    savePath(path: string) {
-      this.path = path;
+    setLogin(token: Token) {
+      console.log("token", token);
+      setUid(String(token.user_id));
+      setToken(token.access_token);
+      console.log("getToken", getToken());
+    },
+    updateUserInfo(user: UserInfoResp) {
+      this.userInfo = user;
+    },
+    isLogin() {
+      const tk = getToken();
+      console.log("isLogin", tk != undefined);
+      return tk != undefined;
     },
     articleLike(articleId: number) {
-      let index = this.articleLikeSet.indexOf(articleId);
-      if (index != -1) {
-        this.articleLikeSet.splice(index, 1);
+      const articleLikeSet = this.userLike.article_like_set;
+      if (articleLikeSet.indexOf(articleId) != -1) {
+        articleLikeSet.splice(articleLikeSet.indexOf(articleId), 1);
       } else {
-        this.articleLikeSet.push(articleId);
+        articleLikeSet.push(articleId);
       }
     },
     commentLike(commentId: number) {
-      let index = this.commentLikeSet.indexOf(commentId);
-      if (index != -1) {
-        this.commentLikeSet.splice(index, 1);
+      const commentLikeSet = this.userLike.comment_like_set;
+      if (commentLikeSet.indexOf(commentId) != -1) {
+        commentLikeSet.splice(commentLikeSet.indexOf(commentId), 1);
       } else {
-        this.commentLikeSet.push(commentId);
+        commentLikeSet.push(commentId);
       }
     },
     talkLike(talkId: number) {
-      let index = this.talkLikeSet.indexOf(talkId);
-      if (index != -1) {
-        this.talkLikeSet.splice(index, 1);
+      const talkLikeSet = this.userLike.talk_like_set;
+      if (talkLikeSet.indexOf(talkId) != -1) {
+        talkLikeSet.splice(talkLikeSet.indexOf(talkId), 1);
       } else {
-        this.talkLikeSet.push(talkId);
+        talkLikeSet.push(talkId);
       }
     },
-    updateUserInfo(user: UserInfo) {
-      this.nickname = user.nickname;
-      this.webSite = user.webSite;
-      this.intro = user.intro;
+    isArticleLike(articleId: number) {
+      return this.userLike.article_like_set.indexOf(articleId) != -1;
+    },
+    isCommentLike(commentId: number) {
+      return this.userLike.comment_like_set.indexOf(commentId) != -1;
+    },
+    isTalkLike(talkId: number) {
+      return this.userLike.talk_like_set.indexOf(talkId) != -1;
     },
   },
   getters: {},

@@ -1,0 +1,29 @@
+import request from "@/utils/request"
+import type { PhotoQuery, IdReq, Album, PageQuery, PageResp } from "./types"
+
+/** "获取相册列表" */
+export function findAlbumListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/album/find_album_list",
+    method: "post",
+    data: data,
+  })
+}
+
+/** "获取相册下的照片列表" */
+export function findPhotoListApi(data?: PhotoQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/album/find_photo_list",
+    method: "post",
+    data: data,
+  })
+}
+
+/** "获取相册" */
+export function getAlbumApi(data?: IdReq): Promise<IApiResponse<Album>> {
+  return request({
+    url: "/api/v1/album/get_album",
+    method: "post",
+    data: data,
+  })
+}

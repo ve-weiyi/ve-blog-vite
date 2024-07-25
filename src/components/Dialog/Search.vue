@@ -24,10 +24,10 @@
         <li v-for="article in articleList" :key="article.id" class="search-result">
           <!-- 文章标题 -->
           <router-link class="search-title" :to="`/article/${article.id}`">
-            <span @click="dialogVisible = false" v-html="article.articleTitle"></span>
+            <span @click="dialogVisible = false" v-html="article.article_title"></span>
           </router-link>
           <!-- 文章内容 -->
-          <p class="search-content" v-html="article.articleContent"></p>
+          <p class="search-content" v-html="article.article_content"></p>
         </li>
       </ul>
       <!-- 搜索结果不存在提示 -->
@@ -39,24 +39,34 @@
 </template>
 
 <script setup lang="ts">
-import { searchArticle } from "@/api/article";
-import { ArticleSearch } from "@/api/article/types";
+import { findArticleHomeListApi } from "@/api/article";
 import { useAppStore } from "@/store";
 import { debouncedWatch } from "@vueuse/core";
+import { ArticleHome } from "@/api/types";
 
-const app = useAppStore();
+const appStore = useAppStore();
 const dialogVisible = computed({
-  get: () => app.searchFlag,
-  set: (value) => (app.searchFlag = value),
+  get: () => appStore.searchFlag,
+  set: (value) => (appStore.searchFlag = value),
 });
 const keyword = ref("");
-const articleList = ref<ArticleSearch[]>([]);
+const articleList = ref<ArticleHome[]>([]);
 debouncedWatch(keyword, () => (keyword.value ? handleSearch() : (articleList.value = [])), {
   debounce: 300,
 });
 const handleSearch = () => {
-  searchArticle(keyword.value).then((res) => {
-    articleList.value = res.data;
+  const data: PageQuery = {
+    conditions: [
+      {
+        field: "article_title",
+        value: keyword.value,
+        operator: "like",
+      },
+    ],
+  };
+
+  findArticleHomeListApi(data).then((res) => {
+    articleList.value = res.data.list;
   });
 };
 </script>

@@ -8,46 +8,46 @@
     <!-- 文章缩略图 -->
     <div class="article-cover">
       <router-link :to="`/article/${article.id}`" href="">
-        <img v-lazy="article.articleCover" class="cover" />
+        <img v-lazy="article.article_cover" class="cover" />
       </router-link>
     </div>
     <!-- 文章信息 -->
     <div class="article-info">
       <div class="article-meta">
         <!-- 置顶 -->
-        <span v-if="article.isTop == 1" class="top">
+        <span v-if="article.is_top == 1" class="top">
           <svg-icon icon-class="top" size="0.85rem" style="margin-right: 0.15rem"></svg-icon
           >置顶</span
         >
         <!-- 发表时间 -->
         <span class="meta-item ml-3.75">
           <svg-icon icon-class="calendar" size="0.9rem" style="margin-right: 0.15rem"></svg-icon
-          >{{ formatDate(article.createTime) }}
+          >{{ formatDate(article.created_at) }}
         </span>
         <!-- 文章标签 -->
         <router-link
-          v-for="tag in article.tagVOList"
-          :key="tag.id"
+          v-for="tag in article.tag_name_list"
+          :key="tag"
           class="meta-item ml-3.75"
-          :to="`/tag/${tag.id}`"
+          :to="`/tag/${tag}`"
         >
           <svg-icon icon-class="tag" size="0.9rem" style="margin-right: 0.15rem"></svg-icon>
-          {{ tag.tagName }}
+          {{ tag }}
         </router-link>
       </div>
       <!-- 文章标题 -->
       <h3 class="article-title">
         <router-link :to="`/article/${article.id}`">
-          {{ article.articleTitle }}
+          {{ article.article_title }}
         </router-link>
       </h3>
       <!-- 文章内容 -->
-      <div class="article-content">{{ article.articleDesc }}</div>
+      <div class="article-content">{{ article.article_content }}</div>
       <!-- 文章分类 -->
       <div class="article-category">
         <svg-icon icon-class="qizhi" size="0.85rem" style="margin-right: 0.15rem"></svg-icon>
-        <router-link :to="`/category/${article.category.id}`"
-          >{{ article.category.categoryName }}
+        <router-link :to="`/category/${article.category_name}`"
+          >{{ article.category_name }}
         </router-link>
       </div>
       <!-- 阅读按钮 -->
@@ -56,37 +56,37 @@
   </div>
   <Pagination
     v-if="count > 5"
-    v-model:current="queryParams.current"
+    v-model:current="queryParams.page"
     :total="Math.ceil(count / 5)"
   ></Pagination>
 </template>
 
 <script setup lang="ts">
-import { getArticleListApi } from "@/api/article";
-import { ArticleHomeDTO } from "@/api/types";
-import { PageQuery } from "@/model";
+import { findArticleHomeListApi } from "@/api/article";
+import { ArticleHome } from "@/api/types";
+
 import { formatDate } from "@/utils/date";
 
 const data = reactive({
   count: 0,
   queryParams: {
-    current: 1,
-    size: 5,
+    page: 1,
+    page_size: 5,
   } as PageQuery,
-  articleList: [] as ArticleHomeDTO[],
+  articleList: [] as ArticleHome[],
 });
 const { count, queryParams, articleList } = toRefs(data);
 watch(
-  () => queryParams.value.current,
+  () => queryParams.value.page,
   () => {
-    getArticleListApi(queryParams.value).then((res) => {
-      articleList.value = res.data.recordList;
-      count.value = res.data.count;
+    findArticleHomeListApi(queryParams.value).then((res) => {
+      articleList.value = res.data.list;
+      count.value = res.data.total;
     });
   }
 );
 onMounted(() => {
-  getArticleListApi(queryParams.value).then((res) => {
+  findArticleHomeListApi(queryParams.value).then((res) => {
     articleList.value = res.data.list;
     count.value = res.data.total;
   });

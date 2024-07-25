@@ -1,11 +1,7 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">相册</h1>
-    <img
-      class="page-cover"
-      src="https://static.ttkwsd.top/config/0639b8855aab4dcbb827a9884e8ec57d.jpg"
-      alt=""
-    />
+    <img class="page-cover" :src="cover" alt="" />
     <!-- 波浪 -->
     <Waves></Waves>
   </div>
@@ -13,10 +9,10 @@
     <div class="page-container">
       <div class="album-container">
         <div v-for="album in albumList" :key="album.id" class="album-item">
-          <img v-lazy="album.albumCover" class="album-cover" />
+          <img v-lazy="album.album_cover" class="album-cover" />
           <router-link :to="`/album/${album.id}`" class="album-info">
-            <div class="album-name">{{ album.albumName }}</div>
-            <div class="album-desc">{{ album.albumDesc }}</div>
+            <div class="album-name">{{ album.album_name }}</div>
+            <div class="album-desc">{{ album.album_desc }}</div>
           </router-link>
         </div>
       </div>
@@ -25,13 +21,17 @@
 </template>
 
 <script setup lang="ts">
-import { getAlbumList } from "@/api/album";
-import { Album } from "@/api/album/types";
+import { findAlbumListApi } from "@/api/album";
+import { Album } from "@/api/types";
+import { useBlogStore } from "@/store";
 
+const blogStore = useBlogStore();
+
+const cover = blogStore.getCover("about");
 const albumList = ref<Album[]>([]);
 onMounted(() => {
-  getAlbumList().then((res) => {
-    albumList.value = res.data;
+  findAlbumListApi().then((res) => {
+    albumList.value = res.data.list;
   });
 });
 </script>

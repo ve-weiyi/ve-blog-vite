@@ -22,26 +22,25 @@ export interface Album {
   album_cover?: string; // 相册封面
 }
 
-export interface AlbumDetails {
-  album_name?: string; // 相册名
-  photo_list?: Photo[]; // 照片列表
-}
-
 export interface ArticleClassifyReq {
+  page?: number; // 页码
+  page_size?: number; // 每页数量
   classify_name?: string; // 分类名
 }
 
-export interface ArticleClassifyResp {
-  article_list?: ArticlePreviewDTO[]; // 文章列表
-  condition_name?: string; // 条件名
+export interface ArticleDeatils extends ArticleHome {
+  last_article?: ArticlePreview; // 上一篇文章
+  next_article?: ArticlePreview; // 下一篇文章
+  recommend_article_list?: ArticlePreview[]; // 推荐文章列表
+  newest_article_list?: ArticlePreview[]; // 最新文章列表
 }
 
-export interface ArticleHomeDTO {
+export interface ArticleHome {
   id?: number; // 文章ID
   article_cover?: string; // 文章缩略图
   article_title?: string; // 标题
   article_content?: string; // 内容
-  type?: number; // 文章类型
+  article_type?: number; // 文章类型
   original_url?: string; // 原文链接
   is_top?: number; // 是否置顶
   status?: number; // 状态值 1 公开 2 私密 3 评论可见
@@ -53,33 +52,16 @@ export interface ArticleHomeDTO {
   views_count?: number; // 浏览量
 }
 
-export interface ArticlePreDeleteReq {
-  id?: number; // 文章ID
-  is_delete?: number; // 是否删除
-}
-
-export interface ArticlePreviewDTO {
+export interface ArticlePreview {
   id?: number; // 文章ID
   article_cover?: string; // 文章缩略图
   article_title?: string; // 标题
   created_at?: number; // 创建时间
 }
 
-export interface ArticleRecommendResp extends ArticleHomeDTO {
-  last_article?: ArticlePreviewDTO; // 上一篇文章
-  next_article?: ArticlePreviewDTO; // 下一篇文章
-  recommend_article_list?: ArticlePreviewDTO[]; // 推荐文章列表
-  newest_article_list?: ArticlePreviewDTO[]; // 最新文章列表
-}
-
 export interface ArticleStatisticsDTO {
   day?: string; // 日期
   count?: number; // 数量
-}
-
-export interface ArticleTopReq {
-  id?: number; // 文章ID
-  is_top?: number; // 是否置顶
 }
 
 export interface ArticleViewRankDTO {
@@ -92,6 +74,11 @@ export interface BatchResp {
   success_count?: number; 
 }
 
+export interface BindUserEmailReq {
+  email?: string; // 邮箱
+  verify_code?: string; // 验证码
+}
+
 export interface BlogHomeInfo {
   article_count?: number; // 文章数量
   category_count?: number; // 分类数量
@@ -101,17 +88,17 @@ export interface BlogHomeInfo {
   page_list?: PageDTO[]; // 页面列表
 }
 
-export interface CategoryDTO {
-  id?: number; 
-  category_name?: string; // 分类名
-}
-
-export interface CategoryDetails {
+export interface Category {
   id?: number; 
   category_name?: string; // 分类名
   article_count?: number; 
   created_at?: number; // 创建时间
   updated_at?: number; // 更新时间
+}
+
+export interface CategoryDTO {
+  id?: number; 
+  category_name?: string; // 分类名
 }
 
 export interface ChatRecord {
@@ -132,34 +119,19 @@ export interface ChatSocketMsg {
   content?: string; // 消息内容
 }
 
-export interface CommentBackDTO {
-  id?: number; 
-  type?: number; 
-  topic_title?: string; 
-  nickname?: string; // 用户昵称
-  avatar?: string; // 用户头像
-  comment_content?: string; 
-  is_review?: number; 
-  created_at?: number; 
-}
-
-export interface CommentDTO {
+export interface Comment {
   id?: number; // 评论id
   topic_id?: number; // 主题id
   parent_id?: number; // 父评论id
   session_id?: number; // 会话id
   user_id?: number; // 用户id
-  nickname?: string; // 用户昵称
-  avatar?: string; // 用户头像
-  website?: string; // 用户网站
   reply_user_id?: number; // 被回复用户id
-  reply_nickname?: string; // 被回复用户昵称
-  reply_avatar?: string; // 被回复用户头像
-  reply_website?: string; // 被回复用户网站
   comment_content?: string; // 评论内容
   type?: number; // 评论类型 1.文章 2.友链 3.说说
   created_at?: number; // 评论时间
   like_count?: number; // 点赞数
+  user?: CommentUserInfo; // 评论用户
+  reply_user?: CommentUserInfo; // 被回复评论用户
   reply_count?: number; // 回复量
   comment_reply_list?: CommentReply[]; // 评论回复列表
 }
@@ -188,17 +160,13 @@ export interface CommentReply {
   parent_id?: number; // 父评论id
   session_id?: number; // 会话id
   user_id?: number; // 用户id
-  nickname?: string; // 用户昵称
-  avatar?: string; // 用户头像
-  website?: string; // 用户网站
   reply_user_id?: number; // 被回复用户id
-  reply_nickname?: string; // 被回复用户昵称
-  reply_avatar?: string; // 被回复用户头像
-  reply_website?: string; // 被回复用户网站
   comment_content?: string; // 评论内容
   type?: number; // 评论类型 1.文章 2.友链 3.说说
   created_at?: number; // 评论时间
   like_count?: number; // 点赞数
+  user?: CommentUserInfo; // 评论用户
+  reply_user?: CommentUserInfo; // 被回复评论用户
 }
 
 export interface CommentUserInfo {
@@ -214,7 +182,7 @@ export interface EmptyReq {
 export interface EmptyResp {
 }
 
-export interface FriendLink {
+export interface Friend {
   id?: number; // id
   link_name?: string; // 链接名
   link_avatar?: string; // 链接头像
@@ -235,7 +203,7 @@ export interface IdsReq {
 export interface LoginReq {
   username?: string; 
   password?: string; 
-  code?: string; 
+  verify_code?: string; // 验证码
 }
 
 export interface LoginResp {
@@ -250,6 +218,15 @@ export interface OauthLoginReq {
 
 export interface OauthLoginUrlResp {
   url?: string; // 授权地址
+}
+
+export interface Page {
+  id?: number; // 页面id
+  page_name?: string; // 页面名
+  page_label?: string; // 页面标签
+  page_cover?: string; // 页面封面
+  created_at?: number; // 创建时间
+  updated_at?: number; // 更新时间
 }
 
 export interface PageCondition {
@@ -311,6 +288,12 @@ export interface PingResp {
   rpc_status?: string[]; 
 }
 
+export interface RegisterReq {
+  username?: string; 
+  password?: string; 
+  verify_code?: string; // 验证码
+}
+
 export interface Remark {
   id?: number; // 主键id
   nickname?: string; // 昵称
@@ -327,7 +310,7 @@ export interface Remark {
 export interface ResetPasswordReq {
   username?: string; 
   password?: string; 
-  code?: string; 
+  verify_code?: string; // 验证码
 }
 
 export interface Response {
@@ -347,12 +330,7 @@ export interface RestHeader {
   header_terminal_id?: string; 
 }
 
-export interface TagDTO {
-  id?: number; // 标签ID
-  tag_name?: string; // 标签名
-}
-
-export interface TagDetails {
+export interface Tag {
   id?: number; // 标签ID
   tag_name?: string; // 标签名
   article_count?: number; // 文章数量
@@ -360,7 +338,12 @@ export interface TagDetails {
   updated_at?: number; // 更新时间
 }
 
-export interface TalkDetails {
+export interface TagDTO {
+  id?: number; // 标签ID
+  tag_name?: string; // 标签名
+}
+
+export interface Talk {
   id?: number; // 说说ID
   user_id?: number; // 用户ID
   nickname?: string; // 用户昵称
@@ -390,6 +373,15 @@ export interface UniqueViewDTO {
   count?: number; // 数量
 }
 
+export interface UpdateUserAvatarReq {
+  avatar?: string; // 头像
+}
+
+export interface UpdateUserInfoReq extends UserInfoExt {
+  nickname?: string; // 昵称
+  avatar?: string; // 头像
+}
+
 export interface UploadFileReq {
   label?: string; 
   file?: any; // 文件
@@ -414,15 +406,8 @@ export interface UserEmailReq {
 }
 
 export interface UserInfoExt {
-  email?: string; // 用户邮箱
-  phone?: string; // 用户手机号
   intro?: string; // 简介
   website?: string; // 网站
-}
-
-export interface UserInfoReq extends UserInfoExt {
-  nickname?: string; // 昵称
-  avatar?: string; // 头像
 }
 
 export interface UserInfoResp extends UserInfoExt {
@@ -430,6 +415,14 @@ export interface UserInfoResp extends UserInfoExt {
   username?: string; // 用户名
   nickname?: string; // 用户昵称
   avatar?: string; // 用户头像
+  email?: string; // 用户邮箱
+  phone?: string; // 用户手机号
+}
+
+export interface UserLikeResp {
+  article_like_set?: number[]; 
+  comment_like_set?: number[]; 
+  talk_like_set?: number[]; 
 }
 
 export interface WebsiteConfig {

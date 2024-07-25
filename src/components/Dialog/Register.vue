@@ -7,9 +7,10 @@
     transform-origin="center"
     :block-scroll="false"
   >
+    <div class="login-title">注册账号</div>
     <n-input v-model:value="registerForm.username" class="mt-11" placeholder="邮箱号"></n-input>
     <n-input-group class="mt-11">
-      <n-input v-model:value="registerForm.code" placeholder="验证码"></n-input>
+      <n-input v-model:value="registerForm.verify_code" placeholder="验证码"></n-input>
       <n-button color="#49b1f5" :disabled="flag" @click="sendCode">
         {{ timer == 0 ? "发送" : `${timer}s` }}
       </n-button>
@@ -39,15 +40,12 @@
 </template>
 
 <script setup lang="ts">
-import { getCode, login, register } from "@/api/login";
-import { LoginForm } from "@/api/login/types";
-import { UserForm } from "@/model";
-import { useAppStore, useUserStore } from "@/store";
-import { setToken } from "@/utils/token";
+import { useAppStore } from "@/store";
 import { useIntervalFn } from "@vueuse/core";
+import { registerApi, sendRegisterEmailApi } from "@/api/auth";
+import { RegisterReq } from "@/api/types";
 
-const app = useAppStore();
-const user = useUserStore();
+const appStore = useAppStore();
 const registerRef = ref();
 const data = reactive({
   timer: 0,
@@ -56,8 +54,8 @@ const data = reactive({
   registerForm: {
     username: "",
     password: "",
-    code: "",
-  } as UserForm,
+    verify_code: "",
+  } as RegisterReq,
 });
 const { timer, flag, loading, registerForm } = toRefs(data);
 const { pause, resume } = useIntervalFn(
@@ -85,14 +83,12 @@ const sendCode = () => {
     return;
   }
   start(60);
-  getCode(registerForm.value.username).then((res) => {
-    if (data.flag) {
-      window.$message?.success("发送成功");
-    }
+  sendRegisterEmailApi(registerForm.value).then((res) => {
+    window.$message?.success("发送成功");
   });
 };
 const handleRegister = () => {
-  if (registerForm.value.code.trim().length != 6) {
+  if (registerForm.value.verify_code.trim().length != 6) {
     window.$message?.warning("请输入6位验证码");
     return;
   }
@@ -101,36 +97,20 @@ const handleRegister = () => {
     return;
   }
   loading.value = true;
-  register(registerForm.value).then((res) => {
-    if (data.flag) {
-      let loginForm: LoginForm = {
-        username: registerForm.value.username,
-        password: registerForm.value.password,
-      };
-      login(loginForm).then((res) => {
-        if (data.flag) {
-          registerForm.value = {
-            username: "",
-            password: "",
-            code: "",
-          };
-          setToken(res.data);
-          user.GetUserInfo();
-          window.$message?.success("登录成功");
-          app.setRegisterFlag(false);
-        }
-      });
-    }
+  registerApi(registerForm.value).then((res) => {
+    window.$message?.success("注册成功");
+    appStore.setRegisterFlag(false);
+    appStore.setLoginFlag(true);
     loading.value = false;
   });
 };
 const dialogVisible = computed({
-  get: () => app.registerFlag,
-  set: (value) => (app.registerFlag = value),
+  get: () => appStore.registerFlag,
+  set: (value) => (appStore.registerFlag = value),
 });
 const handleLogin = () => {
-  app.setRegisterFlag(false);
-  app.setLoginFlag(true);
+  appStore.setRegisterFlag(false);
+  appStore.setLoginFlag(true);
 };
 </script>
 

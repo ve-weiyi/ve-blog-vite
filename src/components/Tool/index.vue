@@ -17,7 +17,7 @@
 import { useAppStore } from "@/store";
 import { useEventListener, useScroll } from "@vueuse/core";
 
-const app = useAppStore();
+const appStore = useAppStore();
 const route = useRoute();
 const process = ref(0);
 const show = reactive({
@@ -36,7 +36,7 @@ useEventListener(document, "scroll", () => {
   );
 });
 const handleSide = () => {
-  app.sideFlag = !app.sideFlag;
+  appStore.sideFlag = !appStore.sideFlag;
 };
 const handleToComment = () => {
   document.getElementById("reply-wrap")?.scrollIntoView({

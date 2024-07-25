@@ -17,8 +17,8 @@
 <script setup lang="ts">
 import { useBlogStore } from "@/store";
 
-const blog = useBlogStore();
-const socialList = blog.blogInfo.siteConfig.socialList;
+const blogStore = useBlogStore();
+const socialList = blogStore.blogInfo.website_config.social_login_list;
 const isShowSocial = computed(() => (social: string) => {
   if (socialList) {
     return socialList.includes(social);
@@ -27,19 +27,19 @@ const isShowSocial = computed(() => (social: string) => {
 const showSocialList = [
   {
     type: "github",
-    href: blog.blogInfo.siteConfig.github,
+    href: blogStore.blogInfo.website_config.github,
   },
   {
     type: "gitee",
-    href: blog.blogInfo.siteConfig.gitee,
+    href: blogStore.blogInfo.website_config.gitee,
   },
   {
     type: "bilibili",
-    href: blog.blogInfo.siteConfig.bilibili,
+    href: blogStore.blogInfo.website_config.bilibili,
   },
   {
     type: "qq",
-    href: "http://wpa.qq.com/msgrd?v=3&uin=" + blog.blogInfo.siteConfig.qq + "&site=qq&menu=yes",
+    href: "http://wpa.qq.com/msgrd?v=3&uin=" + blogStore.blogInfo.website_config.qq + "&site=qq&menu=yes",
     color: "#00a1d6",
   },
 ];

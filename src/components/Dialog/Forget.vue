@@ -7,9 +7,10 @@
     transform-origin="center"
     :block-scroll="false"
   >
+    <div class="login-title">忘记密码</div>
     <n-input v-model:value="forgetForm.username" class="mt-11" placeholder="邮箱号"></n-input>
     <n-input-group class="mt-11">
-      <n-input v-model:value="forgetForm.code" placeholder="验证码" />
+      <n-input v-model:value="forgetForm.verify_code" placeholder="验证码" />
       <n-button color="#49b1f5" :disabled="flag" @click="sendCode">
         {{ timer == 0 ? "发送" : `${timer}s` }}
       </n-button>
@@ -38,13 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { getCode } from "@/api/login";
-import { updateUserPassword } from "@/api/user";
-import { UserForm } from "@/model";
 import { useAppStore } from "@/store";
 import { useIntervalFn } from "@vueuse/core";
+import { resetPasswordApi, sendResetEmailApi } from "@/api/auth";
+import { ResetPasswordReq } from "@/api/types";
 
-const app = useAppStore();
+const appStore = useAppStore();
 const data = reactive({
   timer: 0,
   flag: false,
@@ -52,8 +52,8 @@ const data = reactive({
   forgetForm: {
     username: "",
     password: "",
-    code: "",
-  } as UserForm,
+    verify_code: "",
+  } as ResetPasswordReq,
 });
 const { timer, flag, loading, forgetForm } = toRefs(data);
 const { pause, resume } = useIntervalFn(
@@ -81,14 +81,12 @@ const sendCode = () => {
     return;
   }
   start(60);
-  getCode(forgetForm.value.username).then((res) => {
-    if (data.flag) {
-      window.$message?.success("发送成功");
-    }
+  sendResetEmailApi(forgetForm.value).then((res) => {
+    window.$message?.success("发送成功");
   });
 };
 const handleForget = () => {
-  if (forgetForm.value.code.trim().length != 6) {
+  if (forgetForm.value.verify_code.trim().length != 6) {
     window.$message?.warning("请输入6位验证码");
     return;
   }
@@ -97,26 +95,25 @@ const handleForget = () => {
     return;
   }
   loading.value = true;
-  updateUserPassword(forgetForm.value).then((res) => {
-    if (data.flag) {
-      window.$message?.success("修改成功");
-      forgetForm.value = {
-        username: "",
-        password: "",
-        code: "",
-      };
-      app.setForgetFlag(false);
-    }
+  resetPasswordApi(forgetForm.value).then((res) => {
+    window.$message?.success("修改成功");
+    forgetForm.value = {
+      username: "",
+      password: "",
+      verify_code: "",
+    };
+    appStore.setForgetFlag(false);
+
     loading.value = false;
   });
 };
 const dialogVisible = computed({
-  get: () => app.forgetFlag,
-  set: (value) => (app.forgetFlag = value),
+  get: () => appStore.forgetFlag,
+  set: (value) => (appStore.forgetFlag = value),
 });
 const handleLogin = () => {
-  app.setForgetFlag(false);
-  app.setLoginFlag(true);
+  appStore.setForgetFlag(false);
+  appStore.setLoginFlag(true);
 };
 </script>
 

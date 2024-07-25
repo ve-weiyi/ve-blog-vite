@@ -1,16 +1,16 @@
-import type { PluginOption } from "vite"
-import vue from "@vitejs/plugin-vue"
-import vueJsx from "@vitejs/plugin-vue-jsx"
-import unocss from "@unocss/vite"
-import compress from "./compress"
-import vitePlugin from "./viteplugin"
-import unPlugin from "./unplugin"
+import type { PluginOption } from "vite";
+import vue from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import unocss from "@unocss/vite";
+import compress from "./compress";
+import vitePlugin from "./viteplugin";
+import unPlugin from "./unplugin";
 
 /**
  * vite插件
  * @param env - 环境变量配置
  */
-export function setupVitePlugins(env): (PluginOption | PluginOption[])[] {
+export function setupVitePlugins(env: Env.ImportMeta): (PluginOption | PluginOption[])[] {
   const plugins = [
     /**
      * 支持 `.vue` 文件的解析
@@ -24,11 +24,11 @@ export function setupVitePlugins(env): (PluginOption | PluginOption[])[] {
     ...vitePlugin(env),
     ...unPlugin(env),
     unocss(),
-  ]
+  ];
 
   if (env.VITE_COMPRESS === "Y") {
-    plugins.push(compress(env))
+    plugins.push(compress(env));
   }
 
-  return plugins
+  return plugins;
 }

@@ -32,7 +32,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 12vh;
+  height: 9vh;
   min-height: 3.125rem;
   max-height: 9.375rem;
   z-index: 1;

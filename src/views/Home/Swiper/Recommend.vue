@@ -11,29 +11,29 @@
     :pagination="{ clickable: true }"
   >
     <swiper-slide v-for="article in articleList" :key="article.id">
-      <div class="slide-content" :style="articleCover(article.articleCover)">
+      <div class="slide-content" :style="articleCover(article.article_cover)">
         <router-link :to="`/article/${article.id}`" class="slide-title"
-          >{{ article.articleTitle }}
+          >{{ article.article_title }}
         </router-link>
-        <span class="slide-time">发布时间：{{ formatDate(article.createTime) }}</span>
+        <span class="slide-time">发布时间：{{ formatDate(article.created_at) }}</span>
       </div>
     </swiper-slide>
   </swiper>
 </template>
 
 <script setup lang="ts">
-import { getArticleRecommendApi } from "@/api/article";
-import { ArticleRecommendResp } from "@/api/types";
+import { findArticleRecommendApi } from "@/api/article";
+import { ArticlePreview } from "@/api/types";
 import { formatDate } from "@/utils/date";
 import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 // 自定义模块
 const modules = [Pagination, Navigation, Mousewheel, Autoplay];
-const articleList = ref<ArticleRecommendResp[]>([]);
+const articleList = ref<ArticlePreview[]>([]);
 const articleCover = computed(() => (cover: string) => "background:url(" + cover + ")");
 onMounted(() => {
-  getArticleRecommendApi().then((res) => {
-    articleList.value = res.data;
+  findArticleRecommendApi().then((res) => {
+    articleList.value = res.data.list;
   });
 });
 </script>

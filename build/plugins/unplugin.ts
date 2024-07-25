@@ -1,17 +1,17 @@
-import path from "node:path"
-import AutoImport from "unplugin-auto-import/vite"
-import Components from "unplugin-vue-components/vite"
-import { FileSystemIconLoader } from "unplugin-icons/loaders"
-import IconsResolver from "unplugin-icons/resolver"
-import Icons from "unplugin-icons/vite"
-import { NaiveUiResolver } from "unplugin-vue-components/resolvers"
+import path from "node:path";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
+import IconsResolver from "unplugin-icons/resolver";
+import Icons from "unplugin-icons/vite";
+import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 
 export default function unPlugin(viteEnv: Env.ImportMeta) {
-  const { VITE_ICON_PREFIX, VITE_ICON_LOCAL_PREFIX } = viteEnv
+  const { VITE_ICON_PREFIX, VITE_ICON_LOCAL_PREFIX } = viteEnv;
 
-  const localIconPath = path.join(process.cwd(), "src/assets/icons")
+  const localIconPath = path.join(process.cwd(), "src/assets/icons");
   /** 本地svg图标集合名称 */
-  const collectionName = VITE_ICON_LOCAL_PREFIX.replace(`${VITE_ICON_PREFIX}-`, "")
+  const collectionName = VITE_ICON_LOCAL_PREFIX.replace(`${VITE_ICON_PREFIX}-`, "");
 
   return [
     Icons({
@@ -36,19 +36,19 @@ export default function unPlugin(viteEnv: Env.ImportMeta) {
      */
     AutoImport({
       imports: ["vue", "vue-router", "pinia"],
-      dts: "src/types/auto-imports.d.ts"
+      dts: "src/types/auto-imports.d.ts",
     }),
     /**
      * 自动导入组件，不用每次都 import
      * @see https://github.com/antfu/unplugin-vue-components#configuration
      */
     Components({
-      dirs: ["src/components"],
-      directoryAsNamespace: true,
-      collapseSamePrefixes: true,
-      globalNamespaces: [],
-      extensions: ["vue", "ts", "tsx"],
-      deep: true,
+      // dirs: ["src/components"],
+      // directoryAsNamespace: true,
+      // collapseSamePrefixes: true,
+      // globalNamespaces: [],
+      // extensions: ["vue", "ts", "tsx"],
+      // deep: true,
       dts: "src/types/components.d.ts",
       resolvers: [
         NaiveUiResolver(),
@@ -58,5 +58,5 @@ export default function unPlugin(viteEnv: Env.ImportMeta) {
         }),
       ],
     }),
-  ]
+  ];
 }

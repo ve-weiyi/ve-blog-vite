@@ -1,48 +1,62 @@
 import request from "@/utils/request"
-import { ArticleRecommendResp, EmptyResp, PageQuery, PageResp, ArticleClassifyReq, ArticleClassifyResp, IdReq } from "./types"
+import type { EmptyResp, PageQuery, PageResp, ArticleClassifyReq, IdReq, ArticleDeatils } from "./types"
 
 /** "文章归档(时间轴)" */
-export function getArticleArchivesApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+export function findArticleArchivesApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/article/get_article_archives",
     method: "post",
     data: data,
   })
 }
+
 /** "通过分类获取文章列表" */
-export function getArticleClassifyCategoryApi(data?: ArticleClassifyReq): Promise<IApiResponseData<ArticleClassifyResp>> {
+export function findArticleClassifyCategoryApi(data?: ArticleClassifyReq): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/article/get_article_classify_category",
     method: "post",
     data: data,
   })
 }
+
 /** "通过标签获取文章列表" */
-export function getArticleClassifyTagApi(data?: ArticleClassifyReq): Promise<IApiResponseData<ArticleClassifyResp>> {
+export function findArticleClassifyTagApi(data?: ArticleClassifyReq): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/article/get_article_classify_tag",
     method: "post",
     data: data,
   })
 }
-/** "获取首页文章列表" */
-export function getArticleListApi(data?: PageQuery): Promise<IApiResponseData<PageResp>> {
+
+/** "获取文章详情" */
+export function getArticleDetailsApi(data?: IdReq): Promise<IApiResponse<ArticleDeatils>> {
   return request({
-    url: "/api/v1/article/get_article_list",
+    url: "/api/v1/article/get_article_details",
     method: "post",
     data: data,
   })
 }
-/** "文章相关推荐" */
-export function getArticleRecommendApi(data?: IdReq): Promise<IApiResponseData<ArticleRecommendResp>> {
+
+/** "获取首页文章列表" */
+export function findArticleHomeListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/article/get_article_home_list",
+    method: "post",
+    data: data,
+  })
+}
+
+/** "获取首页推荐文章列表" */
+export function findArticleRecommendApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/article/get_article_recommend",
     method: "post",
     data: data,
   })
 }
+
 /** "点赞文章" */
-export function likeArticleApi(data?: IdReq): Promise<IApiResponseData<EmptyResp>> {
+export function likeArticleApi(data?: IdReq): Promise<IApiResponse<EmptyResp>> {
   return request({
     url: "/api/v1/article/like_article",
     method: "post",

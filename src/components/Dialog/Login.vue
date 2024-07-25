@@ -7,11 +7,12 @@
     transform-origin="center"
     :block-scroll="false"
   >
+    <div class="login-title">登录账号</div>
     <n-input
       v-model:value="loginForm.username"
       class="mt-11"
       placeholder="邮箱号"
-      @keyup.enter="handlelogin"
+      @keyup.enter="handleLogin"
     ></n-input>
     <n-input
       v-model:value="loginForm.password"
@@ -19,14 +20,14 @@
       type="password"
       show-password-on="click"
       placeholder="密码"
-      @keyup.enter="handlelogin"
+      @keyup.enter="handleLogin"
     ></n-input>
     <n-button
       class="mt-11"
       color="#ed6ea0"
       style="width: 100%"
       :loading="loading"
-      @click="handlelogin"
+      @click="handleLogin"
     >
       登 录
     </n-button>
@@ -43,21 +44,21 @@
           icon-class="qq"
           size="2rem"
           color="#00aaee"
-          @click="qqLogin"
+          @click="oauthLogin('qq')"
         ></svg-icon>
         <svg-icon
           v-if="showLogin('gitee')"
           class="icon"
           icon-class="gitee"
           size="2rem"
-          @click="giteeLogin"
+          @click="oauthLogin('gitee')"
         ></svg-icon>
         <svg-icon
           v-if="showLogin('github')"
           class="icon"
           icon-class="github"
           size="2rem"
-          @click="githubLogin"
+          @click="oauthLogin('github')"
         ></svg-icon>
       </div>
     </div>
@@ -65,75 +66,51 @@
 </template>
 
 <script setup lang="ts">
-import { login } from "@/api/login";
-import { LoginForm } from "@/api/login/types";
-import config from "@/assets/js/config";
 import { useAppStore, useBlogStore, useUserStore } from "@/store";
-import { setToken } from "@/utils/token";
+import { loginApi, oauthAuthorizeUrlApi } from "@/api/auth";
+import { getUserInfoApi } from "@/api/user";
+import { LoginReq } from "@/api/types";
 
-const app = useAppStore();
-const user = useUserStore();
-const blog = useBlogStore();
+const appStore = useAppStore();
+const userStore = useUserStore();
+const blogStore = useBlogStore();
 const route = useRoute();
 const loading = ref(false);
-const loginForm = ref<LoginForm>({
+const loginForm = ref<LoginReq>({
   username: "",
   password: "",
 });
 const dialogVisible = computed({
-  get: () => app.loginFlag,
-  set: (value) => (app.loginFlag = value),
+  get: () => appStore.loginFlag,
+  set: (value) => (appStore.loginFlag = value),
 });
 const showLogin = computed(
-  () => (type: string) => blog.blogInfo.siteConfig.loginList.includes(type)
+  () => (type: string) => blogStore.blogInfo.website_config.social_login_list.includes(type)
 );
 const handleRegister = () => {
-  app.setLoginFlag(false);
-  app.setRegisterFlag(true);
+  appStore.setLoginFlag(false);
+  appStore.setRegisterFlag(true);
 };
 const handleForget = () => {
-  app.setLoginFlag(false);
-  app.setForgetFlag(true);
+  appStore.setLoginFlag(false);
+  appStore.setForgetFlag(true);
 };
-const qqLogin = () => {
-  //保留当前路径
-  user.savePath(route.path);
-  app.setLoginFlag(false);
-  window.open(
-    "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=" +
-      config.QQ_APP_ID +
-      "&redirect_uri=" +
-      config.QQ_REDIRECT_URL +
-      "&scope=scope&display=display",
-    "_self"
-  );
+
+const oauthLogin = (platform: string) => {
+  oauthAuthorizeUrlApi({
+    platform: platform,
+    state: route.path,
+  }).then((res) => {
+    appStore.setLoginFlag(false);
+    console.log(res.data.url);
+    // 新启页面跳转
+    // window.open(res.data.url);
+
+    // 当前页面跳转
+    window.location.href = res.data.url;
+  });
 };
-const giteeLogin = () => {
-  //保留当前路径
-  user.savePath(route.path);
-  app.setLoginFlag(false);
-  window.open(
-    "https://gitee.com/oauth/authorize?client_id=" +
-      config.GITEE_APP_ID +
-      "&response_type=code&redirect_uri=" +
-      config.GITEE_REDIRECT_URL,
-    "_self"
-  );
-};
-const githubLogin = () => {
-  //保留当前路径
-  user.savePath(route.path);
-  app.setLoginFlag(false);
-  window.open(
-    "https://github.com/login/oauth/authorize?client_id=" +
-      config.GITHUB_APP_ID +
-      "&redirect_uri=" +
-      config.GITHUB_REDIRECT_URL +
-      "&scope=user",
-    "_self"
-  );
-};
-const handlelogin = () => {
+const handleLogin = () => {
   let reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
   if (!reg.test(loginForm.value.username)) {
     window.$message?.warning("邮箱格式不正确");
@@ -144,18 +121,18 @@ const handlelogin = () => {
     return;
   }
   loading.value = true;
-  login(loginForm.value).then((res) => {
-    if (data.flag) {
-      setToken(res.data);
-      user.GetUserInfo();
-      window.$message?.success("登录成功");
-      loginForm.value = {
-        username: "",
-        password: "",
-      };
-      app.setLoginFlag(false);
-    }
+  loginApi(loginForm.value).then((res) => {
+    userStore.setLogin(res.data.token);
+    window.$message?.success("登录成功");
+    loginForm.value = {
+      username: "",
+      password: "",
+    };
+    appStore.setLoginFlag(false);
     loading.value = false;
+    getUserInfoApi().then((res) => {
+      userStore.updateUserInfo(res.data);
+    });
   });
 };
 </script>
