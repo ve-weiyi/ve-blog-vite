@@ -241,7 +241,7 @@ import { useRoute } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
 import { formatDate } from "@/utils/formatDate.ts"
 import { markdownToHtml } from "@/utils/markdown"
-import { findArticleRecommendApi, likeArticleApi } from "@/api/article"
+import { getArticleRecommendApi, likeArticleApi } from "@/api/article"
 import { ArticleRecommendResp } from "@/api/types"
 
 const config = {
@@ -268,7 +268,7 @@ let commentCount = 0
 const articleCover = ref<string>("")
 const getArticle = () => {
   // 查询文章
-  findArticleRecommendApi({
+  getArticleRecommendApi({
     id: parseInt(articleId, 10),
   }).then((res) => {
     articleDetail.value = res.data

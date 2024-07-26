@@ -8,13 +8,8 @@
     <v-card class="blog-container">
       <div class="photo-wrap">
         <photo-provider>
-          <photo-consumer
-            v-for="(item, index) of photoList"
-            :key="index"
-            :intro="item.photo_desc"
-            :src="item.photo_src"
-          >
-            <img class="photo" :src="item.photo_src" />
+          <photo-consumer v-for="(item, index) of photoList" :key="index" :src="item.photo_url">
+            <img class="photo" :src="item.photo_url" />
           </photo-consumer>
         </photo-provider>
       </div>
@@ -25,7 +20,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findPhotoListApi } from "@/api/photo"
+import { getPhotoListApi } from "@/api/album"
 import { Photo } from "@/api/types"
 
 // 获取存储的博客信息
@@ -43,7 +38,7 @@ onMounted(() => {
 })
 
 function listPhoto() {
-  findPhotoListApi({}).then((res) => {
+  getPhotoListApi({}).then((res) => {
     photoList.value = res.data.list
   })
 }

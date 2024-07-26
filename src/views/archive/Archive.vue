@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findArticleArchivesApi } from "@/api/article"
+import { getArticleArchivesApi } from "@/api/article"
 import { ArticlePreviewDTO } from "@/api/types"
 import { formatDate } from "@/utils/formatDate.ts"
 
@@ -56,7 +56,7 @@ watch(current, (value) => {
 })
 
 function listArchives(page = current.value) {
-  findArticleArchivesApi({
+  getArticleArchivesApi({
     page: page,
   }).then((res) => {
     archiveList.value = res.data.list

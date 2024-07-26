@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findArticleHomeListApi } from "@/api/article"
+import { getArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
 
 const router = useRouter()
@@ -93,7 +93,7 @@ watch(
           flag: "or",
         },
       ]
-      findArticleHomeListApi({
+      getArticleListApi({
         page: 1,
         page_size: 10,
         sorts: [{ field: "created_at", order: "desc" }],

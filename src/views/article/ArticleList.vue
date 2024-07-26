@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findArticleClassifyCategoryApi, findArticleClassifyTagApi } from "@/api/article"
+import { getArticleClassifyCategoryApi, getArticleClassifyTagApi } from "@/api/article"
 import { useRoute } from "vue-router"
 import { formatDate } from "@/utils/formatDate.ts"
 import { ArticleHomeDTO } from "@/api/types"
@@ -90,7 +90,7 @@ onMounted(() => {
   const path = route.path
   if (path.includes("/categories")) {
     title.value = "分类"
-    findArticleClassifyCategoryApi({
+    getArticleClassifyCategoryApi({
       classify_name: categoryId,
     }).then((res) => {
       if (res.data.condition_name) {
@@ -102,7 +102,7 @@ onMounted(() => {
     })
   } else {
     title.value = "标签"
-    findArticleClassifyTagApi({
+    getArticleClassifyTagApi({
       classify_name: tagId,
     }).then((res) => {
       if (res.data.condition_name) {

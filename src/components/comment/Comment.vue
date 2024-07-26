@@ -182,8 +182,8 @@ import { formatDate } from "@/utils/formatDate.ts"
 import { useRoute } from "vue-router"
 import {
   createCommentApi,
-  findCommentListApi,
-  findCommentReplyListApi,
+  getCommentListApi,
+  getCommentReplyListApi,
   likeCommentApi,
 } from "@/api/comment"
 import { usePagination } from "@/hooks/usePagination"
@@ -226,7 +226,7 @@ const listComments = () => {
     order_by: "created_at",
   }
 
-  findCommentListApi(data).then((res) => {
+  getCommentListApi(data).then((res) => {
     console.log(res)
     if (paginationData.currentPage === 1) {
       commentList.value = res.data.list
@@ -371,7 +371,7 @@ function viewMoreReply(index: number, item: CommentDTO) {
     order_by: "created_at",
   }
 
-  findCommentReplyListApi(data).then((res) => {
+  getCommentReplyListApi(data).then((res) => {
     check.value[index].style.display = "none"
     item.comment_reply_list = res.data.list
     // 超过1页才显示分页
@@ -395,7 +395,7 @@ function changeReplyCurrent(index: number, item: CommentDTO, page: number) {
     order_by: "created_at",
   }
 
-  findCommentReplyListApi(data).then((res) => {
+  getCommentReplyListApi(data).then((res) => {
     check.value[index].style.display = "none"
     item.comment_reply_list = res.data.list
     // 超过1页才显示分页

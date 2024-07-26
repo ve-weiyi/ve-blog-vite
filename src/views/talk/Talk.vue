@@ -77,8 +77,8 @@ import { onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useWebStoreHook } from "@/store/modules/website"
 import { formatDate } from "@/utils/formatDate.ts"
-import { findTalkListApi, likeTalkApi } from "@/api/talk"
-import { TalkDetails } from "@/api/types"
+import { getTalkListApi, likeTalkApi } from "@/api/talk"
+import { Talk } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -86,14 +86,14 @@ const cover = ref(webStore.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
-const talkList = ref<TalkDetails[]>([])
+const talkList = ref<Talk[]>([])
 const count = ref(0)
 const previewList = ref([])
 
 const router = useRouter()
 
 const listTalks = () => {
-  findTalkListApi({}).then((res) => {
+  getTalkListApi({}).then((res) => {
     if (current.value === 1) {
       talkList.value = res.data.list
     } else {

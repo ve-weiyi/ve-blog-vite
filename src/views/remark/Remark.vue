@@ -40,7 +40,7 @@ import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
 import VueDanmaku from "vue3-danmaku"
 import { ElMessage } from "element-plus"
-import { createRemarkApi, findRemarkListApi } from "@/api/remark"
+import { createRemarkApi, getRemarkListApi } from "@/api/remark"
 import { Remark } from "@/api/types"
 
 // 获取存储的博客信息
@@ -87,7 +87,7 @@ const addToList = () => {
 }
 
 const listMessage = () => {
-  findRemarkListApi({}).then((res) => {
+  getRemarkListApi({}).then((res) => {
     barrageList.value = res.data.list
   })
 }

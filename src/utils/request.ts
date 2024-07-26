@@ -14,7 +14,7 @@ function getTimestampInSeconds(): number {
 }
 
 const requests = axios.create({
-  baseURL: "/api",
+  baseURL: "/",
   timeout: 10000,
   // 请求头
   headers: {
@@ -86,7 +86,7 @@ requests.interceptors.response.use(
         })
         break
     }
-    return response
+    return response.data
   },
   (error: AxiosError) => {
     let { message } = error

@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findCategoryListApi } from "@/api/category"
+import { getCategoryListApi } from "@/api/category"
 import { CategoryDetails } from "@/api/types"
 
 // 获取存储的博客信息
@@ -37,7 +37,7 @@ onMounted(() => {
 })
 
 function listCategories() {
-  findCategoryListApi({ page: 1, page_size: 100 }).then((res) => {
+  getCategoryListApi({ page: 1, page_size: 100 }).then((res) => {
     categoryList.value = res.data.list
     count.value = res.data.total
   })

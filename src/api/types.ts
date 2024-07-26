@@ -15,7 +15,16 @@ export interface AdminHomeInfo {
   unique_view_list?: UniqueViewDTO[]; // 每日用户访问量
 }
 
+export interface Album {
+  id?: number; // 主键
+  album_name?: string; // 相册名
+  album_desc?: string; // 相册描述
+  album_cover?: string; // 相册封面
+}
+
 export interface ArticleClassifyReq {
+  page?: number; // 页码
+  page_size?: number; // 每页数量
   classify_name?: string; // 分类名
 }
 
@@ -87,13 +96,6 @@ export interface BlogHomeInfo {
   views_count?: string; // 访问量
   website_config?: WebsiteConfig; // 网站配置
   page_list?: PageDTO[]; // 页面列表
-}
-
-export interface Category {
-  id?: number; // id
-  category_name?: string; // 分类名
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
 }
 
 export interface CategoryDTO {
@@ -227,15 +229,6 @@ export interface IdsReq {
   ids?: number[]; 
 }
 
-export interface LoginHistory {
-  id?: number; 
-  login_type?: string; // 登录类型
-  agent?: string; // 代理
-  ip_address?: string; // ip host
-  ip_source?: string; // ip 源
-  login_time?: string; // 创建时间
-}
-
 export interface LoginReq {
   username?: string; 
   password?: string; 
@@ -244,7 +237,6 @@ export interface LoginReq {
 
 export interface LoginResp {
   token?: Token; 
-  user_info?: UserInfo; 
 }
 
 export interface OauthLoginReq {
@@ -297,25 +289,11 @@ export interface PageSort {
 
 export interface Photo {
   id?: number; // 主键
-  album_id?: number; // 相册id
-  photo_name?: string; // 照片名
-  photo_desc?: string; // 照片描述
-  photo_src?: string; // 照片地址
-  is_delete?: number; // 是否删除
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
+  photo_url?: string; // 照片地址
 }
 
-export interface PhotoAlbum {
-  id?: number; // 主键
-  album_name?: string; // 相册名
-  album_desc?: string; // 相册描述
-  album_cover?: string; // 相册封面
-  is_delete?: number; // 是否删除
-  status?: number; // 状态值 1公开 2私密
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
-  photo_count?: number; // 照片数量
+export interface PhotoQuery {
+  album_id?: number; // 相册ID
 }
 
 export interface PingReq {
@@ -366,18 +344,6 @@ export interface RestHeader {
   header_terminal_id?: string; 
 }
 
-export interface RoleLabel {
-  role_name?: string; 
-  role_comment?: string; 
-}
-
-export interface Tag {
-  id?: number; // id
-  tag_name?: string; // 标签名
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
-}
-
 export interface TagDTO {
   id?: number; // 标签ID
   tag_name?: string; // 标签名
@@ -391,7 +357,7 @@ export interface TagDetails {
   updated_at?: number; // 更新时间
 }
 
-export interface TalkDetails {
+export interface Talk {
   id?: number; // 说说ID
   user_id?: number; // 用户ID
   nickname?: string; // 用户昵称
@@ -421,140 +387,46 @@ export interface UniqueViewDTO {
   count?: number; // 数量
 }
 
-export interface UpdateUserRolesReq {
-  user_id?: number; 
-  role_ids?: number[]; 
+export interface UploadFileReq {
+  label?: string; 
+  file?: any; // 文件
+  file_size?: number; // 文件大小
+  file_md5?: string; // 文件md5值
 }
 
-export interface UpdateUserStatusReq {
-  user_id?: number; 
-  status?: number; // 状态: -1删除 0正常 1禁用
-}
-
-export interface User {
-  id?: number; 
-  username?: string; 
-  nickname?: string; 
-  avatar?: string; 
-  intro?: string; 
-  website?: string; 
-  email?: string; 
-  status?: number; 
-  register_type?: string; 
-  ip_address?: string; // ip host
-  ip_source?: string; // ip 源
-  created_at?: number; 
-  updated_at?: number; 
-  roles?: RoleLabel[]; 
-}
-
-export interface UserApi {
-  id?: number; // 主键id
-  name?: string; // api名称
-  path?: string; // api路径
-  method?: string; // api请求方法
-  parent_id?: number; // 分组id
-  traceable?: number; // 是否追溯操作记录 0需要，1是
-  status?: number; // 状态 1开，2关
+export interface UploadFileResp {
+  id?: number; // id
+  user_id?: number; // 用户id
+  label?: string; // 标签
+  file_name?: string; // 文件名称
+  file_size?: number; // 文件大小
+  file_md5?: string; // 文件md5值
+  file_url?: string; // 上传路径
   created_at?: number; // 创建时间
   updated_at?: number; // 更新时间
-  children?: UserApi[]; 
-}
-
-export interface UserApisResp {
-  list?: UserApi[]; 
-}
-
-export interface UserArea {
-  name?: string; 
-  value?: number; 
 }
 
 export interface UserEmailReq {
   username?: string; 
 }
 
-export interface UserInfo {
+export interface UserInfoExt {
+  email?: string; // 用户邮箱
+  phone?: string; // 用户手机号
+  intro?: string; // 简介
+  website?: string; // 网站
+}
+
+export interface UserInfoReq extends UserInfoExt {
+  nickname?: string; // 昵称
+  avatar?: string; // 头像
+}
+
+export interface UserInfoResp extends UserInfoExt {
   user_id?: number; // 用户id
   username?: string; // 用户名
-  nickname?: string; // 昵称
-  avatar?: string; // 头像
-  intro?: string; // 个人简介
-  website?: string; // 个人网站
-  email?: string; // 邮箱
-}
-
-export interface UserInfoReq {
-  nickname?: string; // 昵称
-  website?: string; // 网站
-  intro?: string; // 简介
-  avatar?: string; // 头像
-}
-
-export interface UserInfoResp {
-  id?: number; // id
-  user_id?: number; // 用户id
-  email?: string; // 用户邮箱
   nickname?: string; // 用户昵称
   avatar?: string; // 用户头像
-  phone?: string; // 用户手机号
-  intro?: string; // 个人简介
-  website?: string; // 个人网站
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
-}
-
-export interface UserMenu {
-  id?: number; // 主键
-  parent_id?: number; // 父id
-  title?: string; // 菜单标题
-  type?: number; // 菜单类型（0代表菜单、1代表iframe、2代表外链、3代表按钮）
-  path?: string; // 路由地址
-  name?: string; // 路由名字
-  component?: string; // Layout组件
-  redirect?: string; // 路由重定向
-  meta?: UserMenuMeta; // meta配置
-  children?: UserMenu[]; 
-}
-
-export interface UserMenuMeta {
-  title?: string; // 菜单名称
-  icon?: string; // 菜单图标
-  show_link?: boolean; // 是否在菜单中显示
-  rank?: number; // 菜单升序排序
-  extra_icon?: string; // 菜单名称右侧的额外图标
-  show_parent?: boolean; // 是否显示父级菜单
-  roles?: string[]; // 页面级别权限设置
-  auths?: string[]; // 按钮级别权限设置
-  keep_alive?: boolean; // 路由组件缓存
-  frame_src?: string; // 内嵌的iframe链接
-  frame_loading?: boolean; // iframe页是否开启首次加载动画
-  transition?: any; // 页面加载动画
-  hidden_tag?: boolean; // 是否不添加信息到标签页
-  dynamic_level?: number; // 动态路由可打开的最大数量
-  active_path?: string; // 将某个菜单激活
-}
-
-export interface UserMenusResp {
-  list?: UserMenu[]; 
-}
-
-export interface UserRole {
-  id?: number; // 主键id
-  role_p_id?: number; // 父角色id
-  role_domain?: string; // 角色域
-  role_name?: string; // 角色名
-  role_comment?: string; // 角色备注
-  is_disable?: number; // 是否禁用  0否 1是
-  is_default?: number; // 是否默认角色 0否 1是
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
-  menu_id_list?: number[]; 
-  resource_id_list?: number[]; 
-}
-
-export interface UserRolesResp {
-  list?: UserRole[]; 
 }
 
 export interface WebsiteConfig {

@@ -146,7 +146,7 @@ import image from "@/assets/images/avatar.jpg"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
 import { formatDate } from "@/utils/formatDate.ts"
-import { findChatRecordsApi } from "@/api/chat"
+import { getChatRecordsApi } from "@/api/chat"
 import { ChatRecord } from "@/api/types.ts"
 import { uploadVoiceApi } from "@/api/file.ts"
 // 获取存储的博客信息
@@ -216,7 +216,7 @@ const open = () => {
 }
 
 const getChatRecords = () => {
-  findChatRecordsApi({
+  getChatRecordsApi({
     page: 1,
     page_size: 10,
     sorts: [{ field: "created_at", order: "desc" }],

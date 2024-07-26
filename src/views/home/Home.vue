@@ -226,9 +226,9 @@ import Swiper from "../../components/Swiper.vue"
 import EasyTyper from "easy-typer-js"
 import MarkdownIt from "markdown-it"
 import { usePagination } from "@/hooks/usePagination"
-import { findArticleHomeListApi } from "@/api/article"
-import { findTalkListApi } from "@/api/talk"
-import { ArticleHomeDTO, TalkDetails } from "@/api/types"
+import { getArticleListApi } from "@/api/article"
+import { getTalkListApi } from "@/api/talk"
+import { ArticleHomeDTO, Talk } from "@/api/types"
 import { useWebStoreHook } from "@/store/modules/website"
 import { formatDate } from "@/utils/formatDate.ts"
 
@@ -260,7 +260,7 @@ const title = ref("")
 const author = ref("")
 
 // 说说列表
-const talkList = ref<TalkDetails[]>([])
+const talkList = ref<Talk[]>([])
 // 文章列表
 const articleList = ref<ArticleHomeDTO[]>([])
 
@@ -305,7 +305,7 @@ const getHitokoto = () => {
 }
 
 const listHomeTalks = () => {
-  findTalkListApi({
+  getTalkListApi({
     page: 0,
     page_size: 10,
   }).then((res) => {
@@ -314,7 +314,7 @@ const listHomeTalks = () => {
 }
 
 const listHomeArticles = () => {
-  findArticleHomeListApi({
+  getArticleListApi({
     page: paginationData.currentPage,
     page_size: paginationData.pageSize,
   }).then((res) => {

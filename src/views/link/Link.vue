@@ -48,7 +48,7 @@
 import Comment from "@/components/comment/Comment.vue"
 import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findFriendLinkListApi } from "@/api/friend_link"
+import { getFriendLinkListApi } from "@/api/friend_link"
 import { FriendLink } from "@/api/types.ts"
 
 // 获取存储的博客信息
@@ -58,7 +58,7 @@ const friendLinkList = ref<FriendLink[]>([])
 const commentType = ref(2)
 
 function listFriendLink() {
-  findFriendLinkListApi({}).then((res) => {
+  getFriendLinkListApi({}).then((res) => {
     friendLinkList.value = res.data.list
   })
 }

@@ -3,7 +3,7 @@ import request from "@/utils/request"
 /** 发送验证码 */
 export function sendCaptchaEmailApi(
   data: any,
-): Promise<IApiResponseData<any>> {
+): Promise<IApiResponse<any>> {
   return request({
     url: `/api/v1/captcha/email`,
     method: "post",
@@ -14,7 +14,7 @@ export function sendCaptchaEmailApi(
 /** 生成验证码 */
 export function getCaptchaImageApi(
   data: any,
-): Promise<IApiResponseData<any>> {
+): Promise<IApiResponse<any>> {
   return request({
     url: `/api/v1/captcha/image`,
     method: "post",
@@ -25,7 +25,7 @@ export function getCaptchaImageApi(
 /** 检验验证码 */
 export function verifyCaptchaApi(
   data: any,
-): Promise<IApiResponseData<any>> {
+): Promise<IApiResponse<any>> {
   return request({
     url: `/api/v1/captcha/verify`,
     method: "post",

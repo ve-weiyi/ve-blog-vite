@@ -3,7 +3,7 @@ import Qinglong from "@/assets/images/qinglong.jpg"
 import Avatar from "@/assets/images/avatar.jpg"
 import cookies from "@/utils/cookies"
 import store from "@/store"
-import type { BlogHomeInfo, LoginHistory, LoginResp, Token, UserInfo } from "@/api/types.ts"
+import type { BlogHomeInfo, LoginResp, Token, UserInfoResp } from "@/api/types.ts"
 
 export const useWebStore = defineStore({
   id: "store",
@@ -92,19 +92,13 @@ export const useWebStore = defineStore({
     },
     setBlogInfo(blogInfo: BlogHomeInfo) {
       this.blogInfo = blogInfo
-      // console.log("website_record_no", this.blogInfo.website_config.website_record_no)
+      console.log("website_record_no", this.blogInfo)
     },
-    setUser(user: UserInfo) {
+    setUser(user: UserInfoResp) {
       this.userInfo = user
-    },
-    setLoginHistory(loginHistory: LoginHistory) {
-      this.loginHistory = loginHistory
     },
     login(login: LoginResp) {
       cookies.setItem("token", login.token)
-      cookies.setItem("user_info", login.user_info)
-      console.log("token", cookies.getItem<Token>("token"))
-      console.log("user_info", cookies.getItem<UserInfo>("user_info"))
     },
     logout() {
       cookies.clear()

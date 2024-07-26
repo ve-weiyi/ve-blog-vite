@@ -25,19 +25,19 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findTagListApi } from "@/api/tag"
-import { Tag } from "@/api/types"
+import { getTagListApi } from "@/api/tag"
+import { TagDTO } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
 // 获取背景图片
 const cover = ref(webStore.getCover("tag"))
 
-const tagList = ref<Tag[]>([])
+const tagList = ref<TagDTO[]>([])
 const count = ref(0)
 
 function listTags() {
-  findTagListApi({ page: 1, page_size: 100 }).then((res) => {
+  getTagListApi({ page: 1, page_size: 100 }).then((res) => {
     tagList.value = res.data.list
     count.value = res.data.total
   })

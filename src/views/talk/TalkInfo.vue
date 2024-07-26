@@ -68,9 +68,9 @@
 import { onMounted, ref } from "vue"
 import Comment from "../../components/comment/Comment.vue"
 import { useWebStoreHook } from "@/store/modules/website"
-import { findTalkApi, likeTalkApi } from "@/api/talk"
+import { getTalkApi, likeTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"
-import { TalkDetails } from "@/api/types"
+import { Talk } from "@/api/types"
 
 // 获取存储的博客信息
 const webStore = useWebStoreHook()
@@ -82,7 +82,7 @@ const talkId = route.params.talkId ? parseInt(route.params.talkId as string) : 0
 
 const commentType = 3
 const commentCount = ref(0)
-const talkInfo = ref<TalkDetails>({
+const talkInfo = ref<Talk>({
   id: 49,
   user_id: 2,
   nickname: "ve77",
@@ -97,7 +97,7 @@ const talkInfo = ref<TalkDetails>({
 const previewList = ref([])
 
 function getTalkById() {
-  findTalkApi({ id: talkId }).then((res) => {
+  getTalkApi({ id: talkId }).then((res) => {
     console.log(res)
     talkInfo.value = res.data
     previewList.value = talkInfo.value.img_list
@@ -115,7 +115,7 @@ function previewImg(img) {
   // })
 }
 
-const like = (talk: TalkDetails) => {
+const like = (talk: Talk) => {
   // 判断登录
   if (!webStore.userInfo.id) {
     webStore.loginFlag = true
