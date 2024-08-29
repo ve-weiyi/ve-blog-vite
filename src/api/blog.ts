@@ -1,5 +1,5 @@
-import request from "@/utils/request"
-import type { PingReq, PingResp } from "./types"
+import request from "@/utils/request";
+import type { PingReq, PingResp } from "./types";
 
 /** "ping" */
 export function pingApi(data?: PingReq): Promise<IApiResponse<PingResp>> {
@@ -7,5 +7,5 @@ export function pingApi(data?: PingReq): Promise<IApiResponse<PingResp>> {
     url: "/api/v1/ping",
     method: "get",
     data: data,
-  })
+  });
 }

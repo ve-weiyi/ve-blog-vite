@@ -1,5 +1,5 @@
-import request from "@/utils/request"
-import type { CommentQueryReq, PageResp, CommentNewReq, Comment, IdReq, EmptyResp } from "./types"
+import request from "@/utils/request";
+import type { EmptyResp, CommentQueryReq, PageResp, CommentNewReq, Comment, IdReq } from "./types";
 
 /** "查询评论列表" */
 export function findCommentListApi(data?: CommentQueryReq): Promise<IApiResponse<PageResp>> {
@@ -7,7 +7,7 @@ export function findCommentListApi(data?: CommentQueryReq): Promise<IApiResponse
     url: "/api/v1/comment/find_comment_list",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "查询最新评论回复列表" */
@@ -16,7 +16,7 @@ export function findCommentRecentListApi(data?: CommentQueryReq): Promise<IApiRe
     url: "/api/v1/comment/find_comment_recent_list",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "查询评论回复列表" */
@@ -25,7 +25,7 @@ export function findCommentReplyListApi(data?: CommentQueryReq): Promise<IApiRes
     url: "/api/v1/comment/find_comment_reply_list",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "创建评论" */
@@ -34,7 +34,7 @@ export function addCommentApi(data?: CommentNewReq): Promise<IApiResponse<Commen
     url: "/api/v1/comment/add_comment",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "点赞评论" */
@@ -43,5 +43,5 @@ export function likeCommentApi(data?: IdReq): Promise<IApiResponse<EmptyResp>> {
     url: "/api/v1/comment/like_comment",
     method: "post",
     data: data,
-  })
+  });
 }

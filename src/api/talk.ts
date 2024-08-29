@@ -1,13 +1,13 @@
-import request from "@/utils/request"
-import type { PageResp, IdReq, Talk, EmptyResp, PageQuery } from "./types"
+import request from "@/utils/request";
+import type { EmptyResp, TalkQueryReq, PageResp, IdReq, Talk } from "./types";
 
 /** "分页获取说说列表" */
-export function findTalkListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+export function findTalkListApi(data?: TalkQueryReq): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/talk/find_talk_list",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "查询说说" */
@@ -16,7 +16,7 @@ export function getTalkApi(data?: IdReq): Promise<IApiResponse<Talk>> {
     url: "/api/v1/talk/get_talk",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "点赞说说" */
@@ -25,5 +25,5 @@ export function likeTalkApi(data?: IdReq): Promise<IApiResponse<EmptyResp>> {
     url: "/api/v1/talk/like_talk",
     method: "put",
     data: data,
-  })
+  });
 }

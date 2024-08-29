@@ -17,7 +17,7 @@
       <Forget></Forget>
       <Email></Email>
       <Drawer></Drawer>
-      <!--      <MusicPlayer></MusicPlayer>-->
+      <MusicPlayer></MusicPlayer>
       <ChatRoom></ChatRoom>
     </div>
   </Provider>
@@ -26,6 +26,7 @@
 <script setup lang="ts">
 import Header from "@/components/Layout/Header/index.vue";
 import Footer from "@/components/Layout/Footer/index.vue";
+import MusicPlayer from "@/components/MusicPlayer/index.vue";
 import { useBlogStore, useUserStore } from "@/store";
 import { getBlogHomeInfoApi } from "@/api/website";
 import { pingApi } from "@/api/blog";

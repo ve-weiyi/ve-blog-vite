@@ -1,20 +1,4 @@
 
-export interface AboutMe {
-  content?: string; 
-}
-
-export interface AdminHomeInfo {
-  views_count?: number; // 访问量
-  message_count?: number; // 留言量
-  user_count?: number; // 用户量
-  article_count?: number; // 文章量
-  category_list?: CategoryDTO[]; // 分类列表
-  tag_list?: TagDTO[]; // 标签列表
-  article_view_rank_list?: ArticleViewRankDTO[]; // 文章浏览量排行
-  article_statistics_list?: ArticleStatisticsDTO[]; // 每日文章生产量
-  unique_view_list?: UniqueViewDTO[]; // 每日用户访问量
-}
-
 export interface Album {
   id?: number; // 主键
   album_name?: string; // 相册名
@@ -22,7 +6,17 @@ export interface Album {
   album_cover?: string; // 相册封面
 }
 
-export interface ArticleClassifyReq {
+export interface AlbumQueryReq {
+  page?: number; // 页码
+  page_size?: number; 
+}
+
+export interface ArticleArchivesQueryReq {
+  page?: number; // 页码
+  page_size?: number; // 每页数量
+}
+
+export interface ArticleClassifyQueryReq {
   page?: number; // 页码
   page_size?: number; // 每页数量
   classify_name?: string; // 分类名
@@ -43,13 +37,18 @@ export interface ArticleHome {
   article_type?: number; // 文章类型
   original_url?: string; // 原文链接
   is_top?: number; // 是否置顶
-  status?: number; // 状态值 1 公开 2 私密 3 评论可见
+  status?: number; // 状态值 1 公开 2 私密 3 草稿 4 已删除
   created_at?: number; // 发表时间
   updated_at?: number; // 更新时间
   category_name?: string; // 文章分类名
   tag_name_list?: string[]; // 文章标签列表
   like_count?: number; // 点赞量
   views_count?: number; // 浏览量
+}
+
+export interface ArticleHomeQueryReq {
+  page?: number; // 页码
+  page_size?: number; // 每页数量
 }
 
 export interface ArticlePreview {
@@ -59,15 +58,18 @@ export interface ArticlePreview {
   created_at?: number; // 创建时间
 }
 
-export interface ArticleStatisticsDTO {
-  day?: string; // 日期
-  count?: number; // 数量
+export interface Banner {
+  id?: number; // 页面id
+  banner_name?: string; // 页面名
+  banner_label?: string; // 页面标签
+  banner_cover?: string; // 页面封面
+  created_at?: number; // 创建时间
+  updated_at?: number; // 更新时间
 }
 
-export interface ArticleViewRankDTO {
-  id?: number; // 文章ID
-  article_title?: string; // 文章标题
-  count?: number; // 数量
+export interface BannerQueryReq {
+  page?: number; // 页码
+  page_size?: number; // 每页数量
 }
 
 export interface BatchResp {
@@ -79,15 +81,6 @@ export interface BindUserEmailReq {
   verify_code?: string; // 验证码
 }
 
-export interface BlogHomeInfo {
-  article_count?: number; // 文章数量
-  category_count?: number; // 分类数量
-  tag_count?: number; // 标签数量
-  views_count?: string; // 访问量
-  website_config?: WebsiteConfig; // 网站配置
-  page_list?: PageDTO[]; // 页面列表
-}
-
 export interface Category {
   id?: number; 
   category_name?: string; // 分类名
@@ -96,9 +89,15 @@ export interface Category {
   updated_at?: number; // 更新时间
 }
 
-export interface CategoryDTO {
-  id?: number; 
+export interface CategoryQueryReq {
+  page?: number; // 页码
+  page_size?: number; // 每页数量
   category_name?: string; // 分类名
+}
+
+export interface ChatQueryReq {
+  page?: number; 
+  page_size?: number; 
 }
 
 export interface ChatRecord {
@@ -192,6 +191,30 @@ export interface Friend {
   updated_at?: number; // 更新时间
 }
 
+export interface FriendQueryReq {
+  page?: number; 
+  page_size?: number; 
+}
+
+export interface GetAboutMeReq {
+}
+
+export interface GetAboutMeResp {
+  content?: string; 
+}
+
+export interface GetBlogHomeInfoReq {
+}
+
+export interface GetBlogHomeInfoResp {
+  article_count?: number; // 文章数量
+  category_count?: number; // 分类数量
+  tag_count?: number; // 标签数量
+  views_count?: number; // 访问量
+  website_config?: WebsiteConfigDTO; // 网站配置
+  page_list?: PageDTO[]; // 页面列表
+}
+
 export interface IdReq {
   id?: number; 
 }
@@ -220,39 +243,11 @@ export interface OauthLoginUrlResp {
   url?: string; // 授权地址
 }
 
-export interface Page {
-  id?: number; // 页面id
-  page_name?: string; // 页面名
-  page_label?: string; // 页面标签
-  page_cover?: string; // 页面封面
-  created_at?: number; // 创建时间
-  updated_at?: number; // 更新时间
-}
-
-export interface PageCondition {
-  field?: string; // 字段
-  value?: string; // 值
-  logic?: string; // and | or
-  operator?: string; // = | >= | < | in | not in |....
-}
-
 export interface PageDTO {
   id?: number; // 页面ID
   page_name?: string; // 页面名称
   page_label?: string; // 页面标签
   page_cover?: string; // 页面封面
-}
-
-export interface PageLimit {
-  page?: number; 
-  page_size?: number; 
-}
-
-export interface PageQuery {
-  page?: number; 
-  page_size?: number; 
-  sorts?: PageSort[]; 
-  conditions?: PageCondition[]; 
 }
 
 export interface PageResp {
@@ -262,17 +257,12 @@ export interface PageResp {
   list?: any; 
 }
 
-export interface PageSort {
-  field?: string; 
-  order?: string; // asc | desc
-}
-
 export interface Photo {
   id?: number; // 主键
   photo_url?: string; // 照片地址
 }
 
-export interface PhotoQuery {
+export interface PhotoQueryReq {
   album_id?: number; // 相册ID
 }
 
@@ -307,6 +297,11 @@ export interface Remark {
   updated_at?: number; // 更新时间
 }
 
+export interface RemarkQueryReq {
+  page?: number; 
+  page_size?: number; 
+}
+
 export interface ResetPasswordReq {
   username?: string; 
   password?: string; 
@@ -338,8 +333,9 @@ export interface Tag {
   updated_at?: number; // 更新时间
 }
 
-export interface TagDTO {
-  id?: number; // 标签ID
+export interface TagQueryReq {
+  page?: number; 
+  page_size?: number; 
   tag_name?: string; // 标签名
 }
 
@@ -358,6 +354,11 @@ export interface Talk {
   updated_at?: number; // 更新时间
 }
 
+export interface TalkQueryReq {
+  page?: number; 
+  page_size?: number; 
+}
+
 export interface Token {
   user_id?: number; // 用户id
   token_type?: string; // token类型,Bearer
@@ -366,11 +367,6 @@ export interface Token {
   refresh_token?: string; // 刷新token,过期时间较长。30d
   refresh_expires_in?: number; // 刷新token过期时间
   scope?: string; // 作用域
-}
-
-export interface UniqueViewDTO {
-  day?: string; // 日期
-  count?: number; // 数量
 }
 
 export interface UpdateUserAvatarReq {
@@ -425,7 +421,7 @@ export interface UserLikeResp {
   talk_like_set?: number[]; 
 }
 
-export interface WebsiteConfig {
+export interface WebsiteConfigDTO {
   admin_url?: string; // 后台地址
   alipay_qr_code?: string; // 支付宝二维码
   gitee?: string; // Gitee

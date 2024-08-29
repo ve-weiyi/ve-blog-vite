@@ -64,13 +64,15 @@ requests.interceptors.response.use(
     switch (response.data.code) {
       case 200:
         break;
+      case 401:
+        window.$message?.error("用户未登录");
+        return Promise.reject(response.data.message);
       case 402:
         const userStore = useUserStore();
         userStore.forceLogOut();
         window.$message?.error(response.data.message);
-        break;
+        return Promise.reject(response.data.message);
       case 500:
-      default:
         window.$message?.error(response.data.message);
         return Promise.reject(response.data.message);
     }

@@ -71,8 +71,10 @@ const AddMessage = () => {
     window.$message?.warning("留言内容不能为空");
     return false;
   }
-  const userAvatar = userStore.avatar ? userStore.avatar : blogStore.blogInfo.website_config.tourist_avatar;
-  const userNickname = userStore.nickname ? userStore.nickname : "游客";
+  const userAvatar = userStore.userInfo.avatar
+    ? userStore.userInfo.avatar
+    : blogStore.blogInfo.website_config.tourist_avatar;
+  const userNickname = userStore.userInfo.nickname ? userStore.userInfo.nickname : "游客";
   const message = {
     avatar: userAvatar,
     nickname: userNickname,

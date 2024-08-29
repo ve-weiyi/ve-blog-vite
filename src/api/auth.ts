@@ -1,5 +1,5 @@
-import request from "@/utils/request"
-import type { OauthLoginUrlResp, RegisterReq, EmptyResp, UserEmailReq, EmptyReq, LoginReq, LoginResp, OauthLoginReq, ResetPasswordReq, BindUserEmailReq } from "./types"
+import request from "@/utils/request";
+import type { OauthLoginUrlResp, RegisterReq, EmptyResp, UserEmailReq, ResetPasswordReq, BindUserEmailReq, LoginReq, LoginResp, OauthLoginReq, EmptyReq } from "./types";
 
 /** "登录" */
 export function loginApi(data?: LoginReq): Promise<IApiResponse<LoginResp>> {
@@ -7,7 +7,7 @@ export function loginApi(data?: LoginReq): Promise<IApiResponse<LoginResp>> {
     url: "/api/v1/login",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "第三方登录授权地址" */
@@ -16,7 +16,7 @@ export function oauthAuthorizeUrlApi(data?: OauthLoginReq): Promise<IApiResponse
     url: "/api/v1/oauth_authorize_url",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "第三方登录" */
@@ -25,7 +25,7 @@ export function oauthLoginApi(data?: OauthLoginReq): Promise<IApiResponse<LoginR
     url: "/api/v1/oauth_login",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "注册" */
@@ -34,7 +34,7 @@ export function registerApi(data?: RegisterReq): Promise<IApiResponse<EmptyResp>
     url: "/api/v1/register",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "发送注册账号邮件" */
@@ -43,7 +43,7 @@ export function sendRegisterEmailApi(data?: UserEmailReq): Promise<IApiResponse<
     url: "/api/v1/send_register_email",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "重置密码" */
@@ -52,7 +52,7 @@ export function resetPasswordApi(data?: ResetPasswordReq): Promise<IApiResponse<
     url: "/api/v1/user/reset_password",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "发送重置密码邮件" */
@@ -61,7 +61,7 @@ export function sendResetEmailApi(data?: UserEmailReq): Promise<IApiResponse<Emp
     url: "/api/v1/user/send_reset_email",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "绑定邮箱" */
@@ -70,7 +70,7 @@ export function bindUserEmailApi(data?: BindUserEmailReq): Promise<IApiResponse<
     url: "/api/v1/bind_user_email",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "注销" */
@@ -79,7 +79,7 @@ export function logoffApi(data?: EmptyReq): Promise<IApiResponse<EmptyResp>> {
     url: "/api/v1/logoff",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "登出" */
@@ -88,7 +88,7 @@ export function logoutApi(data?: EmptyReq): Promise<IApiResponse<EmptyResp>> {
     url: "/api/v1/logout",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "发送绑定邮箱验证码" */
@@ -97,5 +97,5 @@ export function sendBindEmailApi(data?: UserEmailReq): Promise<IApiResponse<Empt
     url: "/api/v1/send_bind_email",
     method: "post",
     data: data,
-  })
+  });
 }

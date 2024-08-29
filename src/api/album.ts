@@ -1,22 +1,22 @@
-import request from "@/utils/request"
-import type { PhotoQuery, IdReq, Album, PageQuery, PageResp } from "./types"
+import request from "@/utils/request";
+import type { Album, AlbumQueryReq, PageResp, PhotoQueryReq, IdReq } from "./types";
 
 /** "获取相册列表" */
-export function findAlbumListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+export function findAlbumListApi(data?: AlbumQueryReq): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/album/find_album_list",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "获取相册下的照片列表" */
-export function findPhotoListApi(data?: PhotoQuery): Promise<IApiResponse<PageResp>> {
+export function findPhotoListApi(data?: PhotoQueryReq): Promise<IApiResponse<PageResp>> {
   return request({
     url: "/api/v1/album/find_photo_list",
     method: "post",
     data: data,
-  })
+  });
 }
 
 /** "获取相册" */
@@ -25,5 +25,5 @@ export function getAlbumApi(data?: IdReq): Promise<IApiResponse<Album>> {
     url: "/api/v1/album/get_album",
     method: "post",
     data: data,
-  })
+  });
 }

@@ -6,7 +6,7 @@
         :key="carousel.id"
         class="item"
         :style="{
-          'background-image': 'url(' + carousel.page_cover + ')',
+          'background-image': 'url(' + carousel.banner_cover + ')',
         }"
       ></li>
     </ul>
@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { findPageListApi } from "@/api/page";
-import { Page } from "@/api/types";
+import { Banner } from "@/api/types";
+import { findBannerListApi } from "@/api/banner";
 
-const carouselList = ref<Page[]>([]);
+const carouselList = ref<Banner[]>([]);
 onMounted(() => {
-  findPageListApi().then((res) => {
+  findBannerListApi().then((res) => {
     carouselList.value = res.data.list;
   });
 });
