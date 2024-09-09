@@ -1,5 +1,5 @@
 <template>
-  <div v-if="blogStore.blogInfo.website_config.isChat">
+  <div v-if="blogStore.blogInfo.website_config.is_chat_room">
     <div v-show="show" class="chat-container">
       <div class="chat-header">
         <img width="32" height="32" src="https://static.ttkwsd.top/config/room.png" />
@@ -56,11 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { Record } from "@/model";
 import { useBlogStore, useUserStore } from "@/store";
 import { formatDateTime } from "@/utils/date";
 import { emojiList } from "@/utils/emoji";
 import { tvList } from "@/utils/tv";
+import { ChatRecord } from "@/api/types";
 
 const userStore = useUserStore();
 const blogStore = useBlogStore();
@@ -68,7 +68,7 @@ const data = reactive({
   show: false,
   ipAddress: "",
   ipSource: "",
-  recordList: [] as Record[],
+  recordList: [] as ChatRecord[],
   chatContent: "",
   emojiType: 0,
   unreadCount: 0,
@@ -107,23 +107,23 @@ const websocket = ref<WebSocket>();
 const timeout = ref<NodeJS.Timeout>();
 const serverTimeout = ref<NodeJS.Timeout>();
 const isMy = computed(
-  () => (chat: Record) =>
-    chat.ipAddress == ipAddress.value || (chat.userId !== undefined && chat.userId === userStore.id)
+  () => (chat: ChatRecord) =>
+    chat.ip_address == ipAddress.value || (chat.user_id !== undefined && chat.user_id === userStore.userInfo.user_id)
 );
-const userNickname = computed(() => (userStore.nickname ? userStore.nickname : ipAddress.value));
+const userNickname = computed(() => (userStore.userInfo.nickname ? userStore.userInfo.nickname : ipAddress.value));
 const userAvatar = computed(() =>
-  userStore.avatar ? userStore.avatar : blogStore.blogInfo.website_config.touristAvatar
+  userStore.userInfo.avatar ? userStore.userInfo.avatar : blogStore.blogInfo.website_config.tourist_avatar
 );
 const handleOpen = () => {
   if (websocket.value === undefined) {
-    websocket.value = new WebSocket(blogStore.blogInfo.website_config.websocketUrl);
+    websocket.value = new WebSocket(blogStore.blogInfo.website_config.websocket_url);
     websocket.value.onopen = () => {
       webSocketState.value = true;
       startHeart();
     };
     websocket.value.onmessage = (event: MessageEvent) => {
-      const data = JSON.parse(event.data);
-      switch (data.type) {
+      const res = JSON.parse(event.data);
+      switch (res.type) {
         case Type.ONLINE_COUNT:
           // 在线人数
           onlineCount.value = res.data;
@@ -162,18 +162,18 @@ const handleOpen = () => {
   show.value = !show.value;
 };
 // 展示菜单
-const showBack = (chat: Record, index: number, e: any) => {
+const showBack = (chat: ChatRecord, index: number, e: any) => {
   backBtn.value.forEach((item: any) => {
     item.style.display = "none";
   });
-  if (chat.ipAddress === ipAddress.value || (chat.userId != null && chat.userId == userStore.id)) {
+  if (chat.ip_address === ipAddress.value || (chat.user_id != null && chat.user_id == userStore.userInfo.user_id)) {
     backBtn.value[index].style.left = e.offsetX + "px";
     backBtn.value[index].style.bottom = e.offsetY + "px";
     backBtn.value[index].style.display = "block";
   }
 };
 // 撤回消息
-const back = (item: Record, index: number) => {
+const back = (item: ChatRecord, index: number) => {
   websocketMessage.type = Type.RECALL_MESSAGE;
   websocketMessage.data = item.id;
   websocket.value?.send(JSON.stringify(websocketMessage));
@@ -220,7 +220,7 @@ const handleSend = () => {
     nickname: userNickname.value,
     avatar: userAvatar.value,
     content: chatContent.value,
-    userId: userStore.id,
+    userId: userStore.userInfo.user_id,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   };

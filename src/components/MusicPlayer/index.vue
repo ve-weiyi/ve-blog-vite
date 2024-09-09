@@ -2,7 +2,7 @@
   <!-- <meting-js v-if="blogStore.blogInfo.website_config.isMusic" server="netease" type="playlist"
     :id="blogStore.blogInfo.website_config.musicId" fixed="true" theme="#e9546b"></meting-js> -->
   <aplayer
-    :id="blogStore.blogInfo.website_config.musicId"
+    :id="'blogStore.blogInfo.website_config.music_id'"
     server="netease"
     type="playlist"
     :fixed="true"

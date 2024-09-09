@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { Autoplay } from "swiper";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { findTalkListApi } from "@/api/talk";
 import { Talk } from "@/api/types";

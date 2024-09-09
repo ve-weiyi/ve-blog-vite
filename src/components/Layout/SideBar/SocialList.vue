@@ -33,10 +33,10 @@ const showSocialList = [
     type: "gitee",
     href: blogStore.blogInfo.website_config.gitee,
   },
-  {
-    type: "bilibili",
-    href: blogStore.blogInfo.website_config.bilibili,
-  },
+  // {
+  //   type: "bilibili",
+  //   href: blogStore.blogInfo.website_config.bilibili,
+  // },
   {
     type: "qq",
     href: "http://wpa.qq.com/msgrd?v=3&uin=" + blogStore.blogInfo.website_config.qq + "&site=qq&menu=yes",

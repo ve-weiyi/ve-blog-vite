@@ -13,7 +13,7 @@ function getTimestampInSeconds(): number {
 }
 
 const requests = axios.create({
-  baseURL: "/",
+  baseURL: "",
   timeout: 10000,
   // 请求头
   headers: {

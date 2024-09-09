@@ -25,7 +25,7 @@
 import { findArticleRecommendApi } from "@/api/article";
 import { ArticlePreview } from "@/api/types";
 import { formatDate } from "@/utils/date";
-import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper";
+import { Autoplay, Mousewheel, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 // 自定义模块
 const modules = [Pagination, Navigation, Mousewheel, Autoplay];

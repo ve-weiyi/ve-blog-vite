@@ -5,8 +5,8 @@
 <script setup lang="ts">
 import request from "@/utils/request";
 import type { PropType } from "vue";
-import APlayer from "APlayer";
-import "APlayer/dist/APlayer.min.css";
+import "aplayer/dist/APlayer.min.css";
+import APlayer from "aplayer";
 import { AxiosPromise } from "axios";
 
 const playerRef = ref();

@@ -8,9 +8,9 @@
   >
     <n-drawer-content style="padding-top: 0.5rem">
       <div class="author-container">
-        <img class="author-avatar" :src="blogStore.blogInfo.website_config.authorAvatar" />
+        <img class="author-avatar" :src="blogStore.blogInfo.website_config.website_avatar" />
         <p class="author-name">{{ blogStore.blogInfo.website_config.website_author }}</p>
-        <div class="site-desc">{{ blogStore.blogInfo.website_config.siteIntro }}</div>
+        <div class="site-desc">{{ blogStore.blogInfo.website_config.website_intro }}</div>
       </div>
       <blog-info></blog-info>
       <social-list></social-list>
