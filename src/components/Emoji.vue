@@ -1,6 +1,11 @@
 <template>
   <div v-show="chooseEmoji" class="emoji-wrapper">
-    <span class="emoji-item" v-for="(item, key, index) of emojiList" :key="index" @click="addEmoji(key)">
+    <span
+      v-for="(item, key, index) of emojiList"
+      :key="index"
+      class="emoji-item"
+      @click="addEmoji(key)"
+    >
       <v-img
         :lazy-src="getImage(item.normal)"
         :src="getImage(item.active)"
@@ -15,6 +20,8 @@
 
 <script setup lang="ts">
 import EmojiList from "@/assets/emojis/qq_emoji.json"
+import { ref } from "vue"
+import { getImage } from "@/utils/emoji.ts"
 
 // 定义组件的 props
 const props = defineProps({
@@ -27,15 +34,11 @@ const props = defineProps({
 const emit = defineEmits(["addEmoji"])
 
 // 响应式数据
-const emojiList = EmojiList
+const emojiList = ref<any>(EmojiList)
 
 // 方法
-const addEmoji = (key: string) => {
+const addEmoji = (key: any) => {
   emit("addEmoji", key)
-}
-
-const getImage = (localUrl) => {
-  return new URL(`/src/assets/${localUrl}`, import.meta.url).href
 }
 </script>
 

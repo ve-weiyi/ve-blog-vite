@@ -186,12 +186,16 @@ p {
   background: #fff !important;
 }
 .login-title {
+  margin: 1rem 1rem;
   font-weight: 500;
   font-size: 1.2rem;
   color: #4c4948;
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
+}
+.v-toolbar__content {
+  overflow: visible!important;
 }
 @media (min-width: 760px) {
   .v-toolbar__content,
@@ -288,34 +292,34 @@ p {
   }
 }
 /* 自定义滚动条样式 */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: rgba(73, 177, 245, 0.2);
-  border-radius: 2em;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #49b1f5;
-  background-image: -webkit-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.4) 25%,
-    transparent 25%,
-    transparent 50%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0.4) 75%,
-    transparent 75%,
-    transparent
-  );
-  border-radius: 2em;
-}
-
-::-webkit-scrollbar-corner {
-  background-color: transparent;
-}
+//::-webkit-scrollbar {
+//  width: 8px;
+//  height: 8px;
+//}
+//
+//::-webkit-scrollbar-track {
+//  background-color: rgba(73, 177, 245, 0.2);
+//  border-radius: 2em;
+//}
+//
+//::-webkit-scrollbar-thumb {
+//  background-color: #49b1f5;
+//  background-image: -webkit-linear-gradient(
+//    45deg,
+//    rgba(255, 255, 255, 0.4) 25%,
+//    transparent 25%,
+//    transparent 50%,
+//    rgba(255, 255, 255, 0.4) 50%,
+//    rgba(255, 255, 255, 0.4) 75%,
+//    transparent 75%,
+//    transparent
+//  );
+//  border-radius: 2em;
+//}
+//
+//::-webkit-scrollbar-corner {
+//  background-color: transparent;
+//}
 
 ::-moz-selection {
   color: #fff;

@@ -6,12 +6,12 @@
     <div class="setting-container" @click="show">
       <i class="iconfont iconshezhi setting" />
     </div>
-    <i @click="backTop" class="iconfont rightside-icon iconziyuanldpi" />
+    <i class="iconfont rightside-icon iconziyuanldpi" @click="backTop" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue"
+import { onBeforeUnmount, onMounted, ref } from "vue"
 import { useTheme } from "vuetify"
 
 const theme = useTheme()

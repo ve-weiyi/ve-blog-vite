@@ -1,38 +1,50 @@
 <template>
   <v-footer fixed class="footer absolute">
     <div class="footer-wrap">
-      <v-btn v-for="link in links" :key="link" color="white" variant="text" class="mx-2" rounded="xl">
+      <v-btn
+        v-for="link in links"
+        :key="link"
+        color="white"
+        variant="text"
+        class="mx-2"
+        rounded="xl"
+      >
         {{ link }}
       </v-btn>
       <div>
-        ©{{ websiteConfig.websiteCreateTime }} - {{ new Date().getFullYear() }}
-        By
-        {{ websiteConfig.websiteAuthor }}
+        ©{{ webStore.blogInfo.website_config.website_create_time }} -
+        {{ new Date().getFullYear() }}
+        <a class="copyright" href="https://veweiyi.cn/" target="_blank">
+          {{ webStore.blogInfo.website_config.website_author }}
+        </a>
+        版权所有
       </div>
       <a href="https://beian.miit.gov.cn/" target="_blank">
-        {{ websiteConfig.websiteRecordNo }}
+        {{ webStore.blogInfo.website_config.website_record_no }}
       </a>
     </div>
   </v-footer>
 </template>
 
 <script setup lang="ts">
-import { useWebStore } from "@/stores/modules/website"
+import { useWebStoreHook } from "@/store/modules/website"
 
 // 获取存储的博客信息
-const blogInfo = useWebStore().blogInfo
-
-// 网站信息
-const websiteConfig = blogInfo.websiteConfig
+const webStore = useWebStoreHook()
 
 function getCurrentYear() {
   return new Date().getFullYear()
 }
 
-const links = ["关于", "联系", "博客", "项目", "友链"]
+const links = ["博客", "项目", "友链", "关于", "联系"]
 </script>
 
 <style scoped>
+.copyright {
+  color: white;
+  font-weight: 700;
+}
+
 .footer {
   position: absolute;
   top: calc(100%);

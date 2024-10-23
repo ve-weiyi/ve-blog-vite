@@ -6,31 +6,37 @@
     </div>
     <div class="article-list-wrapper">
       <v-row>
-        <v-col md="4" cols="12" v-for="item of articleList" :key="item.id">
+        <v-col v-for="item of articleList" :key="item.id" md="4" cols="12">
           <!-- 文章 -->
           <v-card class="animated zoomIn article-item-card">
             <div class="article-item-cover">
               <router-link :to="'/articles/' + item.id">
                 <!-- 缩略图 -->
-                <v-img cover class="on-hover" width="100%" height="100%" :src="item.articleCover" />
+                <v-img
+                  cover
+                  class="on-hover"
+                  width="100%"
+                  height="100%"
+                  :src="item.article_cover"
+                />
               </router-link>
             </div>
             <div class="article-item-info">
               <!-- 文章标题 -->
               <div>
                 <router-link :to="'/articles/' + item.id">
-                  {{ item.articleTitle }}
+                  {{ item.article_title }}
                 </router-link>
               </div>
               <div style="margin-top: 0.375rem">
                 <!-- 发表时间 -->
                 <v-icon size="20">mdi-clock-outline</v-icon>
-                {{ formatDate(item.createdAt) }}
+                {{ formatDate(item.created_at) }}
 
                 <!-- 文章分类 -->
-                <router-link :to="'/categories/' + item.categoryId" class="float-right">
+                <router-link :to="'/categories/' + item.category_name" class="float-right">
                   <v-icon>mdi-bookmark</v-icon>
-                  {{ item.categoryName }}
+                  {{ item.category_name }}
                 </router-link>
               </div>
             </div>
@@ -38,8 +44,13 @@
             <v-divider></v-divider>
             <!-- 文章标签 -->
             <div class="tag-wrapper">
-              <router-link :to="'/tags/' + tag.id" class="tag-btn" v-for="tag of item.articleTagList" :key="tag.id">
-                {{ tag.tagName }}
+              <router-link
+                v-for="tag of item.tag_name_list"
+                :key="tag"
+                :to="'/tags/' + tag"
+                class="tag-btn"
+              >
+                {{ tag }}
               </router-link>
             </div>
           </v-card>
@@ -55,23 +66,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findArticleListApi, getArticleListByConditionApi } from "@/api/article"
+import { onMounted, ref } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getArticleClassifyCategoryApi, getArticleClassifyTagApi } from "@/api/article"
 import { useRoute } from "vue-router"
-import { usePagination } from "@/hooks/usePagination"
-import { formatDate } from "@/utils/format"
+import { formatDate } from "@/utils/formatDate.ts"
+import { ArticleHomeDTO } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
-const tagId = route.params.tagId ? parseInt(route.params.tagId) : 0 // 假设路由参数名为 "id"
-const categoryId = route.params.categoryId ? parseInt(route.params.categoryId) : 0 // 假设路由参数名为 "id"
+const tagId = route.params.tagId as string
+const categoryId = route.params.categoryId as string
 
-const articleList = ref([])
+const articleList = ref<ArticleHomeDTO[]>([])
 const name = ref("")
 const title = ref("")
 
@@ -79,26 +90,30 @@ onMounted(() => {
   const path = route.path
   if (path.includes("/categories")) {
     title.value = "分类"
-    getArticleList(categoryId, tagId)
+    getArticleClassifyCategoryApi({
+      classify_name: categoryId,
+    }).then((res) => {
+      if (res.data.condition_name) {
+        name.value = res.data.condition_name
+        document.title = `${title.value} - ${name.value}`
+      }
+
+      articleList.value = res.data.article_list
+    })
   } else {
     title.value = "标签"
-    getArticleList(categoryId, tagId)
+    getArticleClassifyTagApi({
+      classify_name: tagId,
+    }).then((res) => {
+      if (res.data.condition_name) {
+        name.value = res.data.condition_name
+        document.title = `${title.value} - ${name.value}`
+      }
+
+      articleList.value = res.data.article_list
+    })
   }
 })
-
-const getArticleList = (categoryId, tagId) => {
-  getArticleListByConditionApi({
-    categoryId: categoryId,
-    tagId: tagId,
-  }).then((res) => {
-    if (res.data.conditionName) {
-      name.value = res.data.conditionName
-      document.title = `${title.value} - ${name.value}`
-    }
-
-    articleList.value = res.data.articleDtoList
-  })
-}
 </script>
 
 <style scoped>

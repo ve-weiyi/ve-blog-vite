@@ -1,50 +1,66 @@
-import { ConfigEnv, defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import banner from 'vite-plugin-banner'
-import { createHtmlPlugin } from 'vite-plugin-html'
-import components from 'unplugin-vue-components/vite'
-import { envDir, sourceDir, manualChunks } from './scripts/build'
-import pkg from './package.json'
-import { resolve } from 'path'
+import { type ConfigEnv, loadEnv, type UserConfigExport } from "vite"
+import { resolve } from "path"
+import vue from "@vitejs/plugin-vue"
+import vueJsx from "@vitejs/plugin-vue-jsx"
+import banner from "vite-plugin-banner"
+import { createHtmlPlugin } from "vite-plugin-html"
+// import autoImport from "unplugin-auto-import/vite"
+import components from "unplugin-vue-components/vite"
+import pkg from "./package.json"
+import { viteBuildInfo } from "./build/info"
 
 /** 当前执行node命令时文件夹的地址（工作目录） */
 const root: string = process.cwd()
 
 /** 路径查找 */
 const pathResolve = (dir: string): string => {
-  return resolve(__dirname, '.', dir)
+  return resolve(__dirname, ".", dir)
 }
 
 /** 设置别名 */
 const alias: Record<string, string> = {
-  '@': pathResolve('src'),
-  '@build': pathResolve('build'),
+  "@": pathResolve("src"),
+  "@build": pathResolve("build"),
 }
 
 /** 配置项文档：https://cn.vitejs.dev/config */
-export default defineConfig(({ mode }: ConfigEnv) => {
-  const env = loadEnv(mode, envDir)
+export default ({ mode }: ConfigEnv): UserConfigExport => {
+  // 根据当前工作目录中的 `mode` 加载 .env 文件
+  // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
+  const env = loadEnv(mode, root)
 
   return {
     /**
-     * 管理环境变量的配置文件存放目录
+     * 项目根目录（index.html 文件所在的位置）
      */
-    envDir,
-
+    root: root,
     /**
      * 项目部署目录路径
      * @description 见项目根目录下的 `config` 文件夹说明
      */
     base: env.VITE_DEPLOY_BASE_URL,
-
+    resolve: {
+      /**
+       * 配置目录别名
+       * @see https://cn.vitejs.dev/config/shared-options.html#resolve-alias
+       *
+       * @example
+       *  想从 `src/libs/foo` 文件里导入功能：
+       *  配置 alias 前： `import foo from '../../../libs/foo'`
+       *  配置 alias 后： `import foo from '@/libs/foo'`
+       */
+      alias: alias,
+      // 想要省略的扩展名列表。默认值为 ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']。注意，不 建议忽略自定义导入类型的扩展名（例如：.vue）
+      // 设置后导入文件时不需要加后缀'.vue'
+      extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+    },
     /**
      * 本地开发服务，也可以配置接口代理
      * @see https://cn.vitejs.dev/config/#server-proxy
      */
     server: {
       /** 是否开启 HTTPS */
-      https: false,
+      // https: {},
       /** 设置 host: true 才可以使用 Network 的形式，以 IP 访问项目 */
       host: true, // host: "0.0.0.0"
       /** 端口号 */
@@ -58,44 +74,48 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       /** 接口代理 */
       proxy: {
         // mock代理
-        '/mock': {
-          target: env.VITE_PROXY_DOMAIN_REAL,
+        "/mock": {
+          target: env.VITE_MOCK_PROXY_URL,
           ws: false,
           changeOrigin: true,
-          rewrite: (path) => path.replace(path, env.VITE_PROXY_DOMAIN),
+          rewrite: (path) => path.replace("", ""),
         },
         // 前缀
-        '/api': {
-          target: 'http://127.0.0.1:9999/', // 代理后的地址 =target/path
+        "/api": {
+          target: env.VITE_API_PROXY_URL, // 代理后的地址 =target/path
           ws: true,
           /** 是否允许跨域 */
           changeOrigin: true,
-          logLevel: 'debug', // 打印代理以后的地址
-          rewrite: (path) => path.replace('', ''),
+          rewrite: (path) => path.replace("", ""),
         },
       },
     },
 
+    /** 预定义常量 */
+    define: {
+      // https://vue-i18n.intlify.dev/guide/advanced/optimization.html#quasar-cli
+      // 消除 vue-i18n 警告
+      __VUE_I18N_FULL_INSTALL__: true,
+      __VUE_I18N_LEGACY_API__: false,
+      __INTLIFY_PROD_DEVTOOLS__: false,
+    },
+
+    /** 构建选项 */
     build: {
-      /** 消除打包大小超过 500kb 警告 */
-      chunkSizeWarningLimit: 2000,
-      /** Vite 2.6.x 以上需要配置 minify: "terser", terserOptions 才能生效 */
-      minify: 'terser',
-      /** 在打包代码时移除 console.log、debugger 和 注释 */
-      terserOptions: {
-        compress: {
-          drop_console: false,
-          drop_debugger: true,
-          pure_funcs: ['console.log'],
-        },
-        format: {
-          /** 删除注释 */
-          comments: false,
-        },
-      },
+      /** 消除打包大小超过 2048kb 警告 */
+      chunkSizeWarningLimit: 2048,
+      /** 禁用 gzip 压缩大小报告.启用/禁用 gzip 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。*/
+      reportCompressedSize: false,
+      /** 打包文件的输出目录,默认值为 dist */
+      outDir: env.VITE_BUILD_OUTPUT_DIR,
       /** 打包后静态资源目录 */
-      assetsDir: 'static',
+      assetsDir: "assets",
+      sourcemap: false,
       rollupOptions: {
+        input: {
+          index: pathResolve("index.html"),
+        },
+        // 静态资源分类打包
         output: {
           /**
            * 如果要加密打包后的文件名，可以启用该项目
@@ -105,66 +125,39 @@ export default defineConfig(({ mode }: ConfigEnv) => {
            *  2. 导入本文件 `import md5 from '@withtypes/md5'`
            *  3. 将函数里的 `${name}` 修改为 `${md5(name)}`
            */
-          // chunkFileNames: ({ name }) => {
-          //   return `assets/${name}-[hash].js`
-          // },
-          // entryFileNames: ({ name }) => {
-          //   return `assets/${name}-[hash].js`
-          // },
-          // assetFileNames: ({ name }) => {
-          //   return `assets/${name}-[hash].[ext]`
-          // },
-
+          chunkFileNames: "static/js/[name]-[hash].js",
+          entryFileNames: "static/js/[name]-[hash].js",
+          assetFileNames: "static/[ext]/[name]-[hash].[ext]",
           /**
-           * 打包优化，避免全部打包到一个很大的 Chunk 里
-           * @description 根据包名生成不同的 Chunk 文件，方便按需加载
+           * 分块策略
+           * 1. 注意这些包名必须存在，否则打包会报错
+           * 2. 如果你不想自定义 chunk 分割策略，可以直接移除这段配置
            */
-          manualChunks,
+          manualChunks: {
+            vue: ["vue", "vue-router", "pinia"],
+          },
         },
       },
-    },
-
-    resolve: {
-      /**
-       * 配置目录别名
-       * @see https://cn.vitejs.dev/config/shared-options.html#resolve-alias
-       *
-       * @example
-       *  想从 `src/libs/foo` 文件里导入功能：
-       *  配置 alias 前： `import foo from '../../../libs/foo'`
-       *  配置 alias 后： `import foo from '@/libs/foo'`
-       */
-      alias,
-      // 想要省略的扩展名列表。默认值为 ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']。注意，不 建议忽略自定义导入类型的扩展名（例如：.vue）
-      // 设置后导入文件时不需要加后缀'.vue'
-      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
-    },
-
-    css: {
-      /**
-       * 包括 `vw` / `rem` 单位转换等
-       * @see https://cn.vitejs.dev/config/shared-options.html#css-postcss
-       *
-       * @example
-       *  以使用 `vw` 作为移动端适配为例：
-       *  1. 先安装 postcss 依赖 `pnpm i -D postcss-px-to-viewport`
-       *  2. 导入本文件 `import px2vw from 'postcss-px-to-viewport'`
-       *  3. 取消下面函数的注释即可生效
-       */
-      // postcss: {
-      //   plugins: [
-      //     // 使用 postcss-pxtorem
-      //     // px2rem({
-      //     //   propList: ['*'],
-      //     // }),
-      //     // 使用 postcss-px-to-viewport
-      //     // px2vw({
-      //     //   viewportWidth: 375,
-      //     //   minPixelValue: 1,
-      //     // }),
-      //   ],
+      /** 客户端构建默认为 esbuild，SSR构建默认为 false */
+      minify: "esbuild",
+      /** Vite 2.6.x 以上需要配置 minify: "terser", terserOptions 才能生效 */
+      /** 在打包代码时移除 console.log、debugger 和 注释 */
+      // minify: "terser",
+      // terserOptions: {
+      //   compress: {
+      //     drop_console: false,
+      //     drop_debugger: true,
+      //     pure_funcs: ["console.log"],
+      //   },
+      //   format: {
+      //     /** 删除注释 */
+      //     comments: false,
+      //   },
       // },
     },
+
+    /** 混淆器 */
+    esbuild: false,
 
     plugins: [
       /**
@@ -178,18 +171,40 @@ export default defineConfig(({ mode }: ConfigEnv) => {
        */
       vueJsx(),
 
+      // eslintPlugin({
+      //   include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
+      //   emitWarning: false,
+      // }),
+
+      /**
+       * 自动导入 API ，不用每次都 import
+       *
+       * @tips 如果直接使用没导入的 API 依然提示报错，请重启 VS Code
+       *
+       * @see https://github.com/antfu/unplugin-auto-import#configuration
+       */
+      // autoImport({
+      //   imports: ["vue", "vue-router", "pinia"],
+      //   dts: "types/auto-import.d.ts",
+      //   eslintrc: {
+      //     enabled: true,
+      //     filepath: "./.eslintrc-auto-import.json",
+      //     globalsPropValue: true,
+      //   },
+      // }),
+
       /**
        * 自动导入组件，不用每次都 import
        * @see https://github.com/antfu/unplugin-vue-components#configuration
        */
       components({
-        dirs: ['src/components'],
+        dirs: ["src/components"],
         directoryAsNamespace: true,
         collapseSamePrefixes: true,
         globalNamespaces: [],
-        extensions: ['vue', 'ts', 'tsx'],
+        extensions: ["vue", "ts", "tsx"],
         deep: true,
-        dts: 'src/types/declaration-files/components.d.ts',
+        dts: "./types/components.d.ts",
       }),
 
       /**
@@ -204,7 +219,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           ` * description: ${pkg.description}`,
           ` * author: ${pkg.author}`,
           ` */`,
-        ].join('\n'),
+        ].join("\n")
       ),
 
       /**
@@ -221,11 +236,12 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           },
         },
       }),
+      viteBuildInfo(),
     ],
     /** Vitest 单元测试配置：https://cn.vitest.dev/config */
-    test: {
-      include: ['tests/**/*.test.ts'],
-      environment: 'jsdom',
-    },
+    // test: {
+    //   include: ["tests/**/*.test.ts"],
+    //   environment: "jsdom",
+    // },
   }
-})
+}

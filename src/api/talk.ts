@@ -1,55 +1,27 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { IdReq, Talk, PageQuery, PageResp, EmptyResp } from "./types"
 
-/** 增 */
-export function createTalkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/talk/create",
-    method: "post",
-    data,
-  })
-}
-
-/** 改 */
-export function updateTalkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/talk/update",
-    method: "put",
-    data,
-  })
-}
-
-/** 删 删除单个*/
-export function deleteTalkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/talk/delete",
-    method: "delete",
-    data,
-  })
-}
-
-/** 查 */
-export function findTalkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/talk/find",
+/** "查询说说" */
+export function getTalkApi(data?: IdReq): Promise<IApiResponse<Talk>> {
+  return request({
+    url: "/api/v1/talk/get_talk",
     method: "post",
     data: data,
   })
 }
-
-/** 删除 批量操作 */
-export function deleteByIdsTalkApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/talk/deleteByIds",
-    method: "delete",
-    data: ids,
+/** "分页获取说说列表" */
+export function getTalkListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/talk/get_talk_list",
+    method: "post",
+    data: data,
   })
 }
-
-/** 查 列表*/
-export function findTalkListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/talk/list",
-    method: "post",
-    data: page,
+/** "点赞说说" */
+export function likeTalkApi(data?: IdReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/talk/like_talk",
+    method: "put",
+    data: data,
   })
 }

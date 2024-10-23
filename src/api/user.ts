@@ -1,49 +1,19 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { EmptyReq, UserInfoResp, UserInfoReq, EmptyResp } from "./types"
 
-/** 获取用户菜单权限 */
-export function getUserMenusApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/user/menus",
+/** "获取用户信息" */
+export function getUserInfoApi(data?: EmptyReq): Promise<IApiResponse<UserInfoResp>> {
+  return request({
+    url: "/api/v1/user/get_user_info",
     method: "get",
+    data: data,
   })
 }
-
-/** 获取用户接口权限 */
-export function getUserApisApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/user/apis",
-    method: "get",
-  })
-}
-
-/** 获取用户信息 */
-export function getUserInfoApi(): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/user/info",
-    method: "get",
-  })
-}
-
-/** 获取用户登录历史 */
-export function loginHistoryApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/user/login_history",
-    method: "get",
-    data: page,
-  })
-}
-
-/** 更新用户头像 */
-export function updateUserAvatarApi(file: File): Promise<IApiResponseData<any>> {
-  const formData = new FormData()
-  formData.append("file", file)
-
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/user/avatar`,
+/** "修改用户信息" */
+export function updateUserInfoApi(data?: UserInfoReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/user/update_user_info",
     method: "post",
-    data: formData,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+    data: data,
   })
 }

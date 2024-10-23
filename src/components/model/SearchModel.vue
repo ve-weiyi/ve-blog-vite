@@ -5,7 +5,7 @@
       <div class="mb-3">
         <span class="search-title">本地搜索</span>
         <!-- 关闭按钮 -->
-        <v-icon class="float-right" @click="webStore.searchFlag = false"> mdi-close </v-icon>
+        <v-icon class="float-right" @click="webStore.searchFlag = false"> mdi-close</v-icon>
       </div>
       <!-- 输入框 -->
       <div class="search-input-wrapper">
@@ -16,30 +16,32 @@
       <div class="search-result-wrapper">
         <hr class="divider" />
         <ul>
-          <li class="search-reslut" v-for="item of articleList" :key="item.id">
+          <li v-for="item of articleList" :key="item.id" class="search-result">
             <!-- 文章标题 -->
-            <a @click="goTo(item.id)" v-html="item.articleTitle" />
+            <a @click="goTo(item.id)" v-html="item.article_title" />
             <!-- 文章内容 -->
-            <p class="search-reslut-content text-justify" v-html="item.articleContent" />
+            <p class="search-result-content text-justify" v-html="item.article_content" />
           </li>
         </ul>
         <!-- 搜索结果不存在提示 -->
-        <div v-show="flag && articleList === []" style="font-size: 0.875rem">找不到您查询的内容：{{ keywords }}</div>
+        <div v-show="flag && articleList.length === 0" style="font-size: 0.875rem">
+          找不到您查询的内容：{{ keywords }}
+        </div>
       </div>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, toRef, watch, watchEffect } from "vue"
-import { useWebStore } from "@/stores"
-import { findArticleListApi } from "@/api/article"
+import { computed, ref, watch } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getArticleListApi } from "@/api/article"
 import { useRouter } from "vue-router"
+
 const router = useRouter()
 
 // 获取存储的博客信息
-const webStore = useWebStore()
-// const webState = ref(webStore)
+const webStore = useWebStoreHook()
 
 const isMobile = computed(() => {
   const clientWidth = document.documentElement.clientWidth
@@ -81,21 +83,20 @@ watch(
         {
           field: "article_title",
           value: newValue,
-          rule: "like",
+          operator: "like",
           flag: "",
         },
         {
           field: "article_content",
           value: newValue,
-          rule: "like",
+          operator: "like",
           flag: "or",
         },
       ]
-      findArticleListApi({
+      getArticleListApi({
         page: 1,
-        pageSize: 10,
-        order: "created_at",
-        order_key: "desc",
+        page_size: 10,
+        sorts: [{ field: "created_at", order: "desc" }],
         conditions: conditions,
       }).then((res) => {
         console.log(res)
@@ -103,7 +104,7 @@ watch(
       })
     }
   },
-  { immediate: true }, // 立即监听属性
+  { immediate: true } // 立即监听属性
 )
 </script>
 
@@ -144,13 +145,13 @@ watch(
     overflow: auto;
   }
 }
-.search-reslut a {
+.search-result a {
   color: #555;
   font-weight: bold;
   border-bottom: 1px solid #999;
   text-decoration: none;
 }
-.search-reslut-content {
+.search-result-content {
   color: #555;
   cursor: pointer;
   border-bottom: 1px dashed #ccc;

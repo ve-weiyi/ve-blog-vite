@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="webStore.emailFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon class="float-right" @click="webStore.emailFlag = false"> mdi-close </v-icon>
+      <v-icon class="float-right" @click="webStore.emailFlag = false"> mdi-close</v-icon>
       <div class="login-title">绑定邮箱</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -16,8 +16,8 @@
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
           <v-text-field
-            maxlength="6"
             v-model="code"
+            maxlength="6"
             label="验证码"
             variant="underlined"
             placeholder="请输入6位验证码"
@@ -28,18 +28,21 @@
           </v-btn>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="saveUserEmail"> 绑定 </v-btn>
+        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="saveUserEmail">
+          绑定</v-btn
+        >
       </div>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue"
-import { useWebStore } from "@/stores"
+import { computed, ref, watch } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 const email = ref("")
 const code = ref("")
@@ -47,6 +50,21 @@ const flag = ref(false)
 const codeMsg = ref("发送")
 const time = ref(60)
 const show = ref(false)
+
+function register() {
+  if (email.value.trim().length == 0) {
+    ElMessage.success("请输入邮箱号")
+    return false
+  }
+  if (code.value.trim().length == 0) {
+    ElMessage.success("请输入验证码")
+    return false
+  }
+  const user = {
+    email: email.value,
+    code: code.value,
+  }
+}
 
 const sendCode = () => {
   // 发送邮件
@@ -70,11 +88,11 @@ const countDown = () => {
 const saveUserEmail = () => {
   var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(email.value)) {
-    this.$toast({ type: "error", message: "邮箱格式不正确" })
+    ElMessage.success("邮箱格式不正确")
     return false
   }
   if (code.value.trim().length != 6) {
-    this.$toast({ type: "error", message: "请输入6位验证码" })
+    ElMessage.success("请输入6位验证码")
     return false
   }
   const user = {

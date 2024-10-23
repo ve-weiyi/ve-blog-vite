@@ -1,27 +1,40 @@
 <template>
   <router-link to="/talks" class="swiper-container">
     <v-icon size="20" color="#4c4948">mdi-chat-outline</v-icon>
-    <div :style="{ height: `${height * lineNum}px` }" class="rollScreen_container" id="rollScreen_container">
-      <ul class="rollScreen_list" :style="{ transform: transform }" :class="{ rollScreen_list_unanim: num === 0 }">
-        <li class="rollScreen_once" v-for="(item, index) in list" :key="index" :style="{ height: `${height}px` }">
+    <div
+      id="rollScreen_container"
+      :style="{ height: `${height * lineNum}px` }"
+      class="rollScreen_container"
+    >
+      <ul
+        class="rollScreen_list"
+        :style="{ transform: transform }"
+        :class="{ rollScreen_list_unanim: num === 0 }"
+      >
+        <li
+          v-for="(item, index) in list"
+          :key="index"
+          class="rollScreen_once"
+          :style="{ height: `${height}px` }"
+        >
           <span class="item" v-html="item.content" />
         </li>
         <li
-          class="rollScreen_once"
           v-for="(item, index) in list"
           :key="index + list.length"
+          class="rollScreen_once"
           :style="{ height: `${height}px` }"
         >
           <span class="item" v-html="item.content" />
         </li>
       </ul>
     </div>
-    <v-icon size="20" color="#4c4948" class="arrow">mdi-chevron-double-right </v-icon>
+    <v-icon size="20" color="#4c4948" class="arrow">mdi-chevron-double-right</v-icon>
   </router-link>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, toRefs } from "vue"
+import { computed, onMounted, ref, toRefs } from "vue"
 
 // 父组件向子组件传输的数据
 const props = defineProps({
@@ -34,7 +47,7 @@ const props = defineProps({
     type: Number,
   },
   list: {
-    type: Array,
+    type: Array<any>,
     default: () => [],
   },
 })

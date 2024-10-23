@@ -1,73 +1,51 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { PageQuery, PageResp, ArticleClassifyReq, ArticleClassifyResp, IdReq, ArticleRecommendResp, EmptyResp } from "./types"
 
-/** 增 */
-export function createArticleApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/create",
-    method: "post",
-    data,
-  })
-}
-
-/** 改 */
-export function updateArticleApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/update",
-    method: "put",
-    data,
-  })
-}
-
-/** 删 */
-export function deleteArticleApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/delete",
-    method: "delete",
-    data,
-  })
-}
-
-/** 查 */
-export function findArticleApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/find",
+/** "文章归档(时间轴)" */
+export function getArticleArchivesApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/article/get_article_archives",
     method: "post",
     data: data,
   })
 }
-
-/** 删除 批量 */
-export function deleteByIdsArticleApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
-}
-
-/** 查询 列表*/
-export function findArticleListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/list",
-    method: "post",
-    data: page,
-  })
-}
-
-/** 查 列表*/
-export function getArticleListByConditionApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/condition",
+/** "通过分类获取文章列表" */
+export function getArticleClassifyCategoryApi(data?: ArticleClassifyReq): Promise<IApiResponse<ArticleClassifyResp>> {
+  return request({
+    url: "/api/v1/article/get_article_classify_category",
     method: "post",
     data: data,
   })
 }
-
-/** 查 列表*/
-export function getArticleArchivesApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/article/archives",
-    method: "get",
-    data: page,
+/** "通过标签获取文章列表" */
+export function getArticleClassifyTagApi(data?: ArticleClassifyReq): Promise<IApiResponse<ArticleClassifyResp>> {
+  return request({
+    url: "/api/v1/article/get_article_classify_tag",
+    method: "post",
+    data: data,
+  })
+}
+/** "获取首页文章列表" */
+export function getArticleListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/article/get_article_list",
+    method: "post",
+    data: data,
+  })
+}
+/** "文章相关推荐" */
+export function getArticleRecommendApi(data?: IdReq): Promise<IApiResponse<ArticleRecommendResp>> {
+  return request({
+    url: "/api/v1/article/get_article_recommend",
+    method: "post",
+    data: data,
+  })
+}
+/** "点赞文章" */
+export function likeArticleApi(data?: IdReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/article/like_article",
+    method: "post",
+    data: data,
   })
 }

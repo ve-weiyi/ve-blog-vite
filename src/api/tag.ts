@@ -1,55 +1,11 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { PageQuery, PageResp } from "./types"
 
-/** 增 */
-export function createTagApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/tag/create",
-    method: "post",
-    data,
-  })
-}
-
-/** 改 */
-export function updateTagApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/tag/update",
-    method: "put",
-    data,
-  })
-}
-
-/** 删 删除单个*/
-export function deleteTagApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/tag/delete",
-    method: "delete",
-    data,
-  })
-}
-
-/** 删除 批量操作 */
-export function deleteByIdsTagApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/tag/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
-}
-
-/** 查 */
-export function findTagApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/tag/find",
+/** "分页获取标签列表" */
+export function getTagListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/tag/get_tag_list",
     method: "post",
     data: data,
-  })
-}
-
-/** 查 列表*/
-export function findTagListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/tag/list",
-    method: "post",
-    data: page,
   })
 }

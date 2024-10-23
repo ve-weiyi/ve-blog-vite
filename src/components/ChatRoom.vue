@@ -2,8 +2,8 @@
   <div>
     <!-- 聊天界面 -->
     <div
-      class="chat-container animated bounceInUp"
       v-show="isShow"
+      class="chat-container animated bounceInUp"
       @click="closeAll"
       @contextmenu.prevent.stop="closeAll"
     >
@@ -17,83 +17,95 @@
         <v-icon class="close" @click="isShow = false"> mdi-close</v-icon>
       </div>
       <!-- 对话内容 -->
-      <div class="message" id="message">
+      <div id="message" class="message">
         <!-- 录音遮罩层 -->
         <div
           v-show="voiceActive"
           class="voice"
-          @mousemove.prevent.stop="translationmove($event)"
-          @mouseup.prevent.stop="translationEnd($event)"
+          @mousemove.prevent.stop="translationMove"
+          @mouseup.prevent.stop="translationEnd"
         >
           <v-icon ref="voiceClose" class="close-voice">mdi-close</v-icon>
         </div>
-        <div :class="isMyMessage(item)" v-for="(item, index) of chatRecordList" :key="index">
+        <div v-for="(item, index) of chatRecordList" :key="index" :class="isMyMessage(item)">
           <!-- 头像 -->
           <img :src="item.avatar" :class="isleft(item)" />
           <div>
-            <div class="nickname" v-if="!isSelf(item)">
+            <div v-if="!isSelf(item)" class="nickname">
               {{ item.nickname }}
-              <span style="margin-left: 12px">{{ item.createdAt }}</span>
+              <span style="margin-left: 12px">{{ formatDate(item.created_at) }}</span>
             </div>
             <!-- 内容 -->
-            <div ref="all-content" @contextmenu.prevent.stop="showBack(item, index, $event)" :class="isMyContent(item)">
+            <div
+              ref="all-content"
+              :class="isMyContent(item)"
+              @contextmenu.prevent.stop="showBack(item, index, $event)"
+            >
               <!-- 文字消息 -->
               <div v-if="item.type == 3" v-html="item.content" />
               <!-- 语音消息 -->
               <div v-if="item.type == 5" @click.prevent.stop="playVoice(item)">
                 <audio
-                  @ended="endVoice(item)"
-                  @canplay="getVoiceTime(item)"
                   ref="voices"
                   :src="item.content"
                   style="display: none"
+                  @ended="endVoice(item)"
+                  @canplay="getVoiceTime(item)"
                 />
                 <!-- 播放 -->
                 <v-icon
-                  :color="isSelf(item) ? '#fff' : '#000'"
                   ref="plays"
+                  :color="isSelf(item) ? '#fff' : '#000'"
                   style="display: inline-flex; cursor: pointer"
                 >
                   mdi-arrow-right-drop-circle
                 </v-icon>
                 <!-- 暂停 -->
-                <v-icon :color="isSelf(item) ? '#fff' : '#000'" ref="pauses" style="display: none; cursor: pointer">
+                <v-icon
+                  ref="pauses"
+                  :color="isSelf(item) ? '#fff' : '#000'"
+                  style="display: none; cursor: pointer"
+                >
                   mdi-pause-circle
                 </v-icon>
                 <!-- 音频时长 -->
                 <span ref="voiceTimes" />
               </div>
-              <div class="back-menu" ref="backBtn" @click="back(item, index)">撤回</div>
+              <div ref="backBtn" class="back-menu" @click="back(item, index)">撤回</div>
             </div>
           </div>
         </div>
       </div>
       <div class="footer">
         <!-- 表情框 -->
-        <div class="emoji-box" v-show="isEmoji">
+        <div v-show="isEmoji" class="emoji-box">
           <Emoji :chooseEmoji="true" @addEmoji="addEmoji" />
         </div>
-        <div class="emoji-border" v-show="isEmoji" />
+        <div v-show="isEmoji" class="emoji-border" />
         <!-- 切换输入方式 -->
-        <v-icon v-show="!isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-microphone </v-icon>
-        <v-icon v-show="isVoice" @click="isVoice = !isVoice" style="margin-right: 8px"> mdi-keyboard </v-icon>
+        <v-icon v-show="!isVoice" style="margin-right: 8px" @click="isVoice = !isVoice">
+          mdi-microphone
+        </v-icon>
+        <v-icon v-show="isVoice" style="margin-right: 8px" @click="isVoice = !isVoice">
+          mdi-keyboard
+        </v-icon>
         <!-- 文字输入 -->
         <textarea
           v-show="!isVoice"
           ref="chatInput"
           v-model="content"
-          @keydown.enter="saveMessage($event)"
           placeholder="请输入内容"
+          @keydown.enter="saveMessage($event)"
         ></textarea>
         <!-- 语音输入 -->
         <button
-          class="voice-btn"
           v-show="isVoice"
+          class="voice-btn"
           @mousedown.prevent.stop="translationStart"
-          @mouseup.prevent.stop="translationEnd($event)"
+          @mouseup.prevent.stop="translationEnd"
           @touchstart.prevent.stop="translationStart"
-          @touchend.prevent.stop="translationEnd($event)"
-          @touchmove.prevent.stop="translationmove($event)"
+          @touchend.prevent.stop="translationEnd"
+          @touchmove.prevent.stop="translationMove"
         >
           按住说话
         </button>
@@ -104,13 +116,21 @@
           @click.prevent.stop="openEmoji"
         ></i>
         <!-- 发送按钮 -->
-        <i :class="isInput" @click="saveMessage" style="font-size: 1.5rem"></i>
+        <i :class="isInput" style="font-size: 1.5rem" @click="saveMessage"></i>
       </div>
     </div>
     <!-- 未读数量 -->
     <div class="chat-btn" @click="open">
-      <span class="unread" v-if="unreadCount > 0">{{ unreadCount }}</span>
-      <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%">
+      <span v-if="unreadCount > 0" class="unread">{{ unreadCount }}</span>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        "
+      >
         <img width="36" height="36" :src="image" alt="聊天室" />
       </div>
     </div>
@@ -118,20 +138,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onBeforeUnmount, nextTick, computed } from "vue"
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
 import Recorderx, { ENCODE_TYPE } from "recorderx"
 import Emoji from "./Emoji.vue"
-import EmojiList from "@/assets/emojis/qq_emoji.json"
-import { useWebStore } from "@/stores"
-import axios from "axios"
+import { useWebStoreHook } from "@/store/modules/website"
 import image from "@/assets/images/avatar.jpg"
 import { ElMessage } from "element-plus"
 import { replaceEmoji } from "@/utils/emoji"
-import { findChatRecordsApi } from "@/api/website"
-
+import { formatDate } from "@/utils/formatDate.ts"
+import { getChatRecordsApi } from "@/api/chat"
+import { ChatRecord } from "@/api/types.ts"
+import { uploadVoiceApi } from "@/api/file.ts"
 // 获取存储的博客信息
-const webState = useWebStore()
-const blogInfo = useWebStore().blogInfo
+const webStore = useWebStoreHook()
 
 const isInput = computed(() => {
   if (typeof content.value === "string") {
@@ -149,7 +168,7 @@ const websocket = ref<WebSocket | null>(null)
 // 输入框内容
 const content = ref("")
 // 聊天记录列表
-const chatRecordList = ref([])
+const chatRecordList = ref<ChatRecord[]>([])
 // 语音消息列表
 const voiceList = ref([])
 // Recorderx 实例
@@ -197,13 +216,13 @@ const open = () => {
 }
 
 const getChatRecords = () => {
-  findChatRecordsApi({
+  getChatRecordsApi({
     page: 1,
-    pageSize: 10,
-    orders: [{ field: "created_at", order: "desc" }],
+    page_size: 10,
+    sorts: [{ field: "created_at", order: "desc" }],
   }).then((res) => {
     if (res.code === 200) {
-      chatRecordList.value = res.data.list
+      chatRecordList.value = res.data.list.reverse()
     }
   })
 }
@@ -216,7 +235,7 @@ const openEmoji = () => {
 
 // 连接 WebSocket
 const connect = () => {
-  websocket.value = new WebSocket(blogInfo.websiteConfig.websocketUrl)
+  websocket.value = new WebSocket(webStore.blogInfo.website_config.websocket_url)
 
   // 连接发生错误的回调方法
   websocket.value.onerror = (event) => {
@@ -239,6 +258,7 @@ const connect = () => {
 
   // 接收到消息的回调方法
   websocket.value.onmessage = (event) => {
+    console.log("websocket", event)
     const data = JSON.parse(event.data)
     switch (data.type) {
       case 1:
@@ -247,9 +267,9 @@ const connect = () => {
         break
       case 2:
         // 聊天历史记录
-        chatRecordList.value = data.chatRecordList
-        ipAddress.value = data.ipAddress
-        ipSource.value = data.ipSource
+        chatRecordList.value = data.chat_record_list
+        ipAddress.value = data.ip_address
+        ipSource.value = data.ip_source
         break
       case 3:
         // 文字消息
@@ -302,10 +322,10 @@ const saveMessage = (e: Event) => {
   // WebSocket 消息对象
   const WebsocketMessage = {
     type: 3,
-    nickname: webState.nickname,
-    avatar: webState.avatar,
+    nickname: webStore.userInfo.nickname,
+    avatar: webStore.userInfo.avatar,
     content: content.value,
-    userId: webState.userId,
+    userId: webStore.userInfo.id,
     ipAddress: ipAddress.value,
     ipSource: ipSource.value,
   }
@@ -327,7 +347,10 @@ const showBack = (item: any, index: number, e: MouseEvent) => {
     item.style.display = "none"
   })
 
-  if (item.ipAddress === ipAddress.value || (item.userId != null && item.userId === webState.userId)) {
+  if (
+    item.ipAddress === ipAddress.value ||
+    (item.userId != null && item.userId === webStore.userInfo.id)
+  ) {
     backBtn.value[index].style.left = e.offsetX + "px"
     backBtn.value[index].style.bottom = e.offsetY + "px"
     backBtn.value[index].style.display = "block"
@@ -354,7 +377,7 @@ const closeAll = () => {
 }
 
 // 开始录音
-const translationStart = () => {
+const translationStart = (event: Event) => {
   voiceActive.value = true
   rc.value = new Recorderx()
   nextTick(() => {
@@ -370,8 +393,10 @@ const translationStart = () => {
   })
 }
 
+const translationMove = (event: Event) => {}
+
 // 结束录音
-const translationEnd = () => {
+const translationEnd = (event: Event) => {
   console.log("结束")
   voiceActive.value = false
   rc.value.pause()
@@ -388,26 +413,19 @@ const translationEnd = () => {
   })
   const formData = new FormData()
   formData.append("file", file)
-  formData.append("type", 5)
-  formData.append("nickname", webState.nickname)
-  formData.append("avatar", webState.avatar)
-  if (webState.userId !== null) {
-    formData.append("userId", webState.userId)
+  formData.append("type", "5")
+  formData.append("nickname", webStore.userInfo.nickname)
+  formData.append("avatar", webStore.userInfo.avatar)
+  if (webStore.userInfo.id !== null) {
+    formData.append("userId", webStore.userInfo.id)
   }
-  formData.append("ipAddress", ipAddress.value)
-  formData.append("ipSource", ipSource.value)
-  const options = {
-    url: "/api/voice",
-    data: formData,
-    method: "post",
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  }
-  axios(options)
-}
+  formData.append("ip_address", ipAddress.value)
+  formData.append("ip_source", ipSource.value)
 
-const translationmove = () => {}
+  uploadVoiceApi("chat", formData).then((res) => {
+    console.log("chat", res)
+  })
+}
 
 const voices = ref([])
 const plays = ref([])
@@ -451,7 +469,10 @@ const getVoiceTime = (item: any) => {
 
 // 计算属性
 const isSelf = (item: any) => {
-  return item.ipAddress === ipAddress.value || (item.userId !== null && item.userId === webState.userId)
+  return (
+    item.ipAddress === ipAddress.value ||
+    (item.userId !== null && item.userId === webStore.userInfo.id)
+  )
 }
 
 const isleft = (item: any) => {
@@ -528,7 +549,9 @@ const isMyMessage = (item: any) => {
   padding: 20px 24px;
   background: #ffffff;
   border-radius: 1rem 1rem 0 0;
-  box-shadow: 0 10px 15px -16px rgba(50, 50, 93, 0.08), 0 4px 6px -8px rgba(50, 50, 93, 0.04);
+  box-shadow:
+    0 10px 15px -16px rgba(50, 50, 93, 0.08),
+    0 4px 6px -8px rgba(50, 50, 93, 0.04);
 }
 
 .footer {
@@ -648,7 +671,9 @@ const isMyMessage = (item: any) => {
 
 .emoji-box {
   position: absolute;
-  box-shadow: 0 8px 16px rgba(50, 50, 93, 0.08), 0 4px 12px rgba(0, 0, 0, 0.07);
+  box-shadow:
+    0 8px 16px rgba(50, 50, 93, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.07);
   background: #fff;
   border-radius: 8px;
   right: 20px;

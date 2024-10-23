@@ -1,49 +1,75 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { ResetPasswordReq, UserEmailReq, LoginReq, LoginResp, OauthLoginReq, EmptyReq, EmptyResp, OauthLoginUrlResp } from "./types"
 
-export function loginApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+/** "登录" */
+export function loginApi(data?: LoginReq): Promise<IApiResponse<LoginResp>> {
+  return request({
     url: "/api/v1/login",
     method: "post",
-    data,
+    data: data,
   })
 }
-
-export function registerApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/register",
+/** "第三方登录" */
+export function oauthLoginApi(data?: OauthLoginReq): Promise<IApiResponse<LoginResp>> {
+  return request({
+    url: "/api/v1/oauth_login",
     method: "post",
-    data,
+    data: data,
   })
 }
-
-export function logoutApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
+/** "注销" */
+export function logoffApi(data?: EmptyReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/logoff",
+    method: "post",
+    data: data,
+  })
+}
+/** "登出" */
+export function logoutApi(data?: EmptyReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
     url: "/api/v1/logout",
     method: "post",
-    data,
+    data: data,
   })
 }
-
-export function getOauthUrlApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/oauth/url",
+/** "第三方登录授权地址" */
+export function oauthAuthorizeUrlApi(data?: OauthLoginReq): Promise<IApiResponse<OauthLoginUrlResp>> {
+  return request({
+    url: "/api/v1/oauth_authorize_url",
     method: "post",
-    data,
+    data: data,
   })
 }
-
-export function oauthLoginApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/oauth/login",
+/** "注册" */
+export function registerApi(data?: LoginReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/register",
     method: "post",
-    data,
+    data: data,
   })
 }
-
-export function registerEmailApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/register/email",
+/** "重置密码" */
+export function resetPasswordApi(data?: ResetPasswordReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/reset_password",
     method: "post",
-    data,
+    data: data,
+  })
+}
+/** "发送忘记密码邮件" */
+export function sendForgetEmailApi(data?: UserEmailReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/send_forget_email",
+    method: "post",
+    data: data,
+  })
+}
+/** "发送注册账号邮件" */
+export function sendRegisterEmailApi(data?: UserEmailReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/send_register_email",
+    method: "post",
+    data: data,
   })
 }

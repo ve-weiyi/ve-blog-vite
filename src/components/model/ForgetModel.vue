@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="webStore.forgetFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon class="float-right" style="margin-left: auto" @click="webStore.forgetFlag = false"> mdi-close </v-icon>
+      <v-icon class="float-right" style="margin-left: auto" @click="webStore.forgetFlag = false">
+        mdi-close</v-icon
+      >
       <div class="login-title">忘记密码</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -20,16 +22,16 @@
           label="密码"
           placeholder="请输入您的密码"
           variant="underlined"
-          @keyup.enter="forget"
           :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show ? 'text' : 'password'"
+          @keyup.enter="forget"
           @click:append="show = !show"
         />
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
           <v-text-field
-            maxlength="6"
             v-model="code"
+            maxlength="6"
             label="验证码"
             placeholder="请输入6位验证码"
             variant="underlined"
@@ -40,7 +42,7 @@
           </v-btn>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="green" style="color: #fff" @click="forget"> 确定 </v-btn>
+        <v-btn class="mt-7" block color="green" style="color: #fff" @click="forget"> 确定</v-btn>
         <!-- 登录 -->
         <div class="mt-10 login-tip">已有账号？<span @click="openLogin">登录</span></div>
       </div>
@@ -49,13 +51,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue"
-import { useWebStore } from "@/stores"
-import { forgetPasswordApi, resetPasswordApi } from "@/api/login"
+import { computed, ref, watch } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { sendForgetEmailApi, resetPasswordApi } from "@/api/auth"
 import { ElMessage } from "element-plus"
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 const username = ref("")
 const code = ref("")
@@ -71,7 +73,7 @@ const openLogin = () => {
 }
 
 const sendCode = () => {
-  forgetPasswordApi({ username: username.value }).then((res) => {
+  sendForgetEmailApi({ username: username.value }).then((res) => {
     ElMessage.success("发送成功")
     countDown()
   })

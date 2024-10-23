@@ -7,12 +7,12 @@
     <!-- 相册内容 -->
     <v-card class="blog-container">
       <v-row>
-        <v-col :md="6" v-for="item of photoAlbumList" :key="item.id">
+        <v-col v-for="item of photoAlbumList" :key="item.id" :md="6">
           <div class="album-item">
-            <v-img class="album-cover" :src="item.albumCover" />
+            <v-img class="album-cover" :src="item.album_cover" />
             <router-link :to="'/albums/' + item.id" class="album-wrapper">
-              <div class="album-name">{{ item.albumName }}</div>
-              <div class="album-desc">{{ item.albumDesc }}</div>
+              <div class="album-name">{{ item.album_name }}</div>
+              <div class="album-desc">{{ item.album_desc }}</div>
             </router-link>
           </div>
         </v-col>
@@ -22,22 +22,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findPhotoAlbumListApi } from "@/api/photo_album"
+import { onMounted, ref } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getAlbumListApi } from "@/api/album"
+import { Album } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("album"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("album"))
 
-const photoAlbumList = ref([])
+const photoAlbumList = ref<Album[]>([])
 
 onMounted(() => {
   listPhotoAlbums()
 })
 
 function listPhotoAlbums() {
-  findPhotoAlbumListApi({}).then((res) => {
+  getAlbumListApi({}).then((res) => {
     photoAlbumList.value = res.data.list
   })
 }
@@ -57,7 +58,9 @@ function listPhotoAlbums() {
   width: calc(100% + 1.25rem);
   height: 250px;
   opacity: 0.8;
-  transition: opacity 0.35s, transform 0.35s;
+  transition:
+    opacity 0.35s,
+    transform 0.35s;
   transform: translate3d(-10px, 0, 0);
   object-fit: cover;
 }
@@ -105,7 +108,9 @@ function listPhotoAlbums() {
   padding: 0.4rem 0 0;
   line-height: 1.5;
   opacity: 0;
-  transition: opacity 0.35s, transform 0.35s;
+  transition:
+    opacity 0.35s,
+    transform 0.35s;
   transform: translate3d(100%, 0, 0);
 }
 </style>

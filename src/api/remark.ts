@@ -1,55 +1,19 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { PageQuery, PageResp, Remark } from "./types"
 
-/** 增 */
-export function createRemarkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/remark/create",
-    method: "post",
-    data,
-  })
-}
-
-/** 改 */
-export function updateRemarkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/remark/update",
-    method: "put",
-    data,
-  })
-}
-
-/** 删 */
-export function deleteRemarkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/remark/delete",
-    method: "delete",
-    data,
-  })
-}
-
-/** 删除 批量 */
-export function deleteByIdsRemarkApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/remark/deleteByIds",
-    method: "delete",
-    data: ids,
-  })
-}
-
-/** 查 */
-export function findRemarkApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/remark/find",
+/** "分页获取留言列表" */
+export function getRemarkListApi(data?: PageQuery): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/remark/get_remark_list",
     method: "post",
     data: data,
   })
 }
-
-/** 查 列表*/
-export function findRemarkListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/remark/list",
+/** "创建留言" */
+export function createRemarkApi(data?: Remark): Promise<IApiResponse<Remark>> {
+  return request({
+    url: "/api/v1/remark/create_remark",
     method: "post",
-    data: page,
+    data: data,
   })
 }

@@ -1,4 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from "vue-router"
 
 /**
  * 路由配置
@@ -9,105 +9,105 @@ const routes: RouteRecordRaw[] = [
    * 首页
    */
   {
-    path: '/',
-    name: 'home',
-    component: () => import('@/views/home/home.vue'),
+    path: "/",
+    name: "home",
+    component: () => import("@/views/home/Home.vue"),
     meta: {
-      title: 'Home',
+      title: "Home",
     },
   },
   /**
    * 子路由示例
    */
   {
-    path: '/articles/:articleId',
-    component: () => import('@/views/article/Article.vue'),
+    path: "/articles/:articleId",
+    component: () => import("@/views/article/Article.vue"),
   },
   {
-    path: '/archives',
-    component: () => import('@/views/archive/Archive.vue'),
+    path: "/archives",
+    component: () => import("@/views/archive/Archive.vue"),
     meta: {
-      title: '归档',
+      title: "归档",
     },
   },
   {
-    path: '/albums',
-    component: () => import('@/views/album/Album.vue'),
+    path: "/albums",
+    component: () => import("@/views/album/Album.vue"),
     meta: {
-      title: '相册',
+      title: "相册",
     },
   },
   {
-    path: '/talks',
-    component: () => import('@/views/talk/Talk.vue'),
+    path: "/talks",
+    component: () => import("@/views/talk/Talk.vue"),
     meta: {
-      title: '说说',
+      title: "说说",
     },
   },
   {
-    path: '/talks/:talkId',
-    component: () => import('@/views/talk/TalkInfo.vue'),
+    path: "/talks/:talkId",
+    component: () => import("@/views/talk/TalkInfo.vue"),
     meta: {
-      title: '说说',
+      title: "说说",
     },
   },
   {
-    path: '/albums/:albumId',
-    component: () => import('@/views/album/Photo.vue'),
+    path: "/albums/:albumId",
+    component: () => import("@/views/album/Photo.vue"),
   },
   {
-    path: '/tags',
-    component: () => import('@/views/tag/Tag.vue'),
+    path: "/tags",
+    component: () => import("@/views/tag/Tag.vue"),
     meta: {
-      title: '标签',
+      title: "标签",
     },
   },
   {
-    path: '/categories',
-    component: () => import('@/views/category/Category.vue'),
+    path: "/categories",
+    component: () => import("@/views/category/Category.vue"),
     meta: {
-      title: '分类',
+      title: "分类",
     },
   },
   {
-    path: '/categories/:categoryId',
-    component: () => import('@/views/article/ArticleList.vue'),
+    path: "/categories/:categoryId",
+    component: () => import("@/views/article/ArticleList.vue"),
   },
   {
-    path: '/tags/:tagId',
-    component: () => import('@/views/article/ArticleList.vue'),
+    path: "/tags/:tagId",
+    component: () => import("@/views/article/ArticleList.vue"),
   },
   {
-    path: '/links',
-    component: () => import('@/views/link/Link.vue'),
+    path: "/links",
+    component: () => import("@/views/link/Link.vue"),
     meta: {
-      title: '友链列表',
+      title: "友链列表",
     },
   },
   {
-    path: '/about',
-    component: () => import('@/views/about/About.vue'),
+    path: "/about",
+    component: () => import("@/views/about/About.vue"),
     meta: {
-      title: '关于我',
+      title: "关于我",
     },
   },
   {
-    path: '/message',
-    component: () => import('@/views/message/Message.vue'),
+    path: "/remark",
+    component: () => import("@/views/remark/Remark.vue"),
     meta: {
-      title: '留言板',
+      title: "留言板",
     },
   },
   {
-    path: '/user',
-    component: () => import('@/views/user/User.vue'),
+    path: "/user",
+    component: () => import("@/views/user/User.vue"),
     meta: {
-      title: '个人中心',
+      title: "个人中心",
     },
   },
   {
-    path: '/oauth/login/:platform',
-    component: () => import('@/components/OauthLogin.vue'),
+    path: "/oauth/login/:platform",
+    component: () => import("@/components/OauthLogin.vue"),
   },
 ]
 

@@ -1,73 +1,35 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { CommentQueryReq, PageResp, CommentNewReq, IdReq, EmptyResp } from "./types"
 
-/** 增 */
-export function createCommentApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/comment/create",
-    method: "post",
-    data,
-  })
-}
-
-/** 改 */
-export function updateCommentApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/comment/update",
-    method: "put",
-    data,
-  })
-}
-
-/** 删 */
-export function deleteCommentApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/comment/delete",
-    method: "delete",
-    data,
-  })
-}
-
-/** 查 */
-export function findCommentApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/comment/find",
+/** "查询评论列表" */
+export function getCommentListApi(data?: CommentQueryReq): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/comment/get_comment_list",
     method: "post",
     data: data,
   })
 }
-
-/** 删除 批量操作 */
-export function deleteByIdsCommentApi(ids: number[]): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/comment/deleteByIds",
-    method: "delete",
-    data: ids,
+/** "查询评论回复列表" */
+export function getCommentReplyListApi(data?: CommentQueryReq): Promise<IApiResponse<PageResp>> {
+  return request({
+    url: "/api/v1/comment/get_comment_reply_list",
+    method: "post",
+    data: data,
   })
 }
-
-/** 查 列表*/
-export function findCommentListApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/comment/list",
+/** "创建评论" */
+export function createCommentApi(data?: CommentNewReq): Promise<IApiResponse<CommentNewReq>> {
+  return request({
+    url: "/api/v1/comment/create_comment",
     method: "post",
-    data: page,
+    data: data,
   })
 }
-
-/** 查 列表*/
-export function findCommentReplyListApi(id: number, page?: Page): Promise<IApiResponseData<any>> {
-  console.log("id", id)
-  console.log("page", page)
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/comment/${id}/reply_list`,
+/** "点赞评论" */
+export function likeCommentApi(data?: IdReq): Promise<IApiResponse<EmptyResp>> {
+  return request({
+    url: "/api/v1/comment/like_comment",
     method: "post",
-    data: page,
-  })
-}
-
-export function likeCommentApi(id: number): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: `/api/v1/comment/${id}/like`,
-    method: "post",
+    data: data,
   })
 }

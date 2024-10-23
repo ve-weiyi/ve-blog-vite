@@ -10,31 +10,42 @@
         <!-- 用户信息 -->
         <div class="user-info-wrapper">
           <v-avatar size="36" class="user-avatar">
-            <img :src="talkInfo.avatar" />
+            <img height="36" :src="talkInfo.avatar" />
           </v-avatar>
           <div class="user-detail-wrapper">
             <div class="user-nickname">
               {{ talkInfo.nickname }}
-              <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram </v-icon>
+              <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram</v-icon>
             </div>
             <!-- 发表时间 -->
-            <div class="time">{{ talkInfo.createdAt }}</div>
+            <div class="time">{{ talkInfo.created_at }}</div>
             <!-- 说说信息 -->
             <div class="talk-content" v-html="talkInfo.content" />
             <!-- 图片列表 -->
-            <v-row class="talk-images" v-if="talkInfo.imgList">
-              <v-col :md="4" :cols="6" v-for="(img, index) of talkInfo.imgList" :key="index">
-                <v-img class="images-items" :src="img" aspect-ratio="1" max-height="200" @click="previewImg(img)" />
+            <v-row v-if="talkInfo.img_list" class="talk-images">
+              <v-col v-for="(img, index) of talkInfo.img_list" :key="index" :md="4" :cols="6">
+                <v-img
+                  class="images-items"
+                  :src="img"
+                  aspect-ratio="1"
+                  max-height="200"
+                  @click="previewImg(img)"
+                />
               </v-col>
             </v-row>
             <!-- 说说操作 -->
             <div class="talk-operation">
               <div class="talk-operation-item">
-                <v-icon size="16" :color="isLike(talkInfo.id)" class="like-btn" @click.prevent="like(talkInfo)">
+                <v-icon
+                  size="16"
+                  :color="isLike(talkInfo.id)"
+                  class="like-btn"
+                  @click.prevent="like(talkInfo)"
+                >
                   mdi-thumb-up
                 </v-icon>
                 <div class="operation-count">
-                  {{ talkInfo.likeCount === null ? 0 : talkInfo.likeCount }}
+                  {{ talkInfo.like_count === null ? 0 : talkInfo.like_count }}
                 </div>
               </div>
               <div class="talk-operation-item">
@@ -54,16 +65,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
-import Comment from "../../components/comment/TalkComment.vue"
-import axios from "axios"
-import { useWebStore } from "@/stores"
-import { findTalkApi } from "@/api/talk"
+import { onMounted, ref } from "vue"
+import Comment from "../../components/comment/Comment.vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getTalkApi, likeTalkApi } from "@/api/talk"
 import { useRoute } from "vue-router"
+import { Talk } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 // 获取路由参数
 const route = useRoute()
@@ -71,29 +82,25 @@ const talkId = route.params.talkId ? parseInt(route.params.talkId as string) : 0
 
 const commentType = 3
 const commentCount = ref(0)
-const talkInfo = ref<any>({
+const talkInfo = ref<Talk>({
   id: 49,
-  userId: 2,
+  user_id: 2,
   nickname: "ve77",
   avatar: "https://ve77.cn/images/avatar.jpg",
-  content: "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。",
-  images: "",
-  isTop: true,
-  status: true,
-  createdAt: "2022-01-24T23:34:59+08:00",
-  updatedAt: "2022-02-11T23:19:59+08:00",
+  content:
+    "用户需要查看、发表文章、修改其他信息请登录后台管理系统。网站后台管理系统-&gt;https://ve77.cn/admin。",
+  img_list: [],
+  is_top: 1,
+  status: 1,
+  like_count: 0,
 })
 const previewList = ref([])
 
 function getTalkById() {
-  findTalkApi({
-    id: talkId,
-  }).then((res) => {
+  getTalkApi({ id: talkId }).then((res) => {
     console.log(res)
     talkInfo.value = res.data
-    talkInfo.value.avatar = ""
-    talkInfo.value.nickname = ""
-    previewList.value = talkInfo.value.imgList
+    previewList.value = talkInfo.value.img_list
   })
 }
 
@@ -108,30 +115,28 @@ function previewImg(img) {
   // })
 }
 
-function like(talk) {
+const like = (talk: Talk) => {
   // 判断登录
-  if (!webState.userId) {
-    webState.loginFlag = true
+  if (!webStore.userInfo.id) {
+    webStore.loginFlag = true
     return false
   }
   // 发送请求
-  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
-    if (data.flag) {
-      // 判断是否点赞
-      if (webState.talkLikeSet.indexOf(talk.id) !== -1) {
-        talk.likeCount -= 1
-      } else {
-        talk.likeCount += 1
-      }
-      // $store.commit('talkLike', talk.id)
+  likeTalkApi({ id: talk.id }).then((res) => {
+    // 判断是否点赞
+    if (webStore.isTalkLike(talk.id)) {
+      talk.like_count -= 1
+    } else {
+      talk.like_count += 1
     }
+    webStore.talkLike(talk.id)
   })
 }
 
-function isLike(talkId) {
-  const talkLikeSet = webState.talkLikeSet
-  return talkLikeSet.indexOf(talkId) !== -1 ? "#eb5055" : "#999"
+function isLike(talkId: number) {
+  return webStore.isTalkLike(talkId) ? "#eb5055" : "#999"
 }
+
 getTalkById()
 onMounted(() => {
   getTalkById()

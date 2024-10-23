@@ -1,10 +1,10 @@
-import EmojiList from '@/assets/emojis/qq_emoji.json'
+import EmojiList from "@/assets/emojis/qq_emoji.json"
 
 // 解析表情
 export const replaceEmoji = (str: string) => {
   var reg = /\[.+?\]/g
-  str = str.replace(reg, function(str) {
-    console.log('str', str, EmojiList[str].active)
+  str = str.replace(reg, function (str) {
+    console.log("str", str, EmojiList[str].active)
     return (
       "<img src= '" +
       getImage(EmojiList[str].active) +
@@ -14,6 +14,8 @@ export const replaceEmoji = (str: string) => {
   return str
 }
 
-const getImage = (localUrl) => {
-  return new URL(`/src/assets/${localUrl}`, import.meta.url).href
+// 使用本地的图片
+export const getImage = (localUrl) => {
+  return localUrl
+  // return new URL(`/src/assets/${localUrl}`, import.meta.url).href
 }

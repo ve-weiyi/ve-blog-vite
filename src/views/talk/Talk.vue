@@ -6,28 +6,30 @@
     </div>
     <!-- 说说内容 -->
     <v-card class="blog-container">
-      <div class="talk-item" v-for="item of talkList" :key="item.id">
+      <div v-for="item of talkList" :key="item.id" class="talk-item">
         <router-link :to="'/talks/' + item.id">
           <!-- 用户信息 -->
           <div class="user-info-wrapper">
-            <v-avatar size="36" class="user-avatar">
-              <img :src="item.avatar" />
+            <v-avatar class="user-avatar" size="36">
+              <img height="36" :src="item.avatar" />
             </v-avatar>
             <div class="user-detail-wrapper">
               <div class="user-nickname">
                 {{ item.nickname }}
-                <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram </v-icon>
+                <v-icon class="user-sign" size="20" color="#ffa51e"> mdi-check-decagram</v-icon>
               </div>
               <!-- 发表时间 -->
               <div class="time">
-                {{ item.createdAt }}
-                <span class="top" v-if="item.isTop == 1"> <i class="iconfont iconzhiding" /> 置顶 </span>
+                {{ formatDate(item.created_at) }}
+                <span v-if="item.is_top == 1" class="top">
+                  <i class="iconfont iconzhiding" /> 置顶
+                </span>
               </div>
               <!-- 说说信息 -->
               <div class="talk-content" v-html="item.content" />
               <!-- 图片列表 -->
-              <v-row class="talk-images" v-if="item.imgList">
-                <v-col :md="4" :cols="6" v-for="(img, index) of item.imgList" :key="index">
+              <v-row v-if="item.img_list" class="talk-images">
+                <v-col v-for="(img, index) of item.img_list" :key="index" :md="4" :cols="6">
                   <v-img
                     class="images-items"
                     :src="img"
@@ -40,17 +42,22 @@
               <!-- 说说操作 -->
               <div class="talk-operation">
                 <div class="talk-operation-item">
-                  <v-icon size="16" :color="isLike(item.id)" class="like-btn" @click.prevent="like(item)">
+                  <v-icon
+                    size="16"
+                    :color="isLike(item.id)"
+                    class="like-btn"
+                    @click.prevent="like(item)"
+                  >
                     mdi-thumb-up
                   </v-icon>
                   <div class="operation-count">
-                    {{ item.likeCount == null ? 0 : item.likeCount }}
+                    {{ item.like_count == null ? 0 : item.like_count }}
                   </div>
                 </div>
                 <div class="talk-operation-item">
                   <v-icon size="16" color="#999">mdi-chat</v-icon>
                   <div class="operation-count">
-                    {{ item.commentCount == null ? 0 : item.commentCount }}
+                    {{ item.comment_count == null ? 0 : item.comment_count }}
                   </div>
                 </div>
               </div>
@@ -58,42 +65,43 @@
           </div>
         </router-link>
       </div>
-      <div class="load-wrapper" v-if="talkList && count > talkList.length" @click="listTalks">
-        <v-btn outlined> 加载更多... </v-btn>
+      <div v-if="talkList && count > talkList.length" class="load-wrapper" @click="listTalks">
+        <v-btn outlined> 加载更多...</v-btn>
       </div>
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
+import { onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
-import { useWebStore } from "@/stores"
-import axios from "axios"
-import { findTalkListApi } from "@/api/talk"
+import { useWebStoreHook } from "@/store/modules/website"
+import { formatDate } from "@/utils/formatDate.ts"
+import { getTalkListApi, likeTalkApi } from "@/api/talk"
+import { Talk } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
 const current = ref(1)
 const size = ref(10)
-const talkList = ref([])
+const talkList = ref<Talk[]>([])
 const count = ref(0)
 const previewList = ref([])
 
 const router = useRouter()
 
 const listTalks = () => {
-  findTalkListApi({}).then((res) => {
+  getTalkListApi({}).then((res) => {
     if (current.value === 1) {
       talkList.value = res.data.list
     } else {
       talkList.value.push(...res.data.list)
     }
     talkList.value.forEach((item) => {
-      if (item.imgList) {
-        previewList.value.push(...item.imgList)
+      if (item.img_list) {
+        previewList.value.push(...item.img_list)
       }
     })
     current.value++
@@ -102,35 +110,32 @@ const listTalks = () => {
 }
 
 const previewImg = (img) => {
-  $imagePreview({
-    images: previewList.value,
-    index: previewList.value.indexOf(img),
-  })
+  // $imagePreview({
+  //   images: previewList.value,
+  //   index: previewList.value.indexOf(img),
+  // })
 }
 
 const like = (talk) => {
   // 判断登录
-  if (!webState.userId) {
-    webState.loginFlag = true
+  if (!webStore.userInfo.id) {
+    webStore.loginFlag = true
     return false
   }
   // 发送请求
-  axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
-    if (data.flag) {
-      // 判断是否点赞
-      if (webState.talkLikeSet.indexOf(talk.id) != -1) {
-        talk.likeCount -= 1
-      } else {
-        talk.likeCount += 1
-      }
-      $store.commit("talkLike", talk.id)
+  likeTalkApi(talk.id).then((res) => {
+    // 判断是否点赞
+    if (webStore.isTalkLike(talk.id)) {
+      talk.like_count -= 1
+    } else {
+      talk.like_count += 1
     }
+    webStore.talkLike(talk.id)
   })
 }
 
-const isLike = (talkId) => {
-  var talkLikeSet = webState.talkLikeSet
-  return talkLikeSet.includes(talkId) ? "#eb5055" : "#999"
+const isLike = (talkId: number) => {
+  return webStore.isTalkLike(talkId) ? "#eb5055" : "#999"
 }
 
 onMounted(() => {
@@ -212,9 +217,11 @@ onMounted(() => {
   width: 100%;
   padding: 2px !important;
 }
+
 .talk-item:not(:first-child) {
   margin-top: 20px;
 }
+
 .talk-item {
   padding: 16px 20px;
   border-radius: 10px;
@@ -222,45 +229,56 @@ onMounted(() => {
   box-shadow: 0 3px 8px 6px rgb(7 17 27 / 6%);
   transition: all 0.3s ease 0s;
 }
+
 .talk-item:hover {
   box-shadow: 0 5px 10px 8px rgb(7 17 27 / 16%);
   transform: translateY(-3px);
 }
+
 .user-info-wrapper {
   width: 100%;
   display: flex;
 }
+
 .user-avatar {
   border-radius: 50%;
 }
+
 .user-avatar {
   transition: all 0.5s;
 }
+
 .user-avatar:hover {
   transform: rotate(360deg);
 }
+
 .user-detail-wrapper {
   flex: 1;
   margin-left: 10px;
   width: 0;
 }
+
 .user-nickname {
   font-size: 15px;
   font-weight: bold;
   vertical-align: middle;
 }
+
 .user-sign {
   margin-left: 4px;
 }
+
 .time {
   color: #999;
   margin-top: 2px;
   font-size: 12px;
 }
+
 .top {
   color: #ff7242;
   margin-left: 10px;
 }
+
 .talk-content {
   margin-top: 8px;
   font-size: 14px;
@@ -268,38 +286,46 @@ onMounted(() => {
   word-wrap: break-word;
   word-break: break-all;
 }
+
 .talk-images {
   padding: 0 10px;
   margin-top: 8px;
 }
+
 .images-items {
   cursor: pointer;
   border-radius: 4px;
 }
+
 .talk-operation {
   margin-top: 10px;
   display: flex;
   align-items: center;
 }
+
 .talk-operation-item {
   display: flex;
   align-items: center;
   margin-right: 40px;
   font-size: 12px;
 }
+
 .operation-count {
   margin-left: 4px;
 }
+
 .load-wrapper {
   margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .load-wrapper button {
   background-color: #49b1f5;
   color: #fff;
 }
+
 .like-btn:hover {
   color: #eb5055 !important;
 }

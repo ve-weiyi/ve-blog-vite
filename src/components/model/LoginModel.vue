@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="loginFlag" :fullscreen="isMobile" max-width="460">
     <v-card class="login-container" style="border-radius: 4px">
-      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close </v-icon>
+      <v-icon style="margin-left: auto" @click="loginFlag = false"> mdi-close</v-icon>
       <div class="login-title">登录账号</div>
       <div class="login-wrapper">
         <!-- 用户名 -->
@@ -20,30 +20,35 @@
           variant="underlined"
           label="密码"
           placeholder="请输入您的密码"
-          @keyup.enter="login"
           :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show ? 'text' : 'password'"
+          @keyup.enter="login"
           @click:append="show = !show"
         />
         <!-- 验证码 -->
         <div v-if="needCaptcha" class="mt-7 send-wrapper">
           <v-text-field
-            maxlength="6"
             v-model="code"
+            maxlength="6"
             label="验证码"
             placeholder="请输入6位验证码"
             variant="underlined"
           />
           <div class="login-captcha">
-            <img v-if="captcha" :src="captcha.encodeData" alt="请输入验证码" @click="getCaptchaImage()" />
+            <img
+              v-if="captcha"
+              :src="captcha.encodeData"
+              alt="请输入验证码"
+              @click="getCaptchaImage()"
+            />
           </div>
         </div>
         <!-- 按钮 -->
-        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录 </v-btn>
+        <v-btn class="mt-7" block color="blue" style="color: #fff" @click="login"> 登录</v-btn>
         <!-- 注册和找回密码 -->
         <div class="mt-10 login-tip">
           <span @click="openRegister">立即注册</span>
-          <span @click="openForget" class="float-right">忘记密码?</span>
+          <span class="float-right" @click="openForget">忘记密码?</span>
         </div>
         <div v-if="socialLoginList.length > 0">
           <div class="social-login-title">社交账号登录</div>
@@ -56,7 +61,12 @@
               @click="weiboLogin"
             />
             <!-- qq登录 -->
-            <a v-if="showLogin('qq')" class="mr-2 iconfont icon-qq-circle" style="color: #00aaee" @click="qqLogin" />
+            <a
+              v-if="showLogin('qq')"
+              class="mr-2 iconfont icon-qq-circle"
+              style="color: #00aaee"
+              @click="qqLogin"
+            />
             <!-- 飞书登录 -->
             <a
               v-if="showLogin('feishu')"
@@ -79,15 +89,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue"
-import { useWebStore } from "@/stores"
+import { computed, onMounted, ref, watch } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
 import { ElMessage } from "element-plus"
-import { getOauthUrlApi, loginApi } from "@/api/login"
-import { getCaptchaImageApi, sendCaptchaEmailApi, verifyCaptchaApi } from "@/api/captcha"
-import cookies from "@/utils/cookies"
+import { oauthAuthorizeUrlApi, loginApi } from "@/api/auth"
+import { getCaptchaImageApi, verifyCaptchaApi } from "@/api/captcha"
+import router from "@/router"
+import { getUserInfoApi } from "@/api/user.ts"
 
 // 获取存储的博客信息
-const webStore = useWebStore()
+const webStore = useWebStoreHook()
 
 const username = ref("")
 const password = ref("")
@@ -108,7 +119,7 @@ const isMobile = computed(() => {
   return clientWidth <= 960
 })
 
-const socialLoginList = computed(() => webStore.blogInfo.websiteConfig.socialLoginList)
+const socialLoginList = computed(() => webStore.blogInfo.website_config.social_login_list)
 
 const showLogin = (type) => socialLoginList.value.includes(type)
 
@@ -131,7 +142,11 @@ const getCaptchaImage = () => {
     captcha.value = res.data
   })
 }
-
+const getUserinfo = () => {
+  getUserInfoApi().then((res) => {
+    webStore.setUser(res.data)
+  })
+}
 const login = () => {
   const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
   if (!reg.test(username.value)) {
@@ -161,14 +176,16 @@ const login = () => {
   }
 }
 const emailLogin = () => {
-  loginApi({ username: username.value, password: password.value, code: code.value })
+  loginApi({
+    username: username.value,
+    password: password.value,
+    code: code.value,
+  })
     .then((res) => {
       ElMessage.success("登录成功")
-      console.log(res)
-
-      cookies.set("token", res.data.token)
-      webStore.userInfo = res.data.userInfo
-      webStore.loginFlag = false
+      webStore.login(res.data)
+      getUserinfo()
+      webStore.closeModel()
     })
     .catch((err) => {
       console.log(err)
@@ -176,31 +193,45 @@ const emailLogin = () => {
 }
 
 const qqLogin = () => {
-  // $store.commit('saveLoginUrl', $route.path)
-  if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i)) {
+  if (
+    navigator.userAgent.match(
+      /(iPhone|iPod|Android|ios|iOS|iPad|Backerry|WebOS|Symbian|Windows Phone|Phone)/i
+    )
+  ) {
     // eslint-disable-next-line no-undef
     // QC.Login.showPopup({
     //   appId: this.config.QQ_APP_ID,
     //   redirectURI: this.config.QQ_REDIRECT_URI,
     // })
   } else {
-    getOauthUrlApi({ platform: "qq" }).then((res) => {
-      window.open(res.data.url)
+    oauthAuthorizeUrlApi({
+      platform: "qq",
+      state: router.currentRoute.value.path,
+    }).then((res) => {
+      // 新启页面跳转
+      // window.open(res.data.url)
+
+      // 当前页面跳转
+      window.location.href = res.data.url
     })
   }
 }
 
 const weiboLogin = () => {
-  // $store.commit('saveLoginUrl', $route.path)
-  getOauthUrlApi({ platform: "weibo" }).then((res) => {
-    window.open(res.data.url)
+  oauthAuthorizeUrlApi({
+    platform: "weibo",
+    state: router.currentRoute.value.path,
+  }).then((res) => {
+    window.location.href = res.data.url
   })
 }
 
 const feishuLogin = () => {
-  // $store.commit('saveLoginUrl', $route.path)
-  getOauthUrlApi({ platform: "feishu" }).then((res) => {
-    window.open(res.data.url)
+  oauthAuthorizeUrlApi({
+    platform: "feishu",
+    state: router.currentRoute.value.path,
+  }).then((res) => {
+    window.location.href = res.data.url
   })
 }
 

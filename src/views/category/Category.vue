@@ -8,10 +8,10 @@
     <v-card class="blog-container">
       <div class="category-title">分类 - {{ count }}</div>
       <ul class="category-list">
-        <li class="category-list-item" v-for="item of categoryList" :key="item.id">
-          <router-link :to="'/categories/' + item.id">
-            {{ item.categoryName }}
-            <span class="category-count">({{ item.articleCount }})</span>
+        <li v-for="item of categoryList" :key="item.id" class="category-list-item">
+          <router-link :to="'/categories/' + item.category_name">
+            {{ item.category_name }}
+            <span class="category-count">({{ item.article_count }})</span>
           </router-link>
         </li>
       </ul>
@@ -20,15 +20,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findCategoryListApi } from "@/api/category"
+import { onMounted, ref } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getCategoryListApi } from "@/api/category"
+import { CategoryDetails } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
-const cover = ref(webState.getCover("talk"))
+const webStore = useWebStoreHook()
+const cover = ref(webStore.getCover("talk"))
 
-const categoryList = ref([])
+const categoryList = ref<CategoryDetails[]>([])
 const count = ref(0)
 
 onMounted(() => {
@@ -36,7 +37,7 @@ onMounted(() => {
 })
 
 function listCategories() {
-  findCategoryListApi({ page: 1, page_size: 100 }).then((res) => {
+  getCategoryListApi({ page: 1, page_size: 100 }).then((res) => {
     categoryList.value = res.data.list
     count.value = res.data.total
   })

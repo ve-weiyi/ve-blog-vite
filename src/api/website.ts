@@ -1,19 +1,19 @@
-import http from "@/utils/request"
+import request from "@/utils/request"
+import type { EmptyReq, BlogHomeInfo, AboutMe } from "./types"
 
-/** 关于 */
-export function getAboutApi(data?: object): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/about",
+/** "获取博客前台首页信息" */
+export function getBlogHomeInfoApi(data?: EmptyReq): Promise<IApiResponse<BlogHomeInfo>> {
+  return request({
+    url: "/api/v1/blog",
     method: "get",
-    data,
+    data: data,
   })
 }
-
-/** 聊天记录 */
-export function findChatRecordsApi(page?: Page): Promise<IApiResponseData<any>> {
-  return http.request<IApiResponseData<any>>({
-    url: "/api/v1/chat/records",
-    method: "post",
-    data: page,
+/** "获取关于我的信息" */
+export function getAboutMeApi(data?: EmptyReq): Promise<IApiResponse<AboutMe>> {
+  return request({
+    url: "/api/v1/blog/about_me",
+    method: "get",
+    data: data,
   })
 }

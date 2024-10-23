@@ -6,15 +6,16 @@
     </div>
     <!-- 标签列表 -->
     <v-card class="blog-container">
-      <div class="tag-cloud-title">标签 - {{ count }}</div>
+      <div class="tag-cloud-title">标签</div>
+      <div class="tag-cloud-sub-title">数量:{{ count }}</div>
       <div class="tag-cloud">
         <router-link
-          :style="{ 'font-size': getRandomFontSize() }"
           v-for="item of tagList"
           :key="item.id"
-          :to="'/tags/' + item.id"
+          :style="{ 'font-size': getRandomFontSize(), color: getRandomFontColor() }"
+          :to="'/tags/' + item.tag_name"
         >
-          {{ item.tagName }}
+          {{ item.tag_name }}
         </router-link>
       </div>
     </v-card>
@@ -22,35 +23,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { useWebStore } from "@/stores"
-import { findTagListApi } from "@/api/tag"
+import { onMounted, ref } from "vue"
+import { useWebStoreHook } from "@/store/modules/website"
+import { getTagListApi } from "@/api/tag"
+import { TagDTO } from "@/api/types"
 
 // 获取存储的博客信息
-const webState = useWebStore()
+const webStore = useWebStoreHook()
 // 获取背景图片
-const cover = ref(webState.getCover("talk"))
+const cover = ref(webStore.getCover("tag"))
 
-const tagList = ref([])
+const tagList = ref<TagDTO[]>([])
 const count = ref(0)
 
-onMounted(() => {
-  listTags()
-})
-
 function listTags() {
-  findTagListApi({ page: 1, page_size: 100 }).then((res) => {
+  getTagListApi({ page: 1, page_size: 100 }).then((res) => {
     tagList.value = res.data.list
     count.value = res.data.total
   })
 }
 
 function getRandomFontSize() {
-  return `${Math.floor(Math.random() * 10) + 18}px`
+  return `${Math.floor(Math.random() * 20) + 14}px`
 }
+
+function getRandomFontColor() {
+  const r = Math.floor(Math.random() * 196) + 32
+  const g = Math.floor(Math.random() * 196) + 32
+  const b = Math.floor(Math.random() * 196) + 32
+  return `rgb(${r},${g},${b})`
+}
+
+onMounted(() => {
+  listTags()
+})
 </script>
 
 <style scoped>
+.tag-cloud-sub-title {
+  font-size: 14px;
+  text-align: center;
+}
 .tag-cloud-title {
   line-height: 2;
   font-size: 36px;
